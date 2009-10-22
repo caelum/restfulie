@@ -11,9 +11,11 @@ module Restfulie
     end
     to_xml_old :skip_types => true do |xml|
       acts.each do |action|
+        # direct link to action
         rel = action[:rel]
         rel = action[:action] if rel.nil?
-        translate_href = controller.url_for(:controller=>action[:controller], :action=>action[:destroy])
+        translate_href = controller.url_for(action)
+        # xml.tag!('atom:link', 'xpto', 'abcd')
         xml.link :rel => rel, :href => translate_href
       end
     end
