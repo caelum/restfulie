@@ -1,7 +1,7 @@
 Restfulie
 =========
 
-Introduction goes here.
+This is a small cute plugin to show how to implement hypermedia based services in a easy way using rails.
 
 
 Example
@@ -10,4 +10,4 @@ Example
 Example goes here.
 
 
-Copyright (c) 2009 [name of plugin creator], released under the MIT license
+Copyright (c) 2009 Caelum, released under the MIT license

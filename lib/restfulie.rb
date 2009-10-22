@@ -4,13 +4,18 @@ module Restfulie
     to_json_old :methods => :acts
   end
   
-  def acts
-    {:rel => actions[:rel], :href => "#{actions[:href][:controller]}/#{actions[:href][:action]}"}
-  end
-  
-  def to_xml
+  def to_xml(options = {})
+    controller = options[:controller]
+    if controller.nil?
+      return to_xml_old
+    end
     to_xml_old :skip_types => true do |xml|
-      xml.link :rel => actions[:rel], :href => "#{actions[:href][:controller]}/#{actions[:href][:action]}"
+      acts.each do |action|
+        rel = action[:rel]
+        rel = action[:action] if rel.nil?
+        translate_href = controller.url_for(:controller=>action[:controller], :action=>action[:destroy])
+        xml.link :rel => rel, :href => translate_href
+      end
     end
   end
 end
