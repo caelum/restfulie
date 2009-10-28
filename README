@@ -14,7 +14,7 @@ Trying to follow the definition of a restful application supporting resources wi
 	<product>basic rails course</product>
 	<product>restful training</product>
 	<atom:link rel="refresh" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
-	<atom:link rel="refresh" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+	<atom:link rel="update" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
 	<atom:link rel="pay" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
 	<atom:link rel="destroy" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
 </order>
@@ -23,10 +23,35 @@ Trying to follow the definition of a restful application supporting resources wi
 Client Usage
 ============
 
-One should first acquire the xml from the server as, for example:
+One should first acquire the representation from the server through your common GET process and process it through the usual from_* methods:
 <pre>
 xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
+order = Order.from_xml(xml)
 </pre>
+
+And now you can invoke all those actions in order to change your resource's state:
+
+<pre>
+order.refresh
+order.update
+order.pay(payment)
+order.destroy
+</pre>
+
+Note that:
+
+
+Resource format support
+=======================
+
+Restfulie currently supports xml+atom and will soon expand its support to xml+rel links and json+links supports. Those new formats will also support automatic http verb detection - if possible and reasonable.
+
+
+Help
+====
+
+If you are looking for or want to help, let us know at the mailing list: http://groups.google.com/group/restfulie
+
 
 
 Copyright (c) 2009 Caelum, released under the Apache license
