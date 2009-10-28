@@ -40,7 +40,7 @@ order.destroy
 
 Note that:
 1. refresh is get
-2. update is post
+2. update is put (and you have to put everything back)
 3. destroy is delete
 4. pay (unknown methods) is post
 
