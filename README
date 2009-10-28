@@ -39,7 +39,18 @@ order.destroy
 </pre>
 
 Note that:
+1. refresh is get
+2. update is post
+3. destroy is delete
+4. pay (unknown methods) is post
 
+If you want to customize your http request:
+
+<pre>
+order.pay(:form_data => {'from'=>'2005-01-01', 'to'=>'2005-03-31'}, ';') do |req|
+	req.basic_auth 'jack', 'pass'
+end
+</pre>
 
 Resource format support
 =======================
