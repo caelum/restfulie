@@ -1,23 +1,51 @@
+require 'rubygems'
+require 'rubygems/specification'
 require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rake/gempackagetask'
+require 'spec/rake/spectask'
 
-desc 'Default: run unit tests.'
-task :default => :test
+GEM = "restfulie"
+GEM_VERSION = "0.1"
+SUMMARY = ""
+AUTHOR = "Caelum"
+EMAIL = ""
+HOMEPAGE = "http://www.caelum.com.br"
 
-desc 'Test the restfulie plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
+spec = Gem::Specification.new do |s|
+  s.name = GEM
+  s.version = GEM_VERSION
+  s.platform = Gem::Platform::RUBY
+  s.summary = SUMMARY
+  s.require_paths = ['lib']
+  s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
+
+  s.add_dependency(%q<rubigen>, [">= 1.3.4"])
+
+  s.author = AUTHOR
+  s.email = EMAIL
+  s.homepage = HOMEPAGE
 end
 
-desc 'Generate documentation for the restfulie plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Restfulie'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+Spec::Rake::SpecTask.new do |t|
+  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.spec_opts = %w(-fs -fh:doc/specs.html --color)
 end
+
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.gem_spec = spec
+end
+
+desc "Install the gem locally"
+task :install => [:package] do
+  sh %{sudo gem install pkg/#{GEM}-#{GEM_VERSION}}
+end
+
+desc "Create a gemspec file"
+task :make_spec do
+  File.open("#{GEM}.gemspec", "w") do |file|
+    file.puts spec.to_ruby
+  end
+end
+
+desc "Builds the project"
+task :build => :spec
