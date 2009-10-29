@@ -56,11 +56,9 @@ module ActiveRecord
     # found at http://www.xcombinator.com/2008/07/06/activerecord-from_json-and-from_xml/
     # addapted to support links
     def self.from_hash( hash )
-      puts "Base hash is: #{hash.to_s}\n"
       h = hash.dup
       links = nil
       h.each do |key,value|
-        puts "Analyzing #{key}\n"
           case value.class.to_s
           when 'Array'
             if key=="link"
@@ -70,8 +68,13 @@ module ActiveRecord
               h[key].map! { |e|
                 Object.const_get(key.camelize.singularize).from_hash e }
             end
-           when 'Hash'
-            h[key] = Object.const_get(key.camelize).from_hash value
+          when 'Hash'
+            if key=="link"
+              links = [h[key]]
+              h.delete("link")
+            else
+              h[key] = Object.const_get(key.camelize).from_hash value
+            end
           end
       end
       result = self.new h

@@ -48,6 +48,11 @@ describe RestfulieModel do
       model = RestfulieModel.from_xml xml
       model.respond_to?('next_state').should eql(true)
     end
+    it "should be able to answer to just one state change" do
+      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>'
+      model = RestfulieModel.from_xml xml
+      model.respond_to?('next_state').should eql(true)
+    end
   end
   
 end
