@@ -1,7 +1,6 @@
 module Restfulie
-  alias :to_json_old :to_json
   def to_json
-    to_json_old :methods => :following_states
+    super :methods => :following_states
   end
 
   def to_xml(options = {})
@@ -29,6 +28,7 @@ end
 
 module ActiveRecord
   class Base
+    include Restfulie
 
     attr_accessor :_possible_states
 
