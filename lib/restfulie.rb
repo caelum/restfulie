@@ -6,18 +6,24 @@ module Restfulie
   def to_xml(options = {})
     controller = options[:controller]
     return super if controller.nil?
+    
+    puts "Using non nil #{self.to_s}\n"
 
     options[:skip_types] = true
     super options do |xml|
-      following_states.each do |action|
-        rel = action[:rel] || action[:action]
-        translate_href = controller.url_for(action)
-        if options[:use_name_based_link]
-          xml.tag!(rel, translate_href)
-        else
-          xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
+      if respond_to?(:following_states)
+        states = following_states
+        states = [states] if states.class.to_s != 'Array'
+        states.each do |action|
+          rel = action[:rel] || action[:action]
+          translate_href = controller.url_for(action)
+          if options[:use_name_based_link]
+            xml.tag!(rel, translate_href)
+          else
+            xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
+          end
         end
-      end if respond_to?(:following_states)
+      end
     end
   end
 
