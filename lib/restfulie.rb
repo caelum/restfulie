@@ -1,5 +1,5 @@
 module Restfulie
-  #alias :to_json_old :to_json
+  alias :to_json_old :to_json
   def to_json
     to_json_old :methods => :following_states
   end
@@ -91,5 +91,5 @@ module ActiveRecord
 end
 
 module ActiveRecord::Serialization
-  #alias :to_xml_old :to_xml
+  alias :to_xml_old :to_xml
 end
