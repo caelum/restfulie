@@ -7,15 +7,16 @@ module Restfulie
     controller = options[:controller]
     return super if controller.nil?
 
-    use_name_based_link = options[:use_name_based_link]==true
     options[:skip_types] = true
     super options do |xml|
       following_states.each do |action|
-        rel = action[:rel]
-        rel = action[:action] if rel.nil?
+        rel = action[:rel] || action[:action]
         translate_href = controller.url_for(action)
-        xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href) unless use_name_based_link
-        xml.tag!(rel, translate_href) if use_name_based_link
+        if options[:use_name_based_link]
+          xml.tag!(rel, translate_href)
+        else
+          xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
+        end
       end if respond_to?(:following_states)
     end
   end
@@ -54,9 +55,9 @@ module Restfulie
     def result.respond_to?(sym)
       has_state(sym.to_s) || super(sym)
     end
+
     def result.has_state(name)
-      return false if @_possible_states[name].nil?
-      return true
+      !@_possible_states[name].nil?
     end
 
     def result.method_missing(name, *args, &block)
