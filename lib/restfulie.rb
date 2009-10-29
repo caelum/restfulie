@@ -82,4 +82,8 @@ module Restfulie
 
 end
 
-ActiveRecord::Base.send :include, Restfulie
+module ActiveRecord
+  class Base
+    include Restfulie
+  end
+end
