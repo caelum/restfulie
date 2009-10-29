@@ -1,13 +1,13 @@
-module Restfulie  
-  alias :to_json_old :to_json
+module Restfulie
+  #alias :to_json_old :to_json
   def to_json
     to_json_old :methods => :following_states
   end
-  
+
   def to_xml(options = {})
     controller = options[:controller]
     return to_xml_old if controller.nil?
-    
+
     use_name_based_link = options[:use_name_based_link]==true
     options[:skip_types] = true
     to_xml_old options do |xml|
@@ -25,11 +25,11 @@ module Restfulie
 end
 
 
-	
+
 
 module ActiveRecord
   class Base
-    
+
     attr_accessor :_possible_states
 
     # basic code from Matt Pulver
@@ -55,7 +55,7 @@ module ActiveRecord
       result = self.new h
       add_states(result, links) unless links.nil?
     end
-    
+
     def self.add_states(result, states)
       result._possible_states = {}
       states.each do |state|
@@ -68,7 +68,7 @@ module ActiveRecord
         return false if @_possible_states[name].nil?
         return true
       end
-      
+
       def result.method_missing(name, *args, &block)
         return (puts "executei #{name}...") if has_state(name.to_s)
         super(name, *args, &block)
@@ -91,5 +91,5 @@ module ActiveRecord
 end
 
 module ActiveRecord::Serialization
-  alias :to_xml_old :to_xml
+  #alias :to_xml_old :to_xml
 end
