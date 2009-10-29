@@ -27,5 +27,9 @@ describe RestfulieModel do
       my_controller = MockedController.new
       subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/"/></restfulie-model>')
     end
+    it "should add hypermedia link if controller is set and told to use name based link" do
+      my_controller = MockedController.new
+      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <next_state>http://url_for/</next_state></restfulie-model>')
+    end
   end
 end
