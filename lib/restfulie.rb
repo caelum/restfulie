@@ -58,7 +58,7 @@ module ActiveRecord
         name = state["rel"]
         result.create_method(name){ |options|
           options = {} if options.nil?
-          url = URI.parse('http://localhost:4000/order/1')
+          url = URI.parse(state["href"])
           if ['destroy','delete','cancel'].include? name
             method_name = "delete"
           elsif ['refresh', 'reload'].include? name
