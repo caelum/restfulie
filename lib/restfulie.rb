@@ -57,18 +57,11 @@ module ActiveRecord
       states.each do |state|
         result.create_method(state["rel"]){
           url = URI.parse('http://localhost:4000/order/1')
-          req = Net::HTTP::Delete.new(url.path)
           res = Net::HTTP.delete(url)
           return res
         }
       end
       
-      # def result.method_missing(name, *args, &block)
-      #   return super(name, *args, &block) if !has_state(name.to_s)
-      #   url = URI.parse('http://localhost:4000/order/1')
-      #   req = Net::HTTP::Delete.new(url.path)
-      #   return Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
-      # end
       result
     end
 
