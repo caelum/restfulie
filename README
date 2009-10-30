@@ -44,14 +44,6 @@ Note that:
 3. destroy is delete
 4. pay (unknown methods) is post
 
-If you want to customize your http request:
-
-<pre>
-order.pay(:form_data => {'from'=>'2005-01-01', 'to'=>'2005-03-31'}, ';') do |req|
-	req.basic_auth 'jack', 'pass'
-end
-</pre>
-
 Resource format support
 =======================
 
@@ -64,13 +56,21 @@ Help
 If you are looking for or want to help, let us know at the mailing list: http://groups.google.com/group/restfulie
 
 
-Client Defaults
-===============
+How to customize your request
+=============================
+
+By default, restfulie uses the following table:
 
 1. destroy, cancel and delete send a DELETE request
 2. update sends a POST request
-3. refresh sends a GET request
+3. refresh, reload sends a GET request
+4. other methods sends a POST request
 
+If you want to use a custom http verb in order to send your request, you can do it by setting the optional string 'method':
+
+<pre>
+order.update(:method=>"post")
+</pre>
 
 /***
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
