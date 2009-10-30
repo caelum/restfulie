@@ -58,7 +58,8 @@ module ActiveRecord
         result.create_method(state["rel"]){
           url = URI.parse('http://localhost:4000/order/1')
           req = Net::HTTP::Delete.new(url.path)
-          return Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+          res = Net::HTTP.delete(url)
+          return res
         }
       end
       
