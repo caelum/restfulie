@@ -77,6 +77,14 @@ describe RestfulieModel do
         res = model.send('update')
         res.should eql(response)
     end
+    it "should allow method overriding" do
+        xml = xml_for('update')
+        model = RestfulieModel.from_xml xml
+        response = mock Net::HTTPResponse
+        Net::HTTP.should_receive(:delete).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+        res = model.send('update', {:method=>"delete"})
+        res.should eql(response)
+    end
   end
   
 end

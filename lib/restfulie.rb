@@ -56,7 +56,8 @@ module ActiveRecord
       
       states.each do |state|
         name = state["rel"]
-        result.create_method(name){
+        result.create_method(name){ |options|
+          options = {} if options.nil?
           url = URI.parse('http://localhost:4000/order/1')
           case name
           when 'destroy'
@@ -68,6 +69,7 @@ module ActiveRecord
           else
             method_name = "post"
           end
+          method_name = options[:method] if options[:method]
           res = Net::HTTP.send(method_name, url)
           return res
         }
