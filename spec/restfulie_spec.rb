@@ -77,6 +77,14 @@ describe RestfulieModel do
         res = model.send('update')
         res.should eql(response)
     end
+    it "should send a GET request if the state transition name is refresh" do
+        xml = xml_for('refresh')
+        model = RestfulieModel.from_xml xml
+        response = mock Net::HTTPResponse
+        Net::HTTP.should_receive(:get).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+        res = model.send('refresh')
+        res.should eql(response)
+    end
     it "should allow method overriding" do
         xml = xml_for('update')
         model = RestfulieModel.from_xml xml

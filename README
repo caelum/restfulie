@@ -34,8 +34,8 @@ And now you can invoke all those actions in order to change your resource's stat
 <pre>
 order.refresh
 order.update
-order.pay(payment)
 order.destroy
+order.pay(payment)
 </pre>
 
 Note that:
@@ -63,6 +63,13 @@ Help
 
 If you are looking for or want to help, let us know at the mailing list: http://groups.google.com/group/restfulie
 
+
+Client Defaults
+===============
+
+1. destroy, cancel and delete send a DELETE request
+2. update sends a POST request
+3. refresh sends a GET request
 
 
 /***
