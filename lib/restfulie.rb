@@ -59,12 +59,7 @@ module ActiveRecord
         result.create_method(name){ |options|
           options = {} if options.nil?
           url = URI.parse('http://localhost:4000/order/1')
-          case name
-          when 'destroy'
-            method_name = "delete"
-          when 'delete'
-            method_name = "delete"
-          when 'cancel'
+          if ['destroy','delete','cancel'].include? name
             method_name = "delete"
           else
             method_name = "post"
