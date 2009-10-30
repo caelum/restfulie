@@ -69,6 +69,9 @@ describe RestfulieModel do
           env['PATH_INFO'].should == "/order/1"
           [ 200, { 'Content-Type' => 'text/plain', 'Content-Length' => '9' }, [ 'Cancelled' ]]
         end
+        @net_http = mock Net::HTTP
+        Net::HTTP.should_receive(:new).with('localhost', 4000).and_return(@net_http)
+        @net_http.should_receive(:start).and_return(true)
         model.send(method_name)
         request_received.should be_true
         @mock_server.detach
