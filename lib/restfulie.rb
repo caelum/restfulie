@@ -60,14 +60,15 @@ module ActiveRecord
           url = URI.parse('http://localhost:4000/order/1')
           case name
           when 'destroy'
-            res = Net::HTTP.delete(url)
+            method_name = "delete"
           when 'delete'
-            res = Net::HTTP.delete(url)
+            method_name = "delete"
           when 'cancel'
-            res = Net::HTTP.delete(url)
+            method_name = "delete"
           else
-            res = Net::HTTP.post(url)
+            method_name = "post"
           end
+          res = Net::HTTP.send(method_name, url)
           return res
         }
       end
