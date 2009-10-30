@@ -10,8 +10,6 @@ module Restfulie
     controller = options[:controller]
     return super if controller.nil?
     
-    puts "Using non nil #{self.to_s}\n"
-
     options[:skip_types] = true
     super options do |xml|
       if respond_to?(:following_states)

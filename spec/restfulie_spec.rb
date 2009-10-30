@@ -9,7 +9,6 @@ end
 
 class MockedController
   def url_for(x)
-    puts "asking url for #{x}"
     "http://url_for/#{x[:action]}"
   end
 end
@@ -57,24 +56,24 @@ describe RestfulieModel do
   end
 
   context "when invoking an state change" do
-    it "should send a DELETE request if the state transition name is destroy or cancel or delete" do
-      #["destroy","cancel","delete"].each do |method_name|
-      method_name = "cancel"
+    it "should send a DELETE request if the state transition name is cancel" do
+      @mock_server = MockServer.new(4000, 0.5)
+      ["cancel"].each do |method_name|
+        method_name = "cancel"
         xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
         model = RestfulieModel.from_xml xml
-        @mock_server = MockServer.new(4000, 0.5)
         request_received = false
         @mock_server.attach do |env|
           request_received = true
           env['REQUEST_METHOD'].should == "DELETE"
           env['PATH_INFO'].should == "/order/1"
-          [ 200, { 'Content-Type' => 'text/plain', 'Content-Length' => '40' }, [ 'This gets returned from the HTTP request' ]]
+          [ 200, { 'Content-Type' => 'text/plain', 'Content-Length' => '9' }, [ 'Cancelled' ]]
         end
         model.send(method_name)
         request_received.should be_true
         @mock_server.detach
-        @mock_server.stop
-      #end
+      end
+      @mock_server.stop
     end
   end
   
