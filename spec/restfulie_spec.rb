@@ -58,7 +58,7 @@ describe RestfulieModel do
   context "when invoking an state change" do
     it "should send a DELETE request if the state transition name is cancel" do
       @mock_server = MockServer.new(4000, 0.5)
-      ["cancel"].each do |method_name|
+      ["cancel", "destroy", "delete"].each do |method_name|
         method_name = "cancel"
         xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
         model = RestfulieModel.from_xml xml

@@ -28,7 +28,9 @@ module Restfulie
     end
   end
 
-
+  def create_method(name, &block)
+    self.class.send(:define_method, name, &block)
+  end
 
 
 end
@@ -52,12 +54,20 @@ module ActiveRecord
         !@_possible_states[name].nil?
       end
       
-      def result.method_missing(name, *args, &block)
-        return super(name, *args, &block) if !has_state(name.to_s)
-        url = URI.parse('http://localhost:4000/order/1')
-        req = Net::HTTP::Delete.new(url.path)
-        return Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+      states.each do |state|
+        result.create_method(state["rel"]){
+          url = URI.parse('http://localhost:4000/order/1')
+          req = Net::HTTP::Delete.new(url.path)
+          return Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+        }
       end
+      
+      # def result.method_missing(name, *args, &block)
+      #   return super(name, *args, &block) if !has_state(name.to_s)
+      #   url = URI.parse('http://localhost:4000/order/1')
+      #   req = Net::HTTP::Delete.new(url.path)
+      #   return Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+      # end
       result
     end
 
