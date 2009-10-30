@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/server_helper')
 
 class RestfulieModel < ActiveRecord::Base
   def following_states
@@ -44,14 +45,36 @@ describe RestfulieModel do
   
   context "when adding states" do
     it "should be able to answer to the method rel name" do
-      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>'
+      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="pay" href="http://url_for/action_name"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>'
       model = RestfulieModel.from_xml xml
-      model.respond_to?('next_state').should eql(true)
+      model.respond_to?('pay').should eql(true)
     end
     it "should be able to answer to just one state change" do
-      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>'
+      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="cancel" href="http://url_for/action_name"/></restfulie-model>'
       model = RestfulieModel.from_xml xml
-      model.respond_to?('next_state').should eql(true)
+      model.respond_to?('cancel').should eql(true)
+    end
+  end
+
+  context "when invoking an state change" do
+    it "should send a DELETE request if the state transition name is destroy or cancel or delete" do
+      #["destroy","cancel","delete"].each do |method_name|
+      method_name = "cancel"
+        xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
+        model = RestfulieModel.from_xml xml
+        @mock_server = MockServer.new(4000, 0.5)
+        request_received = false
+        @mock_server.attach do |env|
+          request_received = true
+          env['REQUEST_METHOD'].should == "DELETE"
+          env['PATH_INFO'].should == "/order/1"
+          [ 200, { 'Content-Type' => 'text/plain', 'Content-Length' => '40' }, [ 'This gets returned from the HTTP request' ]]
+        end
+        model.send(method_name)
+        request_received.should be_true
+        @mock_server.detach
+        @mock_server.stop
+      #end
     end
   end
   

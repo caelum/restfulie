@@ -1,3 +1,6 @@
+require 'net/http'
+require 'uri'
+
 module Restfulie
   def to_json
     super :methods => :following_states
@@ -50,10 +53,12 @@ module ActiveRecord
       def result.has_state(name)
         !@_possible_states[name].nil?
       end
-
+      
       def result.method_missing(name, *args, &block)
-        return (puts "executei #{name}...") if has_state(name.to_s)
-        super(name, *args, &block)
+        return super(name, *args, &block) if !has_state(name.to_s)
+        url = URI.parse('http://localhost:4000/order/1')
+        req = Net::HTTP::Delete.new(url.path)
+        return Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
       end
       result
     end
@@ -101,4 +106,5 @@ module ActiveRecord
 
     # end of code based on Matt Pulver's
   end
+  
 end
