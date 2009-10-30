@@ -61,6 +61,8 @@ module ActiveRecord
           url = URI.parse('http://localhost:4000/order/1')
           if ['destroy','delete','cancel'].include? name
             method_name = "delete"
+          elsif ['refresh', 'reload'].include? name
+            method_name = "get"
           else
             method_name = "post"
           end
