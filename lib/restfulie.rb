@@ -55,9 +55,19 @@ module ActiveRecord
       end
       
       states.each do |state|
-        result.create_method(state["rel"]){
+        name = state["rel"]
+        result.create_method(name){
           url = URI.parse('http://localhost:4000/order/1')
-          res = Net::HTTP.delete(url)
+          case name
+          when 'destroy'
+            res = Net::HTTP.delete(url)
+          when 'delete'
+            res = Net::HTTP.delete(url)
+          when 'cancel'
+            res = Net::HTTP.delete(url)
+          else
+            res = Net::HTTP.post(url)
+          end
           return res
         }
       end

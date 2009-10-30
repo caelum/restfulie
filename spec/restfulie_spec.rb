@@ -69,15 +69,14 @@ describe RestfulieModel do
         res.should eql(response)
       end
     end
-    # it "should send a POST request if the state transition name is update" do
-    #     xml = xml_for('update')
-    #     model = RestfulieModel.from_xml xml
-    #     @net_http = mock Net::HTTP
-    #     Net::HTTP.should_receive(:new).with('localhost', 4000).and_return(@net_http)
-    #     @net_http.should_receive(:start).and_return(true)
-    #     @net_http.should_receive(:req).with(req)
-    #     model.send(method_name)
-    # end
+    it "should send a POST request if the state transition name is update" do
+        xml = xml_for('update')
+        model = RestfulieModel.from_xml xml
+        response = mock Net::HTTPResponse
+        Net::HTTP.should_receive(:post).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+        res = model.send('update')
+        res.should eql(response)
+    end
   end
   
 end
