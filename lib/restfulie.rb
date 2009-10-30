@@ -57,18 +57,29 @@ module ActiveRecord
       states.each do |state|
         name = state["rel"]
         result.create_method(name){ |options|
+          
           options = {} if options.nil?
           url = URI.parse(state["href"])
-          if ['destroy','delete','cancel'].include? name
-            method_name = "delete"
+          
+          if options[:method]=="delete"
+            req = Net::HTTP::Delete.new(url.path)
+          elsif options[:method]=="put"
+            req = Net::HTTP::Put.new(url.path)
+          elsif options[:method]=="get"
+            req = Net::HTTP::Get.new(url.path)
+          elsif options[:method]=="post"
+            req = Net::HTTP::Post.new(url.path)
+          elsif ['destroy','delete','cancel'].include? name
+            req = Net::HTTP::Delete.new(url.path)
           elsif ['refresh', 'reload'].include? name
-            method_name = "get"
+            req = Net::HTTP::Get.new(url.path)
           else
-            method_name = "post"
+            req = Net::HTTP::Post.new(url.path)
           end
-          method_name = options[:method] if options[:method]
-          res = Net::HTTP.send(method_name, url)
-          return res
+
+          http = Net::HTTP.new(url.host, url.port)
+          http.request(req)
+          
         }
       end
       

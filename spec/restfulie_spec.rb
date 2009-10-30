@@ -1,5 +1,6 @@
+require 'net/http'
+require 'uri'
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/server_helper')
 
 class RestfulieModel < ActiveRecord::Base
   def following_states
@@ -59,35 +60,57 @@ describe RestfulieModel do
     def xml_for(method_name)
       '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
     end
+    def prepare_http_for(request)
+      response = mock Net::HTTPResponse
+      http = mock Net::HTTP
+      Net::HTTP.should_receive(:new).with('localhost', 80).and_return(http)
+      http.should_receive(:request).with(request).and_return(response)
+      response
+    end
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
       ["cancel", "destroy", "delete"].each do |method_name|
         model = RestfulieModel.from_xml xml_for(method_name)
-        response = mock Net::HTTPResponse
-        Net::HTTP.should_receive(:delete).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+        req = mock Net::HTTP::Delete
+        Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+
+        expected_response = prepare_http_for(req)
         res = model.send(method_name)
-        res.should eql(response)
+        res.should eql(expected_response)
       end
     end
     it "should send a POST request if the state transition name is update" do
         model = RestfulieModel.from_xml xml_for('update')
-        response = mock Net::HTTPResponse
-        Net::HTTP.should_receive(:post).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+        req = mock Net::HTTP::Post
+        Net::HTTP::Post.should_receive(:new).with('/order/1').and_return(req)
+
+        expected_response = prepare_http_for(req)
         res = model.send('update')
-        res.should eql(response)
+        res.should eql(expected_response)
     end
     it "should send a GET request if the state transition name is refresh" do
         model = RestfulieModel.from_xml xml_for('refresh')
-        response = mock Net::HTTPResponse
-        Net::HTTP.should_receive(:get).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+        req = mock Net::HTTP::Get
+        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+
+        expected_response = prepare_http_for(req)
         res = model.send('refresh')
-        res.should eql(response)
+        res.should eql(expected_response)
     end
     it "should allow method overriding" do
         model = RestfulieModel.from_xml xml_for('update')
-        response = mock Net::HTTPResponse
-        Net::HTTP.should_receive(:delete).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+        req = mock Net::HTTP::Delete
+        Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+
+        expected_response = prepare_http_for(req)
         res = model.send('update', {:method=>"delete"})
-        res.should eql(response)
+        res.should eql(expected_response)
+    end
+    it "should request xml if came from xml" do
+      model = RestfulieModel.from_xml xml_for('refresh')
+      response = mock Net::HTTPResponse
+      Net::HTTP.should_receive(:get).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
+      res = model.send('refresh')
+      res.should eql(response)
     end
   end
   
