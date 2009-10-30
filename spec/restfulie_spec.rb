@@ -61,8 +61,7 @@ describe RestfulieModel do
     end
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
       ["cancel", "destroy", "delete"].each do |method_name|
-        xml = xml_for(method_name)
-        model = RestfulieModel.from_xml xml
+        model = RestfulieModel.from_xml xml_for(method_name)
         response = mock Net::HTTPResponse
         Net::HTTP.should_receive(:delete).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
         res = model.send(method_name)
@@ -70,24 +69,21 @@ describe RestfulieModel do
       end
     end
     it "should send a POST request if the state transition name is update" do
-        xml = xml_for('update')
-        model = RestfulieModel.from_xml xml
+        model = RestfulieModel.from_xml xml_for('update')
         response = mock Net::HTTPResponse
         Net::HTTP.should_receive(:post).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
         res = model.send('update')
         res.should eql(response)
     end
     it "should send a GET request if the state transition name is refresh" do
-        xml = xml_for('refresh')
-        model = RestfulieModel.from_xml xml
+        model = RestfulieModel.from_xml xml_for('refresh')
         response = mock Net::HTTPResponse
         Net::HTTP.should_receive(:get).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
         res = model.send('refresh')
         res.should eql(response)
     end
     it "should allow method overriding" do
-        xml = xml_for('update')
-        model = RestfulieModel.from_xml xml
+        model = RestfulieModel.from_xml xml_for('update')
         response = mock Net::HTTPResponse
         Net::HTTP.should_receive(:delete).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
         res = model.send('update', {:method=>"delete"})
