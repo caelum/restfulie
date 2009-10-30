@@ -61,6 +61,7 @@ describe RestfulieModel do
       '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
     end
     def prepare_http_for(request)
+      request.should_receive(:add_field).with("Accept", "text/xml")
       response = mock Net::HTTPResponse
       http = mock Net::HTTP
       Net::HTTP.should_receive(:new).with('localhost', 80).and_return(http)
@@ -104,13 +105,6 @@ describe RestfulieModel do
         expected_response = prepare_http_for(req)
         res = model.send('update', {:method=>"delete"})
         res.should eql(expected_response)
-    end
-    it "should request xml if came from xml" do
-      model = RestfulieModel.from_xml xml_for('refresh')
-      response = mock Net::HTTPResponse
-      Net::HTTP.should_receive(:get).with(URI.parse('http://localhost:4000/order/1')).and_return(response)
-      res = model.send('refresh')
-      res.should eql(response)
     end
   end
   

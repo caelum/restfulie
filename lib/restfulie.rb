@@ -32,7 +32,6 @@ module Restfulie
     self.class.send(:define_method, name, &block)
   end
 
-
 end
 
 module ActiveRecord
@@ -40,6 +39,7 @@ module ActiveRecord
 
     include Restfulie
     attr_accessor :_possible_states
+    attr_accessor :_came_from
 
     def self.add_states(result, states)
       result._possible_states = {}
@@ -61,6 +61,7 @@ module ActiveRecord
           options = {} if options.nil?
           url = URI.parse(state["href"])
           
+          # gs: i dont know how to meta play here! i suck
           if options[:method]=="delete"
             req = Net::HTTP::Delete.new(url.path)
           elsif options[:method]=="put"
@@ -76,6 +77,8 @@ module ActiveRecord
           else
             req = Net::HTTP::Post.new(url.path)
           end
+          
+          req.add_field("Accept", "text/xml") if result._came_from == :xml
 
           http = Net::HTTP.new(url.host, url.port)
           http.request(req)
@@ -124,7 +127,9 @@ module ActiveRecord
     # but the hash has no counterpart (e.g. 'ship_to' => {} )
     def self.from_xml( xml )
       hash = Hash.from_xml xml
-      self.from_hash hash[self.to_s.underscore]
+      result = self.from_hash hash[self.to_s.underscore]
+      result._came_from = :xml
+      result
     end
 
     # end of code based on Matt Pulver's
