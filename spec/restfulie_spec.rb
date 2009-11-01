@@ -121,18 +121,6 @@ describe RestfulieModel do
   end
   
   context "when de-serializing straight from a web request" do
-    it "should deserialize correctly if its an xml" do
-      req = mock Net::HTTP::Get
-      Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
-      http = mock Net::HTTP
-      Net::HTTP.should_receive(:new).with('localhost', 3001).and_return(http)
-      res = mock_response(:code => 200, :content_type => "application/xml", :body => "<restfulie_model><status>CANCELLED</status></restfulie_model>")
-      http.should_receive(:request).with(req).and_return(res)
-
-      model = RestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.status.should eql("CANCELLED")
-
-    end
     def mock_request_for(type, body)
       req = mock Net::HTTP::Get
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
@@ -140,6 +128,13 @@ describe RestfulieModel do
       Net::HTTP.should_receive(:new).with('localhost', 3001).and_return(http)
       res = mock_response(:code => 200, :content_type => type, :body => body)
       http.should_receive(:request).with(req).and_return(res)
+    end
+    it "should deserialize correctly if its an xml" do
+      mock_request_for "application/xml", "<restfulie_model><status>CANCELLED</status></restfulie_model>"
+
+      model = RestfulieModel.from_web 'http://localhost:3001/order/15'
+      model.status.should eql("CANCELLED")
+
     end
     it "should deserialize correctly if its a json" do
       mock_request_for "application/json", "{ status : 'CANCELLED' }"
