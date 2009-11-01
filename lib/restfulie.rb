@@ -144,11 +144,8 @@ module ActiveRecord
     def self.from_xml( xml )
       hash = Hash.from_xml xml
       head = hash[self.to_s.underscore]
-      puts "veio com #{hash} // #{head}"
       result = self.from_hash head
-      puts "veio com #{result} #{result.class}"
       return nil if result.nil?
-      puts "veio com #{result}!"
       result._came_from = :xml
       result
     end
