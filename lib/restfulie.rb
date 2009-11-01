@@ -89,6 +89,22 @@ module ActiveRecord
       result
     end
 
+    def self.from_web(uri)
+      url = URI.parse(uri)
+      req = Net::HTTP::Get.new(url.path)
+      http = Net::HTTP.new(url.host, url.port)
+      res = http.request(req)
+      raise :invalid_request, res if res.code != 200
+      case res.content_type
+      when "application/xml"
+        from_xml res.body
+      when "application/json"
+        from_json res.body
+      else
+        raise :unknown_content_type
+      end
+    end
+
     # basic code from Matt Pulver
     # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links

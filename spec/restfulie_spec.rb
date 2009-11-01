@@ -114,14 +114,25 @@ describe RestfulieModel do
   class Order < ActiveRecord::Base
     attr_accessor :id
   end
+  def mock_response(options = {})
+    res = mock Net::HTTPResponse
+    options.keys.each do |x|
+      res.should_receive(x).and_return(options[x])
+    end
+    res
+  end
   
   context "when de-serializing straight from a web request" do
     it "should deserialize correctly if its an xml" do
       req = mock Net::HTTP::Get
-      Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+      Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
+      http = mock Net::HTTP
+      Net::HTTP.should_receive(:new).with('localhost', 3001).and_return(http)
+      res = mock_response(:code => 200, :content_type => "application/xml", :body => "<order><id>15</id></order>")
+      http.should_receive(:request).with(req).and_return(res)
 
-      model = Order.from_web 'http://localhost:3001/order/1'
-      model.id.should eql(1)
+      model = Order.from_web 'http://localhost:3001/order/15'
+      model.id.should eql(15)
 
     end
   end
