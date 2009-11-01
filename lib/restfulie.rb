@@ -72,7 +72,7 @@ module ActiveRecord
             req = Net::HTTP::Post.new(url.path)
           elsif ['destroy','delete','cancel'].include? name
             req = Net::HTTP::Delete.new(url.path)
-          elsif ['refresh', 'reload'].include? name
+          elsif ['refresh', 'reload', 'show'].include? name
             req = Net::HTTP::Get.new(url.path)
           else
             req = Net::HTTP::Post.new(url.path)
