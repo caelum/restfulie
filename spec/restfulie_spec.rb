@@ -90,8 +90,8 @@ describe RestfulieModel do
         res = model.send('update')
         res.should eql(expected_response)
     end
-    it "should send a GET request if the state transition name is refresh, reload or show" do
-      ["refresh", "reload", "show"].each do |method_name|
+    it "should send a GET request if the state transition name is refresh, reload, show or latest" do
+      ["refresh", "latest", "reload", "show"].each do |method_name|
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
