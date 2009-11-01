@@ -15,31 +15,36 @@ class MockedController
 end
 
 describe RestfulieModel do
-  
+    
   context "when parsed to json" do
     it "should include the method following_states" do
-      subject.to_json.should eql("{\"following_states\":{\"rel\":\"next_state\",\"action\":\"action_name\"}}")
+      subject.status = "NEW"
+      subject.to_json.should eql("{\"status\":\"NEW\",\"following_states\":{\"rel\":\"next_state\",\"action\":\"action_name\"}}")
     end
   end
   
   context "when parsed to xml" do
     it "should not add hypermedia if controller is nil" do
-      subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model></restfulie-model>')
+      subject.status = "NEW"
+      subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>NEW</status></restfulie-model>')
     end
     it "should add hypermedia atom link if controller is set" do
       my_controller = MockedController.new
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link rel="next_state" xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/action_name"/></restfulie-model>')
+      subject.status = "NEW"
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>NEW</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>')
     end
     it "should add hypermedia link if controller is set and told to use name based link" do
       my_controller = MockedController.new
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <next_state>http://url_for/action_name</next_state></restfulie-model>')
+      subject.status = "NEW"
+      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>NEW</status>  <next_state>http://url_for/action_name</next_state></restfulie-model>')
     end
     it "should use action name if there is no rel attribute" do
       def subject.following_states
         [{:action => "next_action"}]
       end
+      subject.status = "NEW"
       my_controller = MockedController.new
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <next_action>http://url_for/next_action</next_action></restfulie-model>')
+      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>NEW</status>  <next_action>http://url_for/next_action</next_action></restfulie-model>')
     end
   end
   
@@ -111,9 +116,6 @@ describe RestfulieModel do
     end
   end
   
-  class Order < ActiveRecord::Base
-    attr_accessor :id
-  end
   def mock_response(options = {})
     res = mock Net::HTTPResponse
     options.keys.each do |x|
@@ -128,11 +130,11 @@ describe RestfulieModel do
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
       http = mock Net::HTTP
       Net::HTTP.should_receive(:new).with('localhost', 3001).and_return(http)
-      res = mock_response(:code => 200, :content_type => "application/xml", :body => "<order><id>15</id></order>")
+      res = mock_response(:code => 200, :content_type => "application/xml", :body => "<restfulie_model><status>CANCELLED</status></restfulie_model>")
       http.should_receive(:request).with(req).and_return(res)
 
-      model = Order.from_web 'http://localhost:3001/order/15'
-      model.id.should eql(15)
+      model = RestfulieModel.from_web 'http://localhost:3001/order/15'
+      model.status.should eql("CANCELLED")
 
     end
   end

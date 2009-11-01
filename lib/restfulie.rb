@@ -97,9 +97,9 @@ module ActiveRecord
       raise :invalid_request, res if res.code != 200
       case res.content_type
       when "application/xml"
-        from_xml res.body
+        self.from_xml res.body
       when "application/json"
-        from_json res.body
+        self.from_json res.body
       else
         raise :unknown_content_type
       end
@@ -109,7 +109,8 @@ module ActiveRecord
     # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links
     def self.from_hash( hash )
-      h = hash.dup
+      #h = {}
+      h = hash.dup #if hash
       links = nil
       h.each do |key,value|
         case value.class.to_s
@@ -129,7 +130,8 @@ module ActiveRecord
           end
         end
       end
-      result = new h
+      puts "hash no finalzao eh #{h}"
+      result = self.new h
       add_states(result, links) unless links.nil?
     end
 
@@ -140,9 +142,13 @@ module ActiveRecord
     # The xml has a surrounding class tag (e.g. ship-to),
     # but the hash has no counterpart (e.g. 'ship_to' => {} )
     def self.from_xml( xml )
-      result = from_hash begin
-        Hash.from_xml(xml)[to_s.demodulize.underscore]
-      rescue ; {} end
+      hash = Hash.from_xml xml
+      head = hash[self.to_s.underscore]
+      puts "veio com #{hash} // #{head}"
+      result = self.from_hash head
+      puts "veio com #{result} #{result.class}"
+      return nil if result.nil?
+      puts "veio com #{result}!"
       result._came_from = :xml
       result
     end
