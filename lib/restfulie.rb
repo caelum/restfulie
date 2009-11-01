@@ -109,8 +109,8 @@ module ActiveRecord
     # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links
     def self.from_hash( hash )
-      #h = {}
-      h = hash.dup #if hash
+      h = {}
+      h = hash.dup if hash
       links = nil
       h.each do |key,value|
         case value.class.to_s
@@ -130,9 +130,9 @@ module ActiveRecord
           end
         end
       end
-      puts "hash no finalzao eh #{h}"
       result = self.new h
       add_states(result, links) unless links.nil?
+      result
     end
 
     def self.from_json( json )
