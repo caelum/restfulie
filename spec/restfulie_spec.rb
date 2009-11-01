@@ -56,18 +56,19 @@ describe RestfulieModel do
     end
   end
 
+  def xml_for(method_name)
+    '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
+  end
+  def prepare_http_for(request)
+    request.should_receive(:add_field).with("Accept", "text/xml")
+    response = mock Net::HTTPResponse
+    http = mock Net::HTTP
+    Net::HTTP.should_receive(:new).with('localhost', 80).and_return(http)
+    http.should_receive(:request).with(request).and_return(response)
+    response
+  end
+
   context "when invoking an state change" do
-    def xml_for(method_name)
-      '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
-    end
-    def prepare_http_for(request)
-      request.should_receive(:add_field).with("Accept", "text/xml")
-      response = mock Net::HTTPResponse
-      http = mock Net::HTTP
-      Net::HTTP.should_receive(:new).with('localhost', 80).and_return(http)
-      http.should_receive(:request).with(request).and_return(response)
-      response
-    end
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
       ["cancel", "destroy", "delete"].each do |method_name|
         model = RestfulieModel.from_xml xml_for(method_name)
@@ -110,17 +111,18 @@ describe RestfulieModel do
     end
   end
   
+  class Order < ActiveRecord::Base
+    attr_accessor :id
+  end
+  
   context "when de-serializing straight from a web request" do
     it "should deserialize correctly if its an xml" do
-      model = RestfulieModel.from_xml xml_for('refresh')
       req = mock Net::HTTP::Get
       Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
 
-      expected_response = prepare_http_for(req)
-      res = model.send('refresh')
-      res.should eql(expected_response)
-    end
-    it "should deserialize correctly if its an json" do
+      model = Order.from_web 'http://localhost:3001/order/1'
+      model.id.should eql(1)
+
     end
   end
   
