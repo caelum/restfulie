@@ -63,7 +63,7 @@ By default, restfulie uses the following table:
 
 1. destroy, cancel and delete send a DELETE request
 2. update sends a POST request
-3. refresh, reload sends a GET request
+3. refresh, reload, show sends a GET request
 4. other methods sends a POST request
 
 If you want to use a custom http verb in order to send your request, you can do it by setting the optional string 'method':
