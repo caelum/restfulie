@@ -90,49 +90,53 @@ module ActiveRecord
     end
 
     # basic code from Matt Pulver
-    # found at http://www.xcombinator.com/2008/07/06/activerecord-from_json-and-from_xml/
+    # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links
     def self.from_hash( hash )
       h = hash.dup
       links = nil
       h.each do |key,value|
-          case value.class.to_s
-          when 'Array'
-            if key=="link"
-              links = h[key]
-              h.delete("link")
-            else
-              h[key].map! { |e|
-                Object.const_get(key.camelize.singularize).from_hash e }
-            end
-          when 'Hash'
-            if key=="link"
-              links = [h[key]]
-              h.delete("link")
-            else
-              h[key] = Object.const_get(key.camelize).from_hash value
-            end
+        case value.class.to_s
+        when 'Array'
+          if key=="link"
+            links = h[key]
+            h.delete("link")
+          else
+            h[key].map! { |e| reflect_on_association(key.to_sym ).klass.from_hash e }
           end
+        when /\AHash(WithIndifferentAccess)?\Z/
+          if key=="link"
+            links = [h[key]]
+            h.delete("link")
+          else
+            h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
+          end
+        end
       end
-      result = self.new h
+      result = new h
       add_states(result, links) unless links.nil?
     end
 
     def self.from_json( json )
-      hash = ActiveSupport::JSON.decode json
-      self.from_hash hash
+      from_hash safe_json_decode( json )
     end
 
     # The xml has a surrounding class tag (e.g. ship-to),
     # but the hash has no counterpart (e.g. 'ship_to' => {} )
     def self.from_xml( xml )
-      hash = Hash.from_xml xml
-      result = self.from_hash hash[self.to_s.underscore]
+      result = from_hash begin
+        Hash.from_xml(xml)[to_s.demodulize.underscore]
+      rescue ; {} end
       result._came_from = :xml
       result
     end
-
-    # end of code based on Matt Pulver's
   end
-  
 end
+
+def safe_json_decode( json )
+  return {} if !json
+  begin
+    ActiveSupport::JSON.decode json
+  rescue ; {} end
+end
+# end of code based on Matt Pulver's
