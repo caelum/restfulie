@@ -110,4 +110,18 @@ describe RestfulieModel do
     end
   end
   
+  context "when de-serializing straight from a web request" do
+    it "should deserialize correctly if its an xml" do
+      model = RestfulieModel.from_xml xml_for('refresh')
+      req = mock Net::HTTP::Get
+      Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+
+      expected_response = prepare_http_for(req)
+      res = model.send('refresh')
+      res.should eql(expected_response)
+    end
+    it "should deserialize correctly if its an json" do
+    end
+  end
+  
 end
