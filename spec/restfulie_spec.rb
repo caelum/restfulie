@@ -126,7 +126,7 @@ describe RestfulieModel do
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
       http = mock Net::HTTP
       Net::HTTP.should_receive(:new).with('localhost', 3001).and_return(http)
-      res = mock_response(:code => 200, :content_type => type, :body => body)
+      res = mock_response(:code => "200", :content_type => type, :body => body)
       http.should_receive(:request).with(req).and_return(res)
     end
     it "should deserialize correctly if its an xml" do

@@ -94,7 +94,7 @@ module ActiveRecord
       req = Net::HTTP::Get.new(url.path)
       http = Net::HTTP.new(url.host, url.port)
       res = http.request(req)
-      raise :invalid_request, res if res.code != 200
+      raise :invalid_request, res if res.code != "200"
       case res.content_type
       when "application/xml"
         self.from_xml res.body
