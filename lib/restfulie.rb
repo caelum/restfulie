@@ -100,8 +100,6 @@ module ActiveRecord
               key = hash.keys[0]
               type = key.camelize.constantize
               return type.from_xml response.body
-            when "application/json"
-              return self.from_json response.body
             else
               raise :unknown_content_type
             end
