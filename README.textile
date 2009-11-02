@@ -40,9 +40,7 @@ config.gem "restfulie", :source => "http://gemcutter.org"
 </pre>
 
 Execute:
-<pre>
-	rake gems:install
-</pre>
+<pre>rake gems:install</pre>
 
 or, if you prefer to install as a plugin:
 
@@ -66,10 +64,8 @@ Trying to follow the definition of a restful application supporting resources wi
 h2. Client Usage
 
 One should first acquire the representation from the server through your common GET process and process it through the usual from_* methods:
-<pre>
-xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
-order = Order.from_xml(xml)
-</pre>
+<pre>xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
+order = Order.from_xml(xml)</pre>
 
 And now you can invoke all those actions in order to change your resource's state:
 
