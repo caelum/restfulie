@@ -10,7 +10,7 @@ Just add in your environment.rb the following line:
 
 config.gem "restfulie", :source => "http://gemcutter.org"
 
-Than, execute: rake gems:install
+Execute: rake gems:install
 
 
 Typical Restful Example
