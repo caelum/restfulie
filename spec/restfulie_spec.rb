@@ -168,14 +168,6 @@ describe RestfulieModel do
     end
   end
   
-  # test to create: check it removes the rel attribute from the link
-  # payment = Payment.from_xml compra.check_payment_info.body ==>
-  # payment = compra.check_payment_info
-  # ou
-  # payment = compra.check_payment_info do |res|
-  #   Payment.from_xml res.body
-  # end
-  # to do: support 405 if its mistaken
   # to do: move raise to something else
   
 end
