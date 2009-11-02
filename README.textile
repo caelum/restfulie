@@ -1,10 +1,8 @@
-Restfulie
-=========
+h1. Restfulie
 
 This is a small cute plugin to show how to implement hypermedia based services in a easy way using rails.
 
-Installing
-==========
+h2. Installing
 
 Just add in your environment.rb the following line:
 
@@ -12,9 +10,7 @@ config.gem "restfulie", :source => "http://gemcutter.org"
 
 Execute: rake gems:install
 
-
-Typical Restful Example
-=======================
+h2. Typical Restful Example
 
 Trying to follow the definition of a restful application supporting resources with hypermedia content, a typical restful resource would be:
 
@@ -29,8 +25,7 @@ Trying to follow the definition of a restful application supporting resources wi
 </order>
 </pre>
 
-Client Usage
-============
+h2. Client Usage
 
 One should first acquire the representation from the server through your common GET process and process it through the usual from_* methods:
 <pre>
@@ -48,38 +43,36 @@ order.pay(payment)
 </pre>
 
 Note that:
-1. refresh is get
-2. update is put (and you have to put everything back)
-3. destroy is delete
-4. pay (unknown methods) is post
+* refresh is get
+* update is put (and you have to put everything back)
+* destroy is delete
+* pay (unknown methods) is post
 
-Resource format support
-=======================
+h2. Resource format support
 
 Restfulie currently supports xml+atom and will soon expand its support to xml+rel links and json+links supports. Those new formats will also support automatic http verb detection - if possible and reasonable.
 
 
-Help
-====
+h2. Help
 
 If you are looking for or want to help, let us know at the mailing list: http://groups.google.com/group/restfulie
 
-
-How to customize your request
-=============================
+h2. How to customize your request
 
 By default, restfulie uses the following table:
 
-1. destroy, cancel and delete send a DELETE request
-2. update sends a POST request
-3. refresh, reload, show sends a GET request
-4. other methods sends a POST request
+* destroy, cancel and delete send a DELETE request
+* update sends a POST request
+* refresh, reload, show sends a GET request
+* other methods sends a POST request
 
 If you want to use a custom http verb in order to send your request, you can do it by setting the optional string 'method':
 
 <pre>
 order.update(:method=>"post")
 </pre>
+
+h2. License
 
 /***
  * Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
