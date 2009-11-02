@@ -16,7 +16,11 @@ module Restfulie
         states = following_states
         states = [states] if states.class.to_s != 'Array'
         states.each do |action|
-          rel = action[:rel] || action[:action]
+          rel = action[:action]
+          if action[:rel]
+            rel = action[:rel]
+            action[:rel] = nil
+          end
           translate_href = controller.url_for(action)
           if options[:use_name_based_link]
             xml.tag!(rel, translate_href)
