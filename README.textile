@@ -39,7 +39,10 @@ Just add in your environment.rb the following line:
 config.gem "restfulie", :source => "http://gemcutter.org"
 </pre>
 
-Execute: rake gems:install
+Execute:
+<pre>
+	rake gems:install
+</pre>
 
 or, if you prefer to install as a plugin:
 

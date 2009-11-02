@@ -65,7 +65,7 @@ module ActiveRecord
           options = {} if options.nil?
           data = options[:data] || {}
           url = URI.parse(state["href"])
-          get = false
+#          get = false
           
           # gs: i dont know how to meta play here! i suck
           if options[:method]=="delete"
@@ -74,14 +74,14 @@ module ActiveRecord
             req = Net::HTTP::Put.new(url.path)
           elsif options[:method]=="get"
             req = Net::HTTP::Get.new(url.path)
-            get = true
+#            get = true
           elsif options[:method]=="post"
             req = Net::HTTP::Post.new(url.path)
           elsif ['destroy','delete','cancel'].include? name
             req = Net::HTTP::Delete.new(url.path)
           elsif ['refresh', 'reload', 'show', 'latest'].include? name
             req = Net::HTTP::Get.new(url.path)
-            get = true
+ #           get = true
           else
             req = Net::HTTP::Post.new(url.path)
           end
@@ -91,7 +91,7 @@ module ActiveRecord
 
           http = Net::HTTP.new(url.host, url.port)
           response = http.request(req)
-          return ActiveRecord.from_xml(response.body) if get
+#          return ActiveRecord.from_xml(response.body) if get
           response
           
         }
