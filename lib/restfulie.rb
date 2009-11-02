@@ -92,16 +92,12 @@ module ActiveRecord
           http = Net::HTTP.new(url.host, url.port)
           response = http.request(req)
           if get
-            puts "coleguinha aqui eu vou #{response.content_type}!"
             case response.content_type
             when "application/xml"
-              puts "coleguinha aqui eu vou #{response.content_type}!"
               hash = Hash.from_xml response.body
-              puts "coleguinha aqui eu vou! #{hash}"
               return hash if hash.keys.length == 0
               raise "unable to parse an xml with more than one root element" if hash.keys.length>1
               key = hash.keys[0]
-              puts "coleguinha meu key eh #{key}"
               type = key.camelize.constantize
               return type.from_xml response.body
             when "application/json"
