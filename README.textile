@@ -1,6 +1,35 @@
-h1. Restfulie
+h1. Quit pretending
 
-This is a small cute plugin to show how to implement hypermedia based services in a easy way using rails.
+CRUD through HTTP is a good step forward to using resources and becoming RESTFul, another step further into is to make use of hypermedia based services and this gem allows you to do it really fast.
+
+h1. Restfulie: client-side
+
+Here you can see how to access a resource and its services through the restfulie API:
+
+<pre>
+order = Order.from_web resource_uri      # retrieves order resource (xml/atom/json support)
+
+puts "Order price is #{order.price}"
+
+order.pay payment                        # sends a post request to pay this order
+
+order.cancel                             # sends a delete request
+</pre>
+
+h1. Restfulie: server-side
+
+This is a simple example how to make your state changes available to your resource consumers:
+
+<pre>
+	class Order < ActiveRecord::Base
+	  def following_states
+	    states = [ {:controller => :orders, :action => :show } ]
+	    states << {:controller => :orders, :action => :destroy} if can_cancel?
+	    states << {:controller => :orders, :action => :pay, :id => id} if can_pay?
+	    states << {:controller => :payments, :action => :show, :payment_id => payment.id } if paied?
+	    states
+	  end
+</pre>
 
 h2. Installing
 
