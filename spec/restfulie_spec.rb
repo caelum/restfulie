@@ -19,7 +19,7 @@ describe RestfulieModel do
     
   context "when parsed to json" do
     it "should include the method following_states" do
-      subject.to_json.should eql("{\"following_states\":{\"rel\":\"next_state\",\"action\":\"action_name\"}}")
+      subject.to_json.should eql("{\"following_states\":{\"action\":\"action_name\",\"rel\":\"next_state\"}}")
     end
   end
   

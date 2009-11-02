@@ -6,10 +6,10 @@ require 'spec/rake/spectask'
 
 GEM = "restfulie"
 GEM_VERSION = "0.1"
-SUMMARY = ""
-AUTHOR = "Caelum"
-EMAIL = ""
-HOMEPAGE = "http://www.caelum.com.br"
+SUMMARY = "This is a small cute plugin to show how to implement hypermedia based services in a easy way using rails."
+AUTHOR = "Guilherme Silveira, Caue Guerra"
+EMAIL = "guilherme.silveira@caelum.com.br"
+HOMEPAGE = "http://github.com/caelum/restfulie"
 
 spec = Gem::Specification.new do |s|
   s.name = GEM
@@ -19,7 +19,7 @@ spec = Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
 
-  s.add_dependency(%q<rubigen>, [">= 1.3.4"])
+  # s.add_dependency(%q<rubigen>, [">= 1.3.4"])
 
   s.author = AUTHOR
   s.email = EMAIL
