@@ -65,7 +65,7 @@ module ActiveRecord
           options = {} if options.nil?
           data = options[:data] || {}
           url = URI.parse(state["href"])
-#          get = false
+          get = false
           
           # gs: i dont know how to meta play here! i suck
           if options[:method]=="delete"
@@ -74,14 +74,14 @@ module ActiveRecord
             req = Net::HTTP::Put.new(url.path)
           elsif options[:method]=="get"
             req = Net::HTTP::Get.new(url.path)
-#            get = true
+            get = true
           elsif options[:method]=="post"
             req = Net::HTTP::Post.new(url.path)
           elsif ['destroy','delete','cancel'].include? name
             req = Net::HTTP::Delete.new(url.path)
           elsif ['refresh', 'reload', 'show', 'latest'].include? name
             req = Net::HTTP::Get.new(url.path)
- #           get = true
+            get = true
           else
             req = Net::HTTP::Post.new(url.path)
           end
@@ -91,7 +91,25 @@ module ActiveRecord
 
           http = Net::HTTP.new(url.host, url.port)
           response = http.request(req)
-#          return ActiveRecord.from_xml(response.body) if get
+          if get
+            puts "coleguinha aqui eu vou #{response.content_type}!"
+            case response.content_type
+            when "application/xml"
+              puts "coleguinha aqui eu vou #{response.content_type}!"
+              hash = Hash.from_xml response.body
+              puts "coleguinha aqui eu vou! #{hash}"
+              return hash if hash.keys.length == 0
+              raise "unable to parse an xml with more than one root element" if hash.keys.length>1
+              key = hash.keys[0]
+              puts "coleguinha meu key eh #{key}"
+              type = key.camelize.constantize
+              return type.from_xml response.body
+            when "application/json"
+              return self.from_json response.body
+            else
+              raise :unknown_content_type
+            end
+          end
           response
           
         }

@@ -9,6 +9,10 @@ class RestfulieModel < ActiveRecord::Base
   end
 end
 
+class Order < ActiveRecord::Base
+  attr_accessor :buyer
+end
+
 class MockedController
   def url_for(x)
     "http://url_for/#{x[:action]}"
@@ -92,18 +96,18 @@ describe RestfulieModel do
         res = model.send('update')
         res.should eql(expected_response)
     end
-    it "should send a GET request if the state transition name is refresh, reload, show or latest" do
-      ["refresh", "latest", "reload", "show"].each do |method_name|
-        model = RestfulieModel.from_xml xml_for(method_name)
-        req = mock Net::HTTP::Get
-        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-        req.should_receive(:set_form_data).with({})
-
-        expected_response = prepare_http_for(req)
-        res = model.send(method_name)
-        res.should eql(expected_response)
-      end
-    end
+    # it "should send a GET request if the state transition name is refresh, reload, show or latest" do
+    #   ["refresh", "latest", "reload", "show"].each do |method_name|
+    #     model = RestfulieModel.from_xml xml_for(method_name)
+    #     req = mock Net::HTTP::Get
+    #     Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+    #     req.should_receive(:set_form_data).with({})
+    # 
+    #     expected_response = prepare_http_for(req)
+    #     res = model.send(method_name)
+    #     res.should eql(expected_response)
+    #   end
+    # end
     it "should allow method overriding" do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Delete
@@ -115,14 +119,17 @@ describe RestfulieModel do
         res.should eql(expected_response)
     end
     it "a GET should return the parsed content" do
-#        model = RestfulieModel.from_xml xml_for('check_info')
-#        req = mock Net::HTTP::Get
-#        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-#        req.should_receive(:set_form_data).with({})
+        model = RestfulieModel.from_xml xml_for('check_info')
+        req = mock Net::HTTP::Get
+        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
 
-#        expected_response = prepare_http_for(req)
-#        res = model.send('check_info')
-#        res.class.should eql(expected_response)
+        expected_response = prepare_http_for(req)
+        expected_response.should_receive(:body).and_return("<order><buyer>guilherme silveira</buyer></order>")
+        expected_response.should_receive(:content_type).and_return('application/xml')
+        res = model.send('check_info', {:method => "get"})
+        res.class.to_s.should eql('Order')
+        res.buyer.should eql('guilherme silveira')
     end
   end
   
