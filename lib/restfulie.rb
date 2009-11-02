@@ -59,7 +59,7 @@ module ActiveRecord
         result.create_method(name){ |options|
           
           options = {} if options.nil?
-          data = options['data'] || {}
+          data = options[:data] || {}
           url = URI.parse(state["href"])
           
           # gs: i dont know how to meta play here! i suck
