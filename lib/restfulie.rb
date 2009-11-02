@@ -94,12 +94,13 @@ module ActiveRecord
           if get
             case response.content_type
             when "application/xml"
-              hash = Hash.from_xml response.body
+              body = response.body
+              hash = Hash.from_xml body
               return hash if hash.keys.length == 0
               raise "unable to parse an xml with more than one root element" if hash.keys.length>1
               key = hash.keys[0]
               type = key.camelize.constantize
-              return type.from_xml response.body
+              return type.from_xml body
             else
               raise :unknown_content_type
             end

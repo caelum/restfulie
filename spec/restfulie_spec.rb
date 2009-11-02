@@ -96,18 +96,18 @@ describe RestfulieModel do
         res = model.send('update')
         res.should eql(expected_response)
     end
-    # it "should send a GET request if the state transition name is refresh, reload, show or latest" do
-    #   ["refresh", "latest", "reload", "show"].each do |method_name|
-    #     model = RestfulieModel.from_xml xml_for(method_name)
-    #     req = mock Net::HTTP::Get
-    #     Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-    #     req.should_receive(:set_form_data).with({})
-    # 
-    #     expected_response = prepare_http_for(req)
-    #     res = model.send(method_name)
-    #     res.should eql(expected_response)
-    #   end
-    # end
+    it "should send a GET request if the state transition name is refresh, reload, show or latest" do
+      ["refresh", "latest", "reload", "show"].each do |method_name|
+        model = RestfulieModel.from_xml xml_for(method_name)
+        req = mock Net::HTTP::Get
+        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
+    
+        expected_response = prepare_http_for(req)
+        res = model.send(method_name)
+        res.should eql(expected_response)
+      end
+    end
     it "should allow method overriding" do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Delete
