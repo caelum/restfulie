@@ -59,6 +59,7 @@ module ActiveRecord
         result.create_method(name){ |options|
           
           options = {} if options.nil?
+          data = options['data'] || {}
           url = URI.parse(state["href"])
           
           # gs: i dont know how to meta play here! i suck
@@ -77,7 +78,8 @@ module ActiveRecord
           else
             req = Net::HTTP::Post.new(url.path)
           end
-          
+
+          req.set_form_data(data)
           req.add_field("Accept", "text/xml") if result._came_from == :xml
 
           http = Net::HTTP.new(url.host, url.port)

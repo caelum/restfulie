@@ -145,4 +145,7 @@ describe RestfulieModel do
     end
   end
   
+  # to do: support 405 if its mistaken
+  # to do: move raise to something else
+  
 end
