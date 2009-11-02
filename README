@@ -3,6 +3,15 @@ Restfulie
 
 This is a small cute plugin to show how to implement hypermedia based services in a easy way using rails.
 
+Installing
+==========
+
+Just add in your environment.rb the following line:
+
+config.gem "restfulie", :source => "http://gemcutter.org"
+
+Than, execute: rake gems:install
+
 
 Typical Restful Example
 =======================
