@@ -114,6 +114,17 @@ describe RestfulieModel do
         res = model.send('update', {:method=>"delete"})
         res.should eql(expected_response)
     end
+    it "a GET should return the parsed content" do
+        model = RestfulieModel.from_xml xml_for('check_info')
+        req = mock Net::HTTP::Get
+        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
+
+        expected_response = prepare_http_for(req)
+        res = model.send('check_info')
+        res.class.should eql(expected_response)
+      end
+    end
   end
   
   def mock_response(options = {})
