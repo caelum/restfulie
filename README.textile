@@ -35,9 +35,15 @@ h2. Installing
 
 Just add in your environment.rb the following line:
 
+<pre>
 config.gem "restfulie", :source => "http://gemcutter.org"
+</pre>
 
 Execute: rake gems:install
+
+or, if you prefer to install as a plugin:
+
+script/plugin install git://github.com/caelum/restfulie.git
 
 h2. Typical Restful Example
 
