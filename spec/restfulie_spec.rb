@@ -104,8 +104,10 @@ describe RestfulieModel do
         req.should_receive(:set_form_data).with({})
     
         expected_response = prepare_http_for(req)
+        expected_response.should_receive(:body).and_return("<restfulie_model></restfulie_model>")
+        expected_response.should_receive(:content_type).and_return('application/xml')
         res = model.send(method_name)
-        res.should eql(expected_response)
+        res.class.to_s.should eql('RestfulieModel')
       end
     end
     it "should allow method overriding" do
