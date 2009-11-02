@@ -75,6 +75,7 @@ describe RestfulieModel do
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         res = model.send(method_name)
@@ -85,6 +86,7 @@ describe RestfulieModel do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Post
         Net::HTTP::Post.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         res = model.send('update')
@@ -95,6 +97,7 @@ describe RestfulieModel do
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         res = model.send(method_name)
@@ -105,6 +108,7 @@ describe RestfulieModel do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         res = model.send('update', {:method=>"delete"})
