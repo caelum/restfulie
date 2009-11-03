@@ -96,7 +96,7 @@ module ActiveRecord
 
             http = Net::HTTP.new(url.host, url.port)
             response = http.request(req)
-            return yield if !block.nil?
+            return yield(response) if !block.nil?
             if get
               case response.content_type
               when "application/xml"

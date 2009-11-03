@@ -142,6 +142,7 @@ describe RestfulieModel do
         expected_response = prepare_http_for(req)
         expected_result = "my_custom_info"
         my_result = model.send('check_info', {:method => "get"}) do |response|
+          response.should eql(expected_response)
           expected_result
         end
         my_result.should eql(expected_result)
