@@ -204,7 +204,7 @@ In order to pay do not forget to send the parameter *payment* with a value as
 </pre>
 
 
-h3. Source
+h3. Sources
 
 "Client":http://github.com/caelum/restfulie-client
 "Server":http://github.com/caelum/restfulie-test
