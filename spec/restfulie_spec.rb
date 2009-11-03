@@ -133,6 +133,45 @@ describe RestfulieModel do
         res.class.to_s.should eql('Order')
         res.buyer.should eql('guilherme silveira')
     end
+    it "should allow the user to receive the response" do
+        model = RestfulieModel.from_xml xml_for('check_info')
+        req = mock Net::HTTP::Get
+        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
+        req.should_receive(:set_form_data).with({})
+
+        expected_response = prepare_http_for(req)
+        expected_result = "my_custom_info"
+        my_result = model.send('check_info', {:method => "get"}) do |response|
+          expected_result
+        end
+        my_result.should eql(expected_result)
+    end
+    class X
+      def a(&body)
+        puts "chamei"
+        yield
+      end
+      def create_method(name, &block)
+        self.class.send(:define_method, name, &block)
+      end
+    end
+    it "should work" do
+      method_name = "b"
+        "X".constantize.module_eval do
+          def temp_method(*args, &block)
+            yield
+            puts "qq coisa"
+          end
+          alias_method method_name, :temp_method
+          undef :temp_method
+        end
+      X.new.b do
+        puts "entrei aqui dentro"
+      end
+      X.new.send('b') do
+        puts "rolou"
+      end
+    end
   end
   
   def mock_response(options = {})

@@ -60,54 +60,64 @@ module ActiveRecord
       
       states.each do |state|
         name = state["rel"]
-        result.create_method(name){ |options|
-          
-          options = {} if options.nil?
-          data = options[:data] || {}
-          url = URI.parse(state["href"])
-          get = false
-          
-          # gs: i dont know how to meta play here! i suck
-          if options[:method]=="delete"
-            req = Net::HTTP::Delete.new(url.path)
-          elsif options[:method]=="put"
-            req = Net::HTTP::Put.new(url.path)
-          elsif options[:method]=="get"
-            req = Net::HTTP::Get.new(url.path)
-            get = true
-          elsif options[:method]=="post"
-            req = Net::HTTP::Post.new(url.path)
-          elsif ['destroy','delete','cancel'].include? name
-            req = Net::HTTP::Delete.new(url.path)
-          elsif ['refresh', 'reload', 'show', 'latest'].include? name
-            req = Net::HTTP::Get.new(url.path)
-            get = true
-          else
-            req = Net::HTTP::Post.new(url.path)
+        self.module_eval do
+          def current_method
+            caller[0]=~/`(.*?)'/
+            $1
           end
+          def temp_method(options = {}, &block)
+            name = current_method
+            state = _possible_states[name]
+            puts "Chamou um super metodo #{current_method} com #{options} #{state}"
+            data = options[:data] || {}
+            url = URI.parse(state["href"])
+            get = false
 
-          req.set_form_data(data)
-          req.add_field("Accept", "text/xml") if result._came_from == :xml
-
-          http = Net::HTTP.new(url.host, url.port)
-          response = http.request(req)
-          if get
-            case response.content_type
-            when "application/xml"
-              body = response.body
-              hash = Hash.from_xml body
-              return hash if hash.keys.length == 0
-              raise "unable to parse an xml with more than one root element" if hash.keys.length>1
-              key = hash.keys[0]
-              type = key.camelize.constantize
-              return type.from_xml body
+            # gs: i dont know how to meta play here! i suck
+            if options[:method]=="delete"
+              req = Net::HTTP::Delete.new(url.path)
+            elsif options[:method]=="put"
+              req = Net::HTTP::Put.new(url.path)
+            elsif options[:method]=="get"
+              req = Net::HTTP::Get.new(url.path)
+              get = true
+            elsif options[:method]=="post"
+              req = Net::HTTP::Post.new(url.path)
+            elsif ['destroy','delete','cancel'].include? name
+              req = Net::HTTP::Delete.new(url.path)
+            elsif ['refresh', 'reload', 'show', 'latest'].include? name
+              req = Net::HTTP::Get.new(url.path)
+              get = true
             else
-              raise :unknown_content_type
+              req = Net::HTTP::Post.new(url.path)
             end
+
+            req.set_form_data(data)
+            req.add_field("Accept", "text/xml") if _came_from == :xml
+
+            http = Net::HTTP.new(url.host, url.port)
+            response = http.request(req)
+            #return body(response) if !body.nil?
+            if get
+              case response.content_type
+              when "application/xml"
+                content = response.body
+                hash = Hash.from_xml content
+                return hash if hash.keys.length == 0
+                raise "unable to parse an xml with more than one root element" if hash.keys.length>1
+                key = hash.keys[0]
+                type = key.camelize.constantize
+                return type.from_xml content
+              else
+                raise :unknown_content_type
+              end
+            end
+            response
+
           end
-          response
-          
-        }
+          alias_method name, :temp_method
+          undef :temp_method
+        end
       end
       
       result
