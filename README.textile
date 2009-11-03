@@ -102,7 +102,7 @@ h3. HTTP verbs
 By default, restfulie uses the following table:
 
 * destroy, cancel and delete send a DELETE request
-* update sends a POST request
+* update sends a PUT request
 * refresh, reload, show, latest sends a GET request
 * other methods sends a POST request
 
@@ -153,7 +153,7 @@ services through commons rel+link xml as
 You can do it by passing the *use_name_based_link* argument:
 
 <pre>
-    order.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should 
+    order.to_xml(:controller => my_controller, :use_name_based_link => true)
 </pre>
 
 h2. Team
