@@ -1,13 +1,13 @@
 h1. Quit pretending
 
-CRUD through HTTP is a good step forward to using resources and becoming RESTFul, another step further into is to make use of hypermedia based services and this gem allows you to do it really fast.
+CRUD through HTTP is a good step forward to using resources and becoming RESTful, another step further into it is to make use of hypermedia based services and this gem allows you to do it really fast.
 
 h1. Restfulie: client-side
 
-Here you can see how to access a resource and its services through the restfulie API:
+Example on accessing a resource and its services through the restfulie API:
 
 <pre>
-order = Order.from_web resource_uri      # retrieves order resource (xml/atom/json support)
+order = Order.from_web resource_uri
 
 puts "Order price is #{order.price}"
 
@@ -39,33 +39,35 @@ Just add in your environment.rb the following line:
 config.gem "restfulie", :source => "http://gemcutter.org"
 </pre>
 
-Execute:
+And then execute:
 <pre>rake gems:install</pre>
 
-or, if you prefer to install as a plugin:
+or, if you prefer to install it as a plugin:
 
-script/plugin install git://github.com/caelum/restfulie.git
+<pre>script/plugin install git://github.com/caelum/restfulie.git</pre>
 
 h2. Typical Restful Example
 
-Trying to follow the definition of a restful application supporting resources with hypermedia content, a typical restful resource would be:
+Trying to follow the definition of a RESTful application supporting resources with hypermedia content, a resource would be:
 
 <pre>
 <order>
 	<product>basic rails course</product>
-	<product>restful training</product>
+	<product>RESTful training</product>
 	<atom:link rel="refresh" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
 	<atom:link rel="update" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
-	<atom:link rel="pay" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+	<atom:link rel="pay" href="http://www.caelum.com.br/orders/1/pay" xmlns:atom="http://www.w3.org/2005/Atom"/>
 	<atom:link rel="destroy" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
 </order>
 </pre>
 
 h2. Client Usage
 
-One should first acquire the representation from the server through your common GET process and process it through the usual from_* methods:
+One should first acquire the representation from the server through your common GET request and process it through the usual from_* methods:
 <pre>xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
 order = Order.from_xml(xml)</pre>
+or use the restfulie *from_web*:
+<pre>order = Order.from_web 'http://www.caelum.com.br/orders/1'</pre>
 
 And now you can invoke all those actions in order to change your resource's state:
 
@@ -73,7 +75,7 @@ And now you can invoke all those actions in order to change your resource's stat
 order.refresh
 order.update
 order.destroy
-order.pay(payment)
+order.pay
 </pre>
 
 Note that:
@@ -84,27 +86,82 @@ Note that:
 
 h2. Resource format support
 
-Restfulie currently supports xml+atom and will soon expand its support to xml+rel links and json+links supports. Those new formats will also support automatic http verb detection - if possible and reasonable.
+Restfulie currently supports full xml+atom, partial xml+rel and will soon expand its support to json+links.
 
 
 h2. Help
 
 If you are looking for or want to help, let us know at the mailing list: http://groups.google.com/group/restfulie
 
-h2. How to customize your request
+h2. Client-side configuration: how to customize your request
+
+h3. HTTP verbs
 
 By default, restfulie uses the following table:
 
 * destroy, cancel and delete send a DELETE request
 * update sends a POST request
-* refresh, reload, show sends a GET request
+* refresh, reload, show, latest sends a GET request
 * other methods sends a POST request
 
 If you want to use a custom http verb in order to send your request, you can do it by setting the optional string 'method':
 
+<pre>order.update(:method=>"post")</pre>
+
+h3. Request parameters
+
+If you want to send extra parameters, you can do it through the *data* parameter:
+
+<pre>order.pay(:data => {:payment => my_payment})</pre>
+
+The parameters will be serialized either to xml or json according to which format was used to deserialize the order at first place.
+
+h3. Executing another GET request
+
+If your method executes another GET request, it will automatically deserialize its result as:
+
+<pre>order = Order.from_web order_uri
+payment = order.check_payment_info</pre>
+
+If you want to parse the response yourself, instead of receiving just the final deserialized object, you can do it by passing a body to your method
+
+<pre>order = Order.from_web order_uri
+successful = order.check_payment_info do |response|
+  return response.code==200
+end</pre>
+
+h2. Server-side configuration
+
+h3. Using xml+rel links instead of atom links
+
+Atom is everywhere and can be consumed by a number of existing tools but if your system wants to supply its
+services through commons rel+link xml as
+
 <pre>
-order.update(:method=>"post")
+	<order>
+		<product>basic rails course</product>
+		<product>RESTful training</product>
+		<refresh>http://www.caelum.com.br/orders/1</refresh>
+		<update>http://www.caelum.com.br/orders/1</update>
+		<pay>http://www.caelum.com.br/orders/1/pay</pay>
+		<destroy>http://www.caelum.com.br/orders/1</destroy>
+	</order>
 </pre>
+
+You can do it by passing the *use_name_based_link* argument:
+
+<pre>
+    order.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should 
+</pre>
+
+h2. Team
+
+Commiters
+* Caue Guerra
+* Guilherme Silveira
+
+Collaborators
+* Diego Carrion
 
 h2. License
 
