@@ -91,7 +91,9 @@ Restfulie currently supports full xml+atom, partial xml+rel and will soon expand
 
 h2. Help
 
-If you are looking for or want to help, let us know at the mailing list: http://groups.google.com/group/restfulie
+If you are looking for or want to help, let us know at the mailing list:
+
+"http://groups.google.com/group/restfulie":http://groups.google.com/group/restfulie
 
 h2. Client-side configuration: how to customize your request
 
@@ -156,9 +158,11 @@ You can do it by passing the *use_name_based_link* argument:
 
 h2. Team
 
+Restfulie was created and is maintained within Caelum by
+
 Commiters
-* Caue Guerra
-* Guilherme Silveira
+* "Caue Guerra":mailto:caue.guerra@gmail.com
+* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
 
 Collaborators
 * Diego Carrion
