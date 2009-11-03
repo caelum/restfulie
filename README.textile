@@ -173,14 +173,14 @@ We have a live example of a server implementation using a resource+hypermedia co
 
 Follow the steps below to try out the system:
 
-* "Access the server system":restfulie-test.heroku.com
+* "Access the server system":http://restfulie-test.heroku.com
 * Create a couple of trainings
 * Create an order
 * Access the order listing and retrieve its xml link
 
 And now you can try the restfulie client api through a simple and generic resource+hypermedia client application:
 
-* "Access the client system":restfulie-client.heroku.com
+* "Access the client system":http://restfulie-client.heroku.com
 * Enter your order uri
 * Check your order information which was retrieved and all available actions
 
@@ -202,6 +202,11 @@ In order to pay do not forget to send the parameter *payment* with a value as
    <expiry_year>12</expiry_year>
  </payment>
 </pre>
+
+
+h3. Source
+"Client":http://github.com/caelum/restfulie-client
+"Server":http://github.com/caelum/restfulie-test
 
 
 h2. License
