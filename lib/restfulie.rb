@@ -68,7 +68,6 @@ module ActiveRecord
           def temp_method(options = {}, &block)
             name = current_method
             state = _possible_states[name]
-            puts "Chamou um super metodo #{current_method} com #{options} #{state}"
             data = options[:data] || {}
             url = URI.parse(state["href"])
             get = false
@@ -97,7 +96,7 @@ module ActiveRecord
 
             http = Net::HTTP.new(url.host, url.port)
             response = http.request(req)
-            #return body(response) if !body.nil?
+            return yield if !block.nil?
             if get
               case response.content_type
               when "application/xml"

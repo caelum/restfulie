@@ -146,32 +146,6 @@ describe RestfulieModel do
         end
         my_result.should eql(expected_result)
     end
-    class X
-      def a(&body)
-        puts "chamei"
-        yield
-      end
-      def create_method(name, &block)
-        self.class.send(:define_method, name, &block)
-      end
-    end
-    it "should work" do
-      method_name = "b"
-        "X".constantize.module_eval do
-          def temp_method(*args, &block)
-            yield
-            puts "qq coisa"
-          end
-          alias_method method_name, :temp_method
-          undef :temp_method
-        end
-      X.new.b do
-        puts "entrei aqui dentro"
-      end
-      X.new.send('b') do
-        puts "rolou"
-      end
-    end
   end
   
   def mock_response(options = {})
