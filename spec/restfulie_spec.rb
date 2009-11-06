@@ -4,12 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
   
-  # state [:received, :cancelled], :allow => [:latest]
-  # state :preparing, :allow => [:latest]
-  # state :ready, :allow => [:latest, :receive]
-  # 
   # transition :cancel, {:action => :destroy}, :cancelled
-  # transition :pay, {}, :preparing
   # transition :receive, {}, :received
 end
 
@@ -69,8 +64,15 @@ describe RestfulieModel do
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state froms, :allow => [:latest]
       froms.each do |from|
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link href="http://url_for/show" xmlns:atom="http://www.w3.org/2005/Atom" rel="show"/></restfulie-model>')
+        subject.status = from
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="show"/></restfulie-model>')
       end
+    end
+    it "should use transition name if there is no action" do
+      my_controller = MockedController.new
+      RestfulieModel.transition :pay
+      RestfulieModel.state :unpaid, :allow => [:latest]
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
     end
   end
   

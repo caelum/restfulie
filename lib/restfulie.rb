@@ -47,7 +47,7 @@ module ActiveRecord
     attr_accessor :_came_from
     
     def self._transitions_for(state)
-      puts "Found #{@@states[state]}"
+      #puts "Found #{@@states[state]}"
       @@states[state]
     end
     
@@ -59,13 +59,20 @@ module ActiveRecord
     @@transitions = {}
     
     def self.state(name, options)
-      @@states[name] = options
-      puts "All states so far are #{@@states}"
+      if name.class==Array
+        puts "Indo para cada uma"
+        name.each do |simple|
+          self.state(simple, options)
+        end
+      else
+        @@states[name] = options
+#      puts "All states so far are #{@@states}"
+      end
     end
 
-    def self.transition(name, options)
+    def self.transition(name, options = {})
       @@transitions[name] = options
-      puts "All transitions so far are #{@@transitions}"
+#        puts "All transitions so far are #{@@transitions}"
     end
 
     def self.add_states(result, states)
