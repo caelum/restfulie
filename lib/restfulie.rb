@@ -68,10 +68,11 @@ module ActiveRecord
       end
     end
 
-    def self.transition(name, options = {})
+    def self.transition(name, options = {}, result = nil)
       @@transitions[name] = options
+      result ||= name
       self.send(:define_method, name) do
-        self.status = name
+        self.status = result
       end
       # class self
       # end
