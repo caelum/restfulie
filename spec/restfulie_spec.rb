@@ -3,10 +3,6 @@ require 'uri'
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
-  def following_states
-    {:rel => "next_state", :action => "action_name"}
-  end
-  state :unpaid, :allow => [:latest]
   
   # state :unpaid, :allow => [:latest, :pay, :cancel, :update]
   # state [:received, :cancelled], :allow => [:latest]
@@ -35,19 +31,21 @@ describe RestfulieModel do
     subject.status = :unpaid
   end
 
-  context "when parsed to json" do
+  describe "when parsed to json" do
     it "should include the method following_states" do
-      subject.to_json.should eql("{\"status\":\"unpaid\",\"following_states\":{\"rel\":\"next_state\",\"action\":\"action_name\"}}")
+      subject.to_json.should eql("{\"status\":\"unpaid\"}")
     end
   end
   
-  context "when parsed to xml" do
+  describe "when parsed to xml" do
     it "should not add hypermedia if controller is nil" do
       subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
     end
-    it "should add hypermedia atom link if controller is set" do
+    it "should add allowable actions to models xml if controller is set" do
       my_controller = MockedController.new
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>')
+      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+      RestfulieModel.state :unpaid, :allow => [:latest]
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link rel="show" xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show"/></restfulie-model>')
     end
     it "should add hypermedia link if controller is set and told to use name based link" do
       my_controller = MockedController.new
@@ -62,7 +60,7 @@ describe RestfulieModel do
     end
   end
   
-  context "when adding states" do
+  describe "when adding states" do
     it "should ignore namespaces" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model xmlns="http://www.caelum.com.br/restfulie"></restfulie-model>'
       model = RestfulieModel.from_xml xml
@@ -92,7 +90,7 @@ describe RestfulieModel do
     response
   end
 
-  context "when invoking an state change" do
+  describe "when invoking an state change" do
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
       ["cancel", "destroy", "delete"].each do |method_name|
         model = RestfulieModel.from_xml xml_for(method_name)
@@ -176,7 +174,7 @@ describe RestfulieModel do
     res
   end
   
-  context "when de-serializing straight from a web request" do
+  describe "when de-serializing straight from a web request" do
     def mock_request_for(type, body)
       req = mock Net::HTTP::Get
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)

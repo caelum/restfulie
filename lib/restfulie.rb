@@ -12,21 +12,22 @@ module Restfulie
     
     options[:skip_types] = true
     super options do |xml|
-      if respond_to?(:following_states)
-        states = following_states
-        states = [states] if states.class.to_s != 'Array'
-        states.each do |action|
-          rel = action[:action]
-          if action[:rel]
-            rel = action[:rel]
-            action[:rel] = nil
-          end
-          translate_href = controller.url_for(action)
-          if options[:use_name_based_link]
-            xml.tag!(rel, translate_href)
-          else
-            xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
-          end
+      return if !respond_to?(:status)
+      following_states = self.class._transitions_for(status)
+      return if following_states.nil?
+      following_states[:allow].each do |name|
+        action = self.class._transitions(name)
+        puts "i will be able to go to #{name} which is #{action}"
+        rel = action[:action]
+        if action[:rel]
+          rel = action[:rel]
+          action[:rel] = nil
+        end
+        translate_href = controller.url_for(action)
+        if options[:use_name_based_link]
+          xml.tag!(rel, translate_href)
+        else
+          xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
         end
       end
     end
@@ -45,11 +46,26 @@ module ActiveRecord
     attr_accessor :_possible_states
     attr_accessor :_came_from
     
-    @@states = []
+    def self._transitions_for(state)
+      puts "Found #{@@states[state]}"
+      @@states[state]
+    end
+    
+    def self._transitions(name)
+      @@transitions[name]
+    end
+    
+    @@states = {}
+    @@transitions = {}
     
     def self.state(name, options)
-      @@states << [name, options]
+      @@states[name] = options
       puts "All states so far are #{@@states}"
+    end
+
+    def self.transition(name, options)
+      @@transitions[name] = options
+      puts "All transitions so far are #{@@transitions}"
     end
 
     def self.add_states(result, states)
