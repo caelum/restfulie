@@ -34,7 +34,7 @@ describe RestfulieModel do
     it "should add allowable actions to models xml if controller is set" do
       my_controller = MockedController.new
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
-      RestfulieModel.state :unpaid, :allow => [:latest]
+      RestfulieModel.state :unpaid, :allow => :latest
       subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="show"/></restfulie-model>')
     end
     it "should add more than 1 allowable actions to models xml if controller is set" do

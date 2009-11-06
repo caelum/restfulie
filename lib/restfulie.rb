@@ -47,7 +47,6 @@ module ActiveRecord
     attr_accessor :_came_from
     
     def self._transitions_for(state)
-      #puts "Found #{@@states[state]}"
       @@states[state]
     end
     
@@ -64,6 +63,7 @@ module ActiveRecord
           self.state(simple, options)
         end
       else
+        options[:allow] = [options[:allow]] unless options[:allow].class == Array
         @@states[name] = options
       end
     end
@@ -74,11 +74,6 @@ module ActiveRecord
       self.send(:define_method, name) do
         self.status = result
       end
-      # class self
-      # end
-      # define_method name do
-      #   @status = name
-      # end 
     end
 
     def self.add_states(result, states)
