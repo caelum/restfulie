@@ -162,6 +162,7 @@ module ActiveRecord
             h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
           end
         end
+        h.delete("xmlns") if key=="xmlns"
       end
       result = self.new h
       add_states(result, links) unless links.nil?
