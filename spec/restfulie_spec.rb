@@ -3,9 +3,6 @@ require 'uri'
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
-  
-  # transition :cancel, {:action => :destroy}, :cancelled
-  # transition :receive, {}, :received
 end
 
 class Order < ActiveRecord::Base
@@ -71,9 +68,16 @@ describe RestfulieModel do
     it "should use transition name if there is no action" do
       my_controller = MockedController.new
       RestfulieModel.transition :pay
-      RestfulieModel.state :unpaid, :allow => [:latest]
+      RestfulieModel.state :unpaid, :allow => [:pay]
       subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
     end
+    # it "should use transition name if there is no action" do
+    #   my_controller = MockedController.new
+    #   RestfulieModel.transition :pay
+    #   RestfulieModel.state :unpaid, :allow => [:latest]
+    #   subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
+    # end
+    # transition :cancel, {:action => :destroy}, :cancelled
   end
   
   describe "when adding states" do

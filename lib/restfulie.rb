@@ -18,6 +18,7 @@ module Restfulie
       following_states[:allow].each do |name|
         action = self.class._transitions(name)
         puts "i will be able to go to #{name} which is #{action}"
+        action[:action] ||= name
         rel = action[:action]
         if action[:rel]
           rel = action[:rel]
