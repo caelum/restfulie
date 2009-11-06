@@ -45,7 +45,7 @@ describe RestfulieModel do
       my_controller = MockedController.new
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => [:latest]
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link rel="show" xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show"/></restfulie-model>')
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="show"/></restfulie-model>')
     end
     it "should add hypermedia link if controller is set and told to use name based link" do
       my_controller = MockedController.new
@@ -53,12 +53,11 @@ describe RestfulieModel do
       RestfulieModel.state :unpaid, :allow => [:latest]
       subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show>http://url_for/show</show></restfulie-model>')
     end
-    it "should use action name if there is no rel attribute" do
-      def subject.following_states
-        [{:action => "next_action"}]
-      end
+    it "should use rel if there is a rel attribute" do
       my_controller = MockedController.new
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <next_action>http://url_for/next_action</next_action></restfulie-model>')
+      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
+      RestfulieModel.state :unpaid, :allow => [:latest]
+      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
     end
   end
   
