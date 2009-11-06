@@ -49,7 +49,9 @@ describe RestfulieModel do
     end
     it "should add hypermedia link if controller is set and told to use name based link" do
       my_controller = MockedController.new
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <next_state>http://url_for/action_name</next_state></restfulie-model>')
+      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+      RestfulieModel.state :unpaid, :allow => [:latest]
+      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show>http://url_for/show</show></restfulie-model>')
     end
     it "should use action name if there is no rel attribute" do
       def subject.following_states
