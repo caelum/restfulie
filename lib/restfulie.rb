@@ -5,7 +5,7 @@ module Restfulie
   def to_json
     super :methods => :following_states
   end
-
+  
   def to_xml(options = {})
     controller = options[:controller]
     return super if controller.nil?
@@ -44,6 +44,13 @@ module ActiveRecord
     include Restfulie
     attr_accessor :_possible_states
     attr_accessor :_came_from
+    
+    @@states = []
+    
+    def self.state(name, options)
+      @@states << [name, options]
+      puts "All states so far are #{@@states}"
+    end
 
     def self.add_states(result, states)
       result._possible_states = {}

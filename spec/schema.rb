@@ -1,5 +1,6 @@
 ActiveRecord::Schema.define :version => 0 do
   create_table "restfulie_models", :force => true do |t|
+    t.column :status, :string
   end
 end
 ActiveRecord::Schema.define :version => 1 do
