@@ -17,7 +17,6 @@ module Restfulie
       return if following_states.nil?
       following_states[:allow].each do |name|
         action = self.class._transitions(name)
-        puts "i will be able to go to #{name} which is #{action}"
         action[:action] ||= name
         rel = action[:action]
         if action[:rel]
@@ -61,19 +60,24 @@ module ActiveRecord
     
     def self.state(name, options)
       if name.class==Array
-        puts "Indo para cada uma"
         name.each do |simple|
           self.state(simple, options)
         end
       else
         @@states[name] = options
-#      puts "All states so far are #{@@states}"
       end
     end
 
     def self.transition(name, options = {})
       @@transitions[name] = options
-#        puts "All transitions so far are #{@@transitions}"
+      self.send(:define_method, name) do
+        self.status = name
+      end
+      # class self
+      # end
+      # define_method name do
+      #   @status = name
+      # end 
     end
 
     def self.add_states(result, states)
