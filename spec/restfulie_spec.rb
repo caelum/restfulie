@@ -4,7 +4,6 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
   
-  # state :unpaid, :allow => [:latest, :pay, :cancel, :update]
   # state [:received, :cancelled], :allow => [:latest]
   # state :preparing, :allow => [:latest]
   # state :ready, :allow => [:latest, :receive]
@@ -63,6 +62,15 @@ describe RestfulieModel do
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
       RestfulieModel.state :unpaid, :allow => [:latest]
       subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
+    end
+    it "should add all states if there is more than one with what is allowed" do
+      froms = [:received, :cancelled]
+      my_controller = MockedController.new
+      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+      RestfulieModel.state froms, :allow => [:latest]
+      froms.each do |from|
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link href="http://url_for/show" xmlns:atom="http://www.w3.org/2005/Atom" rel="show"/></restfulie-model>')
+      end
     end
   end
   
