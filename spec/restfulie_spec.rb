@@ -71,12 +71,12 @@ describe RestfulieModel do
       RestfulieModel.state :unpaid, :allow => [:pay]
       subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
     end
-    it "should use change to transition's name status when transitioning" do
+    it "should not change status if there is no result" do
       my_controller = MockedController.new
       RestfulieModel.transition :pay
       RestfulieModel.state :unpaid, :allow => [:pay]
       subject.pay
-      subject.status.should eql(:pay)
+      subject.status.should eql(:unpaid)
     end
     it "should use change status to its result when transitioning" do
       my_controller = MockedController.new

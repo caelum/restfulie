@@ -70,9 +70,8 @@ module ActiveRecord
 
     def self.transition(name, options = {}, result = nil)
       @@transitions[name] = options
-      result ||= name
       self.send(:define_method, name) do
-        self.status = result
+        self.status = result unless result==nil
       end
     end
 
