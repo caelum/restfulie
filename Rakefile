@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
 require 'spec/rake/spectask'
 
 GEM = "restfulie"
-GEM_VERSION = "0.1"
+GEM_VERSION = "0.2"
 SUMMARY = "This is a small cute plugin to show how to implement hypermedia based services in a easy way using rails."
 AUTHOR = "Guilherme Silveira, Caue Guerra"
 EMAIL = "guilherme.silveira@caelum.com.br"
