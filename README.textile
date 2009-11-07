@@ -29,6 +29,7 @@ This is a simple example how to make your state changes available to your resour
 	    states << {:controller => :payments, :action => :show, :payment_id => payment.id } if paied?
 	    states
 	  end
+	end
 </pre>
 
 h2. Installing

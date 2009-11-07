@@ -14,24 +14,28 @@ module Restfulie
     super options do |xml|
       return xml unless respond_to?(:status)
       
-      following_states = []
+      possible_following = []
       default_transitions_map = self.class._transitions_for(status.to_sym)
       default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
       
-      following_states += default_transitions unless default_transitions.nil?
-      following_states += self.following_transitions if self.respond_to?(:following_transitions)
+      possible_following += default_transitions unless default_transitions.nil?
+      possible_following += self.following_transitions if self.respond_to?(:following_transitions)
       
-      return xml if following_states.empty?
+      return xml if possible_following.empty?
 
-      following_states.each do |name|
-        result = self.class._transitions(name.to_sym)
+      possible_following.each do |possible|
+        if possible.class.name=="Array"
+          name = possible[0]
+          result = [possible[1], nil]
+        else
+          name = possible
+          result = self.class._transitions(name.to_sym)
+        end
         
         if result[0]
           action = result[0]
           body = result[1]
-          if body
-            action = body.call(self) if body
-          end
+          action = body.call(self) if body
 
           rel = action[:rel] || name || action[:action]
           action[:rel] = nil
@@ -39,6 +43,7 @@ module Restfulie
           action = {}
           rel = name
         end
+        
         action[:action] ||= name
         translate_href = controller.url_for(action)
         if options[:use_name_based_link]
@@ -46,6 +51,7 @@ module Restfulie
         else
           xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
         end
+        
       end
     end
   end
