@@ -69,8 +69,13 @@ module ActiveRecord
 
     def self.transition(name, options = {}, result = nil)
       @@transitions[name] = options
-      self.send(:define_method, name) do
-        self.status = result unless result==nil
+      if !self.respond_to?(name)
+        self.send(:define_method, name) do
+          self.status = result unless result == nil
+        end
+        self.send(:define_method, "can_#{name}2?") do
+          puts "executing can_#{name}2?"
+        end
       end
     end
 
