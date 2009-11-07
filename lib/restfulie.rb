@@ -13,10 +13,18 @@ module Restfulie
     options[:skip_types] = true
     super options do |xml|
       return xml unless respond_to?(:status)
-      following_states = self.class._transitions_for(status.to_sym)
-      return xml if following_states.nil?
+      
+      following_states = []
+      default_transitions_map = self.class._transitions_for(status.to_sym)
+      default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
+      
+      following_states += default_transitions unless default_transitions.nil?
+      following_states += self.following_transitions if self.respond_to?(:following_transitions)
+      puts "JA FIZ ATE AQUI #{default_transitions}"
+      
+      return xml if following_states.empty?
 
-      following_states[:allow].each do |name|
+      following_states.each do |name|
         result = self.class._transitions(name.to_sym)
         
         if result[0]

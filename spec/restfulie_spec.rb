@@ -54,6 +54,15 @@ describe RestfulieModel do
         RestfulieModel.state :unpaid, :allow => [:latest, :latest]
         subject.to_xml(:controller => my_controller).gsub("\n", '').should eql(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
       end
+      it "should add extra transitions if following_transitions are defined" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+        RestfulieModel.state :unpaid, :allow => [:latest]
+        def subject.following_transitions
+          [:latest]
+        end
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
+      end
       it "should add hypermedia link if controller is set and told to use name based link" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
