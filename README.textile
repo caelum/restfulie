@@ -4,10 +4,11 @@ CRUD through HTTP is a good step forward to using resources and becoming RESTful
 
 h2. Why would I use restfulie?
 
-1. It's easier to write RESTFul clients
-2.
-3.
-4. HATEOAS --> To make changes to your Your *unknown* clients will
+1. Easy --> writing hypermedia aware resource based clients
+2. Easy --> hypermedia aware resource based services
+3. Small -> it's not a bloated solution with a huge list of APIs
+4. HATEOAS --> clients you are unaware of will not bother if you change your URIs
+5. HATEOAS --> services that you consume will not affect your software whenever they change part of their flow or URIs
 
 h1. Restfulie: client-side
 
@@ -29,12 +30,13 @@ This is a simple example how to make your state changes available to your resour
 
 <pre>
 class Order < ActiveRecord::Base
-  def following_states
-    states = [ {:action => :show } ]
-    states << {:action => :destroy} if can_cancel?
-    states << {:action => :pay, :id => id} if can_pay?
-    states << {:controller => :payments, :action => :show, :payment_id => payment.id } if paied?
-    states
+  def following_transitions
+    transitions = []
+    transitions << [:show, {}]
+    transitions << [:destroy, {}] if can_cancel?
+    transitions << [:pay, {:id => id}] if can_pay?
+    transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if paied?
+    transitions
   end
 end
 </pre>
@@ -157,6 +159,128 @@ end</pre>
 
 h2. Server-side configuration
 
+There are two different approaches that can be combined to create a full hypermedia aware resource based service, including awareness of its states and transitions.
+
+h3. The following available transitions method
+
+The most easy way to use restfulie is to write the *following_transitions* method.
+It should return a list of possible transitions, where each transition is identified by an array of its name and definition.
+
+The next example shows how to define a transition which will map to the current controller, action show:
+
+<pre>
+def following_transitions
+  transitions = []
+  transitions << [:show, {}]
+  transitions
+end
+</pre>
+
+Which will generate an hyperlink as
+
+<pre><atom:link rel="show" rel="http://yourserver/orders/15" /></pre>
+
+h3. Customizing the rel name
+
+You can also override the action used, but still keep the rel
+
+<pre>
+def following_transitions
+  transitions = []
+  transitions << [:cancel, { :action => :destroy }]
+  transitions
+end
+</pre>
+
+Which will generate an hyperlink as
+
+<pre><atom:link rel="cancel" rel="http://yourserver/orders/15" /></pre>
+
+h3. Example
+
+A full example showing all capabilities of this method follows:
+
+<pre>
+def following_transitions
+  transitions = []
+  transitions << [:show, {}]
+  transitions << [:destroy, {}] if can_cancel?
+  transitions << [:pay, {:id => id}] if can_pay?
+  transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if paied?
+  transitions
+end
+</pre>
+
+h2. Defining the state machine and its transitions
+
+The second way of defining your available transitions is to explicitely define the states and transitions.
+
+By using this approach, one has to define a new column named *status* in a database migration file.
+
+The first step involves defining all your states, each one with its own name and possible transitions, as:
+
+<pre>
+	state :state_name, :allow => [ :first_transition_name, :second_transition_name]
+</pre>
+
+The following example shows all possible states for an order:
+
+<pre>
+class Order < ActiveRecord::Base
+	state :unpaid, :allow => [:latest, :pay, :cancel]
+	state :cancelled, :allow => :latest
+	state :received, :allow => [:latest, :check_payment_info]
+	state :preparing, :allow => [:latest, :check_payment_info]
+	state :ready, :allow => [:latest, :receive, :check_payment_info]
+end
+</pre>
+
+Now its time to define which controller and action each transition invokes, in a much similar way to
+the transition definitions in the following_transitions method:
+
+<pre>
+class Order < ActiveRecord::Base
+	transition :latest, {:action => :show}
+	transition :cancel, {:action => :destroy}, :cancelled
+	transition :pay, {}, :preparing
+	transition :receive, {}, :received
+	transition :execute_it, {}, :ready
+end
+</pre>
+
+Once a transition has been given a name, its name can be used in the following_transitions method also.
+The next example does not configure the transition because it was already defined, only adding it to the
+list of available transition whenever the *can_pay?* method returns true:
+
+<pre>
+class Order < ActiveRecord::Base
+	transition :pay, {:action => pay_this_order, :controller => :payments}, :preparing
+
+	def following_transitions
+	  transitions = []
+	  transitions << :pay if can_pay?
+	  transitions
+	end
+end
+</pre>
+
+Note that whenever one defines a transition, there is a third - optional - argument, this is the
+transition's target's state. Whenever the method *order.pay* method is invoked in the *server*, it will
+automatically change the order's status to *preparing*.
+
+You can download the server side example to see the complete code.
+
+The last usage of the transition definition involves passing a block which receives the element in which
+the transition URI's is required. The block should return all the necessary information for retrieving the URI, now having access to your element's instance variables:
+
+<pre>
+class Order < ActiveRecord::Base
+	transition :check_payment_info do |order|
+	   {:controller => :payments, :action => :show, :order_id => order.id, :payment_id => order.payments[0].id, :rel => "check_payment_info"}
+	end
+end
+</pre>
+  
 h3. Using xml+rel links instead of atom links
 
 Atom is everywhere and can be consumed by a number of existing tools but if your system wants to supply its
