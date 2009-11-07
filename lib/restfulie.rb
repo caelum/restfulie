@@ -15,16 +15,16 @@ module Restfulie
       return xml unless respond_to?(:status)
       following_states = self.class._transitions_for(status.to_sym)
       return xml if following_states.nil?
-      #puts "sim, eu tenho states"
+
       following_states[:allow].each do |name|
         result = self.class._transitions(name.to_sym)
         
-        #puts "achei #{action} de #{name} #{name.class}"
         if result[0]
           action = result[0]
           body = result[1]
-          puts "Vou executar #{body}"
-          action = body.call(self) if body
+          if body
+            action = body.call(self) if body
+          end
 
           rel = action[:rel] || name || action[:action]
           action[:rel] = nil
@@ -46,6 +46,13 @@ module Restfulie
   def create_method(name, &block)
     self.class.send(:define_method, name, &block)
   end
+  
+  def move_to(name)
+    transitions = self.class._transitions_for(self.status.to_sym)[:allow]
+    raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
+    result = self.class._transitions(name)[2]
+    self.status = result.to_s unless result.nil?
+  end
 
 end
 
@@ -61,12 +68,13 @@ module ActiveRecord
     end
     
     def self._transitions(name)
-      [@@transitions[name], @@bodies[name]]
+      [@@transitions[name], @@bodies[name], @@results[name]]
     end
     
     @@states = {}
     @@transitions = {}
     @@bodies = {}
+    @@results = {}
     
     def self.state(name, options)
       if name.class==Array
@@ -82,8 +90,10 @@ module ActiveRecord
     def self.transition(name, options = {}, result = nil, &body)
       @@transitions[name] = options
       @@bodies[name] = body
-      if !self.respond_to?(name)
-        self.send(:define_method, name) do
+      @@results[name] = result unless result == nil
+      defined = self.respond_to?(name)
+      if !defined
+        self.send(:define_method, name) do |*args|
           self.status = result.to_s unless result == nil
         end
         self.send(:define_method, "can_#{name}2?") do
