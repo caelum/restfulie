@@ -18,9 +18,15 @@ module Restfulie
       #puts "sim, eu tenho states"
       following_states[:allow].each do |name|
         action = self.class._transitions(name.to_sym)
+        
         #puts "achei #{action} de #{name} #{name.class}"
-        rel = action[:rel] || name || action[:action]
-        action[:rel] = nil
+        if action
+          rel = action[:rel] || name || action[:action]
+          action[:rel] = nil
+        else
+          action = {}
+          rel = name
+        end
         action[:action] ||= name
         translate_href = controller.url_for(action)
         if options[:use_name_based_link]
