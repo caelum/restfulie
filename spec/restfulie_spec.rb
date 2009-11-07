@@ -55,6 +55,16 @@ describe RestfulieModel do
       RestfulieModel.state :unpaid, :allow => [:latest]
       subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
     end
+    it "should evaluate in runtime if there is a body to the transition" do
+      my_controller = MockedController.new
+      value = 5
+      RestfulieModel.transition :latest do
+         {:controller => my_controller, :action => value, :rel => :show_me_the_latest}
+      end
+      value = 6
+      RestfulieModel.state :unpaid, :allow => [:latest]
+      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
+    end
     it "should add all states if there is more than one with what is allowed" do
       froms = [:received, :cancelled]
       my_controller = MockedController.new
@@ -74,7 +84,7 @@ describe RestfulieModel do
     it "should not add anything if in an unknown state" do
       my_controller = MockedController.new
       subject.status = :gone
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>gone</status></restfulie-model>')
     end
     it "should not change status if there is no result" do
       my_controller = MockedController.new
@@ -88,7 +98,7 @@ describe RestfulieModel do
       RestfulieModel.transition :pay, {}, :paied
       RestfulieModel.state :unpaid, :allow => [:pay]
       subject.pay
-      subject.status.should eql(:paied)
+      subject.status.should eql("paied")
     end
   end
   
