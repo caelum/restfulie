@@ -20,7 +20,6 @@ module Restfulie
       
       following_states += default_transitions unless default_transitions.nil?
       following_states += self.following_transitions if self.respond_to?(:following_transitions)
-      puts "JA FIZ ATE AQUI #{default_transitions}"
       
       return xml if following_states.empty?
 
