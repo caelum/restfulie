@@ -19,12 +19,9 @@ module Restfulie
       following_states[:allow].each do |name|
         action = self.class._transitions(name.to_sym)
         #puts "achei #{action} de #{name} #{name.class}"
+        rel = action[:rel] || name || action[:action]
+        action[:rel] = nil
         action[:action] ||= name
-        rel = action[:action]
-        if action[:rel]
-          rel = action[:rel]
-          action[:rel] = nil
-        end
         translate_href = controller.url_for(action)
         if options[:use_name_based_link]
           xml.tag!(rel, translate_href)

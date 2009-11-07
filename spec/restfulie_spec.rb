@@ -35,19 +35,19 @@ describe RestfulieModel do
       my_controller = MockedController.new
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => :latest
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="show"/></restfulie-model>')
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
     end
     it "should add more than 1 allowable actions to models xml if controller is set" do
       my_controller = MockedController.new
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => [:latest, :latest]
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="show"/>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="show"/></restfulie-model>')
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
     end
     it "should add hypermedia link if controller is set and told to use name based link" do
       my_controller = MockedController.new
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => [:latest]
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show>http://url_for/show</show></restfulie-model>')
+      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
     end
     it "should use rel if there is a rel attribute" do
       my_controller = MockedController.new
@@ -62,7 +62,7 @@ describe RestfulieModel do
       RestfulieModel.state froms, :allow => [:latest]
       froms.each do |from|
         subject.status = from
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="show"/></restfulie-model>')
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
       end
     end
     it "should use transition name if there is no action" do
