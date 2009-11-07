@@ -3,6 +3,7 @@ require 'uri'
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
+  attr_accessor :content
 end
 
 class Order < ActiveRecord::Base
@@ -29,77 +30,76 @@ describe RestfulieModel do
   
   describe "when parsed to xml" do
     it "should not add hypermedia if controller is nil" do
-      subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
-    end
-    it "should add allowable actions to models xml if controller is set" do
+        subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
+      end
+      it "should add allowable actions to models xml if controller is set" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+        RestfulieModel.state :unpaid, :allow => :latest
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+      end
+      it "should add more than 1 allowable actions to models xml if controller is set" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+        RestfulieModel.state :unpaid, :allow => [:latest, :latest]
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+      end
+      it "should add hypermedia link if controller is set and told to use name based link" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+        RestfulieModel.state :unpaid, :allow => [:latest]
+        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
+      end
+      it "should use rel if there is a rel attribute" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
+        RestfulieModel.state :unpaid, :allow => [:latest]
+        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
+      end
+      it "should evaluate in runtime if there is a body to the transition" do
       my_controller = MockedController.new
-      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
-      RestfulieModel.state :unpaid, :allow => :latest
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
-    end
-    it "should add more than 1 allowable actions to models xml if controller is set" do
-      my_controller = MockedController.new
-      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
-      RestfulieModel.state :unpaid, :allow => [:latest, :latest]
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
-    end
-    it "should add hypermedia link if controller is set and told to use name based link" do
-      my_controller = MockedController.new
-      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+      RestfulieModel.transition :latest do |me|
+         {:action => me.content}
+      end
       RestfulieModel.state :unpaid, :allow => [:latest]
+      subject.content = :show
       subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
     end
-    it "should use rel if there is a rel attribute" do
-      my_controller = MockedController.new
-      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
-      RestfulieModel.state :unpaid, :allow => [:latest]
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
-    end
-    it "should evaluate in runtime if there is a body to the transition" do
-      my_controller = MockedController.new
-      value = 5
-      RestfulieModel.transition :latest do
-         {:controller => my_controller, :action => value, :rel => :show_me_the_latest}
-      end
-      value = 6
-      RestfulieModel.state :unpaid, :allow => [:latest]
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
-    end
     it "should add all states if there is more than one with what is allowed" do
-      froms = [:received, :cancelled]
-      my_controller = MockedController.new
-      RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
-      RestfulieModel.state froms, :allow => [:latest]
-      froms.each do |from|
-        subject.status = from
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+        froms = [:received, :cancelled]
+        my_controller = MockedController.new
+        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+        RestfulieModel.state froms, :allow => [:latest]
+        froms.each do |from|
+          subject.status = from
+          subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+        end
       end
-    end
-    it "should use transition name if there is no action" do
-      my_controller = MockedController.new
-      RestfulieModel.transition :pay
-      RestfulieModel.state :unpaid, :allow => [:pay]
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
-    end
-    it "should not add anything if in an unknown state" do
-      my_controller = MockedController.new
-      subject.status = :gone
-      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>gone</status></restfulie-model>')
-    end
-    it "should not change status if there is no result" do
-      my_controller = MockedController.new
-      RestfulieModel.transition :pay
-      RestfulieModel.state :unpaid, :allow => [:pay]
-      subject.pay
-      subject.status.should eql(:unpaid)
-    end
-    it "should use change status to its result when transitioning" do
-      my_controller = MockedController.new
-      RestfulieModel.transition :pay, {}, :paied
-      RestfulieModel.state :unpaid, :allow => [:pay]
-      subject.pay
-      subject.status.should eql("paied")
-    end
+      it "should use transition name if there is no action" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :pay
+        RestfulieModel.state :unpaid, :allow => [:pay]
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
+      end
+      it "should not add anything if in an unknown state" do
+        my_controller = MockedController.new
+        subject.status = :gone
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>gone</status></restfulie-model>')
+      end
+      it "should not change status if there is no result" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :pay
+        RestfulieModel.state :unpaid, :allow => [:pay]
+        subject.pay
+        subject.status.should eql(:unpaid)
+      end
+      it "should use change status to its result when transitioning" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :pay, {}, :paied
+        RestfulieModel.state :unpaid, :allow => [:pay]
+        subject.pay
+        subject.status.should eql("paied")
+      end
   end
   
   describe "when adding states" do

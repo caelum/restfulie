@@ -17,10 +17,15 @@ module Restfulie
       return xml if following_states.nil?
       #puts "sim, eu tenho states"
       following_states[:allow].each do |name|
-        action = self.class._transitions(name.to_sym)
+        result = self.class._transitions(name.to_sym)
         
         #puts "achei #{action} de #{name} #{name.class}"
-        if action
+        if result[0]
+          action = result[0]
+          body = result[1]
+          puts "Vou executar #{body}"
+          action = body.call(self) if body
+
           rel = action[:rel] || name || action[:action]
           action[:rel] = nil
         else
@@ -56,11 +61,12 @@ module ActiveRecord
     end
     
     def self._transitions(name)
-      @@transitions[name]
+      [@@transitions[name], @@bodies[name]]
     end
     
     @@states = {}
     @@transitions = {}
+    @@bodies = {}
     
     def self.state(name, options)
       if name.class==Array
@@ -73,8 +79,9 @@ module ActiveRecord
       end
     end
 
-    def self.transition(name, options = {}, result = nil)
+    def self.transition(name, options = {}, result = nil, &body)
       @@transitions[name] = options
+      @@bodies[name] = body
       if !self.respond_to?(name)
         self.send(:define_method, name) do
           self.status = result.to_s unless result == nil
