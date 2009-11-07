@@ -2,6 +2,13 @@ h1. Quit pretending
 
 CRUD through HTTP is a good step forward to using resources and becoming RESTful, another step further into it is to make use of hypermedia based services and this gem allows you to do it really fast.
 
+h2. Why would I use restfulie?
+
+1. It's easier to write RESTFul clients
+2.
+3.
+4. HATEOAS --> To make changes to your Your *unknown* clients will
+
 h1. Restfulie: client-side
 
 Example on accessing a resource and its services through the restfulie API:
@@ -21,15 +28,30 @@ h1. Restfulie: server-side
 This is a simple example how to make your state changes available to your resource consumers:
 
 <pre>
-	class Order < ActiveRecord::Base
-	  def following_states
-	    states = [ {:action => :show } ]
-	    states << {:action => :destroy} if can_cancel?
-	    states << {:action => :pay, :id => id} if can_pay?
-	    states << {:controller => :payments, :action => :show, :payment_id => payment.id } if paied?
-	    states
-	  end
-	end
+class Order < ActiveRecord::Base
+  def following_states
+    states = [ {:action => :show } ]
+    states << {:action => :destroy} if can_cancel?
+    states << {:action => :pay, :id => id} if can_pay?
+    states << {:controller => :payments, :action => :show, :payment_id => payment.id } if paied?
+    states
+  end
+end
+</pre>
+
+h2. Restfulie server-side: state machine
+
+For those willing to implement a more complex or advanced state machine, you can use the dsl-like api:
+
+<pre>
+class Order < ActiveRecord::Base
+  state :unpaid, :allow => [:latest, :pay, :cancel]
+  state :cancelled, :allow => :latest
+
+  transition :latest, {:action => :show}
+  transition :cancel, {:action => :destroy}, :cancelled
+  transition :pay, {}, :preparing
+end
 </pre>
 
 h2. Installing
@@ -47,7 +69,7 @@ or, if you prefer to install it as a plugin:
 
 <pre>script/plugin install git://github.com/caelum/restfulie.git</pre>
 
-h2. Typical Restful Example
+h2. Typical hypermedia aware example
 
 Trying to follow the definition of a RESTful application supporting resources with hypermedia content, a resource would be:
 
