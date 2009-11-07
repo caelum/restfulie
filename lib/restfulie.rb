@@ -53,7 +53,7 @@ module Restfulie
     result = self.class._transitions(name)[2]
     self.status = result.to_s unless result.nil?
   end
-
+  
 end
 
 module ActiveRecord

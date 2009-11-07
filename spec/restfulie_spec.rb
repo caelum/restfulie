@@ -28,6 +28,16 @@ describe RestfulieModel do
     end
   end
   
+  def base
+    '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>'
+  end
+  def link(href, rel)
+    '<atom:link xmlns:atom="http://www.w3.org/2005/Atom"' \
+     + ' href="' + href + '"'\
+     + ' rel="' + rel + '"'\
+     + '/>'
+  end
+  
   describe "when parsed to xml" do
     it "should not add hypermedia if controller is nil" do
         subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
@@ -42,7 +52,7 @@ describe RestfulieModel do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => [:latest, :latest]
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
       end
       it "should add hypermedia link if controller is set and told to use name based link" do
         my_controller = MockedController.new
