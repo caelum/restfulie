@@ -71,6 +71,11 @@ describe RestfulieModel do
       RestfulieModel.state :unpaid, :allow => [:pay]
       subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
     end
+    it "should not add anything if in an unknown state" do
+      my_controller = MockedController.new
+      subject.status = :gone
+      subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
+    end
     it "should not change status if there is no result" do
       my_controller = MockedController.new
       RestfulieModel.transition :pay

@@ -12,9 +12,9 @@ module Restfulie
     
     options[:skip_types] = true
     super options do |xml|
-      return unless respond_to?(:status)
+      return xml unless respond_to?(:status)
       following_states = self.class._transitions_for(status.to_sym)
-      return if following_states.nil?
+      return xml if following_states.nil?
       #puts "sim, eu tenho states"
       following_states[:allow].each do |name|
         action = self.class._transitions(name.to_sym)
