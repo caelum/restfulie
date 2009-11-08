@@ -21,35 +21,35 @@ module Restfulie
       possible_following += default_transitions unless default_transitions.nil?
       possible_following += self.following_transitions if self.respond_to?(:following_transitions)
       
-      unless possible_following.empty?
-        possible_following.each do |possible|
-          if possible.class.name=="Array"
-            name = possible[0]
-            result = [possible[1], nil]
-          else
-            name = possible
-            result = self.class._transitions(name.to_sym)
-          end
+      return super if possible_following.empty?
       
-          if result[0]
-            action = result[0]
-            body = result[1]
-            action = body.call(self) if body
+      possible_following.each do |possible|
+        if possible.class.name=="Array"
+          name = possible[0]
+          result = [possible[1], nil]
+        else
+          name = possible
+          result = self.class._transitions(name.to_sym)
+        end
+    
+        if result[0]
+          action = result[0]
+          body = result[1]
+          action = body.call(self) if body
 
-            rel = action[:rel] || name || action[:action]
-            action[:rel] = nil
-          else
-            action = {}
-            rel = name
-          end
-      
-          action[:action] ||= name
-          translate_href = controller.url_for(action)
-          if options[:use_name_based_link]
-            xml.tag!(rel, translate_href)
-          else
-            xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
-          end
+          rel = action[:rel] || name || action[:action]
+          action[:rel] = nil
+        else
+          action = {}
+          rel = name
+        end
+    
+        action[:action] ||= name
+        translate_href = controller.url_for(action)
+        if options[:use_name_based_link]
+          xml.tag!(rel, translate_href)
+        else
+          xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
         end
       end
     end
