@@ -12,46 +12,45 @@ module Restfulie
     
     options[:skip_types] = true
     super options do |xml|
-      return xml unless respond_to?(:status)
+      if respond_to?(:status)
+        possible_following = []
+        default_transitions_map = self.class._transitions_for(status.to_sym)
+        default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
       
-      possible_following = []
-      default_transitions_map = self.class._transitions_for(status.to_sym)
-      default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
-      
-      possible_following += default_transitions unless default_transitions.nil?
-      possible_following += self.following_transitions if self.respond_to?(:following_transitions)
-      
-      return xml if possible_following.empty?
+        possible_following += default_transitions unless default_transitions.nil?
+        possible_following += self.following_transitions if self.respond_to?(:following_transitions)
+        
+        unless possible_following.empty?
+          possible_following.each do |possible|
+            if possible.class.name=="Array"
+              name = possible[0]
+              result = [possible[1], nil]
+            else
+              name = possible
+              result = self.class._transitions(name.to_sym)
+            end
+        
+            if result[0]
+              action = result[0]
+              body = result[1]
+              action = body.call(self) if body
 
-      possible_following.each do |possible|
-        if possible.class.name=="Array"
-          name = possible[0]
-          result = [possible[1], nil]
-        else
-          name = possible
-          result = self.class._transitions(name.to_sym)
-        end
+              rel = action[:rel] || name || action[:action]
+              action[:rel] = nil
+            else
+              action = {}
+              rel = name
+            end
         
-        if result[0]
-          action = result[0]
-          body = result[1]
-          action = body.call(self) if body
-
-          rel = action[:rel] || name || action[:action]
-          action[:rel] = nil
-        else
-          action = {}
-          rel = name
+            action[:action] ||= name
+            translate_href = controller.url_for(action)
+            if options[:use_name_based_link]
+              xml.tag!(rel, translate_href)
+            else
+              xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
+            end
+          end
         end
-        
-        action[:action] ||= name
-        translate_href = controller.url_for(action)
-        if options[:use_name_based_link]
-          xml.tag!(rel, translate_href)
-        else
-          xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
-        end
-        
       end
     end
   end
