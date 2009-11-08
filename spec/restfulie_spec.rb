@@ -46,13 +46,21 @@ describe RestfulieModel do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => :latest
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+        
+        expected = normalize_xml('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+        got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
+        
+        got.should eql(expected)
       end
       it "should add more than 1 allowable actions to models xml if controller is set" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => [:latest, :latest]
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
+        
+        expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
+        got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
+        
+        got.should eql(expected)
       end
       it "should add extra transitions if following_transitions are defined" do
         my_controller = MockedController.new
@@ -61,7 +69,11 @@ describe RestfulieModel do
         def subject.following_transitions
           [:latest]
         end
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
+        
+        expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
+        got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
+        
+        got.should eql(expected)
       end
       it "should add and create extra transition through following_transitions" do
         my_controller = MockedController.new
@@ -69,7 +81,11 @@ describe RestfulieModel do
         def subject.following_transitions
           [[:latest, { :action => :thanks }]]
         end
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql(base + '  <status>unpaid</status>  '+link('http://url_for/thanks','latest')+'</restfulie-model>')
+        
+        expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/thanks','latest')+'</restfulie-model>')
+        got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
+        
+        got.should eql(expected)
       end
       it "should add hypermedia link if controller is set and told to use name based link" do
         my_controller = MockedController.new
@@ -99,14 +115,22 @@ describe RestfulieModel do
         RestfulieModel.state froms, :allow => [:latest]
         froms.each do |from|
           subject.status = from
-          subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+          
+          expected = normalize_xml('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
+          got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
+          
+          got.should eql(expected)
         end
       end
       it "should use transition name if there is no action" do
         my_controller = MockedController.new
         RestfulieModel.transition :pay
         RestfulieModel.state :unpaid, :allow => [:pay]
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
+        
+        expected = normalize_xml('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
+        got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
+        
+        got.should eql(expected)
       end
       it "should not add anything if in an unknown state" do
         my_controller = MockedController.new

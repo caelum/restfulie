@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rubygems'
 require 'spec'
 require 'ruby-debug'
+require 'rexml/document'
 
 require 'active_record'
 
@@ -13,3 +14,12 @@ ActiveRecord::Base.establish_connection(
 )
 
 load(File.dirname(__FILE__) + '/schema.rb')
+
+#
+# Some steroids on Spec::Example::ExampleGroup.
+#
+class Spec::Example::ExampleGroup
+  def normalize_xml(xml)
+    REXML::Document.new(xml).to_s
+  end
+end
