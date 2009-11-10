@@ -240,11 +240,6 @@ the transition definitions in the following_transitions method:
 
 <pre>
 class Order < ActiveRecord::Base
-	transition :latest, {:action => :show}
-	transition :cancel, {:action => :destroy}, :cancelled
-	transition :pay, {}, :preparing
-	transition :receive, {}, :received
-	transition :execute_it, {}, :ready
 end
 </pre>
 
