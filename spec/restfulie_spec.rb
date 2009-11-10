@@ -146,10 +146,10 @@ describe RestfulieModel do
       end
       it "should use change status to its result when transitioning" do
         my_controller = MockedController.new
-        RestfulieModel.transition :pay, {}, :paied
+        RestfulieModel.transition :pay, {}, :paid
         RestfulieModel.state :unpaid, :allow => [:pay]
         subject.pay
-        subject.status.should eql("paied")
+        subject.status.should eql("paid")
       end
   end
   
