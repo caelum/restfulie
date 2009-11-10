@@ -302,12 +302,17 @@ h2. Team
 
 Restfulie was created and is maintained within Caelum by
 
-Commiters
+Projetct Founder
+* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
+
+Active Commiters
 * "Caue Guerra":mailto:caue.guerra@gmail.com
 * "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
 
-Collaborators
+Contributors
 * Diego Carrion
+* Leandro Silva
+* Gavin-John Noonan
 
 h2. Try it online
 
