@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
     transitions << [:show, {}]
     transitions << [:destroy, {}] if can_cancel?
     transitions << [:pay, {:id => id}] if can_pay?
-    transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if payed?
+    transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if paid?
     transitions
   end
 end
@@ -206,7 +206,7 @@ def following_transitions
   transitions << [:show, {}]
   transitions << [:destroy, {}] if can_cancel?
   transitions << [:pay, {:id => id}] if can_pay?
-  transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if payed?
+  transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if paid?
   transitions
 end
 </pre>
