@@ -41,6 +41,34 @@ class Order < ActiveRecord::Base
 end
 </pre>
 
+*Do not forget to create a migration with a string field named status for your resource:*
+
+<pre>
+scripts/generate migration add_status_to_order	
+</pre>
+
+Content:
+
+<pre>
+class AddStatusToOrder < ActiveRecord::Migration
+  def self.up
+    add_column :orders, :status, :string
+	Order.all.each do |order|
+		order.status = "unpaid"
+		order.save
+	end
+  end
+
+  def self.down
+    remove_column :orders, :status
+  end
+end
+</pre>
+
+Or simply define a status reader and writer on your own.
+
+
+
 h2. Restfulie server-side: state machine
 
 For those willing to implement a more complex or advanced state machine, you can use the dsl-like api:
