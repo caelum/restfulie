@@ -413,6 +413,18 @@ h3. More tutorials
 There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
 
 
+h2. News
+
+h3. 0.3
+* implemented support to can_*** methods
+
+h3. 0.2
+* support to state machine configuration
+* resources must contain a status field
+
+h3. 0.1
+* first release
+
 h2. License
 
 /***
@@ -431,3 +443,4 @@ h2. License
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
