@@ -71,17 +71,19 @@ end
 module ActiveRecord
   class TransitionController
   
-    def define_methods_for(type, name, options, result, body) 
-      puts "Defining method for #{type}"
-      defined = type.respond_to?(name)
-      if !defined
-        type.send(:define_method, name) do |*args|
-          self.status = result.to_s unless result == nil
-        end
-        type.send(:define_method, "can_#{name}2?") do
-          puts "executing can_#{name}2?"
-        end
+    def define_methods_for(type, name, result) 
+      
+      return if type.respond_to?(name)
+      
+      type.send(:define_method, name) do |*args|
+        self.status = result.to_s unless result == nil
       end
+      
+      type.send(:define_method, "can_#{name}?") do
+        transitions = self.class._transitions_for(self.status.to_sym)[:allow]
+        transitions.include? name
+      end
+      
     end
   
   end
@@ -121,7 +123,7 @@ module ActiveRecord
       @@transitions[name] = options
       @@bodies[name] = body
       @@results[name] = result unless result == nil
-      @@transition_controller.define_methods_for(self, name, options, result, body)
+      @@transition_controller.define_methods_for(self, name, result)
     end
 
     def self.add_states(result, states)
