@@ -108,7 +108,7 @@ module ActiveRecord
     
     @@transition_controller = TransitionController.new
     
-    def self.state(name, options)
+    def self.state(name, options = {})
       if name.class==Array
         name.each do |simple|
           self.state(simple, options)
