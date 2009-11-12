@@ -69,6 +69,22 @@ module Restfulie
 end
 
 module ActiveRecord
+  class TransitionController
+  
+    def define_methods_for(type, name, options, result, body) 
+      puts "Defining method for #{type}"
+      defined = type.respond_to?(name)
+      if !defined
+        type.send(:define_method, name) do |*args|
+          self.status = result.to_s unless result == nil
+        end
+        type.send(:define_method, "can_#{name}2?") do
+          puts "executing can_#{name}2?"
+        end
+      end
+    end
+  
+  end
   class Base
 
     include Restfulie
@@ -88,6 +104,8 @@ module ActiveRecord
     @@bodies = {}
     @@results = {}
     
+    @@transition_controller = TransitionController.new
+    
     def self.state(name, options)
       if name.class==Array
         name.each do |simple|
@@ -103,15 +121,7 @@ module ActiveRecord
       @@transitions[name] = options
       @@bodies[name] = body
       @@results[name] = result unless result == nil
-      defined = self.respond_to?(name)
-      if !defined
-        self.send(:define_method, name) do |*args|
-          self.status = result.to_s unless result == nil
-        end
-        self.send(:define_method, "can_#{name}2?") do
-          puts "executing can_#{name}2?"
-        end
-      end
+      @@transition_controller.define_methods_for(self, name, options, result, body)
     end
 
     def self.add_states(result, states)

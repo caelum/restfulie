@@ -153,6 +153,18 @@ describe RestfulieModel do
       end
   end
   
+  describe "when checking permissions" do
+    it "should allow execute transition if the status is valid" do
+        my_controller = MockedController.new
+        RestfulieModel.transition :pay, {}
+        RestfulieModel.state :unpaid, :allow => :pay
+        
+        subject.status = :unpaid
+        subject.can_pay?.should eql(true)
+        
+    end
+  end
+  
   describe "when adding states" do
     it "should ignore namespaces" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model xmlns="http://www.caelum.com.br/restfulie"></restfulie-model>'
