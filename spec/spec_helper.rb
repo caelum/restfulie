@@ -8,7 +8,6 @@ require 'rexml/document'
 require 'active_record'
 
 require 'restfulie'
-require 'transition_controller'
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3", "database" => File.join(File.dirname(__FILE__), '..', 'test.sqlite3')

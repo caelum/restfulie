@@ -73,7 +73,7 @@ module ActiveRecord
   
     def define_methods_for(type, name, result) 
       
-      return if type.respond_to?(name)
+      return nil if type.respond_to?(name)
       
       type.send(:define_method, name) do |*args|
         self.status = result.to_s unless result == nil
