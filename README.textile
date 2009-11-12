@@ -2,6 +2,8 @@ h1. Quit pretending
 
 CRUD through HTTP is a good step forward to using resources and becoming RESTful, another step further into it is to make use of hypermedia based services and this gem allows you to do it really fast.
 
+You can read the "article on using the web for real":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/ which gives an introduction to hypermedia/resources/services.
+
 h2. Why would I use restfulie?
 
 1. Easy --> writing hypermedia aware resource based clients
