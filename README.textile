@@ -386,6 +386,10 @@ h3. Sources
 "Client":http://github.com/caelum/restfulie-client
 "Server":http://github.com/caelum/restfulie-test
 
+h3. More tutorials
+
+There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
+
 
 h2. License
 
