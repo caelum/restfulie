@@ -12,7 +12,9 @@ h2. Why would I use restfulie?
 4. HATEOAS --> clients you are unaware of will not bother if you change your URIs
 5. HATEOAS --> services that you consume will not affect your software whenever they change part of their flow or URIs
 
-h1. Restfulie: client-side
+h1. Short examples
+
+h2. Restfulie: client-side
 
 Example on accessing a resource and its services through the restfulie API:
 
@@ -26,7 +28,7 @@ order.pay payment                        # sends a post request to pay this orde
 order.cancel                             # sends a delete request
 </pre>
 
-h1. Restfulie: server-side
+h2. Restfulie: server-side
 
 This is a simple example how to make your state changes available to your resource consumers:
 
@@ -69,8 +71,6 @@ end
 
 Or simply define a status reader and writer on your own.
 
-
-
 h2. Restfulie server-side: state machine
 
 For those willing to implement a more complex or advanced state machine, you can use the dsl-like api:
@@ -86,7 +86,7 @@ class Order < ActiveRecord::Base
 end
 </pre>
 
-h2. Installing
+h1. Installing
 
 Just add in your environment.rb the following line:
 
@@ -191,7 +191,7 @@ h2. Server-side configuration
 
 There are two different approaches that can be combined to create a full hypermedia aware resource based service, including awareness of its states and transitions.
 
-h3. The following available transitions method
+h3. Simple usage: following transitions
 
 The most easy way to use restfulie is to write the *following_transitions* method.
 It should return a list of possible transitions, where each transition is identified by an array of its name and definition.
@@ -241,7 +241,7 @@ def following_transitions
 end
 </pre>
 
-h2. Defining the state machine and its transitions
+h2. Advanced usage: Defining the state machine and its transitions
 
 The second way of defining your available transitions is to explicitely define the states and transitions.
 
@@ -303,6 +303,28 @@ class Order < ActiveRecord::Base
 	transition :check_payment_info do |order|
 	   {:controller => :payments, :action => :show, :order_id => order.id, :payment_id => order.payments[0].id, :rel => "check_payment_info"}
 	end
+end
+</pre>
+
+h3. Checking the possibility of following transitions
+
+By following the advanced usage, one receives also all *can_* method. i.e.:
+
+<pre>
+	order.status = :unpaid
+	puts(order.can_pay?)              # will print true
+	order.status = :paid
+	puts(order.can_pay?)              # will print false
+</pre>
+
+You can use the *can_xxx* methods in your controllers to check if your current resource's state can be changed:
+
+<pre>
+def pay
+  @order = Order.find(params[:id])
+  raise "impossible to pay due to this order status #{order.status}" if !@order.can_pay?
+
+  # payment code
 end
 </pre>
   
