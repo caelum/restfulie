@@ -2,6 +2,8 @@ h1. Quit pretending
 
 CRUD through HTTP is a good step forward to using resources and becoming RESTful, another step further into it is to make use of hypermedia based services and this gem allows you to do it really fast.
 
+You can read the "article on using the web for real":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/ which gives an introduction to hypermedia/resources/services.
+
 h2. Why would I use restfulie?
 
 1. Easy --> writing hypermedia aware resource based clients
@@ -10,7 +12,9 @@ h2. Why would I use restfulie?
 4. HATEOAS --> clients you are unaware of will not bother if you change your URIs
 5. HATEOAS --> services that you consume will not affect your software whenever they change part of their flow or URIs
 
-h1. Restfulie: client-side
+h1. Short examples
+
+h2. Restfulie: client-side
 
 Example on accessing a resource and its services through the restfulie API:
 
@@ -24,7 +28,7 @@ order.pay payment                        # sends a post request to pay this orde
 order.cancel                             # sends a delete request
 </pre>
 
-h1. Restfulie: server-side
+h2. Restfulie: server-side
 
 This is a simple example how to make your state changes available to your resource consumers:
 
@@ -41,6 +45,32 @@ class Order < ActiveRecord::Base
 end
 </pre>
 
+*Do not forget to create a migration with a string field named status for your resource:*
+
+<pre>
+scripts/generate migration add_status_to_order	
+</pre>
+
+Content:
+
+<pre>
+class AddStatusToOrder < ActiveRecord::Migration
+  def self.up
+    add_column :orders, :status, :string
+	Order.all.each do |order|
+		order.status = "unpaid"
+		order.save
+	end
+  end
+
+  def self.down
+    remove_column :orders, :status
+  end
+end
+</pre>
+
+Or simply define a status reader and writer on your own.
+
 h2. Restfulie server-side: state machine
 
 For those willing to implement a more complex or advanced state machine, you can use the dsl-like api:
@@ -56,7 +86,7 @@ class Order < ActiveRecord::Base
 end
 </pre>
 
-h2. Installing
+h1. Installing
 
 Just add in your environment.rb the following line:
 
@@ -161,7 +191,7 @@ h2. Server-side configuration
 
 There are two different approaches that can be combined to create a full hypermedia aware resource based service, including awareness of its states and transitions.
 
-h3. The following available transitions method
+h3. Simple usage: following transitions
 
 The most easy way to use restfulie is to write the *following_transitions* method.
 It should return a list of possible transitions, where each transition is identified by an array of its name and definition.
@@ -211,7 +241,7 @@ def following_transitions
 end
 </pre>
 
-h2. Defining the state machine and its transitions
+h2. Advanced usage: Defining the state machine and its transitions
 
 The second way of defining your available transitions is to explicitely define the states and transitions.
 
@@ -240,11 +270,6 @@ the transition definitions in the following_transitions method:
 
 <pre>
 class Order < ActiveRecord::Base
-	transition :latest, {:action => :show}
-	transition :cancel, {:action => :destroy}, :cancelled
-	transition :pay, {}, :preparing
-	transition :receive, {}, :received
-	transition :execute_it, {}, :ready
 end
 </pre>
 
@@ -280,6 +305,28 @@ class Order < ActiveRecord::Base
 	end
 end
 </pre>
+
+h3. Checking the possibility of following transitions
+
+By following the advanced usage, one receives also all *can_* method. i.e.:
+
+<pre>
+	order.status = :unpaid
+	puts(order.can_pay?)              # will print true
+	order.status = :paid
+	puts(order.can_pay?)              # will print false
+</pre>
+
+You can use the *can_xxx* methods in your controllers to check if your current resource's state can be changed:
+
+<pre>
+def pay
+  @order = Order.find(params[:id])
+  raise "impossible to pay due to this order status #{order.status}" if !@order.can_pay?
+
+  # payment code
+end
+</pre>
   
 h3. Using xml+rel links instead of atom links
 
@@ -307,12 +354,17 @@ h2. Team
 
 Restfulie was created and is maintained within Caelum by
 
-Commiters
+Projetct Founder
+* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
+
+Active Commiters
 * "Caue Guerra":mailto:caue.guerra@gmail.com
 * "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
 
-Collaborators
+Contributors
 * Diego Carrion
+* Leandro Silva
+* Gavin-John Noonan
 
 h2. Try it online
 
@@ -356,6 +408,22 @@ h3. Sources
 "Client":http://github.com/caelum/restfulie-client
 "Server":http://github.com/caelum/restfulie-test
 
+h3. More tutorials
+
+There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
+
+
+h2. News
+
+h3. 0.3
+* implemented support to can_*** methods
+
+h3. 0.2
+* support to state machine configuration
+* resources must contain a status field
+
+h3. 0.1
+* first release
 
 h2. License
 
@@ -375,3 +443,4 @@ h2. License
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
