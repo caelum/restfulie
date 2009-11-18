@@ -33,9 +33,10 @@ module Restfulie
       possible_following.each do |possible|
         if possible.class==Restfulie::Transition
           result = possible
+          name = possible.name
         else
           name = possible
-          result = self.class._transitions(name.to_sym)
+          result = self.class._transitions(possible.to_sym)
         end
         
         if result.action
