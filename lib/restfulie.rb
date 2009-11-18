@@ -59,7 +59,7 @@ module ActiveRecord
         @body = body
       end
       def action
-        @options[:action]
+        @options
       end
     end
     

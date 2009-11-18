@@ -31,7 +31,7 @@ module Restfulie
         end
         
         if result.action
-          action = { :action =>  result.action }
+          action = result.action
           body = result.body
           action = body.call(self) if body
 
