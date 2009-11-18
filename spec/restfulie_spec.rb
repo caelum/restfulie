@@ -62,6 +62,7 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add extra transitions if following_transitions are defined" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -75,6 +76,7 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add and create extra transition through following_transitions" do
         my_controller = MockedController.new
         RestfulieModel.state :unpaid, :allow => []
@@ -87,28 +89,32 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add hypermedia link if controller is set and told to use name based link" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => [:latest]
         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
       end
+      
       it "should use rel if there is a rel attribute" do
-        my_controller = MockedController.new
-        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
-        RestfulieModel.state :unpaid, :allow => [:latest]
-        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
+         my_controller = MockedController.new
+         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
+         RestfulieModel.state :unpaid, :allow => [:latest]
+         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
       end
+      
       it "should evaluate in runtime if there is a body to the transition" do
-      my_controller = MockedController.new
-      RestfulieModel.transition :latest do |me|
-         {:action => me.content}
+        my_controller = MockedController.new
+        RestfulieModel.transition :latest do |me|
+           {:action => me.content}
+        end
+        RestfulieModel.state :unpaid, :allow => [:latest]
+        subject.content = :show
+        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
       end
-      RestfulieModel.state :unpaid, :allow => [:latest]
-      subject.content = :show
-      subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
-    end
-    it "should add all states if there is more than one with what is allowed" do
+      
+      it "should add all states if there is more than one with what is allowed" do
         froms = [:received, :cancelled]
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -151,7 +157,7 @@ context RestfulieModel do
         subject.pay
         subject.status.should eql("paid")
       end
-  end
+    end
   
   context "when checking permissions" do
     it "should add can_xxx methods allowing one to check whther the transition is valid or not" do

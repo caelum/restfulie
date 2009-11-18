@@ -3,18 +3,31 @@ require 'uri'
 require 'restfulie_marshal'
 
 module Restfulie
+
+  class Transition
+    attr_reader :body, :name
+    def initialize(name, options, result, body)
+      @name = name
+      @options = options
+      @result = result
+      @body = body
+    end
+    def action
+      @options
+    end
+  end
  
   def move_to(name)
     transitions = self.class._transitions_for(self.status.to_sym)[:allow]
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
-    result = self.class._transitions(name)[2]
+    result = self.class._transitions(name).result
     self.status = result.to_s unless result.nil?
   end
   
 end
 
 module ActiveRecord
-  class TransitionController
+  class TransitionInjector
   
     def define_methods_for(type, name, result) 
       
@@ -43,15 +56,13 @@ module ActiveRecord
     end
     
     def self._transitions(name)
-      [@@transitions[name], @@bodies[name], @@results[name]]
+      @@transitions[name]
     end
     
-    @@states = {}
     @@transitions = {}
-    @@bodies = {}
-    @@results = {}
+    @@states = {}
     
-    @@transition_controller = TransitionController.new
+    @@transition_controller = TransitionInjector.new
 
     def self.state(name, options = {})
       if name.class==Array
@@ -65,18 +76,11 @@ module ActiveRecord
     end
 
     def self.transition(name, options = {}, result = nil, &body)
-      @@transitions[name] = options
-      @@bodies[name] = body
-      @@results[name] = result unless result == nil
+      transition = Transition.new(name, options, result, body)
+      @@transitions[name] = transition
+      
       @@transition_controller.define_methods_for(self, name, result)
       controller_name = (self.name + "Controller")
-      # if controller.respond_to?(name)
-      #   controller.module_eval
-      #        account = Account.load(params[:id])
-      #        render :status => 405 unless account.send("can_xxx?")
-      #       super()
-      #   end
-      # end
     end
 
     def self.add_states(result, states)
@@ -147,7 +151,7 @@ module ActiveRecord
               raise "unable to parse an xml with more than one root element" if hash.keys.length>1
               key = hash.keys[0]
               type = key.camelize.constantize
-              return type.from_xml content
+              return type.from_xml(content)
             else
               raise :unknown_content_type
             end
