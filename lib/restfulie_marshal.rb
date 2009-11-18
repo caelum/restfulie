@@ -24,15 +24,15 @@ module Restfulie
       possible_following.each do |possible|
         if possible.class.name=="Array"
           name = possible[0]
-          result = [possible[1], nil]
+          result = Transition.new(name, possible[1], nil, nil)
         else
           name = possible
           result = self.class._transitions(name.to_sym)
         end
-    
-        if result[0]
-          action = result[0]
-          body = result[1]
+        
+        if result.action
+          action = { :action =>  result.action }
+          body = result.body
           action = body.call(self) if body
 
           rel = action[:rel] || name || action[:action]
