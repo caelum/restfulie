@@ -17,7 +17,17 @@ module Restfulie
       default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
     
       possible_following += default_transitions unless default_transitions.nil?
-      possible_following += self.following_transitions if self.respond_to?(:following_transitions)
+      extra = self.following_transitions if self.respond_to?(:following_transitions)
+      
+      extra.each do |t|
+        if t.class.name!="Array"
+          possible_following << t
+        else
+          puts "There is an extra #{t}"
+          transition = Transition.new(t[0], t[1], t[2])
+          possible_following[transition.name] = t
+        end
+      end if extra
       
       return super if possible_following.empty?
       

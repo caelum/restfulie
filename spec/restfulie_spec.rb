@@ -62,6 +62,7 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add extra transitions if following_transitions are defined" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -75,6 +76,7 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add and create extra transition through following_transitions" do
         my_controller = MockedController.new
         RestfulieModel.state :unpaid, :allow => []
@@ -87,6 +89,7 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add hypermedia link if controller is set and told to use name based link" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -110,6 +113,7 @@ context RestfulieModel do
         subject.content = :show
         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
       end
+      
       it "should add all states if there is more than one with what is allowed" do
         froms = [:received, :cancelled]
         my_controller = MockedController.new

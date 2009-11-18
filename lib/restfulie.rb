@@ -3,6 +3,19 @@ require 'uri'
 require 'restfulie_marshal'
 
 module Restfulie
+
+  class Transition
+    attr_reader :body
+    def initialize(name, options, result, body)
+      @name = name
+      @options = options
+      @result = result
+      @body = body
+    end
+    def action
+      @options
+    end
+  end
  
   def move_to(name)
     transitions = self.class._transitions_for(self.status.to_sym)[:allow]
@@ -48,20 +61,6 @@ module ActiveRecord
     
     @@transitions = {}
     @@states = {}
-    
-    class Transition
-      # [@@transitions[name], @@bodies[name], @@results[name]]
-      attr_reader :body
-      def initialize(name, options, result, body)
-        @name = name
-        @options = options
-        @result = result
-        @body = body
-      end
-      def action
-        @options
-      end
-    end
     
     @@transition_controller = TransitionInjector.new
 
