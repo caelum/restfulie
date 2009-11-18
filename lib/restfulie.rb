@@ -101,7 +101,6 @@ module ActiveRecord
         def temp_method(options = {}, &block)
           name = current_method
           state = _possible_states[name]
-          data = options[:data] || {}
           url = URI.parse(state["href"])
           get = false
 
@@ -124,7 +123,7 @@ module ActiveRecord
             req = Net::HTTP::Post.new(url.path)
           end
 
-          req.set_form_data(data)
+          req.body = options[:data] if options[:data]
           req.add_field("Accept", "text/xml") if _came_from == :xml
 
           http = Net::HTTP.new(url.host, url.port)

@@ -211,7 +211,6 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         res = model.send(method_name)
@@ -222,7 +221,6 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Post
         Net::HTTP::Post.should_receive(:new).with('/order/1').and_return(req)
-        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         res = model.send('update')
@@ -233,7 +231,6 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-        req.should_receive(:set_form_data).with({})
     
         expected_response = prepare_http_for(req)
         expected_response.should_receive(:body).and_return("<restfulie_model></restfulie_model>")
@@ -246,7 +243,6 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         res = model.send('update', {:method=>"delete"})
@@ -256,7 +252,6 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         expected_response.should_receive(:body).and_return("<order><buyer>guilherme silveira</buyer></order>")
@@ -269,7 +264,6 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-        req.should_receive(:set_form_data).with({})
 
         expected_response = prepare_http_for(req)
         expected_result = "my_custom_info"
