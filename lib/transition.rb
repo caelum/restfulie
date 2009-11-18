@@ -1,7 +1,7 @@
 module Restfulie
 
   class Transition
-    attr_reader :body, :name
+    attr_reader :body, :name, :result
     def initialize(name, options, result, body)
       @name = name
       @options = options
