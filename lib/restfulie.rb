@@ -147,7 +147,7 @@ module ActiveRecord
               raise "unable to parse an xml with more than one root element" if hash.keys.length>1
               key = hash.keys[0]
               type = key.camelize.constantize
-              return type.from_xml content
+              return type.from_xml(content)
             else
               raise :unknown_content_type
             end
