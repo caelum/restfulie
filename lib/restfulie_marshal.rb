@@ -24,8 +24,8 @@ module Restfulie
           possible_following << t
         else
           puts "There is an extra #{t}"
-          transition = Transition.new(t[0], t[1], t[2])
-          possible_following[transition.name] = t
+          transition = Transition.new(t[0], t[1], t[2], nil)
+          possible_following << t
         end
       end if extra
       
