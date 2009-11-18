@@ -405,6 +405,8 @@ In order to pay do not forget to send the parameter *payment* with a value as
 
 h3. Sources
 
+You can see an application's source code here, both client and server side were implemented using *restfulie*:
+
 "Client":http://github.com/caelum/restfulie-client
 "Server":http://github.com/caelum/restfulie-test
 

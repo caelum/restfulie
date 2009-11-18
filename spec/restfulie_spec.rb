@@ -16,13 +16,13 @@ class MockedController
   end
 end
 
-describe RestfulieModel do
+context RestfulieModel do
 
   before do
     subject.status = :unpaid
   end
 
-  describe "when parsed to json" do
+  context "when parsed to json" do
     it "should include the method following_states" do
       subject.to_json.should eql("{\"status\":\"unpaid\"}")
     end
@@ -38,7 +38,7 @@ describe RestfulieModel do
      + '/>'
   end
   
-  describe "when parsed to xml" do
+  context "when parsed to xml" do
     it "should not add hypermedia if controller is nil" do
         subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
       end
@@ -153,7 +153,7 @@ describe RestfulieModel do
       end
   end
   
-  describe "when checking permissions" do
+  context "when checking permissions" do
     it "should add can_xxx methods allowing one to check whther the transition is valid or not" do
         my_controller = MockedController.new
         RestfulieModel.transition :pay, {}
@@ -169,7 +169,7 @@ describe RestfulieModel do
     end
   end
   
-  describe "when adding states" do
+  context "when adding states" do
     it "should ignore namespaces" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model xmlns="http://www.caelum.com.br/restfulie"></restfulie-model>'
       model = RestfulieModel.from_xml xml
@@ -199,7 +199,7 @@ describe RestfulieModel do
     response
   end
 
-  describe "when invoking an state change" do
+  context "when invoking an state change" do
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
       ["cancel", "destroy", "delete"].each do |method_name|
         model = RestfulieModel.from_xml xml_for(method_name)
@@ -283,7 +283,7 @@ describe RestfulieModel do
     res
   end
   
-  describe "when de-serializing straight from a web request" do
+  context "when de-serializing straight from a web request" do
     def mock_request_for(type, body)
       req = mock Net::HTTP::Get
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
@@ -304,6 +304,27 @@ describe RestfulieModel do
 
       model = RestfulieModel.from_web 'http://localhost:3001/order/15'
       model.status.should eql("CANCELLED")
+
+    end
+  end
+
+  
+  context "when invoking a transition" do
+    class Account < ActiveRecord::Base
+    end
+    class AccountController
+    end
+    it "should not add a pay method if it doesnt exist" do
+      Account.transition :pay
+      AccountController.respond_to?(:pay).should be(false)
+    end
+    it "should rewrite the pay method if it exists" do
+      controller = AccountController.new
+      def controller.pay
+      end
+      Account.transition :pay
+      
+    
 
     end
   end

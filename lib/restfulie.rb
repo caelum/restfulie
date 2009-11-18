@@ -1,64 +1,9 @@
 require 'net/http'
 require 'uri'
+require 'restfulie_marshal'
 
 module Restfulie
-  def to_json
-    super :methods => :following_states
-  end
-  
-  def to_xml(options = {})
-    return super unless respond_to?(:status)
-
-    controller = options[:controller]
-    return super if controller.nil?
-        
-    options[:skip_types] = true
-    super options do |xml|
-      possible_following = []
-      default_transitions_map = self.class._transitions_for(status.to_sym)
-      default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
-    
-      possible_following += default_transitions unless default_transitions.nil?
-      possible_following += self.following_transitions if self.respond_to?(:following_transitions)
-      
-      return super if possible_following.empty?
-      
-      possible_following.each do |possible|
-        if possible.class.name=="Array"
-          name = possible[0]
-          result = [possible[1], nil]
-        else
-          name = possible
-          result = self.class._transitions(name.to_sym)
-        end
-    
-        if result[0]
-          action = result[0]
-          body = result[1]
-          action = body.call(self) if body
-
-          rel = action[:rel] || name || action[:action]
-          action[:rel] = nil
-        else
-          action = {}
-          rel = name
-        end
-    
-        action[:action] ||= name
-        translate_href = controller.url_for(action)
-        if options[:use_name_based_link]
-          xml.tag!(rel, translate_href)
-        else
-          xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
-        end
-      end
-    end
-  end
-
-  def create_method(name, &block)
-    self.class.send(:define_method, name, &block)
-  end
-  
+ 
   def move_to(name)
     transitions = self.class._transitions_for(self.status.to_sym)[:allow]
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
@@ -107,7 +52,7 @@ module ActiveRecord
     @@results = {}
     
     @@transition_controller = TransitionController.new
-    
+
     def self.state(name, options = {})
       if name.class==Array
         name.each do |simple|
@@ -124,6 +69,14 @@ module ActiveRecord
       @@bodies[name] = body
       @@results[name] = result unless result == nil
       @@transition_controller.define_methods_for(self, name, result)
+      controller_name = (self.name + "Controller")
+      # if controller.respond_to?(name)
+      #   controller.module_eval
+      #        account = Account.load(params[:id])
+      #        render :status => 405 unless account.send("can_xxx?")
+      #       super()
+      #   end
+      # end
     end
 
     def self.add_states(result, states)
