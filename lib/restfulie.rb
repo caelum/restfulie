@@ -54,9 +54,9 @@ module ActiveRecord
       attr_reader :body
       def initialize(name, options, result, body)
         @name = name
-        @options = options ## transitions
-        @result = result  ## results
-        @body = body ## body
+        @options = options
+        @result = result
+        @body = body
       end
       def action
         @options[:action]
