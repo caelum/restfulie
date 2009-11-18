@@ -1,21 +1,9 @@
 require 'net/http'
 require 'uri'
 require 'restfulie_marshal'
+require 'transition'
 
 module Restfulie
-
-  class Transition
-    attr_reader :body, :name
-    def initialize(name, options, result, body)
-      @name = name
-      @options = options
-      @result = result
-      @body = body
-    end
-    def action
-      @options
-    end
-  end
  
   def move_to(name)
     transitions = self.class._transitions_for(self.status.to_sym)[:allow]
