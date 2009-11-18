@@ -9,7 +9,7 @@ module Restfulie
 
     controller = options[:controller]
     return super if controller.nil?
-        
+
     options[:skip_types] = true
     super options do |xml|
       possible_following = []
@@ -23,8 +23,7 @@ module Restfulie
         if t.class.name!="Array"
           possible_following << t
         else
-          puts "There is an extra #{t}"
-          transition = Transition.new(t[0], t[1], t[2], nil)
+          t = Transition.new(t[0], t[1], t[2], nil)
           possible_following << t
         end
       end if extra
@@ -32,9 +31,8 @@ module Restfulie
       return super if possible_following.empty?
       
       possible_following.each do |possible|
-        if possible.class.name=="Array"
-          name = possible[0]
-          result = Transition.new(name, possible[1], nil, nil)
+        if possible.class==Restfulie::Transition
+          result = possible
         else
           name = possible
           result = self.class._transitions(name.to_sym)
