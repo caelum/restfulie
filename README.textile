@@ -419,6 +419,7 @@ h2. News
 
 h3. 0.3
 * implemented support to can_*** methods
+* post data through http POST body
 
 h3. 0.2
 * support to state machine configuration
