@@ -30,28 +30,23 @@ module Restfulie
       
       return super if possible_following.empty?
       
-      possible_following.each do |possible|
-        if possible.class==Restfulie::Transition
-          result = possible
-          name = possible.name
-        else
-          name = possible
-          result = self.class._transitions(possible.to_sym)
-        end
+      possible_following.each do |result|
+        
+        result = self.class._transitions(result.to_sym) if result.class!=Restfulie::Transition
         
         if result.action
           action = result.action
           body = result.body
           action = body.call(self) if body
 
-          rel = action[:rel] || name || action[:action]
+          rel = action[:rel] || result.name || action[:action]
           action[:rel] = nil
         else
           action = {}
-          rel = name
+          rel = result.name
         end
     
-        action[:action] ||= name
+        action[:action] ||= result.name
         translate_href = controller.url_for(action)
         if options[:use_name_based_link]
           xml.tag!(rel, translate_href)
