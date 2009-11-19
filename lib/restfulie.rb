@@ -117,8 +117,7 @@ module ActiveRecord
                     }
 
           req_type = method_from[options[:method]] if options[:method]
-          req_type ||= defaults[name]
-          req_type ||= Net::HTTP::Post
+          req_type ||= defaults[name] || Net::HTTP::Post
           
           get = req_type==Net::HTTP::Get
           req = req_type.new(url.path)
