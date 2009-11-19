@@ -112,15 +112,12 @@ module ActiveRecord
                           "put" => Net::HTTP::Put,
                           "get" => Net::HTTP::Get,
                           "post" => Net::HTTP::Post}
-          default_deletes = ['destroy','delete','cancel']
-          default_gets = ['refresh', 'reload', 'show', 'latest']
+          defaults = {'destroy' => Net::HTTP::Delete,'delete' => Net::HTTP::Delete,'cancel' => Net::HTTP::Delete,
+                    'refresh' => Net::HTTP::Get, 'reload' => Net::HTTP::Get, 'show' => Net::HTTP::Get, 'latest' => Net::HTTP::Get
+                    }
 
           req_type = method_from[options[:method]] if options[:method]
-          req_type ||= if default_deletes.include? name
-            Net::HTTP::Delete
-          elsif default_gets.include? name
-            Net::HTTP::Get
-          end
+          req_type ||= defaults[name]
           req_type ||= Net::HTTP::Post
           
           get = req_type==Net::HTTP::Get
