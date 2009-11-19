@@ -87,10 +87,12 @@ module ActiveRecord
       result
     end
     
+    # retrieves the invoking method's name
     def self.current_method
       caller[0]=~/`(.*?)'/
       $1
     end
+    
     def self.add_state(state)
       name = state["rel"]
       self.module_eval do
@@ -119,18 +121,14 @@ module ActiveRecord
           response = http.request(req)
           return yield(response) if !block.nil?
           if get
-            case response.content_type
-            when "application/xml"
-              content = response.body
-              hash = Hash.from_xml content
-              return hash if hash.keys.length == 0
-              raise "unable to parse an xml with more than one root element" if hash.keys.length>1
-              key = hash.keys[0]
-              type = key.camelize.constantize
-              return type.from_xml(content)
-            else
-              raise :unknown_content_type
-            end
+            raise "unimplemented content type" if response.content_type!="application/xml"
+            content = response.body
+            hash = Hash.from_xml content
+            return hash if hash.keys.length == 0
+            raise "unable to parse an xml with more than one root element" if hash.keys.length>1
+            key = hash.keys[0]
+            type = key.camelize.constantize
+            return type.from_xml(content)
           end
           response
 
