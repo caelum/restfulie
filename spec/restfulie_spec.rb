@@ -176,21 +176,25 @@ context RestfulieModel do
   end
   
   context "when adding states" do
+    
     it "should ignore namespaces" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model xmlns="http://www.caelum.com.br/restfulie"></restfulie-model>'
       model = RestfulieModel.from_xml xml
       model.should_not eql(nil)
     end
+    
     it "should be able to answer to the method rel name" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="pay" href="http://url_for/action_name"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>'
       model = RestfulieModel.from_xml xml
       model.respond_to?('pay').should eql(true)
     end
+    
     it "should be able to answer to just one state change" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="cancel" href="http://url_for/action_name"/></restfulie-model>'
       model = RestfulieModel.from_xml xml
       model.respond_to?('cancel').should eql(true)
     end
+    
   end
 
   def xml_for(method_name)
@@ -239,16 +243,20 @@ context RestfulieModel do
         res.class.to_s.should eql('RestfulieModel')
       end
     end
+    
     it "should allow method overriding" do
+      ['delete', :delete].each do |method_name|
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
 
         expected_response = prepare_http_for(req)
-        res = model.send('update', {:method=>"delete"})
+        res = model.send('update', {:method=> method_name})
         res.should eql(expected_response)
+      end
     end
-    it "a GET should return the parsed content" do
+    
+    it "should GET and return its content" do
         model = RestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
@@ -260,6 +268,7 @@ context RestfulieModel do
         res.class.to_s.should eql('Order')
         res.buyer.should eql('guilherme silveira')
     end
+    
     it "should allow the user to receive the response" do
         model = RestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
