@@ -1,5 +1,6 @@
 
 module Restfulie
+  
   def to_json
     super :methods => :following_states
   end

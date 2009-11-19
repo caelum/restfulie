@@ -105,6 +105,21 @@ module ActiveRecord
       $1
     end
     
+    
+    # translates a response to an object
+    def self.from_response(res)
+      
+      raise "unimplemented content type" if res.content_type!="application/xml"
+
+      hash = Hash.from_xml res.body
+      return hash if hash.keys.length == 0
+      raise "unable to parse an xml with more than one root element" if hash.keys.length>1
+      
+      type = hash.keys[0].camelize.constantize
+      type.from_xml(res.body)
+      
+    end
+    
     def self.add_state(state)
       name = state["rel"]
       self.module_eval do
@@ -114,12 +129,9 @@ module ActiveRecord
           state = _possible_states[name]
           url = URI.parse(state["href"])
           
-          method_from = { :delete => Net::HTTP::Delete,
-                          :put => Net::HTTP::Put,
-                          :get => Net::HTTP::Get,
-                          :post => Net::HTTP::Post}
+          method_from = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
           defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
-                    :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get}
+                      :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get}
 
           req_type = method_from[options[:method].to_sym] if options[:method]
           req_type ||= defaults[name.to_sym] || Net::HTTP::Post
@@ -135,13 +147,7 @@ module ActiveRecord
           
           return response if req_type!=Net::HTTP::Get
           
-          raise "unimplemented content type" if response.content_type!="application/xml"
-          content = response.body
-          hash = Hash.from_xml content
-          return hash if hash.keys.length == 0
-          raise "unable to parse an xml with more than one root element" if hash.keys.length>1
-          type = hash.keys[0].camelize.constantize
-          type.from_xml(content)
+          self.class.from_response response
 
         end
         alias_method name, :temp_method
