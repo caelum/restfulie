@@ -236,6 +236,7 @@ context RestfulieModel do
         res = model.send('update')
         res.should eql(expected_response)
     end
+    
     it "should send a GET request if the state transition name is refresh, reload, show or latest" do
       ["refresh", "latest", "reload", "show"].each do |method_name|
         model = RestfulieModel.from_xml xml_for(method_name)

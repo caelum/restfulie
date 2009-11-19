@@ -52,7 +52,8 @@ module ActiveRecord
     def self.states
       @states ||= {}
     end
-    
+
+    # adds a new state to the list of possible states
     def self.state(name, options = {})
       if name.class==Array
         name.each do |simple|
@@ -74,15 +75,12 @@ module ActiveRecord
 
     def self.add_states(result, states)
       result._possible_states = {}
+
       states.each do |state|
         result._possible_states[state["rel"]] = state
-      end
-      
-      result.extend Restfulie::State
-      
-      states.each do |state|
         add_state(state)
       end
+      result.extend Restfulie::State
       
       result
     end
@@ -117,8 +115,7 @@ module ActiveRecord
           req.body = options[:data] if options[:data]
           req.add_field("Accept", "text/xml") if _came_from == :xml
 
-          http = Net::HTTP.new(url.host, url.port)
-          response = http.request(req)
+          response = Net::HTTP.new(url.host, url.port).request(req)
           
           return yield(response) if !block.nil?
           
