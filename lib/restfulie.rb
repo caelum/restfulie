@@ -97,6 +97,7 @@ module ActiveRecord
       name = state["rel"]
       self.module_eval do
         def temp_method(options = {}, &block)
+          
           name = self.class.current_method
           state = _possible_states[name]
           url = URI.parse(state["href"])
@@ -111,7 +112,6 @@ module ActiveRecord
           req_type = method_from[options[:method].to_sym] if options[:method]
           req_type ||= defaults[name.to_sym] || Net::HTTP::Post
           
-          get = req_type==Net::HTTP::Get
           req = req_type.new(url.path)
 
           req.body = options[:data] if options[:data]
@@ -119,18 +119,18 @@ module ActiveRecord
 
           http = Net::HTTP.new(url.host, url.port)
           response = http.request(req)
+          
           return yield(response) if !block.nil?
-          if get
-            raise "unimplemented content type" if response.content_type!="application/xml"
-            content = response.body
-            hash = Hash.from_xml content
-            return hash if hash.keys.length == 0
-            raise "unable to parse an xml with more than one root element" if hash.keys.length>1
-            key = hash.keys[0]
-            type = key.camelize.constantize
-            return type.from_xml(content)
-          end
-          response
+          
+          return response if req_type!=Net::HTTP::Get
+          
+          raise "unimplemented content type" if response.content_type!="application/xml"
+          content = response.body
+          hash = Hash.from_xml content
+          return hash if hash.keys.length == 0
+          raise "unable to parse an xml with more than one root element" if hash.keys.length>1
+          type = hash.keys[0].camelize.constantize
+          type.from_xml(content)
 
         end
         alias_method name, :temp_method
@@ -157,17 +157,18 @@ module ActiveRecord
     def self.from_web(uri)
       url = URI.parse(uri)
       req = Net::HTTP::Get.new(url.path)
-      http = Net::HTTP.new(url.host, url.port)
-      res = http.request(req)
-      raise :invalid_request, res if res.code != "200"
+      res = Net::HTTP.new(url.host, url.port).request(req)
+      raise "invalid request" if res.code != "200"
+      
       case res.content_type
       when "application/xml"
         self.from_xml res.body
       when "application/json"
         self.from_json res.body
       else
-        raise :unknown_content_type
+        raise "unknown content type"
       end
+      
     end
 
   end
