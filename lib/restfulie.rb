@@ -107,26 +107,25 @@ module ActiveRecord
           name = current_method
           state = _possible_states[name]
           url = URI.parse(state["href"])
-          get = false
+          
+          method_from = { "delete" => Net::HTTP::Delete,
+                          "put" => Net::HTTP::Put,
+                          "get" => Net::HTTP::Get,
+                          "post" => Net::HTTP::Post}
 
-          # gs: i dont know how to meta play here! i suck
-          if options[:method]=="delete"
-            req = Net::HTTP::Delete.new(url.path)
-          elsif options[:method]=="put"
-            req = Net::HTTP::Put.new(url.path)
-          elsif options[:method]=="get"
-            req = Net::HTTP::Get.new(url.path)
-            get = true
-          elsif options[:method]=="post"
-            req = Net::HTTP::Post.new(url.path)
-          elsif ['destroy','delete','cancel'].include? name
-            req = Net::HTTP::Delete.new(url.path)
+          req = method_from(options[:method]).new(url.path) if options[:method]
+          get = req.class==Net::HTTP::Get
+          
+          ## refatora esse
+          req ||= if ['destroy','delete','cancel'].include? name
+            Net::HTTP::Delete.new(url.path)
           elsif ['refresh', 'reload', 'show', 'latest'].include? name
-            req = Net::HTTP::Get.new(url.path)
-            get = true
+            Net::HTTP::Get.new(url.path)
           else
-            req = Net::HTTP::Post.new(url.path)
+            Net::HTTP::Post.new(url.path)
           end
+          
+
 
           req.body = options[:data] if options[:data]
           req.add_field("Accept", "text/xml") if _came_from == :xml
