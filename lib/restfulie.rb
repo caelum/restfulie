@@ -53,8 +53,16 @@ module ActiveRecord
   class Base
 
     include Restfulie
+    
+    # client side
+    
+    # list of possible states to access
     attr_accessor :_possible_states
+    
+    # which content-type generated this data
     attr_accessor :_came_from
+    
+    # server side
     
     # returns a list containing all available transitions for this object's state
     def all_following_transitions
