@@ -63,6 +63,7 @@ module ActiveRecord
     end
     @@states = {}
     
+    ## TODO kung take out by myself
     @@transition_controller = TransitionInjector.new
 
     def self.state(name, options = {})
@@ -111,15 +112,15 @@ module ActiveRecord
           state = _possible_states[name]
           url = URI.parse(state["href"])
           
-          method_from = { "delete" => Net::HTTP::Delete,
-                          "put" => Net::HTTP::Put,
-                          "get" => Net::HTTP::Get,
-                          "post" => Net::HTTP::Post}
-          defaults = {'destroy' => Net::HTTP::Delete,'delete' => Net::HTTP::Delete,'cancel' => Net::HTTP::Delete,
-                    'refresh' => Net::HTTP::Get, 'reload' => Net::HTTP::Get, 'show' => Net::HTTP::Get, 'latest' => Net::HTTP::Get}
+          method_from = { :delete => Net::HTTP::Delete,
+                          :put => Net::HTTP::Put,
+                          :get => Net::HTTP::Get,
+                          :post => Net::HTTP::Post}
+          defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
+                    :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get}
 
-          req_type = method_from[options[:method]] if options[:method]
-          req_type ||= defaults[name] || Net::HTTP::Post
+          req_type = method_from[options[:method].to_sym] if options[:method]
+          req_type ||= defaults[name.to_sym] || Net::HTTP::Post
           
           get = req_type==Net::HTTP::Get
           req = req_type.new(url.path)
