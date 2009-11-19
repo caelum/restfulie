@@ -12,6 +12,16 @@ module Restfulie
     self.status = result.to_s unless result.nil?
   end
   
+  module State
+    def respond_to?(sym)
+      has_state(sym.to_s) || super(sym)
+    end
+
+    def has_state(name)
+      !@_possible_states[name].nil?
+    end
+  end
+  
 end
 
 module ActiveRecord
@@ -80,14 +90,7 @@ module ActiveRecord
         result._possible_states[state["rel"]] = state
       end
       
-      ## TODO KUNG result.extend Module
-      def result.respond_to?(sym)
-        has_state(sym.to_s) || super(sym)
-      end
-
-      def result.has_state(name)
-        !@_possible_states[name].nil?
-      end
+      result.extend Restfulie::State
       
       states.each do |state|
         add_state(state)
@@ -113,16 +116,13 @@ module ActiveRecord
                           "get" => Net::HTTP::Get,
                           "post" => Net::HTTP::Post}
           defaults = {'destroy' => Net::HTTP::Delete,'delete' => Net::HTTP::Delete,'cancel' => Net::HTTP::Delete,
-                    'refresh' => Net::HTTP::Get, 'reload' => Net::HTTP::Get, 'show' => Net::HTTP::Get, 'latest' => Net::HTTP::Get
-                    }
+                    'refresh' => Net::HTTP::Get, 'reload' => Net::HTTP::Get, 'show' => Net::HTTP::Get, 'latest' => Net::HTTP::Get}
 
           req_type = method_from[options[:method]] if options[:method]
           req_type ||= defaults[name] || Net::HTTP::Post
           
           get = req_type==Net::HTTP::Get
           req = req_type.new(url.path)
-          
-
 
           req.body = options[:data] if options[:data]
           req.add_field("Accept", "text/xml") if _came_from == :xml
