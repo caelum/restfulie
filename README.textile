@@ -306,6 +306,14 @@ class Order < ActiveRecord::Base
 end
 </pre>
 
+h3. Accessing all possible transitions
+
+One can access all possible transitions for an object by invoking its available_transitions method:
+
+<pre>
+	transitions = order.available_transitions
+</pre>
+
 h3. Checking the possibility of following transitions
 
 By following the advanced usage, one receives also all *can_* method. i.e.:
@@ -419,6 +427,7 @@ h2. News
 
 h3. 0.3
 * implemented support to can_*** methods
+* post data through http POST body
 
 h3. 0.2
 * support to state machine configuration
