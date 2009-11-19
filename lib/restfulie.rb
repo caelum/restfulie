@@ -6,9 +6,6 @@ require 'unmarshalling'
 
 module Restfulie
  
-  def invoke_remote_transition(options, block)
-  end
-
   def move_to(name)
     
     transitions = available_transitions[:allow]
@@ -31,6 +28,22 @@ module Restfulie
     def has_state(name)
       !@_possible_states[name].nil?
     end
+  end
+
+  def invoke_remote_transition(name, options, block)
+    
+    method = self.class.requisition_method_for options[:method], name
+
+    url = URI.parse(_possible_states[name]["href"])
+    req = method.new(url.path)
+    req.body = options[:data] if options[:data]
+    req.add_field("Accept", "text/xml") if _came_from == :xml
+
+    response = Net::HTTP.new(url.host, url.port).request(req)
+
+    return block.call(response) if block
+    return response if method != Net::HTTP::Get
+    self.class.from_response response
   end
   
 end
@@ -134,26 +147,8 @@ module ActiveRecord
       name = state["rel"]
       self.module_eval do
         
-        def temp_method(options = {})
-#          invoke_remote_transition(options, block)
-          name = self.class.current_method
-          state = _possible_states[name]
-          url = URI.parse(state["href"])
-
-          method = self.class.requisition_method_for options[:method], name
-
-          req = method.new(url.path)
-
-          req.body = options[:data] if options[:data]
-          req.add_field("Accept", "text/xml") if _came_from == :xml
-
-          response = Net::HTTP.new(url.host, url.port).request(req)
-
-          return yield(response) if block_given?
-
-          return response if method != Net::HTTP::Get
-
-          self.class.from_response response
+        def temp_method(options = {}, &block)
+          self.invoke_remote_transition(self.class.current_method, options, block)
         end
         
         alias_method name, :temp_method
