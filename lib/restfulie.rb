@@ -172,9 +172,7 @@ module ActiveRecord
 
 
     def self.from_web(uri)
-      url = URI.parse(uri)
-      req = Net::HTTP::Get.new(url.path)
-      res = Net::HTTP.new(url.host, url.port).request(req)
+      res = Net::HTTP.get_response(URI.parse(uri))
       raise "invalid request" if res.code != "200"
       
       case res.content_type

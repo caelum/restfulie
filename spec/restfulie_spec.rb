@@ -304,12 +304,8 @@ context RestfulieModel do
   context "when de-serializing straight from a web request" do
     
     def mock_request_for(type, body)
-      req = mock Net::HTTP::Get
-      Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
-      http = mock Net::HTTP
-      Net::HTTP.should_receive(:new).with('localhost', 3001).and_return(http)
       res = mock_response(:code => "200", :content_type => type, :body => body)
-      http.should_receive(:request).with(req).and_return(res)
+      Net::HTTP.should_receive(:get_response).with(URI.parse('http://localhost:3001/order/15')).and_return(res)
     end
     
     it "should deserialize correctly if its an xml" do
