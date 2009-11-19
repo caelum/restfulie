@@ -52,7 +52,7 @@ module ActiveRecord
     attr_accessor :_came_from
     
     def self._transitions_for(state)
-      @@states[state]
+      states[state]
     end
     
     def self._transitions(name)
@@ -62,7 +62,10 @@ module ActiveRecord
     def self.transitions
       @transitions ||= {}
     end
-    @@states = {}
+    
+    def self.states
+      @states ||= {}
+    end
     
     ## TODO kung take out by myself
     @@transition_controller = TransitionInjector.new
@@ -74,7 +77,7 @@ module ActiveRecord
         end
       else
         options[:allow] = [options[:allow]] unless options[:allow].class == Array
-        @@states[name] = options
+        states[name] = options
       end
     end
 
