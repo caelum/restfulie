@@ -87,15 +87,15 @@ module ActiveRecord
       result
     end
     
+    def self.current_method
+      caller[0]=~/`(.*?)'/
+      $1
+    end
     def self.add_state(state)
       name = state["rel"]
       self.module_eval do
-        def current_method
-          caller[0]=~/`(.*?)'/
-          $1
-        end
         def temp_method(options = {}, &block)
-          name = current_method
+          name = self.class.current_method
           state = _possible_states[name]
           url = URI.parse(state["href"])
           
