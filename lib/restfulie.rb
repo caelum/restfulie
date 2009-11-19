@@ -7,7 +7,7 @@ require 'unmarshalling'
 module Restfulie
  
   def move_to(name)
-    transitions = _transitions_for(self.status.to_sym)[:allow]
+    transitions = available_transitions(self.status.to_sym)[:allow]
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
     result = self.class._transitions(name).result
     self.status = result.to_s unless result.nil?
@@ -37,7 +37,7 @@ module ActiveRecord
       end
       
       type.send(:define_method, "can_#{name}?") do
-        transitions = _transitions_for(self.status.to_sym)[:allow]
+        transitions = available_transitions(self.status.to_sym)[:allow]
         transitions.include? name
       end
       
@@ -51,7 +51,7 @@ module ActiveRecord
     attr_accessor :_possible_states
     attr_accessor :_came_from
     
-    def _transitions_for(state)
+    def available_transitions(state)
       self.class.states[state]
     end
     
