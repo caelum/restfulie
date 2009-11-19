@@ -4,24 +4,6 @@ module Restfulie
     super :methods => :following_states
   end
   
-  def all_following_transitions
-    possible_following = []
-    default_transitions_map = available_transitions
-    default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
-
-    possible_following += default_transitions unless default_transitions.nil?
-    extra = self.following_transitions if self.respond_to?(:following_transitions)
-    extra.each do |t|
-      if t.class.name!="Array"
-        possible_following << t
-      else
-        t = Transition.new(t[0], t[1], t[2], nil)
-        possible_following << t
-      end
-    end if extra
-    possible_following
-  end
-  
   def add_links(xml, all, options)
     all.each do |result|
       add_link(result, xml, options)

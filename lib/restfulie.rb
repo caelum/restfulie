@@ -33,6 +33,22 @@ module ActiveRecord
     attr_accessor :_possible_states
     attr_accessor :_came_from
     
+    # returns a list containing all available transitions for this object's state
+    def all_following_transitions
+      possible_following = []
+      possible_following += available_transitions[:allow] if available_transitions
+      extra = self.following_transitions if self.respond_to?(:following_transitions)
+      extra.each do |t|
+        if t.class.name!="Array"
+          possible_following << t
+        else
+          t = Transition.new(t[0], t[1], t[2], nil)
+          possible_following << t
+        end
+      end if extra
+      possible_following
+    end
+
     # returns a list of available transitions for this objects state
     def available_transitions()
       self.class.states[self.status.to_sym]
