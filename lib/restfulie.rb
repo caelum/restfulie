@@ -1,6 +1,6 @@
 require 'net/http'
 require 'uri'
-require 'restfulie_marshal'
+require 'marshalling'
 require 'transition'
 require 'unmarshalling'
 
