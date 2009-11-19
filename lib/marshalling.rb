@@ -13,7 +13,7 @@ module Restfulie
     options[:skip_types] = true
     super options do |xml|
       possible_following = []
-      default_transitions_map = available_transitions(status.to_sym)
+      default_transitions_map = available_transitions
       default_transitions = default_transitions_map[:allow] unless default_transitions_map.nil?
     
       possible_following += default_transitions unless default_transitions.nil?

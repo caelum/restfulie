@@ -7,7 +7,7 @@ require 'unmarshalling'
 module Restfulie
  
   def move_to(name)
-    transitions = available_transitions(self.status.to_sym)[:allow]
+    transitions = available_transitions[:allow]
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
     result = self.class._transitions(name).result
     self.status = result.to_s unless result.nil?
@@ -26,24 +26,6 @@ module Restfulie
 end
 
 module ActiveRecord
-  class TransitionInjector
-  
-    def define_methods_for(type, name, result) 
-      
-      return nil if type.respond_to?(name)
-      
-      type.send(:define_method, name) do |*args|
-        self.status = result.to_s unless result == nil
-      end
-      
-      type.send(:define_method, "can_#{name}?") do
-        transitions = available_transitions(self.status.to_sym)[:allow]
-        transitions.include? name
-      end
-      
-    end
-  
-  end
   
   class Base
 
@@ -51,25 +33,26 @@ module ActiveRecord
     attr_accessor :_possible_states
     attr_accessor :_came_from
     
-    def available_transitions(state)
-      self.class.states[state]
+    # returns a list of available transitions for this objects state
+    def available_transitions()
+      self.class.states[self.status.to_sym]
     end
     
+    # returns the definition for the transaction
     def self._transitions(name)
       transitions[name]
     end
     
+    # returns a hash of all possible transitions
     def self.transitions
       @transitions ||= {}
     end
     
+    # returns a hash of all possible states
     def self.states
       @states ||= {}
     end
     
-    ## TODO kung take out by myself
-    @@transition_controller = TransitionInjector.new
-
     def self.state(name, options = {})
       if name.class==Array
         name.each do |simple|
@@ -85,7 +68,7 @@ module ActiveRecord
       transition = Transition.new(name, options, result, body)
       transitions[name] = transition
       
-      @@transition_controller.define_methods_for(self, name, result)
+      define_methods_for(self, name, result)
       controller_name = (self.name + "Controller")
     end
 
@@ -157,6 +140,21 @@ module ActiveRecord
       end
     end  
       
+    def self.define_methods_for(type, name, result) 
+
+      return nil if type.respond_to?(name)
+
+      type.send(:define_method, name) do |*args|
+        self.status = result.to_s unless result == nil
+      end
+
+      type.send(:define_method, "can_#{name}?") do
+        transitions = available_transitions[:allow]
+        transitions.include? name
+      end
+
+    end
+
 
     def self.from_web(uri)
       url = URI.parse(uri)

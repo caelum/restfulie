@@ -138,11 +138,13 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should not add anything if in an unknown state" do
         my_controller = MockedController.new
         subject.status = :gone
         subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>gone</status></restfulie-model>')
       end
+      
       it "should not change status if there is no result" do
         my_controller = MockedController.new
         RestfulieModel.transition :pay
@@ -150,6 +152,7 @@ context RestfulieModel do
         subject.pay
         subject.status.should eql(:unpaid)
       end
+      
       it "should use change status to its result when transitioning" do
         my_controller = MockedController.new
         RestfulieModel.transition :pay, {}, :paid
@@ -200,6 +203,7 @@ context RestfulieModel do
   def xml_for(method_name)
     '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
   end
+  
   def prepare_http_for(request)
     request.should_receive(:add_field).with("Accept", "text/xml")
     response = mock Net::HTTPResponse
@@ -210,6 +214,7 @@ context RestfulieModel do
   end
 
   context "when invoking an state change" do
+    
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
       ["cancel", "destroy", "delete"].each do |method_name|
         model = RestfulieModel.from_xml xml_for(method_name)
@@ -221,6 +226,7 @@ context RestfulieModel do
         res.should eql(expected_response)
       end
     end
+    
     it "should send a POST request if the state transition name is update" do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Post
@@ -283,6 +289,7 @@ context RestfulieModel do
         end
         my_result.should eql(expected_result)
     end
+    
   end
   
   def mock_response(options = {})
@@ -294,6 +301,7 @@ context RestfulieModel do
   end
   
   context "when de-serializing straight from a web request" do
+    
     def mock_request_for(type, body)
       req = mock Net::HTTP::Get
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
@@ -302,6 +310,7 @@ context RestfulieModel do
       res = mock_response(:code => "200", :content_type => type, :body => body)
       http.should_receive(:request).with(req).and_return(res)
     end
+    
     it "should deserialize correctly if its an xml" do
       mock_request_for "application/xml", "<restfulie_model><status>CANCELLED</status></restfulie_model>"
 
@@ -309,6 +318,7 @@ context RestfulieModel do
       model.status.should eql("CANCELLED")
 
     end
+    
     it "should deserialize correctly if its a json" do
       mock_request_for "application/json", "{ status : 'CANCELLED' }"
 
@@ -333,9 +343,6 @@ context RestfulieModel do
       def controller.pay
       end
       Account.transition :pay
-      
-    
-
     end
   end
   
