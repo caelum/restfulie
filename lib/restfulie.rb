@@ -33,6 +33,7 @@ module ActiveRecord
     end
   
   end
+  
   class Base
 
     include Restfulie
@@ -44,10 +45,12 @@ module ActiveRecord
     end
     
     def self._transitions(name)
-      @@transitions[name]
+      transitions[name]
     end
     
-    @@transitions = {}
+    def self.transitions
+      @transitions ||= {}
+    end
     @@states = {}
     
     @@transition_controller = TransitionInjector.new
@@ -65,7 +68,7 @@ module ActiveRecord
 
     def self.transition(name, options = {}, result = nil, &body)
       transition = Transition.new(name, options, result, body)
-      @@transitions[name] = transition
+      transitions[name] = transition
       
       @@transition_controller.define_methods_for(self, name, result)
       controller_name = (self.name + "Controller")
@@ -76,6 +79,8 @@ module ActiveRecord
       states.each do |state|
         result._possible_states[state["rel"]] = state
       end
+      
+      ## TODO KUNG result.extend Module
       def result.respond_to?(sym)
         has_state(sym.to_s) || super(sym)
       end
