@@ -39,9 +39,11 @@ context RestfulieModel do
   end
   
   context "when parsed to xml" do
-    it "should not add hypermedia if controller is nil" do
+    
+      it "should not add hypermedia if controller is nil" do
         subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
       end
+      
       it "should add allowable actions to models xml if controller is set" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -52,6 +54,7 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add more than 1 allowable actions to models xml if controller is set" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -114,20 +117,6 @@ context RestfulieModel do
         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
       end
       
-      it "should add all states if there is more than one with what is allowed" do
-        froms = [:received, :cancelled]
-        my_controller = MockedController.new
-        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
-        RestfulieModel.state froms, :allow => [:latest]
-        froms.each do |from|
-          subject.status = from
-          
-          expected = normalize_xml('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
-          got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
-          
-          got.should eql(expected)
-        end
-      end
       it "should use transition name if there is no action" do
         my_controller = MockedController.new
         RestfulieModel.transition :pay

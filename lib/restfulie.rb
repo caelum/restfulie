@@ -7,10 +7,13 @@ require 'unmarshalling'
 module Restfulie
  
   def move_to(name)
+    
     transitions = available_transitions[:allow]
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
+    
     result = self.class._transitions(name).result
     self.status = result.to_s unless result.nil?
+    
   end
   
   def following_transitions
@@ -69,14 +72,8 @@ module ActiveRecord
 
     # adds a new state to the list of possible states
     def self.state(name, options = {})
-      if name.class==Array
-        name.each do |simple|
-          self.state(simple, options)
-        end
-      else
-        options[:allow] = [options[:allow]] unless options[:allow].class == Array
-        states[name] = options
-      end
+      options[:allow] = [options[:allow]] unless options[:allow].kind_of? Array
+      states[name] = options
     end
 
     def self.transition(name, options = {}, result = nil, &body)
@@ -120,6 +117,15 @@ module ActiveRecord
       
     end
     
+    def self.requisition_method_for(overriden_option,name)
+      basic_mapping = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
+      defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
+                  :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get}
+
+      return basic_mapping[overriden_option.to_sym] if overriden_option
+      defaults[name.to_sym] || Net::HTTP::Post
+    end
+    
     def self.add_state(state)
       name = state["rel"]
       self.module_eval do
@@ -129,14 +135,9 @@ module ActiveRecord
           state = _possible_states[name]
           url = URI.parse(state["href"])
           
-          method_from = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
-          defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
-                      :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get}
-
-          req_type = method_from[options[:method].to_sym] if options[:method]
-          req_type ||= defaults[name.to_sym] || Net::HTTP::Post
+          method = self.class.requisition_method_for options[:method], name
           
-          req = req_type.new(url.path)
+          req = method.new(url.path)
 
           req.body = options[:data] if options[:data]
           req.add_field("Accept", "text/xml") if _came_from == :xml
@@ -145,7 +146,7 @@ module ActiveRecord
           
           return yield(response) if !block.nil?
           
-          return response if req_type!=Net::HTTP::Get
+          return response if method!=Net::HTTP::Get
           
           self.class.from_response response
 
