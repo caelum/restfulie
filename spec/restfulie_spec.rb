@@ -107,7 +107,7 @@ context RestfulieModel do
          subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
       end
       
-      it "should evaluate in runtime if there is a body to the transition" do
+      it "should evaluate in runtime if there is a block to define the transition" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest do |me|
            {:action => me.content}
