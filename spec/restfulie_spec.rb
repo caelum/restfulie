@@ -245,9 +245,10 @@ context RestfulieModel do
     end
     
     it "should allow method overriding" do
+      model = RestfulieModel.from_xml xml_for('update')
+      req = mock Net::HTTP::Delete
+
       ['delete', :delete].each do |method_name|
-        model = RestfulieModel.from_xml xml_for('update')
-        req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
 
         expected_response = prepare_http_for(req)
