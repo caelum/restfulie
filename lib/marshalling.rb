@@ -13,9 +13,10 @@ module Restfulie
 
   def add_link(result, xml, options) 
 
-    result = self.class._transitions(result.to_sym) if result.class!=Restfulie::Transition
+    result = self.class._transitions(result.to_sym) unless result.kind_of? Restfulie::Transition
+    puts "i will add a link now to #{result} #{result.class}"
 
-    if result.action
+    if result.respond_to? :action
       action = result.action
       body = result.body
       action = body.call(self) if body
@@ -26,6 +27,8 @@ module Restfulie
       action = {}
       rel = result.name
     end
+    
+    puts "here we are"
 
     action[:action] ||= result.name
     translate_href = options[:controller].url_for(action)
@@ -45,7 +48,7 @@ module Restfulie
     super options do |xml|
       all = all_following_transitions
       return super if all.empty?
-
+      
       add_links xml, all, options
     end
   end

@@ -29,7 +29,7 @@ module Restfulie
       !@_possible_states[name].nil?
     end
   end
-
+  
   def invoke_remote_transition(name, options, block)
     
     method = self.class.requisition_method_for options[:method], name
@@ -37,7 +37,7 @@ module Restfulie
     url = URI.parse(_possible_states[name]["href"])
     req = method.new(url.path)
     req.body = options[:data] if options[:data]
-    req.add_field("Accept", "text/xml") if _came_from == :xml
+    req.add_field("Accept", "application/xml") if _came_from == :xml
 
     response = Net::HTTP.new(url.host, url.port).request(req)
 
@@ -75,6 +75,7 @@ module ActiveRecord
     end
 
     # returns a list of available transitions for this objects state
+    # TODO rename because it should never be used by the client...
     def available_transitions()
       self.class.states[self.status.to_sym] || {:allow => []}
     end
@@ -101,13 +102,16 @@ module ActiveRecord
     end
 
     def self.transition(name, options = {}, result = nil, &body)
+      
       transition = Transition.new(name, options, result, body)
       transitions[name] = transition
-      
+
       define_methods_for(self, name, result)
       controller_name = (self.name + "Controller")
     end
 
+    # receives an object and inserts all necessary methods
+    # so it can answer to can_??? invocations
     def self.add_states(result, states)
       result._possible_states = {}
 
@@ -151,8 +155,9 @@ module ActiveRecord
     end
     
     
-    def self.add_state(state)
-      name = state["rel"]
+    def self.add_state(transition)
+      name = transition["rel"]
+      
       self.module_eval do
         
         def temp_method(options = {}, &block)
@@ -182,8 +187,10 @@ module ActiveRecord
 
     def self.from_web(uri)
       res = Net::HTTP.get_response(URI.parse(uri))
+      # TODO redirect... follow or not? (optional...)
       raise "invalid request" if res.code != "200"
       
+      # TODO really support different content types
       case res.content_type
       when "application/xml"
         self.from_xml res.body
@@ -197,4 +204,3 @@ module ActiveRecord
 
   end
 end
-
