@@ -5,6 +5,8 @@ require 'restfulie/transition'
 require 'restfulie/unmarshalling'
 
 module Restfulie
+  
+  include Restfulie::Marshalling
  
   def move_to(name)
     
