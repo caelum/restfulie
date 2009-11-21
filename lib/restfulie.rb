@@ -1,8 +1,8 @@
 require 'net/http'
 require 'uri'
-require 'marshalling'
-require 'transition'
-require 'unmarshalling'
+require 'restfulie/marshalling'
+require 'restfulie/transition'
+require 'restfulie/unmarshalling'
 
 module Restfulie
  
