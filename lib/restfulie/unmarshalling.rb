@@ -1,10 +1,9 @@
-module ActiveRecord
-  class Base
-
+module Restfulie
+  module Unmarshalling
     # basic code from Matt Pulver
     # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links
-    def self.from_hash( hash )
+    def from_hash(hash)
       h = {}
       h = hash.dup if hash
       links = nil
@@ -32,13 +31,13 @@ module ActiveRecord
       result
     end
 
-    def self.from_json( json )
+    def from_json(json)
       from_hash safe_json_decode( json )
     end
 
     # The xml has a surrounding class tag (e.g. ship-to),
     # but the hash has no counterpart (e.g. 'ship_to' => {} )
-    def self.from_xml( xml )
+    def from_xml(xml)
       hash = Hash.from_xml xml
       head = hash[self.to_s.underscore]
       result = self.from_hash head
@@ -46,13 +45,21 @@ module ActiveRecord
       result._came_from = :xml
       result
     end
+    
+    private
+    
+      def safe_json_decode(json)
+        return {} if !json
+        begin
+          ActiveSupport::JSON.decode json
+        rescue ; {} end
+      end
+    
   end
 end
 
-def safe_json_decode( json )
-  return {} if !json
-  begin
-    ActiveSupport::JSON.decode json
-  rescue ; {} end
+module ActiveRecord
+  class Base
+    extend Restfulie::Unmarshalling
+  end
 end
-# end of code based on Matt Pulver's
