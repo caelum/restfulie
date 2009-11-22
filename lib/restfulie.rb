@@ -14,8 +14,7 @@ module Restfulie
     transitions = available_transitions[:allow]
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
     
-    result = self.class.existing_transitions(name).result
-    self.status = result.to_s unless result.nil?
+    self.class.transitions[name].execute_at result
     
   end
   

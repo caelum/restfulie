@@ -13,6 +13,9 @@ module Restfulie
       def action
         @options
       end
+      def execute_at(target_object)
+        target_object.status = result.to_s unless result.nil?
+      end
     end
   
   end

@@ -16,7 +16,6 @@ module Restfulie
     def add_link(result, xml, options) 
 
       result = self.class.existing_transitions(result.to_sym) unless result.kind_of? Restfulie::Transition
-      puts "i will add a link now to #{result} #{result.class}"
 
       if result.respond_to? :action
         action = result.action
