@@ -13,12 +13,22 @@ describe Restfulie::Transitions::Transition do
       
       [:paid, "paid"].each do |result|
         order = Order.new
-        order.status = :unpaid
+        order.status = "unpaid"
       
         pay = Restfulie::Transitions::Transition.new(:pay, {}, result, nil)
         pay.execute_at order
         order.status.should == "paid"
       end
+
+    end
+    it "should bit change its status if there is a resulting status to move to" do
+      
+      order = Order.new
+      order.status = "unpaid"
+    
+      pay = Restfulie::Transitions::Transition.new(:pay, {}, nil, nil)
+      pay.execute_at order
+      order.status.should == "unpaid"
 
     end
   end
