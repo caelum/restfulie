@@ -7,13 +7,14 @@ require 'restfulie/unmarshalling'
 module Restfulie
   
   include Restfulie::Marshalling
+  include Restfulie::Transitions
  
   def move_to(name)
     
     transitions = available_transitions[:allow]
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
     
-    result = self.class._transitions(name).result
+    result = self.class.existing_transitions(name).result
     self.status = result.to_s unless result.nil?
     
   end
@@ -83,7 +84,7 @@ module ActiveRecord
     end
     
     # returns the definition for the transaction
-    def self._transitions(name)
+    def self.existing_transitions(name)
       transitions[name]
     end
     
