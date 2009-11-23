@@ -38,6 +38,18 @@ context RestfulieModel do
      + '/>'
   end
   
+  context "when checking the available transitions" do
+    it "should return nothing if there is no status field" do
+      class Client
+        include Restfulie
+      end
+      c = Client.new
+      c.available_transitions.should == {:allow=>[]}
+    end
+    it "should return nothing if there is status field is nil" do
+    end
+  end
+  
   context "when parsed to xml" do
     
       it "should not add hypermedia if controller is nil" do

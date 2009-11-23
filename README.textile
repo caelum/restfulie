@@ -194,9 +194,16 @@ There are two different approaches that can be combined to create a full hyperme
 h3. Simple usage: following transitions
 
 The most easy way to use restfulie is to write the *following_transitions* method.
-It should return a list of possible transitions, where each transition is identified by an array of its name and definition.
+There are two easy steps to make it work:
 
-The next example shows how to define a transition which will map to the current controller, action show:
+1. Create your model (i.e. Order) with an *status* field
+<pre>
+script/generate scaffold Order status:string location:string
+rake db:create
+rake db:migrate
+</pre>
+
+2. Add the *following_transitions* method returning an array of possible transitions:
 
 <pre>
 def following_transitions
@@ -206,9 +213,48 @@ def following_transitions
 end
 </pre>
 
-Which will generate an hyperlink as
+3. Update your *show* method within the *OrdersController* to show the hypermedia content:
 
-<pre><atom:link rel="show" rel="http://yourserver/orders/15" /></pre>
+<pre>
+ def show
+   @order = Order.find(params[:id])
+
+   respond_to do |format|
+     format.html # show.html.erb
+     format.xml  { render :xml => @order.to_xml(:controller=>self) }
+   end
+ end
+</pre>
+
+You are ready to go, create a new order and save it into the database:
+
+<pre>
+	order = Order.new
+	order.location = "take away"
+	order.status = "unpaid"
+	order.save
+	puts "Order #{order.id} saved"
+</pre>
+
+Start up the server:
+
+<pre>
+	script/server
+</pre>
+
+And now access your server at http://localhost:3000/orders/1.xml
+
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<order>
+  <created-at>2009-11-23T00:15:15Z</created-at>
+  <id>1</id>
+  <location>take away</location>
+  <status>unpaid</status>
+  <updated-at>2009-11-23T00:15:15Z</updated-at>
+  <atom:link rel="show" xmlns:atom="http://www.w3.org/2005/Atom" href="http://localhost:3000/orders/3"/>
+</order>
+</pre>
 
 h3. Customizing the rel name
 
@@ -425,7 +471,7 @@ There is a "portuguese tutorial on the server-side support":http://wakethedead.c
 
 h2. News
 
-h3. 0.3
+h3. current trunk
 * implemented support to can_*** methods
 * post data through http POST body
 
@@ -435,6 +481,10 @@ h3. 0.2
 
 h3. 0.1
 * first release
+
+h2. Coming soon
+
+* Set the correct media type instead of application/xml
 
 h2. License
 

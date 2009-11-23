@@ -17,7 +17,10 @@ module Restfulie
     self.class.transitions[name].execute_at result
     
   end
-  
+
+  # returns a list with extra possible transitions
+  # those transitions will be concatenated with any extra transitions provided by your resource through
+  # the use of state and transition definitions  
   def following_transitions
     []
   end
@@ -48,6 +51,13 @@ module Restfulie
     self.class.from_response response
   end
   
+  # returns a list of available transitions for this objects state
+  # TODO rename because it should never be used by the client...
+  def available_transitions
+    return {:allow => []} unless respond_to? :status
+    self.class.states[self.status.to_sym] || {:allow => []}
+  end
+  
 end
 
 module ActiveRecord
@@ -75,12 +85,6 @@ module ActiveRecord
       end
       all
     end
-
-    # returns a list of available transitions for this objects state
-    # TODO rename because it should never be used by the client...
-    def available_transitions()
-      self.class.states[self.status.to_sym] || {:allow => []}
-    end
     
     # returns the definition for the transaction
     def self.existing_transitions(name)
@@ -91,7 +95,7 @@ module ActiveRecord
     def self.transitions
       @transitions ||= {}
     end
-    
+
     # returns a hash of all possible states
     def self.states
       @states ||= {}
