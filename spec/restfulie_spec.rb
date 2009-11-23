@@ -4,16 +4,12 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
   attr_accessor :content
+  acts_as_restfulie
 end
 
 class Order < ActiveRecord::Base
   attr_accessor :buyer
-end
-class << RestfulieModel
-  include Restfulie::Base
-end
-class << Order
-  include Restfulie::Base
+  acts_as_restfulie
 end
 
 class MockedController
@@ -341,11 +337,9 @@ context RestfulieModel do
   end
   
   
-  context "when invoking a transition" do
-    class Account < ActiveRecord::Base
-    end
-    class << Account
-      include Restfulie::Base
+  context "when creating a transition" do
+    class Account
+      acts_as_restfulie
     end
     class AccountController
     end
@@ -358,6 +352,18 @@ context RestfulieModel do
       def controller.pay
       end
       Account.transition :pay
+    end
+  end
+  
+  
+  context "when invoking acts_as_restfulie" do
+    class Account
+    end
+    it "should add all methods from Restfulie::Base to the target class" do
+      Account.acts_as_restfulie
+      Restfulie::Base.methods.each do |m|
+        Account.methods.include? m
+      end
     end
   end
   

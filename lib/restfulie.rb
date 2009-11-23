@@ -89,3 +89,10 @@ module ActiveRecord
   end
 end
    
+class Class
+  def acts_as_restfulie
+    class << self
+      include Restfulie::Base
+    end
+  end
+end
