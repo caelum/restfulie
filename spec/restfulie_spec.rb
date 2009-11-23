@@ -262,7 +262,7 @@ context RestfulieModel do
       end
     end
     
-    it "should allow method overriding" do
+    it "should allow method overriding for methods given as symbols" do
       model = RestfulieModel.from_xml xml_for('update')
 
       req = mock Net::HTTP::Delete
@@ -270,6 +270,17 @@ context RestfulieModel do
 
       expected_response = prepare_http_for(req)
       res = model.send :update, :method => :delete
+      res.should eql(expected_response)
+    end
+
+    it "should allow method overriding for methods given as strings" do
+      model = RestfulieModel.from_xml xml_for('update')
+
+      req = mock Net::HTTP::Delete
+      Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+
+      expected_response = prepare_http_for(req)
+      res = model.send :update, :method => "delete"
       res.should eql(expected_response)
     end
 
