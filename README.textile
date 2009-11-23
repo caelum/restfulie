@@ -505,6 +505,7 @@ h2. Coming soon
 * rails 3 easier support (no controller argument!)
 * allow servers to define transitions by accessing other systems
 * allow servers to define a state method instead of internal variable
+* controller filtering and methods
 * english tutorial
 * when receiving a 201 + content, it should believe the content
 * when receiving a 201 without any content, it should allow to redirect or not
