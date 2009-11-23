@@ -226,8 +226,8 @@ context RestfulieModel do
   
   context "when invoking an state change" do
     
-    it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
-      ["cancel", "destroy", "delete"].each do |method_name|
+    ["cancel", "destroy", "delete"].each do |method_name|
+      it "should send a DELETE request if the state transition name is #{method_name}" do
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
@@ -248,8 +248,8 @@ context RestfulieModel do
         res.should eql(expected_response)
     end
     
-    it "should send a GET request if the state transition name is refresh, reload, show or latest" do
-      ["refresh", "latest", "reload", "show"].each do |method_name|
+    ["refresh", "latest", "reload", "show"].each do |method_name|
+      it "should send a GET request if the state transition name is #{method_name}" do
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
@@ -264,17 +264,15 @@ context RestfulieModel do
     
     it "should allow method overriding" do
       model = RestfulieModel.from_xml xml_for('update')
+
       req = mock Net::HTTP::Delete
-  
-      ['delete', :delete].each do |method_name|
-        Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        res = model.send('update', {:method=> method_name})
-        res.should eql(expected_response)
-      end
+      Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+
+      expected_response = prepare_http_for(req)
+      res = model.send :update, :method => :delete
+      res.should eql(expected_response)
     end
-    
+
     it "should GET and return its content" do
         model = RestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
