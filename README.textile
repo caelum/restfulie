@@ -430,10 +430,10 @@ h2. Team
 Restfulie was created and is maintained within Caelum by
 
 Projetct Founder
-* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
+* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br - twitter:http://www.twitter.com/guilhermecaelum "http://guilhermesilveira.wordpress.com":http://guilhermesilveira.wordpress.com
 
 Active Commiters
-* "Caue Guerra":mailto:caue.guerra@gmail.com
+* "Caue Guerra":mailto:caue.guerra@gmail.com - "http://caueguerra.com/":http://caueguerra.com/
 * "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
 
 Contributors
