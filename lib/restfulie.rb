@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'restfulie/base'
+require 'restfulie/controller'
 require 'restfulie/helper'
 require 'restfulie/marshalling'
 require 'restfulie/state'

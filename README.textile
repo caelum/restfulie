@@ -12,6 +12,13 @@ h2. Why would I use restfulie?
 4. HATEOAS --> clients you are unaware of will not bother if you change your URIs
 5. HATEOAS --> services that you consume will not affect your software whenever they change part of their flow or URIs
 
+h2. Could you compare it with Spring or JAX-RS based APIs?
+
+Restfulie is the first API which tries to somehow implement "Jim Webber":http://jim.webber.name/ and "Ian Robinson":http://iansrobinson.com/ opinion on how RESTFul systems use hypermedia
+as the way to lead your client's path through a business process.
+
+Therefore Restfulie is unique both in its feature set when compared to both Spring and JAX-RS based implementations, and its implementation: looking for simple code and favoring conventions over manual configurations.
+
 h1. Short examples
 
 h2. Restfulie: client-side
@@ -39,13 +46,12 @@ class Order < ActiveRecord::Base
     transitions << [:show, {}]
     transitions << [:destroy, {}] if can_cancel?
     transitions << [:pay, {:id => id}] if can_pay?
-    transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if paid?
     transitions
   end
 end
 </pre>
 
-*Do not forget to create a migration with a string field named status for your resource:*
+*You might want to create a migration with a string field named status for your resource:*
 
 <pre>
 scripts/generate migration add_status_to_order	
@@ -194,7 +200,7 @@ There are two different approaches that can be combined to create a full hyperme
 h3. Simple usage: following transitions
 
 The most easy way to use restfulie is to write the *following_transitions* method.
-There are two easy steps to make it work:
+There are three easy steps to make it work:
 
 1. Create your model (i.e. Order) with an *status* field
 <pre>
@@ -471,9 +477,10 @@ h3. More tutorials
 There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
 
 
-h2. News
+h2. What's new
 
 h3. next release
+* API change: you need to invoke "acts_as_restfulie" to your models
 * implemented support to can_*** methods
 * post data through http POST body
 * no need for the *status* field if you use the following_transition approach on the server side
@@ -493,12 +500,13 @@ h2. Coming soon
 * runcoderun
 * Generate and link to rubydoc
 * release 0.3
+* controller method should check if its an restfulie resource
+* full support to extended json
 * rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
 * automatically generate uri for this rel with its transition description
 * pure href definition of link
 * post entry point support
-* add acts_as_restfulie
-* remove cliente dependency from ActiveRecord
+* remove client dependency from ActiveRecord
 * remove server side dependency from ActiveRecord (its ok to use anything else)
 * Set the correct media type instead of application/xml
 * transitions << [:show]  should work
