@@ -10,9 +10,7 @@ module Restfulie
   include Restfulie::Transitions
  
   def move_to(name)
-    
-    transitions = available_transitions[:allow]
-    raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
+    raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless available_transitions[:allow].include? name
     
     self.class.transitions[name].execute_at result
     
