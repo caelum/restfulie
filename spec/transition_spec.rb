@@ -2,7 +2,7 @@ require 'net/http'
 require 'uri'
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe Restfulie::Transitions::Transition do
+describe Restfulie::Transition do
   
   class Order
     attr_accessor :status
@@ -15,7 +15,7 @@ describe Restfulie::Transitions::Transition do
         order = Order.new
         order.status = "unpaid"
       
-        pay = Restfulie::Transitions::Transition.new(:pay, {}, result, nil)
+        pay = Restfulie::Transition.new(:pay, {}, result, nil)
         pay.execute_at order
         order.status.should == "paid"
       end
@@ -26,7 +26,7 @@ describe Restfulie::Transitions::Transition do
       order = Order.new
       order.status = "unpaid"
     
-      pay = Restfulie::Transitions::Transition.new(:pay, {}, nil, nil)
+      pay = Restfulie::Transition.new(:pay, {}, nil, nil)
       pay.execute_at order
       order.status.should == "unpaid"
 

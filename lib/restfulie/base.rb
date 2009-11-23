@@ -27,7 +27,7 @@ module Restfulie
     # that following_transition definition does.
     def transition(name, options = {}, result = nil, &body)
       
-      transition = Restfulie::Transitions::Transition.new(name, options, result, body)
+      transition = Restfulie::Transition.new(name, options, result, body)
       transitions[name] = transition
 
       define_methods_for(self, name, result)
