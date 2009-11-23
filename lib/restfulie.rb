@@ -54,7 +54,8 @@ module Restfulie
   # returns a list of available transitions for this objects state
   # TODO rename because it should never be used by the client...
   def available_transitions
-    return {:allow => []} unless respond_to? :status
+    status_available = respond_to?(:status) && status!=nil
+    return {:allow => []} unless status_available
     self.class.states[self.status.to_sym] || {:allow => []}
   end
   

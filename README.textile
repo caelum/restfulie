@@ -488,6 +488,7 @@ h3. 0.1
 h2. Coming soon
 
 * Set the correct media type instead of application/xml
+* transitions << [:show]  should work
 
 h2. License
 
