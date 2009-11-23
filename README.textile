@@ -203,6 +203,8 @@ rake db:create
 rake db:migrate
 </pre>
 
+Note that with this usage the status field is optional (from 0.3.0 onwards).
+
 2. Add the *following_transitions* method returning an array of possible transitions:
 
 <pre>
@@ -474,6 +476,7 @@ h2. News
 h3. current trunk
 * implemented support to can_*** methods
 * post data through http POST body
+* no need for the *status* field if you use the following_transition approach on the server side
 
 h3. 0.2
 * support to state machine configuration
