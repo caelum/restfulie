@@ -1,4 +1,6 @@
-module Restfulie  
+
+module Restfulie
+  
   module Marshalling
   
     def to_json
@@ -11,8 +13,10 @@ module Restfulie
       end
     end
 
-    def add_link(result, xml, options)
+    def add_link(result, xml, options) 
+
       result = self.class._transitions(result.to_sym) unless result.kind_of? Restfulie::Transition
+      puts "i will add a link now to #{result} #{result.class}"
 
       if result.respond_to? :action
         action = result.action
@@ -26,6 +30,8 @@ module Restfulie
         rel = result.name
       end
     
+      puts "here we are"
+
       action[:action] ||= result.name
       translate_href = options[:controller].url_for(action)
       if options[:use_name_based_link]
@@ -35,7 +41,8 @@ module Restfulie
       end
     end
 
-    def to_xml(options = {})    
+    def to_xml(options = {})
+    
       return super unless respond_to?(:status)
       return super if options[:controller].nil?
     
@@ -53,4 +60,5 @@ module Restfulie
     end
   
   end
+  
 end

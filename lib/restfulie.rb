@@ -5,20 +5,17 @@ require 'restfulie/transition'
 require 'restfulie/unmarshalling'
 
 module Restfulie
-  include Restfulie::Marshalling
   
-  class InvalidTransition < Exception
-  end
+  include Restfulie::Marshalling
  
   def move_to(name)
-    transitions = available_transitions[:allow]
     
-    unless transitions.include? name
-      raise Restfulie::InvalidTransition, "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}"
-    end
+    transitions = available_transitions[:allow]
+    raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless transitions.include? name
     
     result = self.class._transitions(name).result
     self.status = result.to_s unless result.nil?
+    
   end
   
   def following_transitions
@@ -135,8 +132,10 @@ module ActiveRecord
       $1
     end
     
+    
     # translates a response to an object
     def self.from_response(res)
+      
       raise "unimplemented content type" if res.content_type!="application/xml"
 
       hash = Hash.from_xml res.body
@@ -145,9 +144,10 @@ module ActiveRecord
       
       type = hash.keys[0].camelize.constantize
       type.from_xml(res.body)
+      
     end
     
-    def self.requisition_method_for(overriden_option, name)
+    def self.requisition_method_for(overriden_option,name)
       basic_mapping = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
       defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
                   :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get}
@@ -155,6 +155,7 @@ module ActiveRecord
       return basic_mapping[overriden_option.to_sym] if overriden_option
       defaults[name.to_sym] || Net::HTTP::Post
     end
+    
     
     def self.add_state(transition)
       name = transition["rel"]
@@ -170,7 +171,8 @@ module ActiveRecord
       end
     end  
       
-    def self.define_methods_for(type, name, result)
+    def self.define_methods_for(type, name, result) 
+
       return nil if type.respond_to?(name)
 
       type.send(:define_method, name) do |*args|
@@ -181,6 +183,7 @@ module ActiveRecord
         transitions = available_transitions[:allow]
         transitions.include? name
       end
+
     end
 
 
@@ -198,6 +201,7 @@ module ActiveRecord
       else
         raise "unknown content type"
       end
+      
     end
 
   end
