@@ -89,7 +89,7 @@ module ActiveRecord
       transitions[name]
     end
     
-    # returns a hash of all possible transitions
+    # returns a hash of all possible transitions: Restfulie::Transition
     def self.transitions
       @transitions ||= {}
     end

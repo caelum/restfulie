@@ -19,19 +19,12 @@ module Restfulie
 
       transition = self.class.existing_transitions(transition.to_sym) unless transition.kind_of? Restfulie::Transition
 
-      if transition.respond_to? :action
-        action = transition.action
-        body = transition.body
-        action = body.call(self) if body
+      action = transition.action
+      body = transition.body
+      action = body.call(self) if body
 
-        rel = action[:rel] || transition.name || action[:action]
-        action[:rel] = nil
-      else
-        action = {}
-        rel = transition.name
-      end
-    
-      puts "here we are"
+      rel = action[:rel] || transition.name || action[:action]
+      action[:rel] = nil
 
       action[:action] ||= transition.name
       translate_href = options[:controller].url_for(action)
