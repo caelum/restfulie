@@ -490,12 +490,27 @@ h3. 0.1
 
 h2. Coming soon
 
-* Status field is required for to_xml. Should it?
-* Generate and link to rubydoc
 * runcoderun
+* Generate and link to rubydoc
+* release 0.3
+* rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
+* automatically generate uri for this rel with its transition description
+* pure href definition of link
+* post entry point support
+* add acts_as_restfulie
+* remove cliente dependency from ActiveRecord
+* remove server side dependency from ActiveRecord (its ok to use anything else)
 * Set the correct media type instead of application/xml
 * transitions << [:show]  should work
 * rails 3 easier support (no controller argument!)
+* allow servers to define transitions by accessing other systems
+* allow servers to define a state method instead of internal variable
+* english tutorial
+* when receiving a 201 + content, it should believe the content
+* when receiving a 201 without any content, it should allow to redirect or not
+* client side should allow withTimeStamp, withETag, withAuth
+* is there is an etag, use it by default (maybe NOT use it by default)... modified since and so on (header tags)
+* server side maybe allow hypermedia controls or not
 
 h2. License
 
