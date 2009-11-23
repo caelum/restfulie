@@ -5,8 +5,8 @@ require 'rake/gempackagetask'
 require 'spec/rake/spectask'
 
 GEM = "restfulie"
-GEM_VERSION = "0.2"
-SUMMARY = "This is a small cute plugin to show how to implement hypermedia based services in a easy way using rails."
+GEM_VERSION = "0.3.git.version"
+SUMMARY = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
 AUTHOR = "Guilherme Silveira, Caue Guerra"
 EMAIL = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://github.com/caelum/restfulie"
@@ -49,3 +49,6 @@ end
 
 desc "Builds the project"
 task :build => :spec
+
+desc "Default build will run specs"
+task :default => :spec

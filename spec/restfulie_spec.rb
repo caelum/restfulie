@@ -4,10 +4,12 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
   attr_accessor :content
+  acts_as_restfulie
 end
 
 class Order < ActiveRecord::Base
   attr_accessor :buyer
+  acts_as_restfulie
 end
 
 class MockedController
@@ -36,6 +38,26 @@ context RestfulieModel do
      + ' href="' + href + '"'\
      + ' rel="' + rel + '"'\
      + '/>'
+  end
+  
+  context "when checking the available transitions" do
+    it "should return nothing if there is no status field" do
+      class Client
+        include Restfulie
+      end
+      c = Client.new
+      c.available_transitions.should == {:allow=>[]}
+    end
+    it "should return nothing if there is status field is nil" do
+      class Client
+        include Restfulie
+        def status
+          nil
+        end
+      end
+      c = Client.new
+      c.available_transitions.should == {:allow=>[]}
+    end
   end
   
   context "when parsed to xml" do
@@ -315,20 +337,15 @@ context RestfulieModel do
   end
   
   
-  context "when invoking a transition" do
-    class Account < ActiveRecord::Base
+  
+  context "when invoking acts_as_restfulie" do
+    class CustomAccount
     end
-    class AccountController
-    end
-    it "should not add a pay method if it doesnt exist" do
-      Account.transition :pay
-      AccountController.respond_to?(:pay).should be(false)
-    end
-    it "should rewrite the pay method if it exists" do
-      controller = AccountController.new
-      def controller.pay
+    it "should add all methods from Restfulie::Base to the target class" do
+      CustomAccount.acts_as_restfulie
+      Restfulie::Base.methods.each do |m|
+        CustomAccount.methods.include? m
       end
-      Account.transition :pay
     end
   end
   
