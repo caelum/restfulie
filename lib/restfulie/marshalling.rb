@@ -7,31 +7,33 @@ module Restfulie
       super :methods => :following_states
     end
   
+    # adds a link for each transition to the current xml writer
     def add_links(xml, all, options)
-      all.each do |result|
-        add_link(result, xml, options)
+      all.each do |transition|
+        add_link(transition, xml, options)
       end
     end
 
-    def add_link(result, xml, options) 
+    # adds a link for this transition to the current xml writer
+    def add_link(transition, xml, options) 
 
-      result = self.class.existing_transitions(result.to_sym) unless result.kind_of? Restfulie::Transition
+      transition = self.class.existing_transitions(transition.to_sym) unless transition.kind_of? Restfulie::Transition
 
-      if result.respond_to? :action
-        action = result.action
-        body = result.body
+      if transition.respond_to? :action
+        action = transition.action
+        body = transition.body
         action = body.call(self) if body
 
-        rel = action[:rel] || result.name || action[:action]
+        rel = action[:rel] || transition.name || action[:action]
         action[:rel] = nil
       else
         action = {}
-        rel = result.name
+        rel = transition.name
       end
     
       puts "here we are"
 
-      action[:action] ||= result.name
+      action[:action] ||= transition.name
       translate_href = options[:controller].url_for(action)
       if options[:use_name_based_link]
         xml.tag!(rel, translate_href)

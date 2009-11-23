@@ -489,8 +489,10 @@ h3. 0.1
 
 h2. Coming soon
 
+* Status field is required for to_xml. Should it?
 * Set the correct media type instead of application/xml
 * transitions << [:show]  should work
+* rails 3 easier support (no controller argument!)
 
 h2. License
 
