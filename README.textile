@@ -473,7 +473,7 @@ There is a "portuguese tutorial on the server-side support":http://wakethedead.c
 
 h2. News
 
-h3. current trunk
+h3. next release
 * implemented support to can_*** methods
 * post data through http POST body
 * no need for the *status* field if you use the following_transition approach on the server side
