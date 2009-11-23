@@ -18,21 +18,8 @@ module Restfulie
     def add_link(transition, xml, options) 
 
       transition = self.class.existing_transitions(transition.to_sym) unless transition.kind_of? Restfulie::Transition
+      transition.add_link_to(xml, self, options)
 
-      action = transition.action
-      body = transition.body
-      action = body.call(self) if body
-
-      rel = action[:rel] || transition.name || action[:action]
-      action[:rel] = nil
-
-      action[:action] ||= transition.name
-      translate_href = options[:controller].url_for(action)
-      if options[:use_name_based_link]
-        xml.tag!(rel, translate_href)
-      else
-        xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => translate_href)
-      end
     end
 
     def to_xml(options = {})
