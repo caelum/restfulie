@@ -477,6 +477,8 @@ h3. current trunk
 * implemented support to can_*** methods
 * post data through http POST body
 * no need for the *status* field if you use the following_transition approach on the server side
+* bug fixed when *status* was nil
+* lots of internal refactoring
 
 h3. 0.2
 * support to state machine configuration
