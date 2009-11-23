@@ -4,6 +4,7 @@ require 'restfulie/marshalling'
 require 'restfulie/transition'
 require 'restfulie/unmarshalling'
 require 'restfulie/state'
+require 'restfulie/helper'
 
 module Restfulie
   
@@ -107,6 +108,8 @@ module ActiveRecord
       states[name] = options
     end
 
+    # defines a new transition. the transition options works in the same way
+    # that following_transition definition does.
     def self.transition(name, options = {}, result = nil, &body)
       
       transition = Transition.new(name, options, result, body)
@@ -128,12 +131,6 @@ module ActiveRecord
       result.extend Restfulie::State
       
       result
-    end
-    
-    # retrieves the invoking method's name
-    def self.current_method
-      caller[0]=~/`(.*?)'/
-      $1
     end
     
     
@@ -167,7 +164,7 @@ module ActiveRecord
       self.module_eval do
         
         def temp_method(options = {}, &block)
-          self.invoke_remote_transition(self.class.current_method, options, block)
+          self.invoke_remote_transition(Restfulie::Helper.current_method, options, block)
         end
         
         alias_method name, :temp_method
