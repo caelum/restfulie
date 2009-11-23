@@ -24,15 +24,12 @@ module Restfulie
 
     def to_xml(options = {})
     
-      return super unless respond_to?(:status)
-      return super if options[:controller].nil?
+      transitions = all_following_transitions
+      return super(options) if transitions.empty? || options[:controller].nil?
     
       options[:skip_types] = true
       super options do |xml|
-        all = all_following_transitions
-        return super if all.empty?
-      
-        add_links xml, all, options
+        add_links xml, transitions, options
       end
     end
 
