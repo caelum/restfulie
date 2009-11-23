@@ -4,10 +4,12 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
   attr_accessor :content
+  acts_as_restfulie
 end
 
 class Order < ActiveRecord::Base
   attr_accessor :buyer
+  acts_as_restfulie
 end
 
 class MockedController
@@ -38,10 +40,32 @@ context RestfulieModel do
      + '/>'
   end
   
+  context "when checking the available transitions" do
+    it "should return nothing if there is no status field" do
+      class Client
+        include Restfulie
+      end
+      c = Client.new
+      c.available_transitions.should == {:allow=>[]}
+    end
+    it "should return nothing if there is status field is nil" do
+      class Client
+        include Restfulie
+        def status
+          nil
+        end
+      end
+      c = Client.new
+      c.available_transitions.should == {:allow=>[]}
+    end
+  end
+  
   context "when parsed to xml" do
-    it "should not add hypermedia if controller is nil" do
+    
+      it "should not add hypermedia if controller is nil" do
         subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
       end
+      
       it "should add allowable actions to models xml if controller is set" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -52,6 +76,7 @@ context RestfulieModel do
         
         got.should eql(expected)
       end
+      
       it "should add more than 1 allowable actions to models xml if controller is set" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -104,7 +129,7 @@ context RestfulieModel do
          subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
       end
       
-      it "should evaluate in runtime if there is a body to the transition" do
+      it "should evaluate in runtime if there is a block to define the transition" do
         my_controller = MockedController.new
         RestfulieModel.transition :latest do |me|
            {:action => me.content}
@@ -114,20 +139,6 @@ context RestfulieModel do
         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
       end
       
-      it "should add all states if there is more than one with what is allowed" do
-        froms = [:received, :cancelled]
-        my_controller = MockedController.new
-        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
-        RestfulieModel.state froms, :allow => [:latest]
-        froms.each do |from|
-          subject.status = from
-          
-          expected = normalize_xml('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>' + from.to_s + '</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
-          got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
-          
-          got.should eql(expected)
-        end
-      end
       it "should use transition name if there is no action" do
         my_controller = MockedController.new
         RestfulieModel.transition :pay
@@ -171,7 +182,7 @@ context RestfulieModel do
         
         subject.status = :unpaid
         subject.can_pay?.should eql(true)
-
+  
         subject.status = :paid
         subject.can_pay?.should eql(false)
         
@@ -199,20 +210,20 @@ context RestfulieModel do
     end
     
   end
-
+  
   def xml_for(method_name)
     '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
   end
   
   def prepare_http_for(request)
-    request.should_receive(:add_field).with("Accept", "text/xml")
+    request.should_receive(:add_field).with("Accept", "application/xml")
     response = mock Net::HTTPResponse
     http = mock Net::HTTP
     Net::HTTP.should_receive(:new).with('localhost', 80).and_return(http)
     http.should_receive(:request).with(request).and_return(response)
     response
   end
-
+  
   context "when invoking an state change" do
     
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
@@ -220,7 +231,7 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for(method_name)
         req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-
+  
         expected_response = prepare_http_for(req)
         res = model.send(method_name)
         res.should eql(expected_response)
@@ -231,7 +242,7 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for('update')
         req = mock Net::HTTP::Post
         Net::HTTP::Post.should_receive(:new).with('/order/1').and_return(req)
-
+  
         expected_response = prepare_http_for(req)
         res = model.send('update')
         res.should eql(expected_response)
@@ -244,7 +255,7 @@ context RestfulieModel do
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
     
         expected_response = prepare_http_for(req)
-        expected_response.should_receive(:body).and_return("<restfulie_model></restfulie_model>")
+        expected_response.should_receive(:body).exactly(2).times.and_return("<restfulie_model></restfulie_model>")
         expected_response.should_receive(:content_type).and_return('application/xml')
         res = model.send(method_name)
         res.class.to_s.should eql('RestfulieModel')
@@ -254,10 +265,10 @@ context RestfulieModel do
     it "should allow method overriding" do
       model = RestfulieModel.from_xml xml_for('update')
       req = mock Net::HTTP::Delete
-
+  
       ['delete', :delete].each do |method_name|
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-
+  
         expected_response = prepare_http_for(req)
         res = model.send('update', {:method=> method_name})
         res.should eql(expected_response)
@@ -268,9 +279,9 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-
+  
         expected_response = prepare_http_for(req)
-        expected_response.should_receive(:body).and_return("<order><buyer>guilherme silveira</buyer></order>")
+        expected_response.should_receive(:body).exactly(2).times.and_return("<order><buyer>guilherme silveira</buyer></order>")
         expected_response.should_receive(:content_type).and_return('application/xml')
         res = model.send('check_info', {:method => "get"})
         res.class.to_s.should eql('Order')
@@ -281,7 +292,7 @@ context RestfulieModel do
         model = RestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-
+  
         expected_response = prepare_http_for(req)
         expected_result = "my_custom_info"
         my_result = model.send('check_info', {:method => "get"}) do |response|
@@ -304,46 +315,37 @@ context RestfulieModel do
   context "when de-serializing straight from a web request" do
     
     def mock_request_for(type, body)
-      req = mock Net::HTTP::Get
-      Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
-      http = mock Net::HTTP
-      Net::HTTP.should_receive(:new).with('localhost', 3001).and_return(http)
       res = mock_response(:code => "200", :content_type => type, :body => body)
-      http.should_receive(:request).with(req).and_return(res)
+      Net::HTTP.should_receive(:get_response).with(URI.parse('http://localhost:3001/order/15')).and_return(res)
     end
     
     it "should deserialize correctly if its an xml" do
       mock_request_for "application/xml", "<restfulie_model><status>CANCELLED</status></restfulie_model>"
-
+  
       model = RestfulieModel.from_web 'http://localhost:3001/order/15'
       model.status.should eql("CANCELLED")
-
+  
     end
     
     it "should deserialize correctly if its a json" do
       mock_request_for "application/json", "{ status : 'CANCELLED' }"
-
+  
       model = RestfulieModel.from_web 'http://localhost:3001/order/15'
       model.status.should eql("CANCELLED")
-
+  
     end
   end
-
   
-  context "when invoking a transition" do
-    class Account < ActiveRecord::Base
+  
+  
+  context "when invoking acts_as_restfulie" do
+    class CustomAccount
     end
-    class AccountController
-    end
-    it "should not add a pay method if it doesnt exist" do
-      Account.transition :pay
-      AccountController.respond_to?(:pay).should be(false)
-    end
-    it "should rewrite the pay method if it exists" do
-      controller = AccountController.new
-      def controller.pay
+    it "should add all methods from Restfulie::Base to the target class" do
+      CustomAccount.acts_as_restfulie
+      Restfulie::Base.methods.each do |m|
+        CustomAccount.methods.include? m
       end
-      Account.transition :pay
     end
   end
   

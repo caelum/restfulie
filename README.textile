@@ -12,6 +12,13 @@ h2. Why would I use restfulie?
 4. HATEOAS --> clients you are unaware of will not bother if you change your URIs
 5. HATEOAS --> services that you consume will not affect your software whenever they change part of their flow or URIs
 
+h2. Could you compare it with Spring or JAX-RS based APIs?
+
+Restfulie is the first API which tries to somehow implement "Jim Webber":http://jim.webber.name/ and "Ian Robinson":http://iansrobinson.com/ opinion on how RESTFul systems use hypermedia
+as the way to lead your client's path through a business process.
+
+Therefore Restfulie is unique both in its feature set when compared to both Spring and JAX-RS based implementations, and its implementation: looking for simple code and favoring conventions over manual configurations.
+
 h1. Short examples
 
 h2. Restfulie: client-side
@@ -34,18 +41,20 @@ This is a simple example how to make your state changes available to your resour
 
 <pre>
 class Order < ActiveRecord::Base
+
+  acts_as_restfulie
+
   def following_transitions
     transitions = []
     transitions << [:show, {}]
     transitions << [:destroy, {}] if can_cancel?
     transitions << [:pay, {:id => id}] if can_pay?
-    transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if paid?
     transitions
   end
 end
 </pre>
 
-*Do not forget to create a migration with a string field named status for your resource:*
+*You might want to create a migration with a string field named status for your resource:*
 
 <pre>
 scripts/generate migration add_status_to_order	
@@ -77,6 +86,8 @@ For those willing to implement a more complex or advanced state machine, you can
 
 <pre>
 class Order < ActiveRecord::Base
+  acts_as_restfulie
+
   state :unpaid, :allow => [:latest, :pay, :cancel]
   state :cancelled, :allow => :latest
 
@@ -194,11 +205,22 @@ There are two different approaches that can be combined to create a full hyperme
 h3. Simple usage: following transitions
 
 The most easy way to use restfulie is to write the *following_transitions* method.
-It should return a list of possible transitions, where each transition is identified by an array of its name and definition.
+There are three easy steps to make it work:
 
-The next example shows how to define a transition which will map to the current controller, action show:
+1. Create your model (i.e. Order) with an *status* field
+<pre>
+script/generate scaffold Order status:string location:string
+rake db:create
+rake db:migrate
+</pre>
+
+Note that with this usage the status field is optional (from 0.3.0 onwards).
+
+2. Add the *acts_as_restfulie* invocation and *following_transitions* method returning an array of possible transitions:
 
 <pre>
+acts_as_restfulie
+
 def following_transitions
   transitions = []
   transitions << [:show, {}]
@@ -206,9 +228,48 @@ def following_transitions
 end
 </pre>
 
-Which will generate an hyperlink as
+3. Update your *show* method within the *OrdersController* to show the hypermedia content:
 
-<pre><atom:link rel="show" rel="http://yourserver/orders/15" /></pre>
+<pre>
+ def show
+   @order = Order.find(params[:id])
+
+   respond_to do |format|
+     format.html # show.html.erb
+     format.xml  { render :xml => @order.to_xml(:controller=>self) }
+   end
+ end
+</pre>
+
+You are ready to go, create a new order and save it into the database:
+
+<pre>
+	order = Order.new
+	order.location = "take away"
+	order.status = "unpaid"
+	order.save
+	puts "Order #{order.id} saved"
+</pre>
+
+Start up the server:
+
+<pre>
+	script/server
+</pre>
+
+And now access your server at http://localhost:3000/orders/1.xml
+
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<order>
+  <created-at>2009-11-23T00:15:15Z</created-at>
+  <id>1</id>
+  <location>take away</location>
+  <status>unpaid</status>
+  <updated-at>2009-11-23T00:15:15Z</updated-at>
+  <atom:link rel="show" xmlns:atom="http://www.w3.org/2005/Atom" href="http://localhost:3000/orders/3"/>
+</order>
+</pre>
 
 h3. Customizing the rel name
 
@@ -257,6 +318,9 @@ The following example shows all possible states for an order:
 
 <pre>
 class Order < ActiveRecord::Base
+
+	acts_as_restfulie
+	
 	state :unpaid, :allow => [:latest, :pay, :cancel]
 	state :cancelled, :allow => :latest
 	state :received, :allow => [:latest, :check_payment_info]
@@ -279,6 +343,9 @@ list of available transition whenever the *can_pay?* method returns true:
 
 <pre>
 class Order < ActiveRecord::Base
+
+	acts_as_restfulie
+	
 	transition :pay, {:action => pay_this_order, :controller => :payments}, :preparing
 
 	def following_transitions
@@ -423,11 +490,16 @@ h3. More tutorials
 There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
 
 
-h2. News
+h2. What's new
 
-h3. 0.3
+h3. next release
+* API change: you need to invoke "acts_as_restfulie" to your models
 * implemented support to can_*** methods
 * post data through http POST body
+* no need for the *status* field if you use the following_transition approach on the server side
+* bug fixed when *status* was nil
+* lots of internal refactoring
+* lots of new documentation
 
 h3. 0.2
 * support to state machine configuration
@@ -435,6 +507,33 @@ h3. 0.2
 
 h3. 0.1
 * first release
+
+h2. Coming soon
+
+* runcoderun
+* Generate and link to rubydoc
+* release 0.3
+* integration tests on orderserver/client api
+* controller method should check if its an restfulie resource
+* full support to extended json
+* rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
+* automatically generate uri for this rel with its transition description
+* pure href definition of link
+* post entry point support
+* remove client dependency from ActiveRecord
+* remove server side dependency from ActiveRecord (its ok to use anything else)
+* Set the correct media type instead of application/xml
+* transitions << [:show]  should work
+* rails 3 easier support (no controller argument!)
+* allow servers to define transitions by accessing other systems
+* allow servers to define a state method instead of internal variable
+* controller filtering and methods
+* english tutorial
+* when receiving a 201 + content, it should believe the content
+* when receiving a 201 without any content, it should allow to redirect or not
+* client side should allow withTimeStamp, withETag, withAuth
+* is there is an etag, use it by default (maybe NOT use it by default)... modified since and so on (header tags)
+* server side maybe allow hypermedia controls or not
 
 h2. License
 
