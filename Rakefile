@@ -49,3 +49,6 @@ end
 
 desc "Builds the project"
 task :build => :spec
+
+desc "Default build will run specs"
+task :default => :spec
