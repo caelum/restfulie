@@ -337,32 +337,14 @@ context RestfulieModel do
   end
   
   
-  context "when creating a transition" do
-    class Account
-      acts_as_restfulie
-    end
-    class AccountController
-    end
-    it "should not add a pay method if it doesnt exist" do
-      Account.transition :pay
-      AccountController.respond_to?(:pay).should be(false)
-    end
-    it "should rewrite the pay method if it exists" do
-      controller = AccountController.new
-      def controller.pay
-      end
-      Account.transition :pay
-    end
-  end
-  
   
   context "when invoking acts_as_restfulie" do
-    class Account
+    class CustomAccount
     end
     it "should add all methods from Restfulie::Base to the target class" do
-      Account.acts_as_restfulie
+      CustomAccount.acts_as_restfulie
       Restfulie::Base.methods.each do |m|
-        Account.methods.include? m
+        CustomAccount.methods.include? m
       end
     end
   end
