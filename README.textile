@@ -41,6 +41,9 @@ This is a simple example how to make your state changes available to your resour
 
 <pre>
 class Order < ActiveRecord::Base
+
+  acts_as_restfulie
+
   def following_transitions
     transitions = []
     transitions << [:show, {}]
@@ -83,6 +86,8 @@ For those willing to implement a more complex or advanced state machine, you can
 
 <pre>
 class Order < ActiveRecord::Base
+  acts_as_restfulie
+
   state :unpaid, :allow => [:latest, :pay, :cancel]
   state :cancelled, :allow => :latest
 
@@ -211,9 +216,11 @@ rake db:migrate
 
 Note that with this usage the status field is optional (from 0.3.0 onwards).
 
-2. Add the *following_transitions* method returning an array of possible transitions:
+2. Add the *acts_as_restfulie* invocation and *following_transitions* method returning an array of possible transitions:
 
 <pre>
+acts_as_restfulie
+
 def following_transitions
   transitions = []
   transitions << [:show, {}]
@@ -311,6 +318,9 @@ The following example shows all possible states for an order:
 
 <pre>
 class Order < ActiveRecord::Base
+
+	acts_as_restfulie
+	
 	state :unpaid, :allow => [:latest, :pay, :cancel]
 	state :cancelled, :allow => :latest
 	state :received, :allow => [:latest, :check_payment_info]
@@ -333,6 +343,9 @@ list of available transition whenever the *can_pay?* method returns true:
 
 <pre>
 class Order < ActiveRecord::Base
+
+	acts_as_restfulie
+	
 	transition :pay, {:action => pay_this_order, :controller => :payments}, :preparing
 
 	def following_transitions
@@ -500,6 +513,7 @@ h2. Coming soon
 * runcoderun
 * Generate and link to rubydoc
 * release 0.3
+* integration tests on orderserver/client api
 * controller method should check if its an restfulie resource
 * full support to extended json
 * rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
