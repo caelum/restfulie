@@ -479,6 +479,7 @@ h3. current trunk
 * no need for the *status* field if you use the following_transition approach on the server side
 * bug fixed when *status* was nil
 * lots of internal refactoring
+* lots of new documentation
 
 h3. 0.2
 * support to state machine configuration
@@ -490,6 +491,8 @@ h3. 0.1
 h2. Coming soon
 
 * Status field is required for to_xml. Should it?
+* Generate and link to rubydoc
+* runcoderun
 * Set the correct media type instead of application/xml
 * transitions << [:show]  should work
 * rails 3 easier support (no controller argument!)
