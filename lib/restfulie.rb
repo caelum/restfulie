@@ -85,34 +85,39 @@ module ActiveRecord
     # which content-type generated this data
     attr_accessor :_came_from
     
+  end
+end
+   
+   module Restfulie
+     module Base 
     # server side
     
     # returns the definition for the transaction
-    def self.existing_transitions(name)
+    def existing_transitions(name)
       transitions[name]
     end
     
     # returns a hash of all possible transitions: Restfulie::Transition
-    def self.transitions
+    def transitions
       @transitions ||= {}
     end
 
     # returns a hash of all possible states
-    def self.states
+    def states
       @states ||= {}
     end
 
     # adds a new state to the list of possible states
-    def self.state(name, options = {})
+    def state(name, options = {})
       options[:allow] = [options[:allow]] unless options[:allow].kind_of? Array
       states[name] = options
     end
 
     # defines a new transition. the transition options works in the same way
     # that following_transition definition does.
-    def self.transition(name, options = {}, result = nil, &body)
+    def transition(name, options = {}, result = nil, &body)
       
-      transition = Transition.new(name, options, result, body)
+      transition = Restfulie::Transitions::Transition.new(name, options, result, body)
       transitions[name] = transition
 
       define_methods_for(self, name, result)
@@ -121,7 +126,7 @@ module ActiveRecord
 
     # receives an object and inserts all necessary methods
     # so it can answer to can_??? invocations
-    def self.add_states(result, states)
+    def add_states(result, states)
       result._possible_states = {}
 
       states.each do |state|
@@ -135,7 +140,7 @@ module ActiveRecord
     
     
     # translates a response to an object
-    def self.from_response(res)
+    def from_response(res)
       
       raise "unimplemented content type" if res.content_type!="application/xml"
 
@@ -148,7 +153,7 @@ module ActiveRecord
       
     end
     
-    def self.requisition_method_for(overriden_option,name)
+    def requisition_method_for(overriden_option,name)
       basic_mapping = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
       defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
                   :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get}
@@ -158,7 +163,7 @@ module ActiveRecord
     end
     
     
-    def self.add_state(transition)
+    def add_state(transition)
       name = transition["rel"]
       
       self.module_eval do
@@ -172,7 +177,7 @@ module ActiveRecord
       end
     end  
       
-    def self.define_methods_for(type, name, result) 
+    def define_methods_for(type, name, result) 
 
       return nil if type.respond_to?(name)
 
@@ -188,7 +193,7 @@ module ActiveRecord
     end
 
 
-    def self.from_web(uri)
+    def from_web(uri)
       res = Net::HTTP.get_response(URI.parse(uri))
       # TODO redirect... follow or not? (optional...)
       raise "invalid request" if res.code != "200"

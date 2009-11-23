@@ -9,6 +9,12 @@ end
 class Order < ActiveRecord::Base
   attr_accessor :buyer
 end
+class << RestfulieModel
+  include Restfulie::Base
+end
+class << Order
+  include Restfulie::Base
+end
 
 class MockedController
   def url_for(x)
@@ -337,6 +343,9 @@ context RestfulieModel do
   
   context "when invoking a transition" do
     class Account < ActiveRecord::Base
+    end
+    class << Account
+      include Restfulie::Base
     end
     class AccountController
     end
