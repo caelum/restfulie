@@ -510,7 +510,6 @@ h3. 0.1
 
 h2. Coming soon
 
-* runcoderun
 * Generate and link to rubydoc
 * release 0.3
 * integration tests on orderserver/client api
