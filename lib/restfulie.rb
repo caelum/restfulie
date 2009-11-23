@@ -3,6 +3,7 @@ require 'uri'
 require 'restfulie/marshalling'
 require 'restfulie/transition'
 require 'restfulie/unmarshalling'
+require 'restfulie/state'
 
 module Restfulie
   
@@ -31,16 +32,6 @@ module Restfulie
   # the transition's uri.
   def following_transitions
     []
-  end
-  
-  module State
-    def respond_to?(sym)
-      has_state(sym.to_s) || super(sym)
-    end
-
-    def has_state(name)
-      !@_possible_states[name].nil?
-    end
   end
   
   def invoke_remote_transition(name, options, block)
