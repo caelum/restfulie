@@ -1,7 +1,8 @@
 module Restfulie
   
   module Server
-  
+
+    # represents a transition on the server side
     class Transition
       attr_reader :body, :name, :result
       def initialize(name, options, result, body)
@@ -13,10 +14,13 @@ module Restfulie
       def action
         @options || {}
       end
+      
+      # executes this transition in a resource
       def execute_at(target_object)
         target_object.status = result.to_s unless result.nil?
       end
     
+      # adds a link to this transition's uri on a xml writer
       def add_link_to(xml, model, options)
         specific_action = action.dup
         specific_action = @body.call(model) if @body
