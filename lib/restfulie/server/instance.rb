@@ -20,6 +20,16 @@ module Restfulie
         []
       end
 
+      # returns a list containing all available transitions for this object's state
+      def all_following_transitions
+        all = [] + available_transitions[:allow]
+        following_transitions.each do |t|
+          t = Restfulie::Server::Transition.new(t[0], t[1], t[2], nil) if t.kind_of? Array
+          all << t
+        end
+        all
+      end
+
     end
   end
 end

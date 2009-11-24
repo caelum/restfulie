@@ -510,7 +510,6 @@ h3. 0.1
 
 h2. Coming soon
 
-* break into Restfulie::Client, Restfulie::Server and Restfulie::Marshall
 * Generate and link to rubydoc
 * release 0.3
 * change parameter order for transition: last one is HASH, first is name, second (if existing) is target state
