@@ -1,11 +1,12 @@
 require 'net/http'
 require 'uri'
 require 'restfulie/base'
-require 'restfulie/controller'
 require 'restfulie/helper'
 require 'restfulie/marshalling'
 require 'restfulie/unmarshalling'
 
+require 'restfulie/server/base'
+require 'restfulie/server/controller'
 require 'restfulie/server/state'
 require 'restfulie/server/transition'
 
@@ -94,6 +95,7 @@ class Class
   def acts_as_restfulie
     class << self
       include Restfulie::Base
+      include Restfulie::Server::Base
     end
   end
 end
