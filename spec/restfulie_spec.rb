@@ -173,66 +173,31 @@ context RestfulieModel do
       end
     end
   
-  # context "when checking permissions" do
-  #   it "should add can_xxx methods allowing one to check whther the transition is valid or not" do
-  #       my_controller = MockedController.new
-  #       RestfulieModel.transition :pay, {}
-  #       RestfulieModel.state :unpaid, :allow => :pay
-  #       RestfulieModel.state :paid
-  #       
-  #       subject.status = :unpaid
-  #       subject.can_pay?.should eql(true)
-  # 
-  #       subject.status = :paid
-  #       subject.can_pay?.should eql(false)
-  #       
-  #   end
-  # end
-  # 
-  # 
-  # def mock_response(options = {})
-  #   res = mock Net::HTTPResponse
-  #   options.keys.each do |x|
-  #     res.should_receive(x).and_return(options[x])
-  #   end
-  #   res
-  # end
-  # 
-  # context "when de-serializing straight from a web request" do
-  #   
-  #   def mock_request_for(type, body)
-  #     res = mock_response(:code => "200", :content_type => type, :body => body)
-  #     Net::HTTP.should_receive(:get_response).with(URI.parse('http://localhost:3001/order/15')).and_return(res)
-  #   end
-  #   
-  #   it "should deserialize correctly if its an xml" do
-  #     mock_request_for "application/xml", "<restfulie_model><status>CANCELLED</status></restfulie_model>"
-  # 
-  #     model = RestfulieModel.from_web 'http://localhost:3001/order/15'
-  #     model.status.should eql("CANCELLED")
-  # 
-  #   end
-  #   
-  #   it "should deserialize correctly if its a json" do
-  #     mock_request_for "application/json", "{ status : 'CANCELLED' }"
-  # 
-  #     model = RestfulieModel.from_web 'http://localhost:3001/order/15'
-  #     model.status.should eql("CANCELLED")
-  # 
-  #   end
-  # end
-  # 
-  # 
-  # 
-  # context "when invoking acts_as_restfulie" do
-  #   class CustomAccount
-  #   end
-  #   it "should add all methods from Restfulie::Base to the target class" do
-  #     CustomAccount.acts_as_restfulie
-  #     Restfulie::Server::Base.methods.each do |m|
-  #       CustomAccount.methods.include? m
-  #     end
-  #   end
-  # end
-  # 
+  context "when checking permissions" do
+      it "should add can_xxx methods allowing one to check whther the transition is valid or not" do
+          my_controller = MockedController.new
+          RestfulieModel.transition :pay, {}
+          RestfulieModel.state :unpaid, :allow => :pay
+          RestfulieModel.state :paid
+          
+          subject.status = :unpaid
+          subject.can_pay?.should eql(true)
+    
+          subject.status = :paid
+          subject.can_pay?.should eql(false)
+          
+      end
+    end
+    
+    context "when invoking acts_as_restfulie" do
+      class CustomAccount
+      end
+      it "should add all methods from Restfulie::Base to the target class" do
+        CustomAccount.acts_as_restfulie
+        Restfulie::Server::Base.methods.each do |m|
+          CustomAccount.methods.include? m
+        end
+      end
+    end
+    
 end

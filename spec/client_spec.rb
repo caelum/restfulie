@@ -115,7 +115,7 @@ context "client unmarshalling" do
     end
     
   end
-  
+
   
   def xml_for(method_name)
     '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></client-restfulie-model>'
@@ -129,6 +129,39 @@ context "client unmarshalling" do
     Net::HTTP.should_receive(:new).with('localhost', 80).and_return(http)
     http.should_receive(:request).with(request).and_return(response)
     response
+  end
+
+  
+  context "when de-serializing straight from a web request" do
+    
+    def mock_request_for(type, body)
+      res = mock_response(:code => "200", :content_type => type, :body => body)
+      Net::HTTP.should_receive(:get_response).with(URI.parse('http://localhost:3001/order/15')).and_return(res)
+    end
+    
+    it "should deserialize correctly if its an xml" do
+      mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>"
+  
+      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
+      model.status.should eql("CANCELLED")
+  
+    end
+    
+    it "should deserialize correctly if its a json" do
+      mock_request_for "application/json", "{ status : 'CANCELLED' }"
+  
+      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
+      model.status.should eql("CANCELLED")
+  
+    end
+  end
+
+  def mock_response(options = {})
+    res = mock Net::HTTPResponse
+    options.keys.each do |x|
+      res.should_receive(x).and_return(options[x])
+    end
+    res
   end
 
 end
