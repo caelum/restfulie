@@ -487,7 +487,7 @@ You can see an application's source code here, both client and server side were 
 
 h3. More tutorials
 
-There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
+There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie, "more on restfulie - portuguese":http://andersonleiteblog.wordpress.com/2009/11/23/mais-sobre-restfulie/ and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
 
 
 h2. What's new
@@ -510,8 +510,10 @@ h3. 0.1
 
 h2. Coming soon
 
+* break into Restfulie::Client, Restfulie::Server and Restfulie::Marshall
 * Generate and link to rubydoc
 * release 0.3
+* allows pure String/byte array client side post and server side retrieval
 * integration tests on orderserver/client api
 * controller method should check if its an restfulie resource
 * full support to extended json
