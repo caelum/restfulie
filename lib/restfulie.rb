@@ -14,14 +14,6 @@ require 'restfulie/server/state'
 require 'restfulie/server/transition'
 
 module Restfulie
-  
-  include Restfulie::Server::Marshalling
-
-  # checks if its possible to execute such transition and, if it is, executes it
-  def move_to(name)
-    raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless available_transitions[:allow].include? name
-    self.class.transitions[name].execute_at result
-  end
 
   # returns a list of available transitions for this objects state
   # TODO rename because it should never be used by the client...
@@ -48,7 +40,8 @@ class Class
       include Restfulie::Client::Base
       include Restfulie::Server::Base
     end
-    include Restfulie::Server::Instance
     include Restfulie::Client::Instance
+    include Restfulie::Server::Instance
+    include Restfulie::Server::Marshalling
   end
 end
