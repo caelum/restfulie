@@ -1,6 +1,5 @@
 require 'net/http'
 require 'uri'
-require 'restfulie/marshalling'
 require 'restfulie/unmarshalling'
 
 require 'restfulie/client/base'
@@ -8,12 +7,13 @@ require 'restfulie/client/helper'
 
 require 'restfulie/server/base'
 require 'restfulie/server/controller'
+require 'restfulie/server/marshalling'
 require 'restfulie/server/state'
 require 'restfulie/server/transition'
 
 module Restfulie
   
-  include Restfulie::Marshalling
+  include Restfulie::Server::Marshalling
 
   # checks if its possible to execute such transition and, if it is, executes it
   def move_to(name)
