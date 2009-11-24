@@ -4,9 +4,11 @@ require 'restfulie/unmarshalling'
 
 require 'restfulie/client/base'
 require 'restfulie/client/helper'
+require 'restfulie/client/instance'
 
 require 'restfulie/server/base'
 require 'restfulie/server/controller'
+require 'restfulie/server/instance'
 require 'restfulie/server/marshalling'
 require 'restfulie/server/state'
 require 'restfulie/server/transition'
@@ -19,24 +21,6 @@ module Restfulie
   def move_to(name)
     raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless available_transitions[:allow].include? name
     self.class.transitions[name].execute_at result
-  end
-
-  # Returns an array with extra possible transitions.
-  # Those transitions will be concatenated with any extra transitions provided by your resource through
-  # the use of state and transition definitions.
-  # For every transition its name is the only mandatory field:
-  # options = {}
-  # [:show, options] # will generate a link to your controller's show action
-  #
-  # The options can be used to override restfulie's conventions:
-  # options[:rel] = "refresh" # will create a rel named refresh
-  # options[:action] = "destroy" # will link to the destroy method
-  # options[:controller] = another controller # will use another controller's action
-  #
-  # Any extra options will be passed to the target controller url_for method in order to retrieve
-  # the transition's uri.
-  def following_transitions
-    []
   end
   
   def invoke_remote_transition(name, options, block)
@@ -81,22 +65,16 @@ module ActiveRecord
 
     include Restfulie
     
-    # client side
-    
-    # list of possible states to access
-    attr_accessor :_possible_states
-    
-    # which content-type generated this data
-    attr_accessor :_came_from
-    
   end
 end
-   
+
 class Class
   def acts_as_restfulie
     class << self
       include Restfulie::Client::Base
       include Restfulie::Server::Base
     end
+    include Restfulie::Server::Instance
+    include Restfulie::Client::Instance
   end
 end
