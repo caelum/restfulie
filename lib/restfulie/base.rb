@@ -43,7 +43,7 @@ module Restfulie
         result._possible_states[state["rel"]] = state
         add_state(state)
       end
-      result.extend Restfulie::State
+      result.extend Restfulie::Server::State
       
       result
     end
