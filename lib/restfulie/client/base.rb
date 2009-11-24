@@ -31,7 +31,7 @@ module Restfulie
         self.module_eval do
         
           def temp_method(options = {}, &block)
-            self.invoke_remote_transition(Restfulie::Helper.current_method, options, block)
+            self.invoke_remote_transition(Restfulie::Client::Helper.current_method, options, block)
           end
         
           alias_method name, :temp_method

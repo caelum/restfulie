@@ -1,10 +1,10 @@
 require 'net/http'
 require 'uri'
-require 'restfulie/helper'
 require 'restfulie/marshalling'
 require 'restfulie/unmarshalling'
 
 require 'restfulie/client/base'
+require 'restfulie/client/helper'
 
 require 'restfulie/server/base'
 require 'restfulie/server/controller'
