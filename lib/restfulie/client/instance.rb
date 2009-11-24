@@ -26,11 +26,6 @@ module Restfulie
       end
 
 
-      # checks if its possible to execute such transition and, if it is, executes it
-      def move_to(name)
-        raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless available_transitions[:allow].include? name
-        self.class.transitions[name].execute_at result
-      end
 
     end
   end

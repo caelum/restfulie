@@ -43,14 +43,14 @@ context RestfulieModel do
   context "when checking the available transitions" do
     it "should return nothing if there is no status field" do
       class Client
-        include Restfulie
+        acts_as_restfulie
       end
       c = Client.new
       c.available_transitions.should == {:allow=>[]}
     end
     it "should return nothing if there is status field is nil" do
       class Client
-        include Restfulie
+        acts_as_restfulie
         def status
           nil
         end

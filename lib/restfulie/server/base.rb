@@ -43,7 +43,7 @@ module Restfulie
         end
 
         type.send(:define_method, "can_#{name}?") do
-          transitions = available_transitions[:allow]
+          transitions = self.available_transitions[:allow]
           transitions.include? name
         end
 
