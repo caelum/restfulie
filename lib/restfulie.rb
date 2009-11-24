@@ -5,8 +5,8 @@ require 'restfulie/controller'
 require 'restfulie/helper'
 require 'restfulie/marshalling'
 require 'restfulie/state'
-require 'restfulie/transition'
 require 'restfulie/unmarshalling'
+require 'restfulie/server/transition'
 
 module Restfulie
   
