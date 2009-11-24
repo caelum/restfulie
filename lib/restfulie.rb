@@ -16,11 +16,15 @@ require 'restfulie/server/transition'
 class Class
   def acts_as_restfulie
     class << self
-      include Restfulie::Client::Base
       include Restfulie::Server::Base
     end
-    include Restfulie::Client::Instance
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
+  end
+  def uses_restfulie
+    class << self
+      include Restfulie::Client::Base
+    end
+    include Restfulie::Client::Instance
   end
 end

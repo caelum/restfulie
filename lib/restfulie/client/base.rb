@@ -41,7 +41,7 @@ module Restfulie
     
       # receives an object and inserts all necessary methods
       # so it can answer to can_??? invocations
-      def add_states(result, states)
+      def add_transitions(result, states)
         result._possible_states = {}
 
         states.each do |state|

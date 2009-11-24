@@ -16,7 +16,7 @@ module Restfulie
         url = URI.parse(_possible_states[name]["href"])
         req = method.new(url.path)
         req.body = options[:data] if options[:data]
-        req.add_field("Accept", "application/xml") if _came_from == :xml
+        req.add_field("Accept", "application/xml") if self._came_from == :xml
 
         response = Net::HTTP.new(url.host, url.port).request(req)
 
