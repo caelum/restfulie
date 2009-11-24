@@ -17,7 +17,7 @@ module Restfulie
     # adds a link for this transition to the current xml writer
     def add_link(transition, xml, options) 
 
-      transition = self.class.existing_transitions(transition.to_sym) unless transition.kind_of? Restfulie::Transition
+      transition = self.class.existing_transitions(transition.to_sym) unless transition.kind_of? Restfulie::Server::Transition
       transition.add_link_to(xml, self, options)
 
     end

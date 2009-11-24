@@ -64,7 +64,7 @@ module Restfulie
   def all_following_transitions
     all = [] + available_transitions[:allow]
     following_transitions.each do |t|
-      t = Restfulie::Transition.new(t[0], t[1], t[2], nil) if t.kind_of? Array
+      t = Restfulie::Server::Transition.new(t[0], t[1], t[2], nil) if t.kind_of? Array
       all << t
     end
     all

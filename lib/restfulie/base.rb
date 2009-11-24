@@ -7,7 +7,7 @@ module Restfulie
       transitions[name]
     end
     
-    # returns a hash of all possible transitions: Restfulie::Transition
+    # returns a hash of all possible transitions: Restfulie::Server::Transition
     def transitions
       @transitions ||= {}
     end
@@ -27,7 +27,7 @@ module Restfulie
     # that following_transition definition does.
     def transition(name, options = {}, result = nil, &body)
       
-      transition = Restfulie::Transition.new(name, options, result, body)
+      transition = Restfulie::Server::Transition.new(name, options, result, body)
       transitions[name] = transition
 
       define_methods_for(self, name, result)
