@@ -343,7 +343,7 @@ context RestfulieModel do
     end
     it "should add all methods from Restfulie::Base to the target class" do
       CustomAccount.acts_as_restfulie
-      Restfulie::Base.methods.each do |m|
+      Restfulie::Server::Base.methods.each do |m|
         CustomAccount.methods.include? m
       end
     end
