@@ -28,7 +28,9 @@ module ActiveRecord
         h.delete("xmlns") if key=="xmlns"
       end
       result = self.new h
-      add_transitions(result, links) unless links.nil? && self.include?(Restfulie::Client::Instance)
+      if !(links.nil?) && self.include?(Restfulie::Client::Instance)
+        add_transitions(result, links)
+      end
       result
     end
 
@@ -43,7 +45,7 @@ module ActiveRecord
       head = hash[self.to_s.underscore]
       result = self.from_hash head
       return nil if result.nil?
-      result._came_from = :xml
+      result._came_from = :xml if self.include?(Restfulie::Client::Instance)
       result
     end
   end
