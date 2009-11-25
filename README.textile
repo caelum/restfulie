@@ -129,6 +129,13 @@ Trying to follow the definition of a RESTful application supporting resources wi
 
 h2. Client Usage
 
+Create your class and invoke the *uses_restfulie* method:
+
+<pre>class Order < ActiveRecord::Base
+	uses_restfulie
+end
+</pre>
+
 One should first acquire the representation from the server through your common GET request and process it through the usual from_* methods:
 <pre>xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
 order = Order.from_xml(xml)</pre>
@@ -487,7 +494,7 @@ You can see an application's source code here, both client and server side were 
 
 h3. More tutorials
 
-There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
+There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie, "more on restfulie - portuguese":http://andersonleiteblog.wordpress.com/2009/11/23/mais-sobre-restfulie/ and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
 
 
 h2. What's new
@@ -510,9 +517,10 @@ h3. 0.1
 
 h2. Coming soon
 
-* runcoderun
 * Generate and link to rubydoc
 * release 0.3
+* change parameter order for transition: last one is HASH, first is name, second (if existing) is target state
+* allows pure String/byte array client side post and server side retrieval
 * integration tests on orderserver/client api
 * controller method should check if its an restfulie resource
 * full support to extended json
