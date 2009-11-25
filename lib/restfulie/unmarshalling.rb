@@ -28,7 +28,7 @@ module ActiveRecord
         h.delete("xmlns") if key=="xmlns"
       end
       result = self.new h
-      add_transitions(result, links) unless links.nil?
+      add_transitions(result, links) unless links.nil? && self.include?(Restfulie::Client::Instance)
       result
     end
 
