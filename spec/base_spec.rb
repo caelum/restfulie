@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-context Restfulie::Base do
+context Restfulie::Server::Base do
   context "when creating a transition" do
     class Account
       acts_as_restfulie
