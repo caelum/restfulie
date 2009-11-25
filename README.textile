@@ -129,6 +129,13 @@ Trying to follow the definition of a RESTful application supporting resources wi
 
 h2. Client Usage
 
+Create your class and invoke the *uses_restfulie* method:
+
+<pre>class Order < ActiveRecord::Base
+	uses_restfulie
+end
+</pre>
+
 One should first acquire the representation from the server through your common GET request and process it through the usual from_* methods:
 <pre>xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
 order = Order.from_xml(xml)</pre>
