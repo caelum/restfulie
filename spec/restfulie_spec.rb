@@ -174,16 +174,6 @@ context RestfulieModel do
     end
   
   context "when checking permissions" do
-<<<<<<< HEAD:spec/restfulie_spec.rb
-      it "should add can_xxx methods allowing one to check whther the transition is valid or not" do
-          my_controller = MockedController.new
-          RestfulieModel.transition :pay, {}
-          RestfulieModel.state :unpaid, :allow => :pay
-          RestfulieModel.state :paid
-          
-          subject.status = :unpaid
-          subject.can_pay?.should eql(true)
-=======
     it "should add can_xxx methods allowing one to check whther the transition is valid or not" do
         my_controller = MockedController.new
         RestfulieModel.transition :pay, {}
@@ -199,135 +189,14 @@ context RestfulieModel do
     end
   end
   
-  context "when adding states" do
-    
-    it "should ignore namespaces" do
-      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model xmlns="http://www.caelum.com.br/restfulie"></restfulie-model>'
-      model = RestfulieModel.from_xml xml
-      model.should_not eql(nil)
+  context "when invoking acts_as_restfulie" do
+    class CustomAccount
     end
-    
-    it "should be able to answer to the method rel name" do
-      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="pay" href="http://url_for/action_name"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></restfulie-model>'
-      model = RestfulieModel.from_xml xml
-      model.respond_to?('pay').should eql(true)
-    end
-    
-    it "should be able to answer to just one state change" do
-      xml = '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="cancel" href="http://url_for/action_name"/></restfulie-model>'
-      model = RestfulieModel.from_xml xml
-      model.respond_to?('cancel').should eql(true)
-    end
-    
-  end
-  
-  def xml_for(method_name)
-    '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="' + method_name + '" href="http://localhost/order/1"/></restfulie-model>'
-  end
-  
-  def prepare_http_for(request)
-    request.should_receive(:add_field).with("Accept", "application/xml")
-    response = mock Net::HTTPResponse
-    http = mock Net::HTTP
-    Net::HTTP.should_receive(:new).with('localhost', 80).and_return(http)
-    http.should_receive(:request).with(request).and_return(response)
-    response
-  end
-  
-  context "when invoking an state change" do
-    
-    ["cancel", "destroy", "delete"].each do |method_name|
-      it "should send a DELETE request if the state transition name is #{method_name}" do
-        model = RestfulieModel.from_xml xml_for(method_name)
-        req = mock Net::HTTP::Delete
-        Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        res = model.send(method_name)
-        res.should eql(expected_response)
-      end
-    end
-    
-    it "should send a POST request if the state transition name is update" do
-        model = RestfulieModel.from_xml xml_for('update')
-        req = mock Net::HTTP::Post
-        Net::HTTP::Post.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        res = model.send('update')
-        res.should eql(expected_response)
-    end
-    
-    ["refresh", "latest", "reload", "show"].each do |method_name|
-      it "should send a GET request if the state transition name is #{method_name}" do
-        model = RestfulieModel.from_xml xml_for(method_name)
-        req = mock Net::HTTP::Get
-        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
->>>>>>> 49d2544d22e3b09a46b303c94b5ed53035fcbaae:spec/restfulie_spec.rb
-    
-          subject.status = :paid
-          subject.can_pay?.should eql(false)
-          
-      end
-    end
-    
-<<<<<<< HEAD:spec/restfulie_spec.rb
-    context "when invoking acts_as_restfulie" do
-      class CustomAccount
-      end
-      it "should add all methods from Restfulie::Base to the target class" do
+    it "should add all methods from Restfulie::Base to the target class" do
         CustomAccount.acts_as_restfulie
         Restfulie::Server::Base.methods.each do |m|
           CustomAccount.methods.include? m
-=======
-    it "should allow method overriding for methods given as symbols" do
-      model = RestfulieModel.from_xml xml_for('update')
-
-      req = mock Net::HTTP::Delete
-      Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-
-      expected_response = prepare_http_for(req)
-      res = model.send :update, :method => :delete
-      res.should eql(expected_response)
-    end
-
-    it "should allow method overriding for methods given as strings" do
-      model = RestfulieModel.from_xml xml_for('update')
-
-      req = mock Net::HTTP::Delete
-      Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-
-      expected_response = prepare_http_for(req)
-      res = model.send :update, :method => "delete"
-      res.should eql(expected_response)
-    end
-
-    it "should GET and return its content" do
-        model = RestfulieModel.from_xml xml_for('check_info')
-        req = mock Net::HTTP::Get
-        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        expected_response.should_receive(:body).exactly(2).times.and_return("<order><buyer>guilherme silveira</buyer></order>")
-        expected_response.should_receive(:content_type).and_return('application/xml')
-        res = model.send('check_info', {:method => "get"})
-        res.class.to_s.should eql('Order')
-        res.buyer.should eql('guilherme silveira')
-    end
-    
-    it "should allow the user to receive the response" do
-        model = RestfulieModel.from_xml xml_for('check_info')
-        req = mock Net::HTTP::Get
-        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        expected_result = "my_custom_info"
-        my_result = model.send('check_info', {:method => "get"}) do |response|
-          response.should eql(expected_response)
-          expected_result
->>>>>>> 49d2544d22e3b09a46b303c94b5ed53035fcbaae:spec/restfulie_spec.rb
         end
-      end
     end
-    
+  end
 end
