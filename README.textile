@@ -518,7 +518,6 @@ h3. 0.1
 h2. Coming soon
 
 * Generate and link to rubydoc
-* release 0.3
 * change parameter order for transition: last one is HASH, first is name, second (if existing) is target state
 * allows pure String/byte array client side post and server side retrieval
 * integration tests on orderserver/client api
