@@ -29,7 +29,7 @@ module ActiveRecord
       end
       result = self.new h
       if !(links.nil?) && self.include?(Restfulie::Client::Instance)
-        add_transitions(result, links)
+        result.add_transitions(links)
       end
       result
     end

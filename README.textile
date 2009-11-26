@@ -542,6 +542,10 @@ h2. Coming soon
 * client side should allow withTimeStamp, withETag, withAuth
 * is there is an etag, use it by default (maybe NOT use it by default)... modified since and so on (header tags)
 * server side maybe allow hypermedia controls or not
+* server and client side 303 support on alternate uri (or content-location)
+* Use If-Unmodified-Since on a timestamp to 
+*  Or use If-Match and an ETag 
+*  You’ll get a 412 Prec if you lost the race 
 
 h2. License
 
