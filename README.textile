@@ -496,6 +496,8 @@ h3. More tutorials
 
 There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie, "more on restfulie - portuguese":http://andersonleiteblog.wordpress.com/2009/11/23/mais-sobre-restfulie/ and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
 
+A japanese article can be found at "infoq.com":http://www.infoq.com/jp/news/2009/11/restfulie-hypermedia-services
+.
 
 h2. What's new
 
@@ -548,6 +550,7 @@ h2. Coming soon
 * Use If-Unmodified-Since on a timestamp to 
 *  Or use If-Match and an ETag 
 *  You’ll get a 412 Prec if you lost the race 
+* support aasm
 
 h2. License
 
