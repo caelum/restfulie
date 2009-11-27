@@ -74,17 +74,26 @@ context "client unmarshalling" do
       end
     end
     
-    it "should allow method overriding" do
-      model = ClientRestfulieModel.from_xml xml_for('update')
+    it "should allow method overriding for methods given as symbols" do
+      model = ClientRestfulieModel.from_xml xml_for('execute')
+
       req = mock Net::HTTP::Delete
-  
-      ['delete', :delete].each do |method_name|
-        Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        res = model.send('update', {:method=> method_name})
-        res.should eql(expected_response)
-      end
+      Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+
+      expected_response = prepare_http_for(req)
+      res = model.send :execute, :method => 'delete'
+      res.should eql(expected_response)
+    end
+
+    it "should allow method overriding for methods given as strings" do
+      model = ClientRestfulieModel.from_xml xml_for('execute')
+
+      req = mock Net::HTTP::Delete
+      Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
+
+      expected_response = prepare_http_for(req)
+      res = model.send('execute', {:method=> 'delete'})
+      res.should eql(expected_response)
     end
     
     it "should GET and return its content" do

@@ -517,31 +517,37 @@ h3. 0.1
 
 h2. Coming soon
 
+* support lastModified
+* support eTag
+* remove client dependency from ActiveRecord
+* remove server side dependency from ActiveRecord (its ok to use anything else)
+* transitions << [:show]  should work
 * Generate and link to rubydoc
-* release 0.3
 * change parameter order for transition: last one is HASH, first is name, second (if existing) is target state
+* rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
+* automatically generate uri for this rel with its transition description
+* release 0.4
+* controller filtering and methods
+* english tutorial and screencast
 * allows pure String/byte array client side post and server side retrieval
 * integration tests on orderserver/client api
 * controller method should check if its an restfulie resource
 * full support to extended json
-* rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
-* automatically generate uri for this rel with its transition description
 * pure href definition of link
 * post entry point support
-* remove client dependency from ActiveRecord
-* remove server side dependency from ActiveRecord (its ok to use anything else)
 * Set the correct media type instead of application/xml
-* transitions << [:show]  should work
 * rails 3 easier support (no controller argument!)
 * allow servers to define transitions by accessing other systems
 * allow servers to define a state method instead of internal variable
-* controller filtering and methods
-* english tutorial
 * when receiving a 201 + content, it should believe the content
 * when receiving a 201 without any content, it should allow to redirect or not
 * client side should allow withTimeStamp, withETag, withAuth
 * is there is an etag, use it by default (maybe NOT use it by default)... modified since and so on (header tags)
 * server side maybe allow hypermedia controls or not
+* server and client side 303 support on alternate uri (or content-location)
+* Use If-Unmodified-Since on a timestamp to 
+*  Or use If-Match and an ETag 
+*  You’ll get a 412 Prec if you lost the race 
 
 h2. License
 
@@ -562,3 +568,12 @@ h2. License
  * limitations under the License.
  */
 
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11770776-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>

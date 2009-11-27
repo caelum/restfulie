@@ -25,6 +25,33 @@ module Restfulie
         self.class.from_response response
       end
 
+  
+      # inserts all transitions from this object as can_xxx and xxx methods
+      def add_transitions(transitions)
+        self._possible_states = {}
+
+        transitions.each do |state|
+          self._possible_states[state["rel"]] = state
+          self.add_state(state)
+        end
+        self.extend Restfulie::Server::State
+      end
+
+    
+      def add_state(transition)
+        name = transition["rel"]
+      
+        # TODO: wrong, should be instance_eval
+        self.class.module_eval do
+        
+          def temp_method(options = {}, &block)
+            self.invoke_remote_transition(Restfulie::Client::Helper.current_method, options, block)
+          end
+        
+          alias_method name, :temp_method
+          undef :temp_method
+        end
+      end  
 
 
     end

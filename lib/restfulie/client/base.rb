@@ -25,34 +25,6 @@ module Restfulie
         defaults[name.to_sym] || Net::HTTP::Post
       end
     
-      def add_state(transition)
-        name = transition["rel"]
-      
-        self.module_eval do
-        
-          def temp_method(options = {}, &block)
-            self.invoke_remote_transition(Restfulie::Client::Helper.current_method, options, block)
-          end
-        
-          alias_method name, :temp_method
-          undef :temp_method
-        end
-      end  
-    
-      # receives an object and inserts all necessary methods
-      # so it can answer to can_??? invocations
-      def add_transitions(result, states)
-        result._possible_states = {}
-
-        states.each do |state|
-          result._possible_states[state["rel"]] = state
-          add_state(state)
-        end
-        result.extend Restfulie::Server::State
-      
-        result
-      end
-
       # retrieves a resource form a specific uri
       def from_web(uri)
         res = Net::HTTP.get_response(URI.parse(uri))
