@@ -90,8 +90,8 @@ context RestfulieModel do
       
       it "should add extra transitions if acts_as_restfulie receives a block" do
         my_controller = MockedController.new
-        RestfulieModel.acts_as_restfulie do
-          [:latest]
+        RestfulieModel.acts_as_restfulie do |transitions|
+          transitions << :latest
         end
         
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
@@ -105,8 +105,8 @@ context RestfulieModel do
       
       it "should add and create extra transition through acts_as_restfulie block" do
         my_controller = MockedController.new
-        RestfulieModel.acts_as_restfulie do
-          [[:latest, { :action => :thanks }]]
+        RestfulieModel.acts_as_restfulie do |transitions|
+          transitions << [:latest, { :action => :thanks }]
         end
         
         RestfulieModel.state :unpaid, :allow => []
