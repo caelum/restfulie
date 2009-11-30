@@ -10,7 +10,7 @@ class ClientOrder < ActiveRecord::Base
   uses_restfulie
 end
 
-context "client unmarshalling" do
+context "accepts client unmarshalling" do
 
   context "when adding states" do
   
@@ -192,7 +192,7 @@ context "client unmarshalling" do
     
     it "allows to use a POST entry point" do
       
-      @mock_response.should_receive(:code).and_return(200)
+      @mock_response.should_receive(:code).and_return("200")
       define_http_expectation(@req, @mock_response)
 
       res = ClientRestfulieModel.remote_create @model.to_xml
@@ -200,7 +200,7 @@ context "client unmarshalling" do
     end
     it "should not follow moved permanently" do
       
-      @mock_response.should_receive(:code).and_return(301)
+      @mock_response.should_receive(:code).and_return("301")
       define_http_expectation(@req, @mock_response)
 
       res = ClientRestfulieModel.remote_create @model.to_xml
@@ -209,13 +209,13 @@ context "client unmarshalling" do
     it "should follow 301 if instructed to do so" do
     	ClientRestfulieModel.follows.moved_permanently
       
-      @mock_response.should_receive(:code).and_return(301)
+      @mock_response.should_receive(:code).and_return("301")
       @mock_response.should_receive(:[]).with("Location").and_return("http://www.caelum.com.br/product/new_location")
       define_http_expectation(@req, @mock_response)
 
       @second_req = expect_request('/product/new_location')
       @second_response = mock Net::HTTPResponse
-      @second_response.should_receive(:code).and_return(200)
+      @second_response.should_receive(:code).and_return("200")
       define_http_expectation(@second_req, @second_response)
 
       res = ClientRestfulieModel.remote_create @model.to_xml
@@ -228,8 +228,6 @@ context "client unmarshalling" do
       http.should_receive(:request).with(req).and_return(mock_response)
       http
     end
-
-    # TESTAR: product = Product.from_web 'http://www.caelum.com.br/product/2' # received a 301, went to the Location
 
   end
 

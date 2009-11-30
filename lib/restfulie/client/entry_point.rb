@@ -19,6 +19,26 @@ module Restfulie
         @follower ||= FollowConfig.new
         @follower
       end
+      
+      # retrieves a resource form a specific uri
+      def from_web(uri)
+        res = Net::HTTP.get_response(URI.parse(uri))
+        code = res.code
+        return from_web(res["Location"]) if code=="301"
+
+        if code=="200"      
+          # TODO really support different content types
+          case res.content_type
+          when "application/xml"
+            self.from_xml res.body
+          when "application/json"
+            self.from_json res.body
+          else
+            raise "unknown content type"
+          end
+        end
+      
+      end
 
       private
       def remote_post(content)
@@ -28,7 +48,7 @@ module Restfulie
         req.add_field("Accept", "application/xml")
 
         response = Net::HTTP.new(url.host, url.port).request(req)
-        return response unless response.code==301 && follows.moved_permanently? == :all
+        return response unless response.code=="301" && follows.moved_permanently? == :all
 
         entry_point_for.create.at response["Location"]
         return remote_post(content)
