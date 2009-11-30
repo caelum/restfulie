@@ -4,7 +4,7 @@ module Restfulie
       
       # configures an entry point
       def entry_point_for
-        @entry_points = EntryPointControl.new(self) unless @entry_points
+        @entry_points ||= EntryPointControl.new(self)
         @entry_points
       end
       
@@ -21,7 +21,11 @@ module Restfulie
         req.body = content
         req.add_field("Accept", "application/xml")
 
-        Net::HTTP.new(url.host, url.port).request(req)
+        response = Net::HTTP.new(url.host, url.port).request(req)
+        if response.code==301
+        end
+        response
+        
       end
       
     end
@@ -34,7 +38,7 @@ module Restfulie
       end
       
       def method_missing(name, *args)
-        @entries[name] = EntryPoint.new unless @entries[name]
+        @entries[name] ||= EntryPoint.new
         @entries[name]
       end
 
