@@ -168,9 +168,36 @@ If you are looking for or want to help, let us know at the mailing list:
 
 "http://groups.google.com/group/restfulie":http://groups.google.com/group/restfulie
 
-h2. Client-side configuration: how to customize your request
+h2. Entry points: POST
 
-h3. HTTP verbs
+In some cases, one wants to access an entry point through a *POST* request, i.e. adding a new Product to the system:
+
+<pre>class Product
+	uses_restfulie
+	entry_point_for.create.at 'http://www.caelum.com.br/product'
+end
+
+product = Product.remote_create Product.new</pre>
+
+h2. Following 301 response code
+
+According to "https specification":http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html , 301 links can be automatically followed when using the *GET* and *HEAD* verbs:
+
+<pre>
+product = Product.from_web 'http://www.caelum.com.br/product/2' # received a 301, went to the Location
+</pre>
+
+But in order to follow 301 responses in any other verbs, you have to explicitely define it:
+<pre>class Product
+	uses_restfulie
+	entry_point_for.create.at 'http://www.caelum.com.br/product'
+
+	follows.moved_permanently
+end
+
+product = Product.remote_create Product.new</pre>
+
+h2. HTTP verbs
 
 By default, restfulie uses the following table:
 
