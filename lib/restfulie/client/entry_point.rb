@@ -42,7 +42,10 @@ module Restfulie
 
       private
       def remote_post(content)
-        url = URI.parse(entry_point_for.create.uri)
+        remote_post_to(entry_point_for.create.uri, content)
+      end
+      def remote_post_to(uri, content)
+        url = URI.parse(uri)
         req = Net::HTTP::Post.new(url.path)
         req.body = content
         req.add_field("Accept", "application/xml")
@@ -50,9 +53,7 @@ module Restfulie
         response = Net::HTTP.new(url.host, url.port).request(req)
         return response unless response.code=="301" && follows.moved_permanently? == :all
 
-        entry_point_for.create.at response["Location"]
-        return remote_post(content)
-        
+        return remote_post_to(response["Location"], content)
       end
       
     end

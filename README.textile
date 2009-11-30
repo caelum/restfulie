@@ -220,6 +220,28 @@ def create_product_at_server(product)
 end
 </pre>
 
+h3. 301 Moved permanently
+
+According to the "http specification":http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html , 301
+responses can be redirected automatically if requesting a GET or HEAD operation:
+
+<pre>
+product = Product.from_web 'http://www.caelum.com.br/product/2' # received a 301, went to the Location
+</pre>
+
+If you want to follow 301 responses while executing other type of request, you have to configure it:
+<pre>
+class Product
+	uses_restfulie
+	entry_point_for.create.at 'http://www.caelum.com.br/product'
+
+	follows.moved_permanently
+end
+
+product = Product.remote_create Product.new # request --> 301, request to the new URI --> 200
+</pre>
+
+
 h2. Server-side configuration
 
 There are two different approaches that can be combined to create a full hypermedia aware resource based service, including awareness of its states and transitions.
