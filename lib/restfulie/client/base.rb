@@ -24,24 +24,6 @@ module Restfulie
         return basic_mapping[overriden_option.to_sym] if overriden_option
         defaults[name.to_sym] || Net::HTTP::Post
       end
-    
-      # retrieves a resource form a specific uri
-      def from_web(uri)
-        res = Net::HTTP.get_response(URI.parse(uri))
-        # TODO redirect... follow or not? (optional...)
-        raise "invalid request" if res.code != "200"
-      
-        # TODO really support different content types
-        case res.content_type
-        when "application/xml"
-          self.from_xml res.body
-        when "application/json"
-          self.from_json res.body
-        else
-          raise "unknown content type"
-        end
-      
-      end
 
     end
   end

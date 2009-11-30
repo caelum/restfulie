@@ -168,9 +168,36 @@ If you are looking for or want to help, let us know at the mailing list:
 
 "http://groups.google.com/group/restfulie":http://groups.google.com/group/restfulie
 
-h2. Client-side configuration: how to customize your request
+h2. Entry points: POST
 
-h3. HTTP verbs
+In some cases, one wants to access an entry point through a *POST* request, i.e. adding a new Product to the system:
+
+<pre>class Product
+	uses_restfulie
+	entry_point_for.create.at 'http://www.caelum.com.br/product'
+end
+
+product = Product.remote_create Product.new</pre>
+
+h2. Following 301 response code
+
+According to "https specification":http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html , 301 links can be automatically followed when using the *GET* and *HEAD* verbs:
+
+<pre>
+product = Product.from_web 'http://www.caelum.com.br/product/2' # received a 301, went to the Location
+</pre>
+
+But in order to follow 301 responses in any other verbs, you have to explicitely define it:
+<pre>class Product
+	uses_restfulie
+	entry_point_for.create.at 'http://www.caelum.com.br/product'
+
+	follows.moved_permanently
+end
+
+product = Product.remote_create Product.new</pre>
+
+h2. HTTP verbs
 
 By default, restfulie uses the following table:
 
@@ -527,6 +554,7 @@ h2. Coming soon
 * rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
 * automatically generate uri for this rel with its transition description
 * release 0.4
+* support 302 and 303
 * controller filtering and methods
 * english tutorial and screencast
 * allows pure String/byte array client side post and server side retrieval
@@ -534,7 +562,6 @@ h2. Coming soon
 * controller method should check if its an restfulie resource
 * full support to extended json
 * pure href definition of link
-* post entry point support
 * Set the correct media type instead of application/xml
 * rails 3 easier support (no controller argument!)
 * allow servers to define transitions by accessing other systems

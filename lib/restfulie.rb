@@ -3,6 +3,7 @@ require 'uri'
 require 'restfulie/unmarshalling'
 
 require 'restfulie/client/base'
+require 'restfulie/client/entry_point'
 require 'restfulie/client/helper'
 require 'restfulie/client/instance'
 
