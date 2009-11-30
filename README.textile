@@ -266,7 +266,7 @@ end
 
    respond_to do |format|
      format.html # show.html.erb
-     format.xml  { render :xml => @order.to_xml(:controller=>self) }
+     format.xml  { render_resource @order }
    end
  end
 </pre>
@@ -450,7 +450,7 @@ services through commons rel+link xml as
 You can do it by passing the *use_name_based_link* argument:
 
 <pre>
-    order.to_xml(:controller => my_controller, :use_name_based_link => true)
+	render_resource order :use_name_based_link => true
 </pre>
 
 h2. Team
@@ -458,10 +458,10 @@ h2. Team
 Restfulie was created and is maintained within Caelum by
 
 Projetct Founder
-* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br - twitter:http://www.twitter.com/guilhermecaelum "http://guilhermesilveira.wordpress.com":http://guilhermesilveira.wordpress.com
+* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br - "twitter":http://www.twitter.com/guilhermecaelum - "http://guilhermesilveira.wordpress.com":http://guilhermesilveira.wordpress.com
 
 Active Commiters
-* "Caue Guerra":mailto:caue.guerra@gmail.com - "http://caueguerra.com/":http://caueguerra.com/
+* "Caue Guerra":mailto:caue.guerra@gmail.com - "twitter":http://www.twitter.com/caueguerra - "http://caueguerra.com/":http://caueguerra.com/
 * "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br
 
 Contributors
@@ -522,6 +522,7 @@ h2. What's new
 
 h3. Next release
 * API change: use acts_as_restfulue *block* instead of defining following_transitions
+* implemented support to render_resource method
 
 h3. 0.3
 * API change: you need to invoke "acts_as_restfulie" to your models
