@@ -205,6 +205,21 @@ successful = order.check_payment_info do |response|
   return response.code==200
 end</pre>
 
+h3. Client-side POST entry point
+
+Some typical entry points are creation ones, which are executed through the use of the *POST* verb:
+
+<pre>
+class Product
+	uses_restfulie
+	create_entry_point_at 'http://www.caelum.com.br/product'
+end
+
+def create_product_at_server(product)
+	response = Product.remote_create product.to_xml
+end
+</pre>
+
 h2. Server-side configuration
 
 There are two different approaches that can be combined to create a full hypermedia aware resource based service, including awareness of its states and transitions.
