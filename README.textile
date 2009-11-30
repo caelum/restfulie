@@ -205,43 +205,6 @@ successful = order.check_payment_info do |response|
   return response.code==200
 end</pre>
 
-h3. Client-side POST entry point
-
-Some typical entry points are creation ones, which are executed through the use of the *POST* verb:
-
-<pre>
-class Product
-	uses_restfulie
-	entry_point_for.creation.at 'http://www.caelum.com.br/product'
-end
-
-def create_product_at_server(product)
-	response = Product.remote_create product.to_xml
-end
-</pre>
-
-h3. 301 Moved permanently
-
-According to the "http specification":http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html , 301
-responses can be redirected automatically if requesting a GET or HEAD operation:
-
-<pre>
-product = Product.from_web 'http://www.caelum.com.br/product/2' # received a 301, went to the Location
-</pre>
-
-If you want to follow 301 responses while executing other type of request, you have to configure it:
-<pre>
-class Product
-	uses_restfulie
-	entry_point_for.create.at 'http://www.caelum.com.br/product'
-
-	follows.moved_permanently
-end
-
-product = Product.remote_create Product.new # request --> 301, request to the new URI --> 200
-</pre>
-
-
 h2. Server-side configuration
 
 There are two different approaches that can be combined to create a full hypermedia aware resource based service, including awareness of its states and transitions.
@@ -533,16 +496,10 @@ h3. More tutorials
 
 There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie, "more on restfulie - portuguese":http://andersonleiteblog.wordpress.com/2009/11/23/mais-sobre-restfulie/ and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
 
-A japanese article can be found at "infoq.com":http://www.infoq.com/jp/news/2009/11/restfulie-hypermedia-services
-.
 
 h2. What's new
 
 h3. next release
-
-* support to POST entry point
-
-h3. 0.3
 * API change: you need to invoke "acts_as_restfulie" to your models
 * implemented support to can_*** methods
 * post data through http POST body
@@ -569,8 +526,8 @@ h2. Coming soon
 * change parameter order for transition: last one is HASH, first is name, second (if existing) is target state
 * rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
 * automatically generate uri for this rel with its transition description
-* standard usage on following and GET transformation
 * release 0.4
+* support 302 and 303
 * controller filtering and methods
 * english tutorial and screencast
 * allows pure String/byte array client side post and server side retrieval
@@ -591,7 +548,6 @@ h2. Coming soon
 * Use If-Unmodified-Since on a timestamp to 
 *  Or use If-Match and an ETag 
 *  You’ll get a 412 Prec if you lost the race 
-* support aasm
 
 h2. License
 
