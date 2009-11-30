@@ -15,7 +15,7 @@ require 'restfulie/server/state'
 require 'restfulie/server/transition'
 
 module Restfulie
-  def acts_as_restfulie
+  def acts_as_restfulie(&block)
     extend Restfulie::Server::Base
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
