@@ -546,17 +546,18 @@ h2. Coming soon
 
 * support acts_as_restfulie *block* as def following_transitions
 * support lastModified
-* support eTag
 * remove client dependency from ActiveRecord
-* remove server side dependency from ActiveRecord (its ok to use anything else)
 * transitions << [:show]  should work
 * generate and link to rubydoc
 * change parameter order for transition: (i.e. last one is HASH, first is name, second (if existing) is target state)
-* rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
-* automatically generate uri for this rel with its transition description
 * controller filtering and methods
+* rails 3 easier support (no controller argument!)
 * release 0.4
 
+* support eTag
+* remove server side dependency from ActiveRecord (its ok to use anything else)
+* rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
+* automatically generate uri for this rel with its transition description
 * support 302 and 303
 * english tutorial and screencast
 * allows pure String/byte array client side post and server side retrieval
@@ -565,7 +566,6 @@ h2. Coming soon
 * full support to extended json
 * pure href definition of link
 * Set the correct media type instead of application/xml
-* rails 3 easier support (no controller argument!)
 * allow servers to define transitions by accessing other systems
 * allow servers to define a state method instead of internal variable
 * when receiving a 201 + content, it should believe the content
