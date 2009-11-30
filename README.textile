@@ -503,6 +503,19 @@ You can see an application's source code here, both client and server side were 
 "Client":http://github.com/caelum/restfulie-client
 "Server":http://github.com/caelum/restfulie-test
 
+h3. RDoc
+
+The RDoc for the latest Restfulie code is hosted on "rdoc.info":http://rdoc.info/projects/caelum/restfulie.
+This documentation always reflects the HEAD of caelum's master branch and may therefore be slightly different from the latest gem release.
+
+If you want the RDoc for a particular version of Restfulie you must build it yourself:
+
+gem install rdoc
+gem install restfulie
+gem server &
+open http://localhost:8808/doc_root/restfulie-0.3/rdoc
+(You may have to change the version number in that URL)
+
 h3. More tutorials
 
 There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie, "more on restfulie - portuguese":http://andersonleiteblog.wordpress.com/2009/11/23/mais-sobre-restfulie/ and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
@@ -513,6 +526,7 @@ h2. What's new
 h3. Next release
 * API change: use acts_as_restfulue *block* instead of defining following_transitions
 * implemented support to render_resource method
+* generate and link to rubydoc
 
 h3. 0.3
 * API change: you need to invoke "acts_as_restfulie" to your models
@@ -535,7 +549,6 @@ h2. Coming soon
 * transitions << [:show]  should work
 * support lastModified
 * remove client dependency from ActiveRecord
-* generate and link to rubydoc
 * change parameter order for transition: (i.e. last one is HASH, first is name, second (if existing) is target state)
 * controller filtering and methods
 * rails 3 easier support (no controller argument!)
