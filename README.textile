@@ -43,8 +43,8 @@ This is a simple example how to make your state changes available to your resour
 class Order < ActiveRecord::Base
 
   acts_as_restfulie do |transitions|
-    transitions << [:show, {}]
-    transitions << [:destroy, {}] if can_cancel?
+    transitions << :show
+    transitions << :destroy if can_cancel?
     transitions << [:pay, {:id => id}] if can_pay?
   end
 end
@@ -250,7 +250,7 @@ Note that with this usage the status field is optional (from 0.3.0 onwards).
 
 <pre>
 acts_as_restfulie do |transitions|
-  transitions << [:show, {}]
+  transitions << :show
 end
 </pre>
 
@@ -317,8 +317,8 @@ A full example showing all capabilities of this method follows:
 
 <pre>
 acts_as_restfulie do |transitions|
-  transitions << [:show, {}]
-  transitions << [:destroy, {}] if can_cancel?
+  transitions << :show
+  transitions << :destroy if can_cancel?
   transitions << [:pay, {:id => id}] if can_pay?
   transitions << [:show, {:controller => :payments, :payment_id => payment.id }] if paid?
 end
@@ -546,7 +546,6 @@ h3. 0.1
 
 h2. Coming soon
 
-* transitions << [:show]  should work
 * support lastModified
 * remove client dependency from ActiveRecord
 * change parameter order for transition: (i.e. last one is HASH, first is name, second (if existing) is target state)
