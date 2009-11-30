@@ -502,6 +502,10 @@ A japanese article can be found at "infoq.com":http://www.infoq.com/jp/news/2009
 h2. What's new
 
 h3. next release
+
+* support to POST entry point
+
+h3. 0.3
 * API change: you need to invoke "acts_as_restfulie" to your models
 * implemented support to can_*** methods
 * post data through http POST body
@@ -536,7 +540,6 @@ h2. Coming soon
 * controller method should check if its an restfulie resource
 * full support to extended json
 * pure href definition of link
-* post entry point support
 * Set the correct media type instead of application/xml
 * rails 3 easier support (no controller argument!)
 * allow servers to define transitions by accessing other systems
