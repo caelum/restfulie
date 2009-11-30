@@ -212,7 +212,7 @@ Some typical entry points are creation ones, which are executed through the use 
 <pre>
 class Product
 	uses_restfulie
-	create_entry_point_at 'http://www.caelum.com.br/product'
+	entry_point_for.creation.at 'http://www.caelum.com.br/product'
 end
 
 def create_product_at_server(product)
@@ -547,6 +547,7 @@ h2. Coming soon
 * change parameter order for transition: last one is HASH, first is name, second (if existing) is target state
 * rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
 * automatically generate uri for this rel with its transition description
+* standard usage on following and GET transformation
 * release 0.4
 * controller filtering and methods
 * english tutorial and screencast

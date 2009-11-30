@@ -16,8 +16,7 @@ module Restfulie
 
       private
       def remote_post(content)
-        puts "uri sera #{entry_point_for.creation.uri}"
-        url = URI.parse(entry_point_for.creation.uri)
+        url = URI.parse(entry_point_for.create.uri)
         req = Net::HTTP::Post.new(url.path)
         req.body = content
         req.add_field("Accept", "application/xml")
@@ -34,10 +33,9 @@ module Restfulie
         @entries = {}
       end
       
-      # defines access for creation entry point
-      def creation
-        @entries[:creation] = EntryPoint.new unless @entries[:creation]
-        @entries[:creation]
+      def method_missing(name, *args)
+        @entries[name] = EntryPoint.new unless @entries[name]
+        @entries[name]
       end
 
     end

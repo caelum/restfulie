@@ -175,7 +175,7 @@ context "client unmarshalling" do
   
   context "while using a creation entry point" do
     it "allows to use a POST entry point" do
-    	ClientRestfulieModel.entry_point_for.creation.at 'http://www.caelum.com.br/product'
+    	ClientRestfulieModel.entry_point_for.create.at 'http://www.caelum.com.br/product'
       model = ClientRestfulieModel.new
       req = mock Net::HTTP::Post
       Net::HTTP::Post.should_receive(:new).with('/product').and_return(req)
