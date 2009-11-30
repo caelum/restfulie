@@ -178,11 +178,18 @@ context "client unmarshalling" do
     	ClientRestfulieModel.entry_point_for.creation.at 'http://www.caelum.com.br/product'
       model = ClientRestfulieModel.new
       req = mock Net::HTTP::Post
-      Net::HTTP::Post.should_receive(:new).with('http://www.caelum.com.br/product').and_return(req)
+      Net::HTTP::Post.should_receive(:new).with('/product').and_return(req)
+      req.should_receive(:body=).with(model.to_xml)
+      req.should_receive(:add_field).with("Accept", "application/xml")
+      
+      mock_response = "return response"
 
-      res = ClientRestfulieModel.remote_create model
-      res.class.to_s.should eql('ClientOrder')
-      res.buyer.should eql('guilherme silveira')
+      http = mock Net::HTTP
+      Net::HTTP.should_receive(:new).with('www.caelum.com.br', 80).and_return(http)
+      http.should_receive(:request).with(req).and_return(mock_response)
+
+      res = ClientRestfulieModel.remote_create model.to_xml
+      res.should eql(mock_response)
     end
   end
 
