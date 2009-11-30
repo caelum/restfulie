@@ -16,10 +16,6 @@ module Restfulie
       #
       # Any extra options will be passed to the target controller url_for method in order to retrieve
       # the transition's uri.
-      def following_transitions
-        []
-      end
-
 
       # returns a list of available transitions for this objects state
       # TODO rename because it should never be used by the client...

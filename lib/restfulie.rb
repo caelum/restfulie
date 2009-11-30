@@ -15,13 +15,19 @@ require 'restfulie/server/state'
 require 'restfulie/server/transition'
 
 class Class
-  def acts_as_restfulie
+  def acts_as_restfulie(&block)  
     class << self
       include Restfulie::Server::Base
     end
+    
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
+    
+    self.send :define_method, :following_transitions do
+      block.nil? ? [] : block.call
+    end
   end
+  
   def uses_restfulie
     class << self
       include Restfulie::Client::Base

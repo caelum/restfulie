@@ -4,12 +4,10 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class RestfulieModel < ActiveRecord::Base
   attr_accessor :content
-  acts_as_restfulie
 end
 
 class Order < ActiveRecord::Base
   attr_accessor :buyer
-  acts_as_restfulie
 end
 
 class MockedController
@@ -68,6 +66,7 @@ context RestfulieModel do
       
       it "should add allowable actions to models xml if controller is set" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => :latest
         
@@ -79,6 +78,7 @@ context RestfulieModel do
       
       it "should add more than 1 allowable actions to models xml if controller is set" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => [:latest, :latest]
         
@@ -88,13 +88,14 @@ context RestfulieModel do
         got.should eql(expected)
       end
       
-      it "should add extra transitions if following_transitions are defined" do
+      it "should add extra transitions if acts_as_restfulie receives a block" do
         my_controller = MockedController.new
-        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
-        RestfulieModel.state :unpaid, :allow => [:latest]
-        def subject.following_transitions
+        RestfulieModel.acts_as_restfulie do
           [:latest]
         end
+        
+        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
+        RestfulieModel.state :unpaid, :allow => [:latest]
         
         expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
         got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
@@ -102,12 +103,13 @@ context RestfulieModel do
         got.should eql(expected)
       end
       
-      it "should add and create extra transition through following_transitions" do
+      it "should add and create extra transition through acts_as_restfulie block" do
         my_controller = MockedController.new
-        RestfulieModel.state :unpaid, :allow => []
-        def subject.following_transitions
+        RestfulieModel.acts_as_restfulie do
           [[:latest, { :action => :thanks }]]
         end
+        
+        RestfulieModel.state :unpaid, :allow => []
         
         expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/thanks','latest')+'</restfulie-model>')
         got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
@@ -117,6 +119,7 @@ context RestfulieModel do
       
       it "should add hypermedia link if controller is set and told to use name based link" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => [:latest]
         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
@@ -124,6 +127,7 @@ context RestfulieModel do
       
       it "should use rel if there is a rel attribute" do
          my_controller = MockedController.new
+         RestfulieModel.acts_as_restfulie
          RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
          RestfulieModel.state :unpaid, :allow => [:latest]
          subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
@@ -131,6 +135,7 @@ context RestfulieModel do
       
       it "should evaluate in runtime if there is a block to define the transition" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :latest do |me|
            {:action => me.content}
         end
@@ -141,6 +146,7 @@ context RestfulieModel do
       
       it "should use transition name if there is no action" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :pay
         RestfulieModel.state :unpaid, :allow => [:pay]
         
@@ -158,6 +164,7 @@ context RestfulieModel do
       
       it "should not change status if there is no result" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :pay
         RestfulieModel.state :unpaid, :allow => [:pay]
         subject.pay
@@ -166,6 +173,7 @@ context RestfulieModel do
       
       it "should use change status to its result when transitioning" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :pay, {}, :paid
         RestfulieModel.state :unpaid, :allow => [:pay]
         subject.pay
@@ -176,6 +184,7 @@ context RestfulieModel do
   context "when checking permissions" do
     it "should add can_xxx methods allowing one to check whther the transition is valid or not" do
         my_controller = MockedController.new
+        RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :pay, {}
         RestfulieModel.state :unpaid, :allow => :pay
         RestfulieModel.state :paid
