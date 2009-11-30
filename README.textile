@@ -42,9 +42,7 @@ This is a simple example how to make your state changes available to your resour
 <pre>
 class Order < ActiveRecord::Base
 
-  acts_as_restfulie
-
-  def following_transitions
+  acts_as_restfulie do
     transitions = []
     transitions << [:show, {}]
     transitions << [:destroy, {}] if can_cancel?
@@ -236,9 +234,9 @@ h2. Server-side configuration
 
 There are two different approaches that can be combined to create a full hypermedia aware resource based service, including awareness of its states and transitions.
 
-h3. Simple usage: following transitions
+h3. Simple usage: transitions
 
-The most easy way to use restfulie is to write the *following_transitions* method.
+The most easy way to use restfulie is to pass a block to the *acts_as_restfulie* method.
 There are three easy steps to make it work:
 
 1. Create your model (i.e. Order) with an *status* field
@@ -250,12 +248,10 @@ rake db:migrate
 
 Note that with this usage the status field is optional (from 0.3.0 onwards).
 
-2. Add the *acts_as_restfulie* invocation and *following_transitions* method returning an array of possible transitions:
+2. Add the *acts_as_restfulie* invocation with a block returning an array of possible transitions:
 
 <pre>
-acts_as_restfulie
-
-def following_transitions
+acts_as_restfulie do
   transitions = []
   transitions << [:show, {}]
   transitions
@@ -310,7 +306,7 @@ h3. Customizing the rel name
 You can also override the action used, but still keep the rel
 
 <pre>
-def following_transitions
+acts_as_restfulie do
   transitions = []
   transitions << [:cancel, { :action => :destroy }]
   transitions
@@ -326,7 +322,7 @@ h3. Example
 A full example showing all capabilities of this method follows:
 
 <pre>
-def following_transitions
+acts_as_restfulie do
   transitions = []
   transitions << [:show, {}]
   transitions << [:destroy, {}] if can_cancel?
@@ -378,15 +374,13 @@ list of available transition whenever the *can_pay?* method returns true:
 <pre>
 class Order < ActiveRecord::Base
 
-	acts_as_restfulie
-	
-	transition :pay, {:action => pay_this_order, :controller => :payments}, :preparing
-
-	def following_transitions
-	  transitions = []
+	acts_as_restfulie do
+		transitions = []
 	  transitions << :pay if can_pay?
 	  transitions
 	end
+	
+	transition :pay, {:action => pay_this_order, :controller => :payments}, :preparing
 end
 </pre>
 
@@ -544,7 +538,7 @@ h3. 0.1
 
 h2. Coming soon
 
-* support acts_as_restfulie *block* as def following_transitions
+* support acts_as_restfulie *block* instead of def following_transitions
 * support lastModified
 * remove client dependency from ActiveRecord
 * transitions << [:show]  should work
