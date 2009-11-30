@@ -172,5 +172,18 @@ context "client unmarshalling" do
     end
     res
   end
+  
+  context "while using a creation entry point" do
+    it "allows to use a POST entry point" do
+    	ClientRestfulieModel.entry_point_for.creation.at 'http://www.caelum.com.br/product'
+      model = ClientRestfulieModel.new
+      req = mock Net::HTTP::Post
+      Net::HTTP::Post.should_receive(:new).with('http://www.caelum.com.br/product').and_return(req)
+
+      res = ClientRestfulieModel.remote_create model
+      res.class.to_s.should eql('ClientOrder')
+      res.buyer.should eql('guilherme silveira')
+    end
+  end
 
 end
