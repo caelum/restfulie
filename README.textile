@@ -520,7 +520,10 @@ There is a "portuguese tutorial on the server-side support":http://wakethedead.c
 
 h2. What's new
 
-h3. next release
+h3. Next release
+* API change: use acts_as_restfulue *block* instead of defining following_transitions
+
+h3. 0.3
 * API change: you need to invoke "acts_as_restfulie" to your models
 * implemented support to can_*** methods
 * post data through http POST body
@@ -538,10 +541,9 @@ h3. 0.1
 
 h2. Coming soon
 
-* support acts_as_restfulie *block* instead of def following_transitions
+* transitions << [:show]  should work
 * support lastModified
 * remove client dependency from ActiveRecord
-* transitions << [:show]  should work
 * generate and link to rubydoc
 * change parameter order for transition: (i.e. last one is HASH, first is name, second (if existing) is target state)
 * controller filtering and methods
