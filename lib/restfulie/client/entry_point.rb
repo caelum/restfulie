@@ -13,6 +13,12 @@ module Restfulie
         content = content.to_xml unless content.kind_of? String
         remote_post content
       end
+      
+      # handles which types of responses should be automatically followed
+      def follows
+        @follower ||= FollowConfig.new
+        @follower
+      end
 
       private
       def remote_post(content)
@@ -22,12 +28,33 @@ module Restfulie
         req.add_field("Accept", "application/xml")
 
         response = Net::HTTP.new(url.host, url.port).request(req)
-        if response.code==301
-        end
-        response
+        return response unless response.code==301 && follows.moved_permanently? == :all
+
+        entry_point_for.create.at response["Location"]
+        return remote_post(content)
         
       end
       
+    end
+    
+    class FollowConfig
+      def initialize
+        @entries = {
+          :moved_permanently => [:get, :head]
+        }
+      end
+      def method_missing(name, *args)
+        return value_for name if name.to_s[-1,1]=="?"
+        set_all_for name
+      end
+      
+      private
+      def set_all_for(name)
+        @entries[name] = :all
+      end
+      def value_for(name)
+        return @entries[name.to_s.chop.to_sym]
+      end
     end
     
     class EntryPointControl
