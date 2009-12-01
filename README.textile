@@ -518,8 +518,23 @@ open http://localhost:8808/doc_root/restfulie-0.3/rdoc
 
 h3. More tutorials
 
-There is a "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie, "more on restfulie - portuguese":http://andersonleiteblog.wordpress.com/2009/11/23/mais-sobre-restfulie/ and a "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
+1. "blog post on the entire ecosystem in english":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/
+2. "Restfulie @ infoq":http://www.infoq.com/news/2009/11/restfulie-hypermedia-services
+3. "Ruby5 podcast on restfulie":http://ruby5.envylabs.com/episodes/26-episode-25-november-6-2009/stories/201-restfulie
+4. "Techstartup on restfulie":http://www.techstartups.com/2009/11/17/real-time-ruby-is-a-gem-called-restfulie/
 
+h4. Portuguese
+
+1. "portuguese tutorial on the server-side support":http://wakethedead.com.br/blog/70-restfulie
+2. "more on restfulie - portuguese":http://andersonleiteblog.wordpress.com/2009/11/23/mais-sobre-restfulie/ and 
+
+h4. Chinese
+
+1. "Restfulie @ infoq":http://www.infoq.com/cn/news/2009/11/restfulie-hypermedia-services
+
+h4. Japanese
+
+1. "Restfulie @ infoq":http://www.infoq.com/cn/news/2009/11/restfulie-hypermedia-services?utm_source=twitterfeed&utm_medium=twitter
 
 h2. What's new
 
