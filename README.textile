@@ -561,14 +561,18 @@ h3. 0.1
 
 h2. Coming soon
 
-* support lastModified
+* relations instead of transitions
+* lucas restfulie-vraptor support last-modified and etag
+* lucas vraptor big upload check, missing contentlength check
+* rails 411 check
+* support lastModified and eTag on the server side automatically through render_resource
 * remove client dependency from ActiveRecord
-* change parameter order for transition: (i.e. last one is HASH, first is name, second (if existing) is target state)
-* controller filtering and methods
+	* hashie must support boolean? fields
+* controller filtering based on status
 * rails 3 easier support (no controller argument!)
+* support aasm and change parameter order for transition: (i.e. last one is HASH, first is name, second (if existing) is target state)
 * release 0.4
 
-* support eTag
 * remove server side dependency from ActiveRecord (its ok to use anything else)
 * rel prepend suffix as http://iansrobinson.com/resources/link-relations/preceding
 * automatically generate uri for this rel with its transition description
