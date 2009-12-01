@@ -4,8 +4,10 @@ module Restfulie
 
     # represents a transition on the server side
     class Transition
-      attr_reader :body, :name, :result
-      def initialize(name, options, result, body)
+      attr_reader :body, :name
+      attr_writer :options
+      attr_accessor :result
+      def initialize(name, options = {}, result = nil, body = nil)
         @name = name
         @options = options
         @result = result
@@ -49,7 +51,7 @@ module Restfulie
           xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => uri)
         end
       end
-    
+      
     end
   end
 

@@ -22,31 +22,49 @@ module Restfulie
         options[:allow] = [options[:allow]] unless options[:allow].kind_of? Array
         states[name] = options
       end
-
+      
       # defines a new transition. the transition options works in the same way
       # that following_transition definition does.
-      def transition(name, options = {}, result = nil, &body)
+      def transition(name = nil, options = {}, result = nil, &body)
+        return TransitionBuilder.new(self) if name.nil?
       
         transition = Restfulie::Server::Transition.new(name, options, result, body)
         transitions[name] = transition
 
-        define_methods_for(self, name, result)
-        controller_name = (self.name + "Controller")
+        define_execution_method(self, name, result)
+        define_can_method(self, name)
+      end
+      
+      class TransitionBuilder
+        def initialize(type)
+          @type = type
+        end
+        def method_missing(name, *args)
+          @transition = Restfulie::Server::Transition.new(name)
+          @type.transitions[name] = @transition
+          @type.define_can_method(@type, name)
+          self
+        end
+        def at(options)
+          @transition.options = options
+        end
+        def results_in(result)
+          @transition.result = result
+        end
+        
       end
  
-      def define_methods_for(type, name, result) 
-
-        return nil if type.respond_to?(name)
-
+      def define_execution_method(type, name, result) 
         type.send(:define_method, name) do |*args|
-          self.status = result.to_s unless result == nil
-        end
-
+          self.status = result.to_s unless result.nil?
+        end unless type.respond_to?(name)
+      end
+ 
+      def define_can_method(type, name) 
         type.send(:define_method, "can_#{name}?") do
           transitions = self.available_transitions[:allow]
           transitions.include? name
-        end
-
+        end unless type.respond_to?("can_#{name}?")
       end
  
     end
