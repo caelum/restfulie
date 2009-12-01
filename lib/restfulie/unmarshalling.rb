@@ -1,3 +1,66 @@
+require 'restfulie'
+
+module Restfulie
+  module Resource
+    def from_hash(hash)
+      instance = Hashi.to_object(hash)
+    end
+  end
+end
+
+module Hashi
+  class UndefinedMethod
+  end
+  class CustomHash
+    
+    attr_reader :hash
+
+    def initialize(h)
+      @hash = h
+    end
+    def method_missing(name, *args)
+      name = name.to_s if name.kind_of? Symbol
+      if name[-1,1] == "?"
+        parse(@hash[name.chop])
+      elsif name[-1,1] == "="
+        @hash[name.chop] = args[0]
+      else
+        parse(transform(@hash[name]))
+      end
+    end
+    def [](x)
+      transform(@hash[x])
+    end
+    private
+    def transform(value)
+      return CustomHash.new(value) if value.kind_of?(Hash) || value.kind_of?(Array)
+      value
+    end
+    def parse(val)
+      raise Hashi::UndefinedMethod.new if val.nil?
+      val
+    end
+    
+  end
+  def self.to_object(h)
+    CustomHash.new(h)
+  end
+end
+module Hashi
+  class CustomHash
+    uses_restfulie
+    def initialize(h)
+      @hash = h
+      link = h['link']
+      add_transitions([link]) if link.kind_of? Hash
+      add_transitions(link) if link.kind_of? Array
+    end
+    def method_missing(name, *args)
+      super(name, args)
+    end
+  end
+end
+
 module ActiveRecord
   class Base
 
@@ -58,67 +121,3 @@ def safe_json_decode( json )
   rescue ; {} end
 end
 # end of code based on Matt Pulver's
-
-module Restfulie
-  class CustomObject
-      # def initialize(hash)
-      #   hash.each do |k,v|
-      #     self.instance_variable_set("@#{k}", v)
-      #     self.class.send(:define_method, k, proc{self.instance_variable_get("@#{k}")})
-      #     self.class.send(:define_method, "#{k}=", proc{|v| self.instance_variable_set("@#{k}", v)})
-      #   end
-      # end
-      # 
-      # def save
-      #   hash_to_return = {}
-      #   self.instance_variables.each do |var|
-      #     hash_to_return[var.gsub("@","")] = self.instance_variable_get(var)
-      #   end
-      #   return hash_to_return
-      # end
-
-
-    def initialize(h)
-      @hash = h
-    end
-    def method_missing(name, *args)
-      name = name.to_s if name.kind_of? Symbol
-      if name[-1,1] == "="
-        name = name.chop
-        @hash[name] = args[0]
-      else
-        transform(@hash[name])
-      end
-    end
-    def [](x)
-      transform(@hash[x])
-    end
-    private
-    def transform(value)
-      return CustomObject.new(value) if value.kind_of?(Hash) || value.kind_of?(Array)
-      value
-    end
-  end
-  def self.hash_to_object(h)
-    CustomObject.new(h)
-    #   return super(name, args)
-    #   return super(name, args) if o.respond_to? name
-    #   # array?
-    #   h[name]
-    # end
-  end
-  # def self.from_xml
-#  values = Hash.from_xml(xml).values
-  #   
-  #   player.friend.name
-  #   
-  #   a.b
-  #   a["b"]
-  #   
-  #   from_xml::
-  #              typecast_xml_value(unrename_keys(XmlMini.parse(xml)))
-  #   self.attributes = .first
-  #   self
-  # end
-  # 
-end

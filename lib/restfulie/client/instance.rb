@@ -13,7 +13,8 @@ module Restfulie
 
         method = self.class.requisition_method_for options[:method], name
 
-        url = URI.parse(_possible_states[name]["href"])
+        state = _possible_states[name]
+        url = URI.parse(state["href"] || state[:href])
         req = method.new(url.path)
         req.body = options[:data] if options[:data]
         req.add_field("Accept", "application/xml") if self._came_from == :xml
@@ -31,7 +32,7 @@ module Restfulie
         self._possible_states = {}
 
         transitions.each do |state|
-          self._possible_states[state["rel"]] = state
+          self._possible_states[state["rel"] || state[:rel]] = state
           self.add_state(state)
         end
         self.extend Restfulie::Server::State
@@ -39,7 +40,7 @@ module Restfulie
 
     
       def add_state(transition)
-        name = transition["rel"]
+        name = transition["rel"] || transition[:rel]
       
         # TODO: wrong, should be instance_eval
         self.class.module_eval do

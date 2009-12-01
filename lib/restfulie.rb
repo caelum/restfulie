@@ -1,6 +1,6 @@
 require 'net/http'
 require 'uri'
-require 'restfulie/unmarshalling'
+#require 'hashi'
 
 require 'restfulie/client/base'
 require 'restfulie/client/entry_point'
@@ -35,3 +35,4 @@ end
 
 Object.extend Restfulie
 
+require 'restfulie/unmarshalling'

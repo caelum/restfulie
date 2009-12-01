@@ -1,34 +1,31 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+module Restfulie
+  module Unmarshalling
+    class Product
+    end
+  end
+end
+
 describe Restfulie do
   
   context "when creating an object from a hash" do
-    it "it should allow direct attribute access" do
-      hash = {"name" => "guilherme silveira"}
-      Restfulie.hash_to_object(hash).name.should == ("guilherme silveira")
+    it "should extract no links if there are none" do
+      hash = {}
+      product = Hashi.to_object hash
+      product.nil?.should be_false
     end
-    it "it should allow direct attribute attribution" do
-      hash = {"name" => "guilherme silveira"}
-      Restfulie.hash_to_object(hash).name = "donizetti"
-      Restfulie.hash_to_object(hash).name.should == ("donizetti")
+    it "should extract a link" do
+      hash = {"link" => {:rel => "latest", :href => "http://www.caelumobjects.com/product/2"}}
+      product = Hashi.to_object hash
+      product.respond_to?(:latest).should be_true
     end
-    it "it should allow access to child element" do
-      hash = {"player" => {"name" => "guilherme silveira"}}
-      Restfulie.hash_to_object(hash).player.name.should == ("guilherme silveira")
-    end
-    it "it should allow access attribution to child element" do
-      hash = {"player" => {"name" => "guilherme silveira"}}
-      Restfulie.hash_to_object(hash).player.name = "donizetti"
-      Restfulie.hash_to_object(hash).player.name.should == ("donizetti")
-    end
-    it "it should allow access to an array element" do
-      hash = {"player" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
-      Restfulie.hash_to_object(hash).player[1].name.should == ("caue guerra")
-    end
-    it "it should allow access attribution to an array element" do
-      hash = {"player" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
-      Restfulie.hash_to_object(hash).player[1].name = "donizetti"
-      Restfulie.hash_to_object(hash).player[1].name.should == ("donizetti")
+    it "should extract all links" do
+      hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
+                         {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
+      product = Hashi.to_object hash
+      product.respond_to?(:latest).should be_true
+      product.respond_to?(:destroy).should be_true
     end
   end
   
