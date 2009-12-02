@@ -49,13 +49,13 @@ describe Restfulie do
       player = Restfulie::Unmarshalling::Player.from_hash hash
       player.respond_to?(:latest).should be_true
     end
-    # it "should extract all links" do
-    #   hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
-    #                      {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
-    #   player = Restfulie::Unmarshalling::Player.from_hash hash
-    #   player.respond_to?(:latest).should be_true
-    #   player.respond_to?(:destroy).should be_true
-    # end
+    it "should extract all links" do
+      hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
+                         {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
+      player = Restfulie::Unmarshalling::Player.from_hash hash
+      player.respond_to?(:latest).should be_true
+      player.respond_to?(:destroy).should be_true
+    end
   end
 
   context "when creating a JeokkarakActiveRecord from a hash" do
@@ -64,18 +64,18 @@ describe Restfulie do
       player = Restfulie::Unmarshalling::Person.from_hash hash
       player.nil?.should be_false
     end
-    # it "should extract a link" do
-    #   hash = {"link" => {:rel => "latest", :href => "http://www.caelumobjects.com/product/2"}}
-    #   player = Restfulie::Unmarshalling::Person.from_hash hash
-    #   player.respond_to?(:latest).should be_true
-    # end
-    # it "should extract all links" do
-    #   hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
-    #                      {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
-    #   player = Restfulie::Unmarshalling::Person.from_hash hash
-    #   player.respond_to?(:latest).should be_true
-    #   player.respond_to?(:destroy).should be_true
-    # end
+    it "should extract a link" do
+      hash = {"link" => {:rel => "latest", :href => "http://www.caelumobjects.com/product/2"}}
+      player = Restfulie::Unmarshalling::Person.from_hash hash
+      player.respond_to?(:latest).should be_true
+    end
+    it "should extract all links" do
+      hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
+                         {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
+      player = Restfulie::Unmarshalling::Person.from_hash hash
+      player.respond_to?(:latest).should be_true
+      player.respond_to?(:destroy).should be_true
+    end
   end
   
 end
