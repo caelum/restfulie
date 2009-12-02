@@ -5,10 +5,12 @@ module Restfulie
     class Product
     end
     class Player
+      uses_restfulie
       acts_as_jeokkarak
       attr_accessor :link
     end
     class Person < ActiveRecord::Base
+      uses_restfulie
       attr_accessor :link
     end
   end
