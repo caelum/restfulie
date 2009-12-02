@@ -12,3 +12,7 @@ ActiveRecord::Schema.define :version => 1 do
   create_table "client_orders", :force => true do |t|
   end
 end
+ActiveRecord::Schema.define :version => 2 do
+  create_table "people", :force => true do |t|
+  end
+end
