@@ -1,6 +1,6 @@
 require 'net/http'
 require 'uri'
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Restfulie::Server::Transition do
   
