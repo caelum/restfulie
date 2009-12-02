@@ -18,9 +18,9 @@ spec = Gem::Specification.new do |s|
   s.summary = SUMMARY
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
-  s.add_dependency(%q<hashi>, [">= 0.1"])
 
   # s.add_dependency(%q<rubigen>, [">= 1.3.4"])
+  s.add_dependency('hashi', '>= 1.0.1')
 
   s.author = AUTHOR
   s.email = EMAIL

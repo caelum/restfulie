@@ -1,6 +1,6 @@
 require 'net/http'
 require 'uri'
-#require 'hashi'
+require 'hashi'
 
 require 'restfulie/client/base'
 require 'restfulie/client/entry_point'
