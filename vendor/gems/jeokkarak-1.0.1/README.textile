@@ -1,0 +1,211 @@
+h1. Schema evolution
+
+One of the main issues with service oriented architectures is the use of strong coupled schema definitions shared between clients and servers.
+
+In order to provide forward-compatibility, clients should be able to accept formats that contain
+new content, without breaking own their own.
+
+Jeokkarak and Hashi makes the perfect couple for this task: given a hash (parsed from a xml file), Jeokkarak will either:
+
+* instantiate your rail's ActiveRecord type and use its relations
+* instantiate your type and use pre-defined relations
+* create a pseudo-object backed on the hash
+
+In any of those cases, Jeokkarak will let your server evolve their schema, without requiring you to add new fields to your type.
+
+h1. Jeokkarak
+
+Jeokkarak is the korean version of hashis. In our case, Jeokkarak is used to support
+evolution-ready schemas and loosely coupled systems in the web.
+By creating your own class only with the attributes you require:
+
+<pre>
+class Player
+  acts_as_jeokkarak
+  attr_accessor :name
+end
+</pre>
+
+You can still parse the entire hash and set the fields that you know, and allow schema evolution
+(and forward compatibility) so that the new fields are dynamically created in your object:
+
+<pre>
+# using the existing field
+hash = {"name" => "guilherme silveira"}
+player = Player.from_hash(hash)
+player.name.should == ("guilherme silveira")
+	
+# dinamically creating a field
+hash = {"age" => 29}
+player = Player.from_hash(hash)
+player.age.should == 29
+</pre>
+
+h1. Hashi
+
+It's a common task to simulate objects from hashes, but one has to remember using hash access format in order to access it. Hashi helps you by allowing direct access to its content:
+
+<pre>
+	hash = { :team => {:players => [{:name=>"guilherme silveira"},{:name=>"jose donizetti"}]}}
+	object = Hashi.to_object(hash)
+	puts object.team.players[0].name
+</pre>
+
+
+h1. What is Hashi?
+
+h2. The reality without Hashi
+
+<pre>
+	hash = { :team => {:players => [{:name=>"guilherme silveira"},{:name=>"jose donizetti"}]}}
+	puts hash[:team][:players][0][:name] # his name
+</pre>
+
+h2. The reality without Hashi, within Rails
+
+Although the Ruby language provides an easy way to access hashes, it becomes easier if you use Rails with "Matt Pulver's":http://www.xcombinator.com/2008/07/06/activerecord-from_json-and-from_xml/ code:
+
+<pre>
+	class Team < ActiveRecord::Base
+		has_many :players
+	end
+	class Player < ActiveRecord::Base
+		# create a migration with field name:string
+	end
+	hash = { :team => {:players => [{:name=>"guilherme silveira"},{:name=>"jose donizetti"}]}}
+	puts Team.from_xml(hash).players[0].name
+</pre>
+
+h2. How does it compare to Hashie?
+
+Hashi actually does not create your attributes, instead it deals with *method_missing* invocations to
+simulate those properties, never creating a copy of your hash.
+
+h2. Updated hash
+
+You can access the original hash (updated if you have made any changes) by one of those two ways:
+
+<pre>
+	hash = { :team => {:players => [{:name=>"guilherme silveira"},{:name=>"jose donizetti"}]}}
+	object = Hashi.to_object(hash)
+	object.team.players[0].name = 'jose donizetti'
+	
+	# the original hash was modified!
+	puts hash
+	
+	# you can extract the original hash if you wish
+	puts object.hash
+	
+</pre>
+
+h1. Jeokkarak
+
+h2. Relationships
+
+Jeokkarak supports schema evoluted relationships: newly created relationships will be treated as Hashi's:
+
+<pre>
+hash = {"player" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}], "new_relation" => {"new_entry" => 20}}
+team = Team.from_hash(hash)
+team.new_relation.new_entry.should eql(20)
+</pre>
+
+It also supports pre-existing relations through the use of has_child:
+
+<pre>
+class Team
+  acts_as_jeokkarak
+  has_child Player, :as => "player"
+end
+
+# will instantiate a Player type:
+hash = {"player" => {"name" => "guilherme silveira"}}
+team = Team.from_hash(hash)
+team.player.class.should eql(Player)
+</pre>
+
+And finally, it supports rails's ActiveRecord:
+
+<pre>
+class Team < ActiveRecord::Base
+  has_many :players
+end
+
+hash = {"players" => [{"name" => "guilherme silveira"}]}
+team = Team.from_hash(hash)
+team.players[0].class.should eql(Player)
+</pre>
+
+h1. Installing
+
+h2. Ruby
+
+gem install gemcutter
+gem tumble
+gem install jeokkarak
+
+h2. Rails
+
+Just add in your environment.rb the following line:
+
+<pre>
+config.gem "jeokkarak", :source => "http://gemcutter.org"
+</pre>
+
+And then execute:
+<pre>rake gems:install</pre>
+
+or, if you prefer to install it as a plugin:
+
+<pre>script/plugin install git://github.com/caelum/jeokkarak.git</pre>
+
+
+h2. Help
+
+If you are looking for or want to help, let us know at the mailing list:
+
+"http://groups.google.com/group/jeokkarak":http://groups.google.com/group/jeokkarak
+
+h2. Team
+
+Hashi was created and is maintained within Caelum:http://www.caelum.com.br by
+
+Projetct Founder
+* "Guilherme Silveira":mailto:guilherme.silveira@caelum.com.br - twitter:http://www.twitter.com/guilhermecaelum "http://guilhermesilveira.wordpress.com":http://guilhermesilveira.wordpress.com
+
+Active Commiters
+* Guilherme Silveira
+* Jose Donizetti
+
+h3. Sources
+
+You can see its source code at: "github":http://github.com/caelum/jeokkarak
+
+h2. What's new
+
+h3. 1.0.1
+
+* Supports active record relationships
+* Supports jeokkarak relationships
+* Supports boolean invocations with ?
+* Non-existing fields will throw an exception
+
+h2. License
+
+/***
+ * Copyright (c) 2009 Caelum - www.caelumobjects.com.br
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
