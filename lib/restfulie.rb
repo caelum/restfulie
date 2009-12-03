@@ -1,5 +1,6 @@
 require 'net/http'
 require 'uri'
+require 'jeokkarak'
 require 'hashi'
 
 require 'restfulie/client/base'

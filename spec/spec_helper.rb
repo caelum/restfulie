@@ -8,6 +8,7 @@ require 'rexml/document'
 require 'active_record'
 require 'action_controller'
 
+require 'jeokkarak'
 require 'restfulie'
 
 ActiveRecord::Base.establish_connection(
