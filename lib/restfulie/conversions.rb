@@ -1,5 +1,10 @@
 require 'date'
 
+# original code from Rails2
+# unfortunately Ruby does not give such a nice xml -> hash support
+# therefore we are required to distribute this code in order to make clients
+# rails-requirement-free.
+# rails3 modular system will allow us to deploy just one (conversion) module with restfulie.
 module ActiveSupport #:nodoc:
   module CoreExtensions #:nodoc:
     module Hash #:nodoc:
