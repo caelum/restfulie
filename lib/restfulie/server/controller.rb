@@ -1,4 +1,4 @@
-require 'restfulie'
+puts "vou ler o controller custom"
 
 module Restfulie
   module Server
@@ -27,8 +27,4 @@ module Restfulie
   end
 end
 
-module ActionController
-  class Base
-    include Restfulie::Server::Controller
-  end
-end
+ActionController::Base.send :include, Restfulie::Server::Controller
