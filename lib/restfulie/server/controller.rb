@@ -1,5 +1,3 @@
-puts "vou ler o controller custom"
-
 module Restfulie
   module Server
    module Controller
@@ -7,9 +5,13 @@ module Restfulie
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
     def render_resource(resource, options={})
-      options[:controller] = self
-      options[:xml] = resource.to_xml options
-      render options
+      cache_info = {:etag => resource}
+      cache_info[:last_modified] = resource.updated_at if resource.respond_to? :updated_at
+      if stale? cache_info
+        options[:controller] = self
+        options[:xml] = resource.to_xml options
+        render options
+      end
     end
   
     # adds support to rendering resources, i.e.:
