@@ -17,4 +17,6 @@ ActiveRecord::Schema.define :version => 2 do
   end
   create_table "players", :force => true do |t|
   end
+  create_table "teams", :force => true do |t|
+  end
 end
