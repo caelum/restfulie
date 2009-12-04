@@ -8,7 +8,6 @@ module Restfulie
       # which content-type generated this data
       attr_accessor :_came_from
       
-      
       def invoke_remote_transition(name, options, block)
 
         method = self.class.requisition_method_for options[:method], name

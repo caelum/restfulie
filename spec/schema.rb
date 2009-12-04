@@ -15,4 +15,6 @@ end
 ActiveRecord::Schema.define :version => 2 do
   create_table "people", :force => true do |t|
   end
+  create_table "players", :force => true do |t|
+  end
 end

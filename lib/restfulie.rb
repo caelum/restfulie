@@ -31,6 +31,7 @@ module Restfulie
   def uses_restfulie
     extend Restfulie::Client::Base
     include Restfulie::Client::Instance
+    extend Restfulie::Unmarshalling
   end
 end
 

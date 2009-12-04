@@ -1,7 +1,7 @@
 module Restfulie
   module Client
-    module Base 
-    
+    module Base
+      
       # translates a response to an object
       def from_response(res)
       
@@ -24,7 +24,7 @@ module Restfulie
         return basic_mapping[overriden_option.to_sym] if overriden_option
         defaults[name.to_sym] || Net::HTTP::Post
       end
-
+      
     end
   end
 end
