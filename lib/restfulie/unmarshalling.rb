@@ -27,45 +27,45 @@ module Restfulie
     # basic code from Matt Pulver
     # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links
-  #   def from_hash( hash )
-  #     h = {}
-  #     h = hash.dup if hash
-  #     puts hash
-  #     puts h
-  #     links = nil
-  #     h.each do |key,value|
-  #       case value.class.to_s
-  #       when 'Array'
-  #         if key=="link"
-  #           links = h[key]
-  #           h.delete("link")
-  #         else
-  #           h[key].map! { |e| reflect_on_association(key.to_sym ).klass.from_hash e }
-  #         end
-  #       when /\AHash(WithIndifferentAccess)?\Z/
-  #         if key=="link"
-  #           links = [h[key]]
-  #           h.delete("link")
-  #         else
-  #           h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
-  #         end
-  #       end
-  #       h.delete("xmlns") if key=="xmlns"
-  #     end
-  #     puts h.inspect
-  #     result = self.new h
-  #     if !(links.nil?) && self.include?(Restfulie::Client::Instance)
-  #       result.add_transitions(links)
-  #     end
-  #     result
-  #   end
+    def from_hash( hash )
+      h = {}
+      h = hash.dup if hash
+      puts hash
+      puts h
+      links = nil
+      h.each do |key,value|
+        case value.class.to_s
+        when 'Array'
+          if key=="link"
+            links = h[key]
+            h.delete("link")
+          else
+            h[key].map! { |e| reflect_on_association(key.to_sym ).klass.from_hash e }
+          end
+        when /\AHash(WithIndifferentAccess)?\Z/
+          if key=="link"
+            links = [h[key]]
+            h.delete("link")
+          else
+            h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
+          end
+        end
+        h.delete("xmlns") if key=="xmlns"
+      end
+      puts h.inspect
+      result = self.new h
+      if !(links.nil?) && self.include?(Restfulie::Client::Instance)
+        result.add_transitions(links)
+      end
+      result
+    end
   end
 end  
 
 module ActiveRecord
   class Base
     extend Restfulie::Unmarshalling
-    acts_as_jeokkarak
+    # acts_as_jeokkarak
 
     def self.from_json( json )
       from_hash safe_json_decode( json )

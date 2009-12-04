@@ -15,7 +15,10 @@ end
 ActiveRecord::Schema.define :version => 2 do
   create_table "people", :force => true do |t|
   end
+end
+ActiveRecord::Schema.define :version => 3 do
   create_table "players", :force => true do |t|
+    t.column :name, :string
   end
   create_table "teams", :force => true do |t|
   end
