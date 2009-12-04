@@ -47,7 +47,10 @@ context Restfulie::Server::Controller do
       @controller.should_receive(:render).with({:xml=>"#{xml}"})
       @controller.render_resource(resource, options)
     end
-  
+    it "should not process if not stale" do
+      @controller.should_receive(:stale?).and_return(false)
+      @controller.render_resource(Object.new, {})
+    end
   end
 
 end
