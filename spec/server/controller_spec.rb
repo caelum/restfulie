@@ -39,21 +39,13 @@ context Restfulie::Server::Controller do
   context "when invoking render_resource" do
   
     it "should invoke to_xml with the specified parameters and controller" do
-      @controller.should_receive(:stale?).and_return(true)
       resource = Object.new
       xml = "<resource />"
       options = {:custom => :whatever}
       resource.should_receive(:to_xml).with(options).and_return(xml)
-      expected = options.dup
-      expected[:xml] = xml
-      expected[:controller] = @controller
-      @controller.should_receive(:render).with(expected)
+      @controller.should_receive(:stale?).and_return(true)
+      @controller.should_receive(:render).with({:xml=>"#{xml}"})
       @controller.render_resource(resource, options)
-    end
-
-    it "should not process if not stale" do
-      @controller.should_receive(:stale?).and_return(false)
-      @controller.render_resource(Object.new, {})
     end
   
   end

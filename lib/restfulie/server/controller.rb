@@ -9,8 +9,7 @@ module Restfulie
       cache_info[:last_modified] = resource.updated_at if resource.respond_to? :updated_at
       if stale? cache_info
         options[:controller] = self
-        options[:xml] = resource.to_xml options
-        render options
+        render :xml => resource.to_xml(options)
       end
     end
   
