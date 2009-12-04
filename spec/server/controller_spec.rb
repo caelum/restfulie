@@ -1,18 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class BaseController
-  attr_reader :rendered
-  def render(options={})
-    @rendered = options
-  end
+class ClientsController < ActionController::Base
 end
 
-class ClientsController < BaseController
-  include Restfulie::Server::Controller
-end
-
-
-context Restfulie::Server::Controller do
+context ActionController::Base do
   
   before do
     @controller = ClientsController.new
@@ -21,9 +12,9 @@ context Restfulie::Server::Controller do
   context "when generic rendering a resource" do
   
     it "should invoke the original rendering process if there is no resource" do
-      options = {:custom => :whatever}
-      @controller.render(options)
-      @controller.rendered.should eql(options)
+      resource = Object.new
+      @controller.should_receive(:old_render)
+      @controller.render :xml => resource
     end
   
     it "should invoke render_resource if there is a resource to render" do
@@ -47,6 +38,7 @@ context Restfulie::Server::Controller do
       @controller.should_receive(:render).with({:xml=>"#{xml}"})
       @controller.render_resource(resource, options)
     end
+    
     it "should not process if not stale" do
       @controller.should_receive(:stale?).and_return(false)
       @controller.render_resource(Object.new, {})

@@ -1,31 +1,31 @@
-module Restfulie
-  module Server
-   module Controller
-
+module ActionController
+  class Base
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
-    def render_resource(resource, options={})
+    def render_resource(resource, options = {})
       cache_info = {:etag => resource}
       cache_info[:last_modified] = resource.updated_at if resource.respond_to? :updated_at
       if stale? cache_info
         options[:controller] = self
-        render :xml => resource.to_xml(options)
+        # format = self.params[:format] || "xml"
+        # if format == "xml"
+        #   render :xml => resource.to_xml(options)
+        # elsif
+          render :xml => resource.to_xml(options)
+        # end
       end
     end
-  
+
     # adds support to rendering resources, i.e.:
     # render :resource => @order, :with => { :except => [:paid_at] }
-    def render(options = {})
+    alias_method :old_render, :render
+    def render(options = nil, extra_options = {}, &block)
       resource = options[:resource]
-      if resource
+      unless resource.nil?
         render_resource(resource, options[:with])
       else
-        super(options)
+        old_render(options, extra_options)
       end
     end
-
-   end
   end
 end
-
-ActionController::Base.send :include, Restfulie::Server::Controller
