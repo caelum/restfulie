@@ -15,7 +15,7 @@ context "accepts client unmarshalling" do
   context "when adding states" do
   
     it "should ignore namespaces" do
-      xml = '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model xmlns="http://www.caelum.com.br/restfulie"></client-restfulie-model>'
+      xml = '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model xmlns="http://www.caelumobjects.com/restfulie"></client-restfulie-model>'
       model = ClientRestfulieModel.from_xml xml
       model.should_not eql(nil)
     end
@@ -177,7 +177,7 @@ context "accepts client unmarshalling" do
   context "while using a creation entry point" do
   	
   	before do
-    	ClientRestfulieModel.entry_point_for.create.at 'http://www.caelum.com.br/product'
+    	ClientRestfulieModel.entry_point_for.create.at 'http://www.caelumobjects.com/product'
       @model = ClientRestfulieModel.new
       @req = expect_request('/product')
       @mock_response = mock Net::HTTPResponse
@@ -211,7 +211,7 @@ context "accepts client unmarshalling" do
     	ClientRestfulieModel.follows.moved_permanently
       
       @mock_response.should_receive(:code).and_return("301")
-      @mock_response.should_receive(:[]).with("Location").and_return("http://www.caelum.com.br/product/new_location")
+      @mock_response.should_receive(:[]).with("Location").and_return("http://www.caelumobjects.com/product/new_location")
       define_http_expectation(@req, @mock_response)
 
       @second_req = expect_request('/product/new_location')
@@ -225,7 +225,7 @@ context "accepts client unmarshalling" do
     
     def define_http_expectation(req, mock_response)
       http = mock Net::HTTP
-      Net::HTTP.should_receive(:new).with('www.caelum.com.br', 80).and_return(http)
+      Net::HTTP.should_receive(:new).with('www.caelumobjects.com', 80).and_return(http)
       http.should_receive(:request).with(req).and_return(mock_response)
       http
     end
