@@ -144,7 +144,9 @@ context "accepts client unmarshalling" do
     
     def mock_request_for(type, body)
       res = mock_response(:code => "200", :content_type => type, :body => body)
-      Net::HTTP.should_receive(:get_response).with(URI.parse('http://localhost:3001/order/15')).and_return(res)
+      req = mock Net::HTTPRequest
+      Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
+      Net::HTTP.should_receive(:start).with('localhost',3001).and_return(res)
     end
     
     it "should deserialize correctly if its an xml" do
@@ -190,13 +192,13 @@ context "accepts client unmarshalling" do
     end
     
     it "allows to use a POST entry point" do
-      
       @mock_response.should_receive(:code).and_return("200")
       define_http_expectation(@req, @mock_response)
 
       res = ClientRestfulieModel.remote_create @model.to_xml
       res.should eql(@mock_response)
     end
+    
     it "should not follow moved permanently" do
       
       @mock_response.should_receive(:code).and_return("301")
