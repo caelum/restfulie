@@ -4,17 +4,28 @@ module Restfulie
 
       SELF_RETRIEVAL = [:latest, :refresh, :reload]
       
+      class UnsupportedContentType < Exception
+        attr_reader :msg
+        def initialize(msg)
+          @msg = msg
+        end
+      end
+
       # translates a response to an object
       def from_response(res)
       
-        raise "unimplemented content type: #{res.content_type} '#{res.body}'" unless res.content_type=="application/xml"
+        raise UnsupportedContentType.new("unsupported content type '#{res.content_type}'") unless res.content_type=="application/xml"
 
-        hash = Hash.from_xml res.body
+        body = res.body
+        return {} if body.empty?
+        
+        hash = Hash.from_xml body
         return hash if hash.keys.length == 0
+        
         raise "unable to parse an xml with more than one root element" if hash.keys.length>1
       
         type = hash.keys[0].camelize.constantize
-        type.from_xml(res.body)
+        type.from_xml(body)
       
       end
     

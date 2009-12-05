@@ -1,6 +1,11 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
+class CustomType < ActiveRecord::Base
+  acts_as_restfulie
+end
 
 context Restfulie::Server::Base do
+  
   context "when creating a transition" do
     class Account
       acts_as_restfulie
@@ -12,4 +17,5 @@ context Restfulie::Server::Base do
       AccountsController.respond_to?(:pay).should be(false)
     end
   end
+  
 end
