@@ -20,7 +20,7 @@ module ActionController
     # render :resource => @order, :with => { :except => [:paid_at] }
     alias_method :old_render, :render
     def render(options = nil, extra_options = {}, &block)
-      resource = options[:resource]
+      resource = options[:resource] unless options.nil?
       unless resource.nil?
         render_resource(resource, options[:with])
       else

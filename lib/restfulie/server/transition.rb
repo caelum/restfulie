@@ -32,7 +32,7 @@ module Restfulie
         # but you can replace it for a symbol and defer the model call
         #   transition :show, {:action => :show, :foo_id => :id}
         specific_action = specific_action.inject({}) do |actions, pair|
-          if pair.last.is_a?( Symbol ) && model.respond_to?(pair.last)
+          if pair.last.is_a?( Symbol ) && model.attributes.include?(pair.last)
             actions.merge!( pair.first => model.send(pair.last) )
           else
             actions.merge!( pair.first => pair.last )
