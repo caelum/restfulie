@@ -138,8 +138,9 @@ context "accepts client unmarshalling" do
   
   context "when de-serializing straight from a web request" do
     
-    def mock_request_for(type, body)
+    def mock_request_for(type, body, etag = '"ETAGVALUE"')
       res = mock_response(:code => "200", :content_type => type, :body => body)
+      res.should_receive(:[]).with('Etag').at_least(1).and_return(etag)
       req = mock Net::HTTPRequest
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
       Net::HTTP.should_receive(:start).with('localhost',3001).and_return(res)
@@ -150,6 +151,14 @@ context "accepts client unmarshalling" do
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
       model.status.should eql("CANCELLED")
+  
+    end
+    
+    it "should save etag value" do
+      mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>", '"custom-etag"'
+  
+      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
+      model.etag.should be_eql('"custom-etag"')
   
     end
     

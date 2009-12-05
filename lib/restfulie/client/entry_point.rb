@@ -26,7 +26,7 @@ module Restfulie
         req = Net::HTTP::Get.new(uri.path)
         options.each do |key,value| req[key] = value end 
         res = Net::HTTP.start(uri.host, uri.port) {|http|
-          http.request(req)
+          http.request(req) # canc hange to straight .request(req)
         }
         
         code = res.code
