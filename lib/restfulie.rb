@@ -3,11 +3,7 @@ require 'uri'
 require 'jeokkarak'
 require 'hashi'
 
-require 'restfulie/client/base'
-require 'restfulie/client/entry_point'
-require 'restfulie/client/helper'
-require 'restfulie/client/instance'
-require 'restfulie/client/state'
+require 'restfulie/client'
 
 require 'restfulie/server/base'
 require 'restfulie/server/controller'
@@ -45,11 +41,6 @@ module Restfulie
     end
   end
   
-  def uses_restfulie
-    extend Restfulie::Client::Base
-    include Restfulie::Client::Instance
-    extend Restfulie::Unmarshalling
-  end
 end
 
 Object.extend Restfulie

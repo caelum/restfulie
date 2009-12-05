@@ -13,13 +13,10 @@ module Restfulie
   def uses_restfulie
     extend Restfulie::Client::Base
     include Restfulie::Client::Instance
+    extend Restfulie::Unmarshalling #???
   end
 end
 
 Object.extend Restfulie
 
 require 'restfulie/unmarshalling'
-require 'restfulie/conversions'
-class Hash
-  include ActiveSupport::CoreExtensions::Hash::Conversions
-end
