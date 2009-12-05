@@ -105,6 +105,7 @@ context "accepts client unmarshalling" do
         expected_response.should_receive(:content_type).and_return('application/xml')
         res = model.send('check_info', {:method => "get"})
         res.class.to_s.should eql('ClientOrder')
+        puts "aqui o meu buyer #{res.class.name} #{res.extended_fields}  #{res} #{res.buyer}"
         res.buyer.should eql('guilherme silveira')
     end
     

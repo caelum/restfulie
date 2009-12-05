@@ -53,6 +53,67 @@ module Restfulie
         end
       end  
 
+      # returns a list of extended fields for this instance.
+      # extended fields are those unknown to this model but kept in a hash
+      # to allow forward-compatibility.
+      def extended_fields
+        @hash ||= {}
+        @hash
+      end
+
+      def method_missing(name, *args)
+        puts "chamando o missing method que me interessa"
+        name = name.to_s if name.kind_of? Symbol
+
+        if name[-1,1] == "="
+          extended_fields[name.chop] = args[0] 
+        elsif name[-1,1] == "?"
+          found = extended_fields[name.chop]
+          return super(name,args) if found.nil?
+          parse(found)
+        else
+          found = extended_fields[name]
+          return super(name,args) if found.nil?
+          parse(transform(found))
+        end
+
+      end
+
+      # redefines attribute definition allowing the invocation of method_missing
+      # when an attribute does not exist
+      def attributes=(values)
+        values.each do |key, value|
+          unless attributes.include? key
+            method_missing("#{key}=", value)
+            values.delete key
+          end
+        end
+        super(values)
+      end
+
+
+      # serializes the extended fields with the existing fields
+      def to_xml(options={})
+        super(options) do |xml|
+          extended_fields.each do |key,value|
+            xml.tag! key, value
+          end
+        end
+      end
+
+      private
+      
+      # transforms a value in a custom hash
+      def transform(value)
+        return CustomHash.new(value) if value.kind_of?(Hash) || value.kind_of?(Array)
+        value
+      end
+      
+      def parse(val)
+        raise "undefined method: '#{val}'" if val.nil?
+        val
+      end
+
 
     end
   end
