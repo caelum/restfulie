@@ -1,26 +1,26 @@
-module Hashi
-  class CustomHash
-    # uses_restfulie
-    def initialize(h)
-      @hash = h
-      link = h['link']
-      add_transitions([link]) if link.kind_of? Hash
-      add_transitions(link) if link.kind_of? Array
-    end
-  end
-end
-
-module Jeokkarak
-  module Base
-    alias_method :old_from_hash_parse, :from_hash_parse
-    def from_hash_parse(result,h,key,value)
-      return old_from_hash_parse(result, h, key, value) if key!='link'
-      link = h[key]
-      result.add_transitions([link]) if link.kind_of? Hash
-      result.add_transitions(link) if link.kind_of? Array
-    end
-  end
-end
+# module Hashi
+#   class CustomHash
+#     # uses_restfulie
+#     def initialize(h)
+#       @hash = h
+#       link = h['link']
+#       add_transitions([link]) if link.kind_of? Hash
+#       add_transitions(link) if link.kind_of? Array
+#     end
+#   end
+# end
+# 
+# module Jeokkarak
+#   module Base
+#     alias_method :old_from_hash_parse, :from_hash_parse
+#     def from_hash_parse(result,h,key,value)
+#       return old_from_hash_parse(result, h, key, value) if key!='link'
+#       link = h[key]
+#       result.add_transitions([link]) if link.kind_of? Hash
+#       result.add_transitions(link) if link.kind_of? Array
+#     end
+#   end
+# end
 
 module Restfulie
   module Unmarshalling
