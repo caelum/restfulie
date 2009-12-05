@@ -108,7 +108,6 @@ describe Restfulie do
   context "when creating a Jeokkarak from a hash" do
     it "should extract no links if there are none" do
       hash = {}
-      puts Player.method(:from_hash)
       player = Player.from_hash hash
       player.nil?.should be_false
     end
