@@ -43,5 +43,4 @@ end
 
 Object.extend Restfulie
 
-require 'restfulie/conversions'
 require 'restfulie/unmarshalling'
