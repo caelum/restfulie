@@ -7,6 +7,7 @@ require 'restfulie/client/base'
 require 'restfulie/client/entry_point'
 require 'restfulie/client/helper'
 require 'restfulie/client/instance'
+require 'restfulie/client/state'
 
 module Restfulie
   def uses_restfulie

@@ -1,6 +1,6 @@
 module Restfulie
   
-  module Server
+  module Client
   
     # adds respond_to and has_state methods to resources
     module State

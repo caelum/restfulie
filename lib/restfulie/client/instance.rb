@@ -34,7 +34,7 @@ module Restfulie
           self._possible_states[state["rel"] || state[:rel]] = state
           self.add_state(state)
         end
-        self.extend Restfulie::Server::State
+        self.extend Restfulie::Client::State
       end
 
     
@@ -42,7 +42,6 @@ module Restfulie
         name = transition["rel"] || transition[:rel]
       
         # TODO: wrong, should be instance_eval
-        puts "i will define a method #{name} now!"
         self.class.module_eval do
         
           def temp_method(options = {}, &block)

@@ -7,12 +7,12 @@ require 'restfulie/client/base'
 require 'restfulie/client/entry_point'
 require 'restfulie/client/helper'
 require 'restfulie/client/instance'
+require 'restfulie/client/state'
 
 require 'restfulie/server/base'
 require 'restfulie/server/controller'
 require 'restfulie/server/instance'
 require 'restfulie/server/marshalling'
-require 'restfulie/server/state'
 require 'restfulie/server/transition'
 
 module Restfulie
