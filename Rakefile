@@ -20,7 +20,6 @@ spec = Gem::Specification.new do |s|
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
 
   # s.add_dependency(%q<rubigen>, [">= 1.3.4"])
-  s.add_dependency('jeokkarak', '>= 1.0.2')
 
   s.author = AUTHOR
   s.email = EMAIL

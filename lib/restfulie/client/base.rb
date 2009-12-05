@@ -7,7 +7,7 @@ module Restfulie
       # translates a response to an object
       def from_response(res)
       
-        raise "unimplemented content type" if res.content_type!="application/xml"
+        raise "unimplemented content type: #{res.content_type} '#{res.body}'" unless res.content_type=="application/xml"
 
         hash = Hash.from_xml res.body
         return hash if hash.keys.length == 0
