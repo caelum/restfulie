@@ -30,8 +30,6 @@ module Restfulie
     def from_hash( hash )
       h = {}
       h = hash.dup if hash
-      puts hash
-      puts h
       links = nil
       h.each do |key,value|
         case value.class.to_s
@@ -52,7 +50,6 @@ module Restfulie
         end
         h.delete("xmlns") if key=="xmlns"
       end
-      puts h.inspect
       result = self.new h
       if !(links.nil?) && self.include?(Restfulie::Client::Instance)
         result.add_transitions(links)

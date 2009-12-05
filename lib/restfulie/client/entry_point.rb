@@ -21,9 +21,16 @@ module Restfulie
       end
       
       # retrieves a resource form a specific uri
-      def from_web(uri)
-        res = Net::HTTP.get_response(URI.parse(uri))
+      def from_web(uri, options = {})
+        uri = URI.parse(uri)
+        req = Net::HTTP::Get.new(uri.path)
+        options.each do |key,value| req[key] = value end 
+        res = Net::HTTP.start(uri.host, uri.port) {|http|
+          http.request(req)
+        }
+        
         code = res.code
+        puts "got from web #{res.code}"
         return from_web(res["Location"]) if code=="301"
 
         if code=="200"      
@@ -34,7 +41,7 @@ module Restfulie
           when "application/json"
             self.from_json res.body
           else
-            raise "unknown content type"
+            raise "unknown content type: #{res.content_type}"
           end
         end
       
@@ -45,15 +52,22 @@ module Restfulie
         remote_post_to(entry_point_for.create.uri, content)
       end
       def remote_post_to(uri, content)
+        puts "vou postar"
         url = URI.parse(uri)
         req = Net::HTTP::Post.new(url.path)
         req.body = content
         req.add_field("Accept", "application/xml")
 
         response = Net::HTTP.new(url.host, url.port).request(req)
-        return response unless response.code=="301" && follows.moved_permanently? == :all
+        puts "got a #{response.code} #{response.code.class}"
+        if response.code=="301" && follows.moved_permanently? == :all
+          remote_post_to(response["Location"], content)
+        elsif response.code=="201"
+          from_web(response["Location"], "Accept" => "application/xml")
+        else
+          response
+        end
 
-        return remote_post_to(response["Location"], content)
       end
       
     end

@@ -38,7 +38,7 @@ end
 
 desc "Install the gem locally"
 task :install => [:package] do
-  sh %{sudo gem install pkg/#{GEM}-#{GEM_VERSION}}
+  sh %{sudo gem install pkg/#{GEM}-#{GEM_VERSION} -l}
 end
 
 desc "Create a gemspec file"
