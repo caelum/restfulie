@@ -65,7 +65,7 @@ context "accepts client unmarshalling" do
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
 
         expected_response = prepare_http_for(req)
-        expected_response.should_receive(:body).exactly(2).times.and_return("<client-restfulie_model></client-restfulie_model>")
+        expected_response.should_receive(:body).and_return("<client-restfulie_model></client-restfulie_model>")
         expected_response.should_receive(:content_type).and_return('application/xml')
         res = model.send(method_name)
         res.class.to_s.should eql('ClientRestfulieModel')

@@ -19,7 +19,7 @@ module Restfulie
         req = method.new(url.path)
         req.body = options[:data] if options[:data]
         req.add_field("Accept", "application/xml") if self._came_from == :xml
-        req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval? name
+        req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval?(name) && self.respond_to?(:etag)
 
         response = Net::HTTP.new(url.host, url.port).request(req)
 
@@ -64,7 +64,6 @@ module Restfulie
       end
 
       def method_missing(name, *args)
-        puts "chamando o missing method que me interessa"
         name = name.to_s if name.kind_of? Symbol
 
         if name[-1,1] == "="
