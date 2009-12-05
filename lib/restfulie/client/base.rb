@@ -1,6 +1,8 @@
 module Restfulie
   module Client
     module Base
+
+      SELF_RETRIEVAL = [:latest, :refresh, :reload]
       
       # translates a response to an object
       def from_response(res)
@@ -23,6 +25,11 @@ module Restfulie
 
         return basic_mapping[overriden_option.to_sym] if overriden_option
         defaults[name.to_sym] || Net::HTTP::Post
+      end
+      
+      def is_self_retrieval?(name)
+        name = name.to_sym if name.kind_of? String
+        SELF_RETRIEVAL.include? name
       end
       
     end

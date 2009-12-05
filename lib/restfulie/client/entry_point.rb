@@ -32,16 +32,20 @@ module Restfulie
         code = res.code
         return from_web(res["Location"]) if code=="301"
 
-        if code=="200"      
+        if code=="200"
           # TODO really support different content types
           case res.content_type
           when "application/xml"
-            self.from_xml res.body
+            result = self.from_xml res.body
           when "application/json"
-            self.from_json res.body
+            result = self.from_json res.body
           else
             raise "unknown content type: #{res.content_type}"
           end
+          result.etag = res['Etag'] unless res['Etag'].nil?
+          result
+        else
+          res
         end
       
       end
