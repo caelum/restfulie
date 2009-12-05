@@ -34,18 +34,12 @@ context "accepts client unmarshalling" do
   
   end
   
-  def mock_with_etag(type)
-    result = mock type
-    result.should_receive(:[]).with('Etag').and_return(nil)
-    result
-  end
-  
   context "when invoking an state change" do
 
     it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
       ["cancel", "destroy", "delete"].each do |method_name|
         model = ClientRestfulieModel.from_xml xml_for(method_name)
-        req = mock_with_etag Net::HTTP::Delete
+        req = mock Net::HTTP::Delete
         Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
   
         expected_response = prepare_http_for(req)
@@ -56,7 +50,7 @@ context "accepts client unmarshalling" do
     
     it "should send a POST request if the state transition name is update" do
         model = ClientRestfulieModel.from_xml xml_for('update')
-        req = mock_with_etag Net::HTTP::Post
+        req = mock Net::HTTP::Post
         Net::HTTP::Post.should_receive(:new).with('/order/1').and_return(req)
   
         expected_response = prepare_http_for(req)
@@ -67,7 +61,7 @@ context "accepts client unmarshalling" do
     it "should send a GET request if the state transition name is refresh, reload, show or latest" do
       ["refresh", "latest", "reload", "show"].each do |method_name|
         model = ClientRestfulieModel.from_xml xml_for(method_name)
-        req = mock_with_etag Net::HTTP::Get
+        req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
 
         expected_response = prepare_http_for(req)
@@ -81,7 +75,7 @@ context "accepts client unmarshalling" do
     it "should allow method overriding for methods given as symbols" do
       model = ClientRestfulieModel.from_xml xml_for('execute')
 
-      req = mock_with_etag Net::HTTP::Delete
+      req = mock Net::HTTP::Delete
       Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
 
       expected_response = prepare_http_for(req)
@@ -92,7 +86,7 @@ context "accepts client unmarshalling" do
     it "should allow method overriding for methods given as strings" do
       model = ClientRestfulieModel.from_xml xml_for('execute')
 
-      req = mock_with_etag Net::HTTP::Delete
+      req = mock Net::HTTP::Delete
       Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
 
       expected_response = prepare_http_for(req)
@@ -102,21 +96,17 @@ context "accepts client unmarshalling" do
     
     it "should GET and return its content" do
         model = ClientRestfulieModel.from_xml xml_for('check_info')
-        req = mock_with_etag Net::HTTP::Get
+        req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
   
         expected_response = prepare_http_for(req)
-        expected_response.should_receive(:body).exactly(2).times.and_return("<client-order><buyer>guilherme silveira</buyer></client-order>")
-        expected_response.should_receive(:content_type).and_return('application/xml')
+        ClientRestfulieModel.should_receive(:from_response).with(expected_response)
         res = model.send('check_info', {:method => "get"})
-        res.class.to_s.should eql('ClientOrder')
-        puts "aqui o meu buyer #{res.class.name} #{res.extended_fields}  #{res} #{res.buyer}"
-        res.buyer.should eql('guilherme silveira')
     end
     
     it "should allow the user to receive the response" do
         model = ClientRestfulieModel.from_xml xml_for('check_info')
-        req = mock_with_etag Net::HTTP::Get
+        req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
   
         expected_response = prepare_http_for(req)
@@ -150,7 +140,7 @@ context "accepts client unmarshalling" do
     
     def mock_request_for(type, body)
       res = mock_response(:code => "200", :content_type => type, :body => body)
-      req = mock_with_etag Net::HTTPRequest
+      req = mock Net::HTTPRequest
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
       Net::HTTP.should_receive(:start).with('localhost',3001).and_return(res)
     end

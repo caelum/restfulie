@@ -19,14 +19,12 @@ module Restfulie
         req = method.new(url.path)
         req.body = options[:data] if options[:data]
         req.add_field("Accept", "application/xml") if self._came_from == :xml
-        puts "#{self.class.is_self_retrieval? name} #{name} eh sim rapaz!"
         req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval? name
-        puts req['Etag']
 
         response = Net::HTTP.new(url.host, url.port).request(req)
 
         return block.call(response) if block
-        return response unless method.kind_of? Net::HTTP::Get
+        return response unless method == Net::HTTP::Get
         self.class.from_response response
       end
 
