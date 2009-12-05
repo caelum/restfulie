@@ -42,6 +42,7 @@ module Restfulie
         name = transition["rel"] || transition[:rel]
       
         # TODO: wrong, should be instance_eval
+        puts "i will define a method #{name} now!"
         self.class.module_eval do
         
           def temp_method(options = {}, &block)
