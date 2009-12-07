@@ -20,6 +20,7 @@ module Restfulie
         req.body = options[:data] if options[:data]
         req.add_field("Accept", "application/xml") if self._came_from == :xml
         req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval?(name) && self.respond_to?(:etag)
+        req.add_field("If-Modified-Since", self.last_modified) if self.class.is_self_retrieval?(name) && self.respond_to?(:last_modified)
 
         response = Net::HTTP.new(url.host, url.port).request(req)
 
@@ -78,6 +79,11 @@ module Restfulie
           parse(transform(found))
         end
 
+      end
+
+      # TODO test this guy
+      def respond_to?(sym)
+        extended_fields[sym.to_s].nil? ? super(sym) : true
       end
 
       # redefines attribute definition allowing the invocation of method_missing

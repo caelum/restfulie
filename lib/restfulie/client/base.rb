@@ -13,7 +13,7 @@ module Restfulie
 
       # translates a response to an object
       def from_response(res)
-      
+        
         raise UnsupportedContentType.new("unsupported content type '#{res.content_type}'") unless res.content_type=="application/xml"
 
         body = res.body

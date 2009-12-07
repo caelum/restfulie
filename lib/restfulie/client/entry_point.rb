@@ -28,7 +28,7 @@ module Restfulie
         res = Net::HTTP.start(uri.host, uri.port) {|http|
           http.request(req) # canc hange to straight .request(req)
         }
-        
+
         code = res.code
         return from_web(res["Location"]) if code=="301"
 
@@ -43,6 +43,7 @@ module Restfulie
             raise "unknown content type: #{res.content_type}"
           end
           result.etag = res['Etag'] unless res['Etag'].nil?
+          result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
           result
         else
           res
@@ -55,6 +56,7 @@ module Restfulie
         remote_post_to(entry_point_for.create.uri, content)
       end
       def remote_post_to(uri, content)
+        
         url = URI.parse(uri)
         req = Net::HTTP::Post.new(url.path)
         req.body = content
@@ -62,6 +64,7 @@ module Restfulie
 
         response = Net::HTTP.new(url.host, url.port).request(req)
         code = response.code
+        
         if code=="301" && follows.moved_permanently? == :all
           remote_post_to(response["Location"], content)
         elsif code=="201"
