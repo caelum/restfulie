@@ -7,12 +7,12 @@ module ActionController
       cache_info[:last_modified] = resource.updated_at if resource.respond_to? :updated_at
       if stale? cache_info
         options[:controller] = self
-        # format = self.params[:format] || "xml"
-        # if format == "xml"
-        #   render :xml => resource.to_xml(options)
-        # elsif
-          render :xml => resource.to_xml(options)
-        # end
+        format = (self.params && self.params[:format]) || "xml"
+        if ["xml", "json"].include?(format)
+          render format.to_sym => resource.send(:"to_#{format}", options)
+        else
+          render format.to_sym => resource
+        end
       end
     end
 

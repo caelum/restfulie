@@ -5,7 +5,7 @@ module Restfulie
   
     module Marshalling
   
-      def to_json
+      def to_json(options={})
         super :methods => :following_states
       end
   
