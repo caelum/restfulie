@@ -141,6 +141,7 @@ context "accepts client unmarshalling" do
     def mock_request_for(type, body, etag = '"ETAGVALUE"')
       res = mock_response(:code => "200", :content_type => type, :body => body)
       res.should_receive(:[]).with('Etag').at_least(1).and_return(etag)
+      res.should_receive(:[]).with('Last-Modified').at_least(1).and_return(etag)
       req = mock Net::HTTPRequest
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
       Net::HTTP.should_receive(:start).with('localhost',3001).and_return(res)
