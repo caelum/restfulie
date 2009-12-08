@@ -21,12 +21,6 @@ context RestfulieModel do
   before do
     subject.status = :unpaid
   end
-  
-  context "when parsed to json" do
-    it "should include the method following_states" do
-      subject.to_json.should eql("{\"restfulie_model\":{\"status\":\"unpaid\"}}")
-    end
-  end
 
   context "when checking the available transitions" do
     it "should return nothing if there is no status field" do
