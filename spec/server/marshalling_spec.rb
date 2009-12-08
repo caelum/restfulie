@@ -122,7 +122,10 @@ context RestfulieModel do
        RestfulieModel.acts_as_restfulie
        RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
        RestfulieModel.state :unpaid, :allow => [:latest]
-       subject.to_json(:controller => my_controller, :use_name_based_link => true).should eql("{\"restfulie_model\":{\"show_me_the_latest\":\"http://url_for/show\",\"status\":\"unpaid\"}}")
+       
+       expected = normalize_json("{\"restfulie_model\":{\"show_me_the_latest\":\"http://url_for/show\",\"status\":\"unpaid\"}}")
+       got      = normalize_json(subject.to_json :controller => my_controller, :use_name_based_link => true)
+       got.should ==(expected)
     end
     
     it "should evaluate in runtime if there is a block to define the transition" do
