@@ -64,11 +64,9 @@ context "accepts client unmarshalling" do
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
 
-        expected_response = prepare_http_for(req)
-        expected_response.should_receive(:body).and_return("<client-restfulie_model></client-restfulie_model>")
-        expected_response.should_receive(:content_type).and_return('application/xml')
-        res = model.send(method_name)
-        res.class.to_s.should eql('ClientRestfulieModel')
+        final_result = Object.new
+        ClientRestfulieModel.should_receive(:from_response).with(prepare_http_for(req), model).and_return(final_result)
+        model.send(method_name).should eql(final_result)
       end
     end
     
@@ -98,10 +96,10 @@ context "accepts client unmarshalling" do
         model = ClientRestfulieModel.from_xml xml_for('check_info')
         req = mock Net::HTTP::Get
         Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        ClientRestfulieModel.should_receive(:from_response).with(expected_response)
-        res = model.send('check_info', {:method => "get"})
+
+        final_result = Object.new
+        ClientRestfulieModel.should_receive(:from_response).with(prepare_http_for(req), model).and_return(final_result)
+        model.send('check_info', {:method => "get"}).should eql(final_result)
     end
     
     it "should allow the user to receive the response" do

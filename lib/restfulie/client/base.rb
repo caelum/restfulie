@@ -9,12 +9,17 @@ module Restfulie
         def initialize(msg)
           @msg = msg
         end
+        def to_s
+          @msg
+        end
       end
 
       # translates a response to an object
-      def from_response(res)
+      def from_response(res, invoking_object)
         
-        raise UnsupportedContentType.new("unsupported content type '#{res.content_type}'") unless res.content_type=="application/xml"
+        return invoking_object if res.code=="304"
+        
+        raise UnsupportedContentType.new("unsupported content type '#{res.content_type}' '#{res.code}'") unless res.content_type=="application/xml"
 
         body = res.body
         return {} if body.empty?

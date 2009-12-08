@@ -26,7 +26,7 @@ module Restfulie
 
         return block.call(response) if block
         return response unless method == Net::HTTP::Get
-        self.class.from_response response
+        self.class.from_response response, self
       end
 
   
