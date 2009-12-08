@@ -23,4 +23,8 @@ class Spec::Example::ExampleGroup
   def normalize_xml(xml)
     REXML::Document.new(xml).to_s
   end
+  
+  def normalize_json(json)
+    ActiveSupport::JSON.decode(json)
+  end
 end

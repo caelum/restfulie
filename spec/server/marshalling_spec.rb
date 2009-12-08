@@ -59,8 +59,8 @@ context RestfulieModel do
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => :latest
       
-      expected = "{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}"
-      got      = subject.to_json :controller => my_controller
+      expected = normalize_json("{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}")
+      got      = normalize_json(subject.to_json :controller => my_controller)
       
       got.should eql(expected)
     end
@@ -71,8 +71,8 @@ context RestfulieModel do
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => [:latest, :latest]
       
-      expected = "{\"restfulie_model\":{\"link\":[{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"}],\"status\":\"unpaid\"}}"
-      got      = subject.to_json :controller => my_controller
+      expected = normalize_json("{\"restfulie_model\":{\"link\":[{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"}],\"status\":\"unpaid\"}}")
+      got      = normalize_json(subject.to_json :controller => my_controller)
       
       got.should eql(expected)
     end
@@ -86,8 +86,8 @@ context RestfulieModel do
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => [:latest]
       
-      expected = "{\"restfulie_model\":{\"link\":[{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"}],\"status\":\"unpaid\"}}"
-      got      = subject.to_json :controller => my_controller
+      expected = normalize_json("{\"restfulie_model\":{\"link\":[{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"}],\"status\":\"unpaid\"}}")
+      got      = normalize_json(subject.to_json :controller => my_controller)
       
       got.should eql(expected)
     end
@@ -100,8 +100,8 @@ context RestfulieModel do
       
       RestfulieModel.state :unpaid, :allow => []
       
-      expected = "{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/thanks\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}"
-      got      = subject.to_json :controller => my_controller
+      expected = normalize_json("{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/thanks\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}")
+      got      = normalize_json(subject.to_json :controller => my_controller)
       
       got.should eql(expected)
     end
@@ -139,8 +139,8 @@ context RestfulieModel do
       RestfulieModel.transition :pay
       RestfulieModel.state :unpaid, :allow => [:pay]
       
-      expected = "{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/pay\",\"rel\":\"pay\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}"
-      got      = subject.to_json :controller => my_controller
+      expected = normalize_json("{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/pay\",\"rel\":\"pay\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}")
+      got      = normalize_json(subject.to_json :controller => my_controller)
       
       got.should eql(expected)
     end
