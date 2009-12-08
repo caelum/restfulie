@@ -62,7 +62,7 @@ context RestfulieModel do
       expected = normalize_json("{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}")
       got      = normalize_json(subject.to_json :controller => my_controller)
       
-      got.should eql(expected)
+      got.should ==(expected)
     end
     
     it "should add more than 1 allowable actions to models json if controller is set" do
@@ -74,7 +74,7 @@ context RestfulieModel do
       expected = normalize_json("{\"restfulie_model\":{\"link\":[{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"}],\"status\":\"unpaid\"}}")
       got      = normalize_json(subject.to_json :controller => my_controller)
       
-      got.should eql(expected)
+      got.should ==(expected)
     end
     
     it "should add extra transitions if acts_as_restfulie receives a block" do
@@ -89,7 +89,7 @@ context RestfulieModel do
       expected = normalize_json("{\"restfulie_model\":{\"link\":[{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},{\"href\":\"http://url_for/show\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"}],\"status\":\"unpaid\"}}")
       got      = normalize_json(subject.to_json :controller => my_controller)
       
-      got.should eql(expected)
+      got.should ==(expected)
     end
     
     it "should add and create extra transition through acts_as_restfulie block" do
@@ -103,7 +103,7 @@ context RestfulieModel do
       expected = normalize_json("{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/thanks\",\"rel\":\"latest\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}")
       got      = normalize_json(subject.to_json :controller => my_controller)
       
-      got.should eql(expected)
+      got.should ==(expected)
     end
     
     it "should add hypermedia link if controller is set and told to use name based link" do
@@ -111,7 +111,10 @@ context RestfulieModel do
       RestfulieModel.acts_as_restfulie
       RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
       RestfulieModel.state :unpaid, :allow => [:latest]
-      subject.to_json(:controller => my_controller, :use_name_based_link => true).should eql("{\"restfulie_model\":{\"latest\":\"http://url_for/show\",\"status\":\"unpaid\"}}")
+      
+      expected = normalize_json("{\"restfulie_model\":{\"latest\":\"http://url_for/show\",\"status\":\"unpaid\"}}")
+      got      = normalize_json(subject.to_json :controller => my_controller, :use_name_based_link => true)
+      got.should ==(expected)
     end
     
     it "should use rel if there is a rel attribute" do
@@ -130,7 +133,10 @@ context RestfulieModel do
       end
       RestfulieModel.state :unpaid, :allow => [:latest]
       subject.content = :show
-      subject.to_json(:controller => my_controller, :use_name_based_link => true).should eql("{\"restfulie_model\":{\"latest\":\"http://url_for/show\",\"status\":\"unpaid\"}}")
+      
+      expected = normalize_json("{\"restfulie_model\":{\"latest\":\"http://url_for/show\",\"status\":\"unpaid\"}}")
+      got      = normalize_json(subject.to_json :controller => my_controller, :use_name_based_link => true)
+      got.should ==(expected)
     end
     
     it "should use transition name if there is no action" do
@@ -142,7 +148,7 @@ context RestfulieModel do
       expected = normalize_json("{\"restfulie_model\":{\"link\":{\"href\":\"http://url_for/pay\",\"rel\":\"pay\",\"xmlns:atom\":\"http://www.w3.org/2005/Atom\"},\"status\":\"unpaid\"}}")
       got      = normalize_json(subject.to_json :controller => my_controller)
       
-      got.should eql(expected)
+      got.should ==(expected)
     end
     
     it "should not add anything if in an unknown state" do
