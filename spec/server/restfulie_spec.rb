@@ -24,7 +24,7 @@ context RestfulieModel do
   
   context "when parsed to json" do
     it "should include the method following_states" do
-      subject.to_json.should eql("{\"status\":\"unpaid\"}")
+      subject.to_json.should eql("{\"restfulie_model\":{\"status\":\"unpaid\"}}")
     end
   end
 

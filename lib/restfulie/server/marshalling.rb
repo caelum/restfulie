@@ -5,8 +5,8 @@ module Restfulie
   
     module Marshalling
   
-      def to_json(options={})
-        super :methods => :following_states
+      def to_json(options = {})
+        Hash.from_xml(to_xml(options)).to_json
       end
   
       # adds a link for each transition to the current xml writer
