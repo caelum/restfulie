@@ -162,7 +162,7 @@ context "accepts client unmarshalling" do
     end
     
     it "should deserialize correctly if its a json" do
-      mock_request_for "application/json", "{ status : 'CANCELLED' }"
+      mock_request_for "application/json", "{order: { status : 'CANCELLED' }}"
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
       model.status.should eql("CANCELLED")
