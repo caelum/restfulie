@@ -84,7 +84,7 @@ module Restfulie
         }
       end
       def method_missing(name, *args)
-        return value_for name if name.to_s[-1,1]=="?"
+        return value_for(name) if name.to_s[-1,1] == "?"
         set_all_for name
       end
       
