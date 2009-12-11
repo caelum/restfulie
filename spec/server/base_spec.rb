@@ -14,7 +14,16 @@ context Restfulie::Server::Base do
     end
     it "should not add a pay method if it doesnt exist" do
       Account.transition :pay
-      AccountsController.respond_to?(:pay).should be(false)
+      AccountsController.respond_to?(:pay).should be_false
+    end
+  end
+  
+  context "when acting as restfulie" do
+    it "should import module MimeType" do
+      class City
+        acts_as_restfulie
+      end
+      City.included_modules.include?(Restfulie::MimeTypeControl).should be_true
     end
   end
   

@@ -7,6 +7,7 @@ require 'restfulie/server/base'
 require 'restfulie/server/controller'
 require 'restfulie/server/instance'
 require 'restfulie/server/marshalling'
+require 'restfulie/server/mime_type'
 require 'restfulie/server/transition'
 
 module Restfulie
@@ -31,6 +32,7 @@ module Restfulie
     extend Restfulie::Server::Base
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
+    include Restfulie::MimeTypeControl
     
     self.send :define_method, :following_transitions do
       transitions = []
