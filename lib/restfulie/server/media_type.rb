@@ -21,6 +21,13 @@ module Restfulie
     end
   end
   
+  # deserializes data from a request body.
+  # uses the request 'Content-type' header to look for the corresponding media type.
+  # To register a media type use:
+  # class City
+  #  uses_restfulie
+  #  media_type 'vnd/caelum_city+xml'
+  # end
   def self.from(request)
     media_class = MediaType.media_type(request['Content-type'])
     media_class.from_xml(request.body.string)
