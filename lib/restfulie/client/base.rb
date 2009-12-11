@@ -1,3 +1,16 @@
+class Hash
+  def to_object(body)
+    if keys.length>1
+      raise "unable to parse an xml with more than one root element"
+    elsif keys.length == 0
+      self
+    else
+      type = keys[0].camelize.constantize
+      type.from_xml(body)
+    end
+  end
+end
+
 module Restfulie
   module Client
     module Base
@@ -15,13 +28,8 @@ module Restfulie
         return {} if body.empty?
         
         hash = Hash.from_xml body
-        return hash if hash.keys.length == 0
+        hash.to_object(body)
         
-        raise "unable to parse an xml with more than one root element" if hash.keys.length>1
-      
-        type = hash.keys[0].camelize.constantize
-        type.from_xml(body)
-      
       end
     
       def requisition_method_for(overriden_option,name)
