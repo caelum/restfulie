@@ -32,7 +32,7 @@ module Restfulie
     extend Restfulie::Server::Base
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
-    include Restfulie::MimeTypeControl
+    extend Restfulie::MimeTypeControl
     
     self.send :define_method, :following_transitions do
       transitions = []
