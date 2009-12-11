@@ -3,7 +3,7 @@ module Restfulie
     module Base
     
       # returns the definition for the transaction
-      def existing_transitions(name)
+      def existing_transition(name)
         transitions[name]
       end
     

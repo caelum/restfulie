@@ -22,10 +22,9 @@ module Restfulie
         target_object.status = result.to_s unless result.nil?
       end
     
-      # adds a link to this transition's uri on a xml writer
-      def add_link_to(xml, model, options)
-        specific_action = action.dup
-        specific_action = @body.call(model) if @body
+      # return the link to this transitions's uri
+      def link_for(model, controller)
+        specific_action = @body ? @body.call(model) : action.dup
 
         # if you use the class level DSL, you will need to add a lambda for instance level accessors:
         #   transition :show, {:action => :show, :foo_id => lambda { |model| model.id }}
@@ -43,13 +42,9 @@ module Restfulie
         specific_action[:rel] = nil
 
         specific_action[:action] ||= @name
-        uri = options[:controller].url_for(specific_action)
-      
-        if options[:use_name_based_link]
-          xml.tag!(rel, uri)
-        else
-          xml.tag!('atom:link', 'xmlns:atom' => 'http://www.w3.org/2005/Atom', :rel => rel, :href => uri)
-        end
+        uri = controller.url_for(specific_action)
+        
+        return rel, uri
       end
       
     end

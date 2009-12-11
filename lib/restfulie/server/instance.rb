@@ -25,6 +25,25 @@ module Restfulie
         raise "Current state #{status} is invalid in order to execute #{name}. It must be one of #{transitions}" unless available_transitions[:allow].include? name
         self.class.transitions[name].execute_at self
       end
+      
+      # gets all the links for each transition
+      def links(controller)
+        links = []
+        unless controller.nil?
+          all_following_transitions.each do |transition|
+            rel, uri = link_for(transition, controller)
+            links << {:rel => rel, :uri => uri}
+          end
+        end
+        links
+      end
+
+      private
+      # gets a link for this transition
+      def link_for(transition, controller) 
+        transition = self.class.existing_transition(transition.to_sym) unless transition.kind_of? Restfulie::Server::Transition
+        transition.link_for(self, controller)
+      end
 
     end
   end
