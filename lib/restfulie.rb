@@ -7,7 +7,7 @@ require 'restfulie/server/base'
 require 'restfulie/server/controller'
 require 'restfulie/server/instance'
 require 'restfulie/server/marshalling'
-require 'restfulie/server/mime_type'
+require 'restfulie/server/media_type'
 require 'restfulie/server/transition'
 
 module Restfulie
@@ -30,9 +30,9 @@ module Restfulie
   # the transition's uri.
   def acts_as_restfulie
     extend Restfulie::Server::Base
+    extend Restfulie::MediaTypeControl
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
-    extend Restfulie::MimeTypeControl
     
     self.send :define_method, :following_transitions do
       transitions = []

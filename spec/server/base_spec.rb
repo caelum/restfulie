@@ -23,7 +23,7 @@ context Restfulie::Server::Base do
       class City
         acts_as_restfulie
       end
-      City.kind_of?(Restfulie::MimeTypeControl).should be_true
+      City.kind_of?(Restfulie::MediaTypeControl).should be_true
     end
   end
   

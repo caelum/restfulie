@@ -1,13 +1,12 @@
 module Restfulie
-  module MimeTypeControl
+  module MediaTypeControl
     def media_type(*args)
       args.each do |name|
-        puts "#{name}"
-        Restfulie::MimeType.register(name, self)
+        Restfulie::MediaType.register(name, self)
       end
     end
   end
-  module MimeType
+  module MediaType
     def self.register(name, who)
       mime_types[name] = who
     end
@@ -16,6 +15,6 @@ module Restfulie
     end
   end
   def self.from(name)
-    MimeType.mime_types[name]
+    MediaType.mime_types[name]
   end
 end
