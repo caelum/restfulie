@@ -10,6 +10,14 @@ context Restfulie::Server::Base do
       end
       Restfulie.from('vnd/caelum_city+xml').should eql(City)
     end
+    it "should be able to register more than one" do
+      class City
+        extend Restfulie::MimeTypeControl
+        media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
+      end
+      Restfulie.from('vnd/caelum_city+xml').should eql(City)
+      Restfulie.from('vnd/caelum_city+json').should eql(City)
+    end
   end
   
 end
