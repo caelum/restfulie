@@ -6,15 +6,26 @@ module Restfulie
       end
     end
   end
+  
   module MediaType
     def self.register(name, who)
-      mime_types[name] = who
+      media_types[name] = who
     end
-    def self.mime_types
-      @mime_types ||= {}
+    def self.media_type(name)
+      raise UnsupportedContentType.new("unsupported content type '#{name}'") if media_types[name].nil?
+      media_types[name]
+    end
+    private
+    def self.media_types
+      @media_types ||= {}
     end
   end
-  def self.from(name)
-    MediaType.mime_types[name]
+  
+  def self.from(request)
+    content = request.body.string
+    content_type = request['Content-type']
+    media_class = MediaType.media_type(content_type)
+    media_class
   end
+  
 end

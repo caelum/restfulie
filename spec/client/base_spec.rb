@@ -37,7 +37,7 @@ context Restfulie::Client::Base do
       prepare
       @res.should_receive(:code).and_return('200')
       @res.should_receive(:content_type).at_least(1).and_return('vdr/unknown')
-      lambda {CustomType.from_response @res, @origin}.should raise_error(Restfulie::Client::Base::UnsupportedContentType)
+      lambda {CustomType.from_response @res, @origin}.should raise_error(Restfulie::UnsupportedContentType)
     end
 
     it "should return an empty hash if there is no body" do
