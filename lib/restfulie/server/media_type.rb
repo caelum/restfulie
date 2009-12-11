@@ -22,10 +22,8 @@ module Restfulie
   end
   
   def self.from(request)
-    content = request.body.string
-    content_type = request['Content-type']
-    media_class = MediaType.media_type(content_type)
-    media_class
+    media_class = MediaType.media_type(request['Content-type'])
+    media_class.from_xml(request.body.string)
   end
   
 end

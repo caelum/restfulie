@@ -5,20 +5,19 @@ context Restfulie::Server::Base do
   context "while registering a mime type" do
     it "should be able to unmarshall the data" do
       class City
-        extend Restfulie::MediaTypeControl
-        media_type 'vnd/caelum_city+xml'
-        attr_reader :name
       end
-      content = "my custom content"
       
       body = Object.new
-      body.should_receive(:string).and_return(content)
+      body.should_receive(:string).and_return("my custom content")
       
       request = Object.new
       request.should_receive(:body).and_return(body)
+      request.should_receive(:[]).and_return('vnd/caelum_city+xml')
+      
+      Restfulie::MediaType.should_receive(:media_type).with("vnd/caelum_city+xml").and_return(City)
       
       result = Object.new
-      City.should_receive(:from_xml).and_return(result)
+      City.should_receive(:from_xml).with("my custom content").and_return(result)
       city = Restfulie.from request
       city.should eql(result)
       
