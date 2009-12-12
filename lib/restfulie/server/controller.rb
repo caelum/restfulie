@@ -34,7 +34,7 @@ module ActionController
     # Location and 201
     def render_created(resource, options = {})
       location= url_for resource
-      render_resource resource, options, {:code => 201, :location => location}
+      render_resource resource, options, {:status => :created, :location => location}
     end
     
   end
