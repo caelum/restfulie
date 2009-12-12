@@ -29,7 +29,7 @@ module Restfulie
   #  media_type 'vnd/caelum_city+xml'
   # end
   def self.from(request)
-    media_class = MediaType.media_type(request['Content-type'])
+    media_class = MediaType.media_type(request.headers['CONTENT_TYPE'])
     media_class.from_xml(request.body.string)
   end
   

@@ -14,6 +14,7 @@ module Restfulie
       
       def as(content_type)
         @content_type = content_type
+        self
       end
 
       def create(content)
