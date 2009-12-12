@@ -62,7 +62,15 @@ module Restfulie
 
         code = res.code
         return from_web(res["Location"]) if code=="301"
+        result = from_web_parse(res, code)
+        result.etag = res['Etag'] unless res['Etag'].nil?
+        result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
+        result.web_response = res
+        result
 
+      end
+      
+      def from_web_parse(res, code)
         if code=="200"
           content_type = res.content_type
           # TODO really support different content types
@@ -74,9 +82,6 @@ module Restfulie
           else
             raise UnsupportedContentType.new("unsupported content type '#{content_type}'")
           end
-          result.etag = res['Etag'] unless res['Etag'].nil?
-          result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
-          result.web_response = res
           result
         else
           res
