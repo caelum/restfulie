@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 
+require 'restfulie/media_type'
 require 'restfulie/client/base'
 require 'restfulie/client/entry_point'
 require 'restfulie/client/helper'

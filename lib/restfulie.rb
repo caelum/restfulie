@@ -1,13 +1,14 @@
 require 'net/http'
 require 'uri'
 
+require 'restfulie/media_type'
+
 require 'restfulie/client'
 
 require 'restfulie/server/base'
 require 'restfulie/server/controller'
 require 'restfulie/server/instance'
 require 'restfulie/server/marshalling'
-require 'restfulie/server/media_type'
 require 'restfulie/server/transition'
 
 module Restfulie

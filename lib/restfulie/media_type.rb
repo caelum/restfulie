@@ -12,12 +12,22 @@ module Restfulie
   
   module DefaultMediaTypes
     
+    # from rails source code
+    def self.constantize(camel_cased_word)
+     unless /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/ =~ camel_cased_word
+       raise NameError, "#{camel_cased_word.inspect} is not a valid constant name!"
+     end
+
+     Object.module_eval("::#{$1}", __FILE__, __LINE__)
+    end
+    
     def self.from_xml(xml)
       hash = Hash.from_xml xml
       raise "there should be only one root element" unless hash.keys.size==1
 
       head = hash[self.to_s.underscore]
-      type = hash.keys.first.camelize.constantize
+      type = constantize(hash.keys.first.camelize) rescue Hashi
+      
       result = type.from_hash hash.values.first
       return nil if result.nil?
       result._came_from = :xml if self.include?(Restfulie::Client::Instance)

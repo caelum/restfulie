@@ -18,6 +18,8 @@ spec = Gem::Specification.new do |s|
   s.summary = SUMMARY
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
+  
+  s.add_dependency("jeokkarak", [">= 1.0.3"])
 
   # s.add_dependency(%q<rubigen>, [">= 1.3.4"])
 
