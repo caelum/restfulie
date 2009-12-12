@@ -1,5 +1,6 @@
 module Restfulie
   module Client
+
     class RequestExecution
       
       def initialize(type)
@@ -47,7 +48,7 @@ module Restfulie
         if code=="301" && @type.follows.moved_permanently? == :all
           remote_post_to(response["Location"], content)
         elsif code=="201"
-          type.from_web(response["Location"], "Accept" => "application/xml")
+          from_web(response["Location"], "Accept" => "application/xml")
         else
           response
         end
@@ -63,14 +64,15 @@ module Restfulie
         return from_web(res["Location"]) if code=="301"
 
         if code=="200"
+          content_type = res.content_type
           # TODO really support different content types
-          case res.content_type
-          when "application/xml"
-            result = @type.from_xml res.body
-          when "application/json"
-            result = @type.from_json res.body
+          type = Restfulie::MediaType.media_type(content_type)
+          if content_type[-3,3]=="xml"
+            result = type.from_xml res.body
+          elsif content_type[-4,4]=="json"
+            result = type.from_json res.body
           else
-            raise "unknown content type: #{res.content_type}"
+            raise UnsupportedContentType.new("unsupported content type '#{content_type}'")
           end
           result.etag = res['Etag'] unless res['Etag'].nil?
           result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?

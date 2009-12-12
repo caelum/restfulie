@@ -62,7 +62,6 @@ end
 module ActiveRecord
   class Base
     extend Restfulie::Unmarshalling
-    # acts_as_jeokkarak
 
     def self.from_json(json)
       from_hash(safe_json_decode(json).values.first)

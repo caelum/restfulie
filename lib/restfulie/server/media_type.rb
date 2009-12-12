@@ -1,16 +1,43 @@
 module Restfulie
+  
   module MediaTypeControl
+    
     def media_type(*args)
       args.each do |name|
         Restfulie::MediaType.register(name, self)
       end
     end
+    
+  end
+  
+  module DefaultMediaTypes
+    
+    def self.from_xml(xml)
+      hash = Hash.from_xml xml
+      raise "there should be only one root element" unless hash.keys.size==1
+
+      head = hash[self.to_s.underscore]
+      type = hash.keys.first.camelize.constantize
+      result = type.from_hash hash.values.first
+      return nil if result.nil?
+      result._came_from = :xml if self.include?(Restfulie::Client::Instance)
+      result
+    end
+
+    def self.from_json(json)
+      hash = safe_json_decode(json)
+      type = hash.keys.first.camelize.constantize
+      type.from_hash(hash.values.first)
+    end
+    
   end
   
   module MediaType
+    
     def self.register(name, who)
       media_types[name] = who
     end
+    
     # TODO rename to type for mt
     def self.media_type(name)
       raise UnsupportedContentType.new("unsupported content type '#{name}'") if media_types[name].nil?
@@ -20,6 +47,9 @@ module Restfulie
       @media_types ||= {}
     end
   end
+  
+  Restfulie::MediaType.register('application/xml', DefaultMediaTypes)
+  Restfulie::MediaType.register('application/json', DefaultMediaTypes)
   
   # deserializes data from a request body.
   # uses the request 'Content-type' header to look for the corresponding media type.
@@ -33,4 +63,11 @@ module Restfulie
     media_class.from_xml(request.body.string)
   end
   
+end
+
+def safe_json_decode(json)
+  return {} if !json
+  begin
+    ActiveSupport::JSON.decode json
+  rescue ; {} end
 end

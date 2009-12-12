@@ -45,9 +45,11 @@ module Restfulie
           @type.define_can_method(@type, name)
           self
         end
+        
         def at(options)
           @transition.options = options
         end
+        
         def results_in(result)
           @transition.result = result
         end
