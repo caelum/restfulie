@@ -11,6 +11,14 @@ context Restfulie::Server::Base do
       end
       Restfulie::MediaType.media_type('vnd/caelum_city+xml').should eql(City)
     end
+
+    it "should be able to locate with encoding" do
+      class City
+        extend Restfulie::MediaTypeControl
+        media_type 'vnd/caelum_city+xml'
+      end
+      Restfulie::MediaType.media_type('vnd/caelum_city+xml; charset=UTF-8').should eql(City)
+    end
     
     it "should throw an exception if not found" do
       lambda {Restfulie::MediaType.media_type('vnd/caelum_unknown_city+xml')}.should raise_error(Restfulie::UnsupportedContentType)
