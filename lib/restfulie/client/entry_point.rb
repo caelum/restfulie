@@ -22,31 +22,7 @@ module Restfulie
       
       # retrieves a resource form a specific uri
       def from_web(uri, options = {})
-        uri = URI.parse(uri)
-        req = Net::HTTP::Get.new(uri.path)
-        options.each do |key,value| req[key] = value end 
-        res = Net::HTTP.start(uri.host, uri.port).request(req)
-
-        code = res.code
-        return from_web(res["Location"]) if code=="301"
-
-        if code=="200"
-          # TODO really support different content types
-          case res.content_type
-          when "application/xml"
-            result = self.from_xml res.body
-          when "application/json"
-            result = self.from_json res.body
-          else
-            raise "unknown content type: #{res.content_type}"
-          end
-          result.etag = res['Etag'] unless res['Etag'].nil?
-          result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
-          result
-        else
-          res
-        end
-
+        RequestExecution.new(self).at(uri).get(options)
       end
 
       private

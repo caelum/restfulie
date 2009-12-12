@@ -24,6 +24,10 @@ module Restfulie
       def post(content)
         remote_post_to(@uri, content)
       end
+      
+      def get(options = {})
+        from_web(@uri, options)
+      end
 
       private
       def remote_post_to(uri, content)
@@ -49,6 +53,32 @@ module Restfulie
         end
       end
 
+      def from_web(uri, options = {})
+        uri = URI.parse(uri)
+        req = Net::HTTP::Get.new(uri.path)
+        options.each do |key,value| req[key] = value end 
+        res = Net::HTTP.start(uri.host, uri.port).request(req)
+
+        code = res.code
+        return from_web(res["Location"]) if code=="301"
+
+        if code=="200"
+          # TODO really support different content types
+          case res.content_type
+          when "application/xml"
+            result = @type.from_xml res.body
+          when "application/json"
+            result = @type.from_json res.body
+          else
+            raise "unknown content type: #{res.content_type}"
+          end
+          result.etag = res['Etag'] unless res['Etag'].nil?
+          result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
+          result
+        else
+          res
+        end
+      end
       
     end
   end
