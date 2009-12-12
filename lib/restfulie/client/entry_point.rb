@@ -25,9 +25,7 @@ module Restfulie
         uri = URI.parse(uri)
         req = Net::HTTP::Get.new(uri.path)
         options.each do |key,value| req[key] = value end 
-        res = Net::HTTP.start(uri.host, uri.port) {|http|
-          http.request(req) # canc hange to straight .request(req)
-        }
+        res = Net::HTTP.start(uri.host, uri.port).request(req)
 
         code = res.code
         return from_web(res["Location"]) if code=="301"

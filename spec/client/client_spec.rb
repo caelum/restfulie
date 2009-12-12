@@ -142,7 +142,9 @@ context "accepts client unmarshalling" do
       res.should_receive(:[]).with('Last-Modified').at_least(1).and_return(etag)
       req = mock Net::HTTPRequest
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
-      Net::HTTP.should_receive(:start).with('localhost',3001).and_return(res)
+      http = Object.new
+      Net::HTTP.should_receive(:start).with('localhost',3001).and_return(http)
+      http.should_receive(:request).with(req).and_return(res)
     end
     
     it "should deserialize correctly if its an xml" do
