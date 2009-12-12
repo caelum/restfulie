@@ -1,5 +1,6 @@
 require 'net/http'
 require 'uri'
+require 'hashi'
 
 require 'restfulie/media_type'
 require 'restfulie/client/base'

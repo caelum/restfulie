@@ -76,6 +76,7 @@ module Restfulie
           end
           result.etag = res['Etag'] unless res['Etag'].nil?
           result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
+          result.web_response = res
           result
         else
           res

@@ -140,6 +140,7 @@ context "accepts client unmarshalling" do
       res = mock_response(:code => "200", :content_type => type, :body => body)
       res.should_receive(:[]).with('Etag').at_least(1).and_return(etag)
       res.should_receive(:[]).with('Last-Modified').at_least(1).and_return(etag)
+      @response = res
       req = mock Net::HTTPRequest
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
       http = Object.new
@@ -152,7 +153,13 @@ context "accepts client unmarshalling" do
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
       model.status.should eql("CANCELLED")
+    end
+    
+    it "should add the response" do
+      mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>"
   
+      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
+      model.web_response.should eql(@response)
     end
     
     it "should save etag value" do
