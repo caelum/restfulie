@@ -44,5 +44,16 @@ context ActionController::Base do
       @controller.render_resource(Object.new, {})
     end
   end
+  
+  context "when rendering a creation" do
+    it "should set the location, code and render the resource" do
+      resource = Object.new
+      uri = "custom resource uri"
+      @controller.should_receive(:url_for).with(resource).and_return(uri)
+      @controller.should_receive(:location=).with(uri)
+      @controller.should_receive(:render_resource).with(resource, {}, {:code => 201})
+      @controller.render_created resource
+    end
+  end
 
 end

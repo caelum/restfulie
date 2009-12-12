@@ -11,11 +11,11 @@ module Restfulie
     def self.register(name, who)
       media_types[name] = who
     end
+    # TODO rename to type for mt
     def self.media_type(name)
       raise UnsupportedContentType.new("unsupported content type '#{name}'") if media_types[name].nil?
       media_types[name]
     end
-    private
     def self.media_types
       @media_types ||= {}
     end

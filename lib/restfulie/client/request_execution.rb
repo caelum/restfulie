@@ -35,8 +35,11 @@ module Restfulie
         req.add_field("Content-type", @content_type)
 
         response = Net::HTTP.new(url.host, url.port).request(req)
+        parse_post_response(response, content)
+      end
+      
+      def parse_post_response(response, content)
         code = response.code
-        
         if code=="301" && @type.follows.moved_permanently? == :all
           remote_post_to(response["Location"], content)
         elsif code=="201"
@@ -44,7 +47,6 @@ module Restfulie
         else
           response
         end
-
       end
 
       

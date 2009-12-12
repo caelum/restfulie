@@ -3,17 +3,18 @@ module ActionController
     
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
-    def render_resource(resource, options = {})
+    def render_resource(resource, options = {}, render_options = {})
       cache_info = {:etag => resource}
       cache_info[:last_modified] = resource.updated_at.utc if resource.respond_to? :updated_at
       if stale? cache_info
         options[:controller] = self
         format = (self.params && self.params[:format]) || "xml"
         if ["xml", "json"].include?(format)
-          render format.to_sym => resource.send(:"to_#{format}", options)
+          render_options[format.to_sym] = resource.send(:"to_#{format}", options)
         else
-          render format.to_sym => resource
+          render_options[format.to_sym] = resource
         end
+        render render_options
       end
     end
 
@@ -27,6 +28,13 @@ module ActionController
       else
         old_render(options, extra_options)
       end
+    end
+    
+    # renders a created resource including its required headers:
+    # Location and 201
+    def render_created(resource, options = {})
+      self.location= url_for resource
+      render_resource resource, options, {:code => 201}
     end
     
   end
