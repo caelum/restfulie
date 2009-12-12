@@ -33,8 +33,8 @@ module ActionController
     # renders a created resource including its required headers:
     # Location and 201
     def render_created(resource, options = {})
-      self.location= url_for resource
-      render_resource resource, options, {:code => 201}
+      location= url_for resource
+      render_resource resource, options, {:code => 201, :location => location}
     end
     
   end

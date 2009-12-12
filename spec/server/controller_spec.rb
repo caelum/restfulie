@@ -50,8 +50,7 @@ context ActionController::Base do
       resource = Object.new
       uri = "custom resource uri"
       @controller.should_receive(:url_for).with(resource).and_return(uri)
-      @controller.should_receive(:location=).with(uri)
-      @controller.should_receive(:render_resource).with(resource, {}, {:code => 201})
+      @controller.should_receive(:render_resource).with(resource, {}, {:code => 201, :location => uri})
       @controller.render_created resource
     end
   end
