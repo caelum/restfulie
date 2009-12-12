@@ -12,6 +12,12 @@ class Hash
 end
 
 module Restfulie
+
+  # will execute some action in a specific URI
+  def self.at(uri)
+    Client::RequestExecution.new(nil).at uri
+  end
+
   module Client
     module Base
 
@@ -30,11 +36,6 @@ module Restfulie
         hash = Hash.from_xml body
         hash.to_object(body)
         
-      end
-      
-      # will execute some action in a specific URI
-      def at(uri)
-        RequestExecution.new.at uri
       end
     
       def requisition_method_for(overriden_option,name)

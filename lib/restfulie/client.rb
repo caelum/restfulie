@@ -5,6 +5,7 @@ require 'restfulie/client/base'
 require 'restfulie/client/entry_point'
 require 'restfulie/client/helper'
 require 'restfulie/client/instance'
+require 'restfulie/client/request_execution'
 require 'restfulie/client/state'
 
 module Restfulie
