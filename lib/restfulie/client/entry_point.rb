@@ -48,13 +48,36 @@ module Restfulie
         else
           res
         end
-      
+
       end
 
       private
       def remote_post(content)
-        remote_post_to(entry_point_for.create.uri, content)
+        RequestExecution.new(self).at(entry_point_for.create.uri).post(content)
       end
+
+    end
+
+    class RequestExecution
+      
+      def initialize(type)
+        @type = type
+      end
+
+      def at(uri)
+        @uri = uri
+        self
+      end
+
+      def create(content)
+        post(content)
+      end
+
+      def post(content)
+        remote_post_to(@uri, content)
+      end
+
+      private
       def remote_post_to(uri, content)
         
         url = URI.parse(uri)
@@ -65,15 +88,16 @@ module Restfulie
         response = Net::HTTP.new(url.host, url.port).request(req)
         code = response.code
         
-        if code=="301" && follows.moved_permanently? == :all
+        if code=="301" && @type.follows.moved_permanently? == :all
           remote_post_to(response["Location"], content)
         elsif code=="201"
-          from_web(response["Location"], "Accept" => "application/xml")
+          type.from_web(response["Location"], "Accept" => "application/xml")
         else
           response
         end
 
       end
+
       
     end
     

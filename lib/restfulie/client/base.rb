@@ -31,6 +31,11 @@ module Restfulie
         hash.to_object(body)
         
       end
+      
+      # will execute some action in a specific URI
+      def at(uri)
+        RequestExecution.new.at uri
+      end
     
       def requisition_method_for(overriden_option,name)
         basic_mapping = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
