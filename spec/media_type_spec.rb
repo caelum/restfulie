@@ -24,6 +24,16 @@ context Restfulie::Server::Base do
       lambda {Restfulie::MediaType.media_type('vnd/caelum_unknown_city+xml')}.should raise_error(Restfulie::UnsupportedContentType)
     end
     
+    it "should notify when not supported" do
+      class Country
+        extend Restfulie::MediaTypeControl
+        media_type 'vnd/country+xml'
+      end
+      Restfulie::MediaType.supports('vnd/country+xml').should be_true
+      Restfulie::MediaType.supports('vnd/caelum_unknown_city+xml').should be_false
+      lambda {Restfulie::MediaType.media_type('vnd/caelum_unknown_city+xml')}.should raise_error(Restfulie::UnsupportedContentType)
+    end
+    
     it "should be able to register more than one" do
       class City
         extend Restfulie::MediaTypeControl

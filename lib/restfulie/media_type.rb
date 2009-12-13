@@ -50,10 +50,20 @@ module Restfulie
     
     # TODO rename to type for mt
     def self.media_type(name)
-      name = name[/[^;]*/]
+      name = normalize(name)
       raise UnsupportedContentType.new("unsupported content type '#{name}'") if media_types[name].nil?
       media_types[name]
     end
+    
+    def self.supports(name)
+      name = normalize(name)
+      !media_types[name].nil?
+    end
+    
+    def self.normalize(name)
+      name[/[^;]*/]
+    end
+    
     def self.media_types
       @media_types ||= {}
     end

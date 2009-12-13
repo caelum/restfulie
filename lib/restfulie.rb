@@ -11,6 +11,7 @@ require 'restfulie/server/controller'
 require 'restfulie/server/instance'
 require 'restfulie/server/marshalling'
 require 'restfulie/server/transition'
+require 'restfulie/server/restfulie_controller'
 
 module Restfulie
 
