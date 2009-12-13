@@ -55,7 +55,7 @@ module Restfulie
       media_types[name]
     end
     
-    def self.supports(name)
+    def self.supports?(name)
       name = normalize(name)
       !media_types[name].nil?
     end

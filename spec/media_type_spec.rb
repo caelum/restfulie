@@ -29,8 +29,8 @@ context Restfulie::Server::Base do
         extend Restfulie::MediaTypeControl
         media_type 'vnd/country+xml'
       end
-      Restfulie::MediaType.supports('vnd/country+xml').should be_true
-      Restfulie::MediaType.supports('vnd/caelum_unknown_city+xml').should be_false
+      Restfulie::MediaType.supports?('vnd/country+xml').should be_true
+      Restfulie::MediaType.supports?('vnd/caelum_unknown_city+xml').should be_false
       lambda {Restfulie::MediaType.media_type('vnd/caelum_unknown_city+xml')}.should raise_error(Restfulie::UnsupportedContentType)
     end
     
