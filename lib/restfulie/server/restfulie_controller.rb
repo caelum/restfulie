@@ -4,6 +4,8 @@ module Restfulie
   
     module Controller
     
+      # creates a model based on the request media-type extracted from its content-type
+      # 
       def create
       
         type = model_for_this_controller
