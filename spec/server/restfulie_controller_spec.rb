@@ -1,13 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class ClientsController
-  include Restfulie::Controller
+  include Restfulie::Server::Controller
   
 end
 class Client
 end
 
-context Restfulie::Controller do
+context Restfulie::Server::Controller do
   
   before do
     @controller = ClientsController.new
