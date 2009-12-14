@@ -8,6 +8,23 @@ module ActionController
       cache_info[:last_modified] = resource.updated_at.utc if resource.respond_to? :updated_at
       if stale? cache_info
         options[:controller] = self
+        
+        # should check every accepted content-type
+        # if the resource renders to one of them, render to it ==> chama .render_to(type)
+        # if it doesnt and is xml or json entao ok, chama
+        # caso contrario, nao consigo... tem que jogar erro
+        
+        # no responder, vou chamar .json, .html e .cada_content_type_dele, alem de JA TER registrado os content_types para abreviacoes
+        # ai ele vai chamar o format.xpto nesse caso com o bloco certo
+        # def method_missing(symbol, &block)
+        # mime_constant = symbol.to_s.upcase
+        # if Mime::SET.include?(Mime.const_get(mime_constant))
+        # custom(Mime.const_get(mime_constant), &block)
+        # else
+        # super
+        # end
+        # end
+        
         format = (self.params && self.params[:format]) || "xml"
         formatted_resource = ["xml", "json"].include?(format) ? resource.send(:"to_#{format}", options) : resource
         render_options[format.to_sym] = formatted_resource
