@@ -102,17 +102,24 @@ module Restfulie
         result.web_response = res
       end
       
+      def type_for(content_type)
+        if Restfulie::MediaType.supports? content_type
+          Restfulie::MediaType.media_type(content_type)
+        else
+          DefaultMediaTypes
+        end
+      end
+      
       def parse_get_entity(res, code)
         if code=="200"
           content_type = res.content_type
-          # TODO really support different content types
-          type = Restfulie::MediaType.media_type(content_type)
+          type = type_for(content_type)
           if content_type[-3,3]=="xml"
             result = type.from_xml res.body
           elsif content_type[-4,4]=="json"
             result = type.from_json res.body
           else
-            raise UnsupportedContentType.new("unsupported content type '#{content_type}'")
+            raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}'")
           end
           result
         else
