@@ -84,6 +84,20 @@ context Restfulie::Server::Base do
       render_options[:text].should eql('content')
     end
     
+    # move to server-side media type support only
+    it "should execute and use the resource if not json nor xml" do
+      render_options = {}
+      resource = Object.new
+      options = Object.new
+      controller = Object.new
+      type = Restfulie::Type.new('content-type', String)
+      type.should_receive(:format_name).at_least(1).and_return('else')
+      controller.should_receive(:render).with(render_options)
+      type.execute_for(controller, resource, options, render_options)
+      render_options[:content_type].should eql('content-type')
+      render_options[:text].should eql(resource)
+    end
+    
   end
   
   context Restfulie::Type do
