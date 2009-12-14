@@ -6,6 +6,7 @@ module Restfulie
       def initialize(type)
         @type = type
         @content_type = "application/xml"
+        @accepts = "application/xml"
       end
 
       def at(uri)
@@ -13,19 +14,30 @@ module Restfulie
         self
       end
       
+      # sets the Content-type AND Accept headers for this request
       def as(content_type)
         @content_type = content_type
+        @accepts = content_type
+        self
+      end
+      
+      # sets the Accept header for this request
+      def accepts(content_type)
+        @accepts = content_type
         self
       end
 
+      # asks to create this content on the server (post it)
       def create(content)
         post(content)
       end
 
+      # post this content to the server
       def post(content)
         remote_post_to(@uri, content)
       end
       
+      # retrieves information from the server using a GET request
       def get(options = {})
         from_web(@uri, options)
       end
@@ -36,7 +48,7 @@ module Restfulie
         url = URI.parse(uri)
         req = Net::HTTP::Post.new(url.path)
         req.body = content
-        req.add_field("Accept", @content_type)
+        add_basic_request_headers(req)
         req.add_field("Content-type", @content_type)
 
         response = Net::HTTP.new(url.host, url.port).request(req)
@@ -58,19 +70,39 @@ module Restfulie
         uri = URI.parse(uri)
         req = Net::HTTP::Get.new(uri.path)
         options.each do |key,value| req[key] = value end 
-        res = Net::HTTP.start(uri.host, uri.port).request(req)
-
+        add_basic_request_headers(req)
+        
+        res = Net::HTTP.new(uri.host, uri.port).request(req)
+        parse_get_response(res)
+      end
+      
+      private
+      
+      def add_basic_request_headers(req)
+        req.add_field("Accept", @accepts) unless @accepts.nil?
+      end
+      
+      def parse_get_response(res)
+        
         code = res.code
         return from_web(res["Location"]) if code=="301"
-        result = from_web_parse(res, code)
+        parse_get_ok_response(res, code)
+        
+      end
+      
+      def parse_get_ok_response(res, code)
+        result = parse_get_entity(res, code)
+        add_extra_fields(result, res)
+        result
+      end
+      
+      def add_extra_fields(result,res)
         result.etag = res['Etag'] unless res['Etag'].nil?
         result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
         result.web_response = res
-        result
-
       end
       
-      def from_web_parse(res, code)
+      def parse_get_entity(res, code)
         if code=="200"
           content_type = res.content_type
           # TODO really support different content types
