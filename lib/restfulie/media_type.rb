@@ -8,6 +8,11 @@ module Restfulie
       end
     end
     
+    # returns the list of media types available for this resource
+    def media_types
+      ['application/xml', 'application/json'] + MediaType.medias_for(self)
+    end
+    
   end
   
   module DefaultMediaTypes
@@ -44,29 +49,37 @@ module Restfulie
   
   module MediaType
     
-    def self.register(name, who)
-      media_types[name] = who
+    class << self
+    
+      def register(name, who)
+        media_types[name] = who
+      end
+    
+      # TODO rename to type for mt
+      def media_type(name)
+        name = normalize(name)
+        raise UnsupportedContentType.new("unsupported content type '#{name}'") if media_types[name].nil?
+        media_types[name]
+      end
+    
+      def supports?(name)
+        name = normalize(name)
+        !media_types[name].nil?
+      end
+    
+      def normalize(name)
+        name[/[^;]*/]
+      end
+    
+      def media_types
+        @media_types ||= {}
+      end
+    
+      def medias_for(type)
+        media_types.dup.delete_if {|key, value| value!=type}.keys
+      end
     end
     
-    # TODO rename to type for mt
-    def self.media_type(name)
-      name = normalize(name)
-      raise UnsupportedContentType.new("unsupported content type '#{name}'") if media_types[name].nil?
-      media_types[name]
-    end
-    
-    def self.supports?(name)
-      name = normalize(name)
-      !media_types[name].nil?
-    end
-    
-    def self.normalize(name)
-      name[/[^;]*/]
-    end
-    
-    def self.media_types
-      @media_types ||= {}
-    end
   end
   
   Restfulie::MediaType.register('application/xml', DefaultMediaTypes)

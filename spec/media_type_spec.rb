@@ -43,6 +43,22 @@ context Restfulie::Server::Base do
       Restfulie::MediaType.media_type('vnd/caelum_city+json').should eql(City)
     end
     
+    it "should return the list of media types for a specific type" do
+      class City
+        extend Restfulie::MediaTypeControl
+        media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
+      end
+      Restfulie::MediaType.medias_for(City).should eql(['vnd/caelum_city+xml', 'vnd/caelum_city+json'])
+    end
+    
+    it "should return the list of media types for a specific type with json and xml support" do
+      class City
+        extend Restfulie::MediaTypeControl
+        media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
+      end
+      City.media_types.should eql(['application/xml','application/json','vnd/caelum_city+xml', 'vnd/caelum_city+json'])
+    end
+    
   end
   
 end
