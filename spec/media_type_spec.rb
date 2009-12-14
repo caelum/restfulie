@@ -85,6 +85,10 @@ context Restfulie::Server::Base do
       Restfulie::Type.new('xml',String).format_name.should eql('xml')
     end
     
+    it "should retrieve the format if there is a /" do
+      Restfulie::Type.new('application/xml',String).format_name.should eql('xml')
+    end
+    
   end
   
 end

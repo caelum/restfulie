@@ -28,7 +28,7 @@ module Restfulie
     end
     
     def format_name
-      name[/(.*\+)?(.*)/,2]
+      name[/(.*[\+\/])?(.*)/,2]
     end
     
   end
