@@ -9,11 +9,8 @@ module ActionController
       if stale? cache_info
         options[:controller] = self
         format = (self.params && self.params[:format]) || "xml"
-        if ["xml", "json"].include?(format)
-          render_options[format.to_sym] = resource.send(:"to_#{format}", options)
-        else
-          render_options[format.to_sym] = resource
-        end
+        formatted_resource = ["xml", "json"].include?(format) ? resource.send(:"to_#{format}", options) : resource
+        render_options[format.to_sym] = formatted_resource
         render render_options
       end
     end
@@ -36,6 +33,5 @@ module ActionController
       location= url_for resource
       render_resource resource, options, {:status => :created, :location => location}
     end
-    
   end
 end
