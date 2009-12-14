@@ -4,7 +4,8 @@ module Restfulie
     
     def media_type(*args)
       args.each do |name|
-        Restfulie::MediaType.register(Type.new(name, self))
+        type = Restfulie::Type.new(name, self)
+        Restfulie::MediaType.register(type)
       end
     end
     
@@ -24,6 +25,10 @@ module Restfulie
     
     def short_name
       name.gsub(/\//,'_').gsub(/\+/,'_')
+    end
+    
+    def format_name
+      name[/(.*\+)?(.*)/,2]
     end
     
   end
@@ -65,6 +70,7 @@ module Restfulie
     class << self
     
       def register(type)
+        Mime::Type.register(type.name, type.short_name.to_sym)
         media_types[type.name] = type
       end
     

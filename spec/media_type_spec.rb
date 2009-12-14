@@ -69,8 +69,20 @@ context Restfulie::Server::Base do
       end
     end
     
+  end
+  
+  context Restfulie::Type do
+    
     it "should translate / and + to _ when generating the short name" do
       Restfulie::Type.new('vnd/city+xml',String).short_name.should eql('vnd_city_xml')
+    end
+    
+    it "should retrieve the format from the last part of the media type" do
+      Restfulie::Type.new('vnd/city+xml',String).format_name.should eql('xml')
+    end
+    
+    it "should retrieve the format if there is no +" do
+      Restfulie::Type.new('xml',String).format_name.should eql('xml')
     end
     
   end
