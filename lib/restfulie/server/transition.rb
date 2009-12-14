@@ -7,19 +7,21 @@ module Restfulie
       attr_reader :body, :name
       attr_writer :options
       attr_accessor :result
+      
       def initialize(name, options = {}, result = nil, body = nil)
         @name = name
         @options = options
         @result = result
         @body = body
       end
+      
       def action
         @options || {}
       end
       
       # executes this transition in a resource
       def execute_at(target_object)
-        target_object.status = result.to_s unless result.nil?
+        target_object.status = @result.to_s unless @result.nil?
       end
     
       # return the link to this transitions's uri
