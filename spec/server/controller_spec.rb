@@ -33,9 +33,8 @@ context ActionController::Base do
       resource = Object.new
       xml = "<resource />"
       options = {:custom => :whatever}
-      resource.should_receive(:to_xml).with(options).and_return(xml)
       @controller.should_receive(:stale?).and_return(true)
-      @controller.should_receive(:render).with({:xml=>"#{xml}"})
+      @controller.should_receive(:respond_to)
       @controller.render_resource(resource, options)
     end
     

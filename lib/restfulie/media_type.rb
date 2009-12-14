@@ -31,6 +31,14 @@ module Restfulie
       name[/(.*[\+\/])?(.*)/,2]
     end
     
+    # server side only (move it)
+    def execute_for(controller, resource, options, render_options)
+      formatted_resource = ["xml", "json"].include?(format_name) ? resource.send(:"to_#{format_name}", options) : resource
+      render_options[:text] = formatted_resource
+      render_options[:content_type] = name
+      controller.render render_options
+    end
+
   end
   
   module DefaultMediaTypes
@@ -97,6 +105,7 @@ module Restfulie
       def medias_for(type)
         media_types.dup.delete_if {|key, value| value.type!=type}.values
       end
+      
     end
     
   end

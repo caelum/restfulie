@@ -69,6 +69,21 @@ context Restfulie::Server::Base do
       end
     end
     
+    # move to server-side media type support only
+    it "should execute and serialize the resource" do
+      render_options = {}
+      resource = Object.new
+      options = Object.new
+      controller = Object.new
+      type = Restfulie::Type.new('content-type', String)
+      resource.should_receive(:to_xml).with(options).and_return('content')
+      type.should_receive(:format_name).at_least(1).and_return('xml')
+      controller.should_receive(:render).with(render_options)
+      type.execute_for(controller, resource, options, render_options)
+      render_options[:content_type].should eql('content-type')
+      render_options[:text].should eql('content')
+    end
+    
   end
   
   context Restfulie::Type do

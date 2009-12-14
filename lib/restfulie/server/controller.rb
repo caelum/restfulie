@@ -4,33 +4,29 @@ module ActionController
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
     def render_resource(resource, options = {}, render_options = {})
-      cache_info = {:etag => resource}
-      cache_info[:last_modified] = resource.updated_at.utc if resource.respond_to? :updated_at
-      if stale? cache_info
-        options[:controller] = self
-        
-        # should check every accepted content-type
-        # if the resource renders to one of them, render to it ==> chama .render_to(type)
-        # if it doesnt and is xml or json entao ok, chama
-        # caso contrario, nao consigo... tem que jogar erro
-        
-        # no responder, vou chamar .json, .html e .cada_content_type_dele, alem de JA TER registrado os content_types para abreviacoes
-        # ai ele vai chamar o format.xpto nesse caso com o bloco certo
-        # def method_missing(symbol, &block)
-        # mime_constant = symbol.to_s.upcase
-        # if Mime::SET.include?(Mime.const_get(mime_constant))
-        # custom(Mime.const_get(mime_constant), &block)
-        # else
-        # super
-        # end
-        # end
-        
-        format = (self.params && self.params[:format]) || "xml"
-        formatted_resource = ["xml", "json"].include?(format) ? resource.send(:"to_#{format}", options) : resource
-        render_options[format.to_sym] = formatted_resource
-        render render_options
-      end
-    end
+       cache_info = {:etag => resource}
+       cache_info[:last_modified] = resource.updated_at.utc if resource.respond_to? :updated_at
+       if stale? cache_info
+         options[:controller] = self
+     
+         respond_to do |format|
+           add_media_responses(format, resource, options, render_options)
+         end
+       end
+     end
+ 
+   def add_media_responses(format, resource, options, render_options)
+     resource.class.media_types.each do |media_type|
+       add_media_response(format, resource, media_type, options, render_options)
+     end
+   end
+
+   def add_media_response(format, resource, media_type, options, render_options)
+     controller = self
+     format.send media_type.short_name.to_sym do
+       media_type.execute_for(controller, resource, options, render_options)
+     end
+   end
 
     # adds support to rendering resources, i.e.:
     # render :resource => @order, :with => { :except => [:paid_at] }
