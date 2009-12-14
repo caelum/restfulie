@@ -22,6 +22,10 @@ module Restfulie
       @type = type
     end
     
+    def short_name
+      name.gsub(/\//,'_').gsub(/\+/,'_')
+    end
+    
   end
   
   module DefaultMediaTypes

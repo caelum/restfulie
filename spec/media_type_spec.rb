@@ -69,6 +69,10 @@ context Restfulie::Server::Base do
       end
     end
     
+    it "should translate / and + to _ when generating the short name" do
+      Restfulie::Type.new('vnd/city+xml',String).short_name.should eql('vnd_city_xml')
+    end
+    
   end
   
 end
