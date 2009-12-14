@@ -28,8 +28,7 @@ module Restfulie
     # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links
     def from_hash( hash )
-      h = {}
-      h = hash.dup if hash
+      h = hash ? hash.dup : {}
       links = nil
       h.each do |key,value|
         case value.class.to_s
