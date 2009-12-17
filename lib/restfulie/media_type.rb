@@ -11,7 +11,7 @@ module Restfulie
     
     # returns the list of media types available for this resource
     def media_types
-      [Type.new('application/xml', self), Type.new('application/json', self)] + MediaType.medias_for(self)
+      [Type.new('application/xml', self), Type.new('application/json', self), Type.new('xml', self), Type.new('json', self)] + MediaType.medias_for(self)
     end
     
   end
@@ -112,6 +112,8 @@ module Restfulie
   
   Restfulie::MediaType.register(Type.new('application/xml', DefaultMediaTypes))
   Restfulie::MediaType.register(Type.new('application/json', DefaultMediaTypes))
+  Restfulie::MediaType.register(Type.new('xml', DefaultMediaTypes))
+  Restfulie::MediaType.register(Type.new('json', DefaultMediaTypes))
   
   # deserializes data from a request body.
   # uses the request 'Content-type' header to look for the corresponding media type.

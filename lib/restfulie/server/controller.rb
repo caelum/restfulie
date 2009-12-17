@@ -14,6 +14,7 @@ module ActionController
          end
        end
      end
+
  
    def add_media_responses(format, resource, options, render_options)
      resource.class.media_types.each do |media_type|

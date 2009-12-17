@@ -57,7 +57,7 @@ context Restfulie::Server::Base do
         extend Restfulie::MediaTypeControl
         media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
       end
-      types = ['application/xml','application/json','vnd/caelum_city+xml', 'vnd/caelum_city+json']
+      types = ['application/xml','application/json','xml','json','vnd/caelum_city+xml', 'vnd/caelum_city+json']
       verify(City.media_types, types)
     end
     
