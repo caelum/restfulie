@@ -1,3 +1,7 @@
+h1. Web site
+
+Restulie's website can be found at "http://restfulie.caelum.com.br":http://restfulie.caelum.com.br
+
 h1. Quit pretending
 
 CRUD through HTTP is a good step forward to using resources and becoming RESTful, another step further into it is to make use of hypermedia based services and this gem allows you to do it really fast.
