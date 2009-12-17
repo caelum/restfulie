@@ -11,7 +11,7 @@ module Restfulie
     
     # returns the list of media types available for this resource
     def media_types
-      [Type.new('application/xml', self), Type.new('application/json', self), Type.new('xml', self), Type.new('json', self)] + MediaType.medias_for(self)
+      [Type.new('application/xml', self), Type.new('application/json', self), Type.new('xml', self), Type.new('json', self), CustomExecutionType.new('html', self, lambda {})] + MediaType.medias_for(self)
     end
     
   end
@@ -39,6 +39,19 @@ module Restfulie
       controller.render render_options
     end
 
+  end
+  
+  # TODO should be refactored: Type should be a type that receives a block, serializing type should contain serialization
+  class CustomExecutionType < Type
+    attr_reader :name, :type
+    def initialize(name, type, lambda)
+      @name = name
+      @type = type
+      @lambda = lambda
+    end
+    def execute_for(controller, resource, options, render_options)
+      @lambda.call
+    end
   end
   
   module DefaultMediaTypes

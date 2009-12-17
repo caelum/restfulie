@@ -70,6 +70,18 @@ context Restfulie::Server::Base do
     end
     
     # move to server-side media type support only
+    it "should invoke lambda if its a custom type" do
+      l = mock Object
+      l.should_receive :call
+      type= Restfulie::CustomExecutionType.new('name',Object, l)
+      render_options = {}
+      resource = Object.new
+      options = Object.new
+      controller = Object.new
+      type.execute_for(controller, resource, options, render_options)
+    end
+    
+    # move to server-side media type support only
     it "should execute and serialize the resource" do
       render_options = {}
       resource = Object.new
