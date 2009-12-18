@@ -1,5 +1,10 @@
 module Restfulie
   
+  # TODO rename it and move it
+  def self.default_types
+    [Type.new('application/xml', self), Type.new('application/json', self), Type.new('xml', self), Type.new('json', self), CustomExecutionType.new('html', self, lambda {})]
+  end
+  
   module MediaTypeControl
     
     def media_type(*args)
@@ -11,7 +16,7 @@ module Restfulie
     
     # returns the list of media types available for this resource
     def media_types
-      [Type.new('application/xml', self), Type.new('application/json', self), Type.new('xml', self), Type.new('json', self), CustomExecutionType.new('html', self, lambda {})] + MediaType.medias_for(self)
+      Restfulie.default_types + MediaType.medias_for(self)
     end
     
   end
