@@ -57,12 +57,12 @@ context Restfulie::Server::Base do
         extend Restfulie::MediaTypeControl
         media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
       end
-      types = ['application/xml','application/json','xml','json','vnd/caelum_city+xml', 'vnd/caelum_city+json']
+      types = ['html','application/xml','application/json','xml','json','vnd/caelum_city+xml', 'vnd/caelum_city+json']
       verify(City.media_types, types)
     end
     
     def verify(what, expected)
-      types = expected.map do |key| Restfulie::Type.new(key, City) end
+      types = expected.map do |key| Restfulie.rendering_type(key, City) end
       types.each_with_index do |t, i|
         what[i].name.should eql(t.name)
         what[i].type.should eql(t.type)
@@ -73,7 +73,7 @@ context Restfulie::Server::Base do
     it "should invoke lambda if its a custom type" do
       l = mock Object
       l.should_receive :call
-      type= Restfulie::CustomExecutionType.new('name',Object, l)
+      type= Restfulie.custom_type('name',Object, l)
       render_options = {}
       resource = Object.new
       options = Object.new
@@ -87,7 +87,7 @@ context Restfulie::Server::Base do
       resource = Object.new
       options = Object.new
       controller = Object.new
-      type = Restfulie::Type.new('content-type', String)
+      type = Restfulie.rendering_type('content-type', String)
       resource.should_receive(:to_xml).with(options).and_return('content')
       type.should_receive(:format_name).at_least(1).and_return('xml')
       controller.should_receive(:render).with(render_options)
@@ -102,7 +102,7 @@ context Restfulie::Server::Base do
       resource = Object.new
       options = Object.new
       controller = Object.new
-      type = Restfulie::Type.new('content-type', String)
+      type = Restfulie.rendering_type('content-type', String)
       type.should_receive(:format_name).at_least(1).and_return('else')
       controller.should_receive(:render).with(render_options)
       type.execute_for(controller, resource, options, render_options)
@@ -115,19 +115,19 @@ context Restfulie::Server::Base do
   context Restfulie::Type do
     
     it "should translate / and + to _ when generating the short name" do
-      Restfulie::Type.new('vnd/city+xml',String).short_name.should eql('vnd_city_xml')
+      Restfulie.rendering_type('vnd/city+xml',String).short_name.should eql('vnd_city_xml')
     end
     
     it "should retrieve the format from the last part of the media type" do
-      Restfulie::Type.new('vnd/city+xml',String).format_name.should eql('xml')
+      Restfulie.rendering_type('vnd/city+xml',String).format_name.should eql('xml')
     end
     
     it "should retrieve the format if there is no +" do
-      Restfulie::Type.new('xml',String).format_name.should eql('xml')
+      Restfulie.rendering_type('xml',String).format_name.should eql('xml')
     end
     
     it "should retrieve the format if there is a /" do
-      Restfulie::Type.new('application/xml',String).format_name.should eql('xml')
+      Restfulie.rendering_type('application/xml',String).format_name.should eql('xml')
     end
     
   end

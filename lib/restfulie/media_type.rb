@@ -4,7 +4,21 @@ module Restfulie
   
   # TODO rename it and move it
   def self.default_types
-    [Type.new('application/xml', self), Type.new('application/json', self), Type.new('xml', self), Type.new('json', self), CustomExecutionType.new('html', self, lambda {})]
+    [Type.new('html', self, lambda {}),
+      rendering_type('application/xml', self),
+      rendering_type('application/json', self),
+      rendering_type('xml', self),
+      rendering_type('json', self)]
+  end
+  
+  # TODO remove this nasty method
+  def self.rendering_type(name, type)
+    Type.new(name,type)
+  end
+  
+  # TODO remove this method
+  def self.custom_type(name, type, l)
+    CustomType.new(name, type, l)
   end
   
   class Type
@@ -13,7 +27,6 @@ module Restfulie
       @name = name
       @type = type
     end
-    
     def short_name
       name.gsub(/\//,'_').gsub(/\+/,'_')
     end
@@ -21,30 +34,24 @@ module Restfulie
     def format_name
       name[/(.*[\+\/])?(.*)/,2]
     end
-    
-    # server side only (move it)
     def execute_for(controller, resource, options, render_options)
       formatted_resource = ["xml", "json"].include?(format_name) ? resource.send(:"to_#{format_name}", options) : resource
       render_options[:text] = formatted_resource
       render_options[:content_type] = name
       controller.render render_options
     end
-
   end
   
-  # TODO should be refactored: Type should be a type that receives a block, serializing type should contain serialization
-  class CustomExecutionType < Type
-    attr_reader :name, :type
-    def initialize(name, type, lambda)
-      @name = name
-      @type = type
-      @lambda = lambda
+  class CustomType < Type
+    def initialize(name, type, l)
+      super(name, type)
+      @lambda = l
     end
     def execute_for(controller, resource, options, render_options)
       @lambda.call
     end
   end
-  
+    
   module DefaultMediaTypes
     
     # from rails source code
@@ -77,10 +84,11 @@ module Restfulie
     
   end
   
-  Restfulie::MediaType.register(Type.new('application/xml', DefaultMediaTypes))
-  Restfulie::MediaType.register(Type.new('application/json', DefaultMediaTypes))
-  Restfulie::MediaType.register(Type.new('xml', DefaultMediaTypes))
-  Restfulie::MediaType.register(Type.new('json', DefaultMediaTypes))
+  Restfulie::MediaType.register(rendering_type('text/html', DefaultMediaTypes))
+  Restfulie::MediaType.register(rendering_type('application/xml', DefaultMediaTypes))
+  Restfulie::MediaType.register(rendering_type('application/json', DefaultMediaTypes))
+  Restfulie::MediaType.register(rendering_type('xml', DefaultMediaTypes))
+  Restfulie::MediaType.register(rendering_type('json', DefaultMediaTypes))
   
   
 end

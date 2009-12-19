@@ -4,7 +4,7 @@ module Restfulie
     
     def media_type(*args)
       args.each do |name|
-        type = Restfulie::Type.new(name, self)
+        type = Restfulie.rendering_type(name, self)
         Restfulie::MediaType.register(type)
       end
     end
