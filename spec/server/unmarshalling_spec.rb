@@ -12,9 +12,9 @@ context Restfulie::Server::Base do
       
       request = Object.new
       request.should_receive(:body).and_return(body)
-      request.should_receive(:headers).and_return({"CONTENT_TYPE" => 'vnd/caelum_city+xml'})
+      request.should_receive(:headers).and_return({"CONTENT_TYPE" => 'application/vnd.caelum_city+xml'})
       
-      Restfulie::MediaType.should_receive(:media_type).with("vnd/caelum_city+xml").and_return(City)
+      Restfulie::MediaType.should_receive(:media_type).with("application/vnd.caelum_city+xml").and_return(City)
       
       result = Object.new
       City.should_receive(:from_xml).with("my custom content").and_return(result)
