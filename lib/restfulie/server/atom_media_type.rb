@@ -22,6 +22,23 @@ class Array
   extend Restfulie::MediaTypeControl
   media_type "application/atom+xml"
   def to_atom
-    puts "atom content from array here"
+    last_modified = updated_at
+    '<?xml version="1.0"?>
+    <feed xmlns="http://www.w3.org/2005/Atom">
+      <id>urn:uuid:d0b4f914-30e9-418c-8628-7d9b7815060f</id>
+      <title type="text">Hotels list</title>
+      <updated>2009-07-01T12:05:00Z</updated>
+      <generator uri="http://caelumtravel.com">Hotels Service</generator>
+      <link rel="self" href="http://caelumtravel.com/hotels"/>'
+      +
+      to_xml
+      + '</feed>'
+  end
+  def updated_at
+    last = Time.now
+    each do |item|
+      last = item.updated_at if item.respond_to? :updated_at && item.updated_at > last
+    end
+    last
   end
 end

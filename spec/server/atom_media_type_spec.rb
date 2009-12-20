@@ -53,4 +53,12 @@ context Restfulie::Server::AtomMediaType do
     [first, second].to_atom.should eql(expected)
   end
   
+  context "while checking the last modified date from an array" do
+    it "should return now if there are no items" do
+      now = Time.now
+      Time.should_receive(:now).and_return(now)
+      [].updated_at.should eql(now)
+    end
+  end
+  
 end
