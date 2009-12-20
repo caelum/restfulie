@@ -2,9 +2,17 @@ require 'restfulie/media_type_control'
 
 module Restfulie
   
+  def self.HtmlType
+    @HTML ||= CustomType.new('html', self, lambda {})
+  end
+  def self.TextHtmlType
+    @TEXT_HTML ||= CustomType.new('text/html', self, lambda {})
+  end
+  
   # TODO rename it and move it
   def self.default_types
-    [CustomType.new('html', self, lambda {}),
+    [Restfulie.HtmlType,
+      Restfulie.TextHtmlType,
       rendering_type('application/xml', self),
       rendering_type('application/json', self),
       rendering_type('xml', self),
@@ -13,7 +21,7 @@ module Restfulie
   
   # TODO remove this nasty method
   def self.rendering_type(name, type)
-    Type.new(name,type)
+    Restfulie::MediaType.media_types[name] || Type.new(name,type)
   end
   
   # TODO remove this method
@@ -84,7 +92,9 @@ module Restfulie
     
   end
   
-  Restfulie::MediaType.register(rendering_type('text/html', DefaultMediaTypes))
+  # TODO should allow aliases...
+  Restfulie::MediaType.register(Restfulie.HtmlType)
+  Restfulie::MediaType.register(Restfulie.TextHtmlType)
   Restfulie::MediaType.register(rendering_type('application/xml', DefaultMediaTypes))
   Restfulie::MediaType.register(rendering_type('application/json', DefaultMediaTypes))
   Restfulie::MediaType.register(rendering_type('xml', DefaultMediaTypes))

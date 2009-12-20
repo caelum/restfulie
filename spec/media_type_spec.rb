@@ -57,15 +57,15 @@ context Restfulie::Server::Base do
         extend Restfulie::MediaTypeControl
         media_type 'application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json'
       end
-      types = ['html','application/xml','application/json','xml','json','application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json']
+      types = ['text/html','application/xml','application/json','xml','json','application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json']
       verify(City.media_types, types)
     end
     
-    def verify(what, expected)
-      types = expected.map do |key| Restfulie.rendering_type(key, City) end
-      types.each_with_index do |t, i|
-        what[i].name.should eql(t.name)
-        what[i].type.should eql(t.type)
+    def verify(all, expected)
+      expected.each_with_index do |t, i|
+        type = Restfulie::MediaType.media_types[t]
+        puts "looking for #{t}, #{type} at #{all}"
+        all.include?(type).should be_true
       end
     end
     
