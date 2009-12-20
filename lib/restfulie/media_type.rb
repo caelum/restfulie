@@ -4,7 +4,7 @@ module Restfulie
   
   # TODO rename it and move it
   def self.default_types
-    [Type.new('html', self, lambda {}),
+    [CustomType.new('html', self, lambda {}),
       rendering_type('application/xml', self),
       rendering_type('application/json', self),
       rendering_type('xml', self),
@@ -28,7 +28,7 @@ module Restfulie
       @type = type
     end
     def short_name
-      name.gsub(/\//,'_').gsub(/\+/,'_')
+      name.gsub(/\//,'_').gsub(/\+/,'_').gsub(/\./,'_')
     end
     
     def format_name

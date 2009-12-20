@@ -7,17 +7,17 @@ context Restfulie::Server::Base do
     it "should be able to locate it" do
       class City
         extend Restfulie::MediaTypeControl
-        media_type 'vnd/caelum_city+xml'
+        media_type 'application/vnd.caelum_city+xml'
       end
-      Restfulie::MediaType.media_type('vnd/caelum_city+xml').should eql(City)
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml').should eql(City)
     end
 
     it "should be able to locate with encoding" do
       class City
         extend Restfulie::MediaTypeControl
-        media_type 'vnd/caelum_city+xml'
+        media_type 'application/vnd.caelum_city+xml'
       end
-      Restfulie::MediaType.media_type('vnd/caelum_city+xml; charset=UTF-8').should eql(City)
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml; charset=UTF-8').should eql(City)
     end
     
     it "should throw an exception if not found" do
@@ -37,27 +37,27 @@ context Restfulie::Server::Base do
     it "should be able to register more than one" do
       class City
         extend Restfulie::MediaTypeControl
-        media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
+        media_type 'application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json'
       end
-      Restfulie::MediaType.media_type('vnd/caelum_city+xml').should eql(City)
-      Restfulie::MediaType.media_type('vnd/caelum_city+json').should eql(City)
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml').should eql(City)
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+json').should eql(City)
     end
     
     it "should return the list of media types for a specific type" do
       class City
         extend Restfulie::MediaTypeControl
-        media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
+        media_type 'application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json'
       end
-      types = ['vnd/caelum_city+xml', 'vnd/caelum_city+json']
+      types = ['application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json']
       verify(Restfulie::MediaType.medias_for(City), types)
     end
     
     it "should return the list of media types for a specific type with json and xml support" do
       class City
         extend Restfulie::MediaTypeControl
-        media_type 'vnd/caelum_city+xml', 'vnd/caelum_city+json'
+        media_type 'application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json'
       end
-      types = ['html','application/xml','application/json','xml','json','vnd/caelum_city+xml', 'vnd/caelum_city+json']
+      types = ['html','application/xml','application/json','xml','json','application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json']
       verify(City.media_types, types)
     end
     
@@ -114,8 +114,8 @@ context Restfulie::Server::Base do
   
   context Restfulie::Type do
     
-    it "should translate / and + to _ when generating the short name" do
-      Restfulie.rendering_type('vnd/city+xml',String).short_name.should eql('vnd_city_xml')
+    it "should translate /, . and + to _ when generating the short name" do
+      Restfulie.rendering_type('application/vnd.city+xml',String).short_name.should eql('application_vnd_city_xml')
     end
     
     it "should retrieve the format from the last part of the media type" do
