@@ -12,10 +12,10 @@ module Restfulie
     def self.default_types
       [Restfulie::MediaType.HtmlType,
         Restfulie::MediaType.TextHtmlType,
-        rendering_type('application/xml', self),
-        rendering_type('application/json', self),
-        rendering_type('xml', self),
-        rendering_type('json', self)]
+        Restfulie::MediaType.rendering_type('application/xml', self),
+        Restfulie::MediaType.rendering_type('application/json', self),
+        Restfulie::MediaType.rendering_type('xml', self),
+        Restfulie::MediaType.rendering_type('json', self)]
     end
 
     # TODO should allow aliases...

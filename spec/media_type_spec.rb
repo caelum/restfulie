@@ -87,7 +87,7 @@ context Restfulie::Server::Base do
       resource = Object.new
       options = Object.new
       controller = Object.new
-      type = Restfulie.rendering_type('content-type', String)
+      type = Restfulie::MediaType.rendering_type('content-type', String)
       resource.should_receive(:to_xml).with(options).and_return('content')
       type.should_receive(:format_name).at_least(1).and_return('xml')
       controller.should_receive(:render).with(render_options)
@@ -102,7 +102,7 @@ context Restfulie::Server::Base do
       resource = Object.new
       options = Object.new
       controller = Object.new
-      type = Restfulie.rendering_type('content-type', String)
+      type = Restfulie::MediaType.rendering_type('content-type', String)
       type.should_receive(:format_name).at_least(1).and_return('else')
       controller.should_receive(:render).with(render_options)
       type.execute_for(controller, resource, options, render_options)
@@ -115,19 +115,19 @@ context Restfulie::Server::Base do
   context Restfulie::MediaType::Type do
     
     it "should translate /, . and + to _ when generating the short name" do
-      Restfulie.rendering_type('application/vnd.city+xml',String).short_name.should eql('application_vnd_city_xml')
+      Restfulie::MediaType.rendering_type('application/vnd.city+xml',String).short_name.should eql('application_vnd_city_xml')
     end
     
     it "should retrieve the format from the last part of the media type" do
-      Restfulie.rendering_type('vnd/city+xml',String).format_name.should eql('xml')
+      Restfulie::MediaType.rendering_type('vnd/city+xml',String).format_name.should eql('xml')
     end
     
     it "should retrieve the format if there is no +" do
-      Restfulie.rendering_type('xml',String).format_name.should eql('xml')
+      Restfulie::MediaType.rendering_type('xml',String).format_name.should eql('xml')
     end
     
     it "should retrieve the format if there is a /" do
-      Restfulie.rendering_type('application/xml',String).format_name.should eql('xml')
+      Restfulie::MediaType.rendering_type('application/xml',String).format_name.should eql('xml')
     end
     
   end
