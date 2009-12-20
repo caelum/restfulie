@@ -2,7 +2,7 @@ module Restfulie
   
   module Server
     
-    class AtomMediaType < Type
+    class AtomMediaType < Restfulie::MediaType::Type
       def initialize(name, type)
         super(name, type)
       end
@@ -14,7 +14,7 @@ module Restfulie
     
   end
   
-  Restfulie::MediaType.register(rendering_type('application/atom+xml', Server::AtomMediaType))
+  Restfulie::MediaType.register(Restfulie::MediaType.rendering_type('application/atom+xml', Server::AtomMediaType))
   
 end
 

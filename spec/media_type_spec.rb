@@ -62,7 +62,7 @@ context Restfulie::Server::Base do
     end
     
     def verify(all, expected)
-      expected.each_with_index do |t, i|
+      expected.each do |t|
         type = Restfulie::MediaType.media_types[t]
         puts "looking for #{t}, #{type} at #{all}"
         all.include?(type).should be_true
@@ -73,7 +73,7 @@ context Restfulie::Server::Base do
     it "should invoke lambda if its a custom type" do
       l = mock Object
       l.should_receive :call
-      type= Restfulie.custom_type('name',Object, l)
+      type= Restfulie::MediaType.custom_type('name',Object, l)
       render_options = {}
       resource = Object.new
       options = Object.new
@@ -112,7 +112,7 @@ context Restfulie::Server::Base do
     
   end
   
-  context Restfulie::Type do
+  context Restfulie::MediaType::Type do
     
     it "should translate /, . and + to _ when generating the short name" do
       Restfulie.rendering_type('application/vnd.city+xml',String).short_name.should eql('application_vnd_city_xml')
