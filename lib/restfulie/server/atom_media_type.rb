@@ -48,7 +48,7 @@ class AtomFeed
         <id>#{id}</id>""" +
       "\n        <title type=\"text\">#{@title}</title>
         <updated>"  + last_modified.strftime("%Y-%m-%dT%H:%M:%S-08:00") + """</updated>
-        <generator uri=\"http://caelumtravel.com\">Hotels Service</generator>
+        <author><name>#{@title}</name></author>
         #{self_link(controller)}
         #{xml}
       </feed>"""

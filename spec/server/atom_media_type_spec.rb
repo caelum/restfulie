@@ -30,7 +30,7 @@ context Restfulie::Server::AtomMediaType do
         <id>custom_id</id>
         <title type="text">Hotels list</title>
         <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
-        <generator uri="http://caelumtravel.com">Hotels Service</generator>
+        <author><name>Hotels list</name></author>
         <link rel="self" href="http://caelumtravel.com/hotels"/>
         <items/>
       </feed>'
@@ -52,7 +52,7 @@ context Restfulie::Server::AtomMediaType do
         <id>http://caelumtravel.com/hotels</id>
         <title type="text">Hotels list</title>
         <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
-        <generator uri="http://caelumtravel.com">Hotels Service</generator>
+        <author><name>Hotels list</name></author>
         <link rel="self" href="http://caelumtravel.com/hotels"/>
         <items/>
       </feed>'
