@@ -7,6 +7,10 @@ end
 
 context Restfulie::Server::AtomMediaType do
   
+  before do
+    @now = Time.now
+  end
+
   it "should support atom feed media type by default" do
     Array.media_type_representations.include?('application/atom+xml').should be_true
   end
@@ -18,7 +22,7 @@ context Restfulie::Server::AtomMediaType do
     <feed xmlns="http://www.w3.org/2005/Atom">
       <id>urn:uuid:d0b4f914-30e9-418c-8628-7d9b7815060f</id>
       <title type="text">Hotels list</title>
-      <updated>2009-07-01T12:05:00Z</updated>
+      <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
       <generator uri="http://caelumtravel.com">Hotels Service</generator>
       <link rel="self" href="http://caelumtravel.com/hotels"/>
       <entry>
@@ -47,10 +51,23 @@ context Restfulie::Server::AtomMediaType do
       </entry>
     </feed>'
     first = City.new
+    first.should_receive(:updated_at).and_return(@now)
     first.should_receive(:to_xml).and_return(first_entry)
     second = City.new
+    second.should_receive(:updated_at).and_return(@now)
     second.should_receive(:to_xml).and_return(second_entry)
-    [first, second].to_atom.should eql(expected)
+    AtomFeed.new([first, second]).title('Hotels list').to_atom.should eql(expected)
+  end
+  
+  context AtomFeed do
+    
+    it "should generate its own link" do
+      uri = 'http://caelumobjects.com'
+      controller = Object.new
+      controller.should_receive(:url_for).with({}).and_return(uri)
+      AtomFeed.new(nil).self_link(controller).should eql("<link rel=\"self\" href=\"#{uri}\"/>")
+    end
+    
   end
   
   context "while checking the last modified date from an array" do
@@ -62,30 +79,26 @@ context Restfulie::Server::AtomMediaType do
       attr_reader :updated_at
     end
     
-    before do
-      @now = Time.now
-    end
-    
     it "should return now if there are no items" do
       Time.should_receive(:now).and_return(@now)
-      [].updated_at.should eql(@now)
+      AtomFeed.new([]).updated_at.should eql(@now)
     end
     
     it "should return now if the items dont answer to updated_at" do
       Time.should_receive(:now).and_return(@now)
-      ["first", "second"].updated_at.should eql(@now)
+      AtomFeed.new(["first", "second"]).updated_at.should eql(@now)
     end
     
     it "should return a date in the future if an item has such date" do
-      [Item.new(@now + 100)].updated_at.should eql(@now+100)
+      AtomFeed.new([Item.new(@now + 100)]).updated_at.should eql(@now+100)
     end
     
     it "should return any date if there is any date" do
-      [Item.new(@now - 100)].updated_at.should eql(@now - 100)
+      AtomFeed.new([Item.new(@now - 100)]).updated_at.should eql(@now - 100)
     end
     
     it "should return the most recent date if there is more than one date" do
-      [Item.new(@now - 100), Item.new(@now-50)].updated_at.should eql(@now - 50)
+      AtomFeed.new([Item.new(@now - 100), Item.new(@now-50)]).updated_at.should eql(@now - 50)
     end
     
   end
