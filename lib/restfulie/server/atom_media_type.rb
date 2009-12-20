@@ -35,10 +35,10 @@ class Array
       + '</feed>'
   end
   def updated_at
-    last = Time.now
+    last = nil
     each do |item|
-      last = item.updated_at if item.respond_to?(:updated_at) && item.updated_at > last
+      last = item.updated_at if item.respond_to?(:updated_at) && (last.nil? || item.updated_at > last)
     end
-    last
+    last || Time.now
   end
 end

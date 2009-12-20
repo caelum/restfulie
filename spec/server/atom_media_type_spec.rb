@@ -64,19 +64,28 @@ context Restfulie::Server::AtomMediaType do
     
     before do
       @now = Time.now
-      Time.should_receive(:now).and_return(@now)
     end
     
     it "should return now if there are no items" do
+      Time.should_receive(:now).and_return(@now)
       [].updated_at.should eql(@now)
     end
     
     it "should return now if the items dont answer to updated_at" do
+      Time.should_receive(:now).and_return(@now)
       ["first", "second"].updated_at.should eql(@now)
     end
     
     it "should return a date in the future if an item has such date" do
       [Item.new(@now + 100)].updated_at.should eql(@now+100)
+    end
+    
+    it "should return any date if there is any date" do
+      [Item.new(@now - 100)].updated_at.should eql(@now - 100)
+    end
+    
+    it "should return the most recent date if there is more than one date" do
+      [Item.new(@now - 100), Item.new(@now-50)].updated_at.should eql(@now - 50)
     end
     
   end
