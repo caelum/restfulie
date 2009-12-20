@@ -24,10 +24,10 @@ context Restfulie::Server::AtomMediaType do
       AtomFeed.new(nil).self_link(controller).should eql("<link rel=\"self\" href=\"#{uri}\"/>")
     end
 
-    it "array serialization to atom will serialize every element" do
+    it "array serialization to atom will serialize every element and allows id overriding" do
       expected = '<?xml version="1.0"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
-        <id>urn:uuid:d0b4f914-30e9-418c-8628-7d9b7815060f</id>
+        <id>custom_id</id>
         <title type="text">Hotels list</title>
         <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
         <generator uri="http://caelumtravel.com">Hotels Service</generator>
@@ -40,6 +40,29 @@ context Restfulie::Server::AtomMediaType do
       second.should_receive(:updated_at).and_return(@now)
 
       controller = Object.new
+      feed = AtomFeed.new([first, second]).id('custom_id')
+      feed.should_receive(:items_to_atom_xml).and_return("<items/>")
+      feed.should_receive(:self_link).with(controller).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels\"/>")
+      feed.title('Hotels list').to_atom(controller).should eql(expected)
+    end
+
+    it "array serialization to atom will use default id" do
+      expected = '<?xml version="1.0"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <id>http://caelumtravel.com/hotels</id>
+        <title type="text">Hotels list</title>
+        <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
+        <generator uri="http://caelumtravel.com">Hotels Service</generator>
+        <link rel="self" href="http://caelumtravel.com/hotels"/>
+        <items/>
+      </feed>'
+      first = City.new
+      first.should_receive(:updated_at).and_return(@now)
+      second = City.new
+      second.should_receive(:updated_at).and_return(@now)
+
+      controller = Object.new
+      controller.should_receive(:url_for).with({}).and_return('http://caelumtravel.com/hotels')
       feed = AtomFeed.new([first, second])
       feed.should_receive(:items_to_atom_xml).and_return("<items/>")
       feed.should_receive(:self_link).with(controller).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels\"/>")
