@@ -106,7 +106,7 @@ module Restfulie
         if Restfulie::MediaType.supports? content_type
           Restfulie::MediaType.media_type(content_type)
         else
-          DefaultMediaTypes
+          DefaultMediaTypeDecoder
         end
       end
       

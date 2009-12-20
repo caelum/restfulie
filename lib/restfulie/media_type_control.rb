@@ -4,14 +4,20 @@ module Restfulie
     
     def media_type(*args)
       args.each do |name|
+        media_type_representations << name
         type = Restfulie::MediaType.rendering_type(name, self)
         Restfulie::MediaType.register(type)
       end
     end
     
-    # returns the list of media types available for this resource
+    # returns the list of media types available for this resource to be deserialized from
     def media_types
       Restfulie::MediaType.default_types + MediaType.medias_for(self)
+    end
+    
+    # returns a list of media types that this resource can be serialized to
+    def media_type_representations
+      @my_media_types ||= Restfulie::MediaType.default_representations.dup
     end
     
   end

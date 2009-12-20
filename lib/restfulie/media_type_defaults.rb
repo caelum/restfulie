@@ -17,6 +17,11 @@ module Restfulie
         rendering_type('xml', self),
         rendering_type('json', self)]
     end
+    
+    # Default representations: every object can be serialized to those types
+    def self.default_representations
+      ['html','text/html','application/xml','application/json','xml','json']
+    end
 
     # TODO should allow aliases...
     register(Restfulie::MediaType.HtmlType)
