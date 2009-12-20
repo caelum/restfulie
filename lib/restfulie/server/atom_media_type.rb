@@ -39,16 +39,18 @@ class AtomFeed
     self
   end
   
-  def to_atom
+  def to_atom(controller)
     last_modified = updated_at
     xml = items_to_atom_xml
     '<?xml version="1.0"?>
-    <feed xmlns="http://www.w3.org/2005/Atom">
-      <id>urn:uuid:d0b4f914-30e9-418c-8628-7d9b7815060f</id>' +
-      "\n      <title type=\"text\">#{@title}</title>
-      <updated>"  + last_modified.strftime("%Y-%m-%dT%H:%M:%S-08:00") + '</updated>
-      <generator uri="http://caelumtravel.com">Hotels Service</generator>' +
-      self_link(nil) + xml + '</feed>'
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <id>urn:uuid:d0b4f914-30e9-418c-8628-7d9b7815060f</id>' +
+      "\n        <title type=\"text\">#{@title}</title>
+        <updated>"  + last_modified.strftime("%Y-%m-%dT%H:%M:%S-08:00") + """</updated>
+        <generator uri=\"http://caelumtravel.com\">Hotels Service</generator>
+        #{self_link(controller)}
+        #{xml}
+      </feed>"""
   end
   
   def self_link(controller)
