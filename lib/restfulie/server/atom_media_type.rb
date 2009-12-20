@@ -37,7 +37,7 @@ class Array
   def updated_at
     last = Time.now
     each do |item|
-      last = item.updated_at if item.respond_to? :updated_at && item.updated_at > last
+      last = item.updated_at if item.respond_to?(:updated_at) && item.updated_at > last
     end
     last
   end

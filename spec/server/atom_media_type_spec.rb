@@ -54,11 +54,31 @@ context Restfulie::Server::AtomMediaType do
   end
   
   context "while checking the last modified date from an array" do
-    it "should return now if there are no items" do
-      now = Time.now
-      Time.should_receive(:now).and_return(now)
-      [].updated_at.should eql(now)
+    
+    class Item
+      def initialize(time)
+        @updated_at = time
+      end
+      attr_reader :updated_at
     end
+    
+    before do
+      @now = Time.now
+      Time.should_receive(:now).and_return(@now)
+    end
+    
+    it "should return now if there are no items" do
+      [].updated_at.should eql(@now)
+    end
+    
+    it "should return now if the items dont answer to updated_at" do
+      ["first", "second"].updated_at.should eql(@now)
+    end
+    
+    it "should return a date in the future if an item has such date" do
+      [Item.new(@now + 100)].updated_at.should eql(@now+100)
+    end
+    
   end
   
 end
