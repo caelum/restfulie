@@ -68,43 +68,44 @@ context Restfulie::Server::AtomMediaType do
       feed.should_receive(:self_link).with(controller).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels\"/>")
       feed.title('Hotels list').to_atom(controller).should eql(expected)
     end
-
-    # first_entry = '<city>1</city>'
-    # second_entry = '<city>2</city>'
-    # first.should_receive(:to_xml).and_return(first_entry)
-    # second.should_receive(:to_xml).and_return(second_entry)
-    # expected  = '<?xml version="1.0"?>
-     #  <feed xmlns="http://www.w3.org/2005/Atom">
-     #    <id>urn:uuid:d0b4f914-30e9-418c-8628-7d9b7815060f</id>
-     #    <title type="text">Hotels list</title>
-     #    <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
-     #    <generator uri="http://caelumtravel.com">Hotels Service</generator>
-     #    <link rel="self" href="http://caelumtravel.com/hotels"/>
-     #    <entry>
-     #      <id>urn:uuid:aa990d44-fce0-4823-a971-d23facc8d7c6</id>
-     #      <title type="text">hotel</title>
-     #      <updated>2009-07-01T11:58:00Z</updated>
-     #      <author>
-     #        <name>caelum travel</name>
-     #      </author>
-     #      <link rel="self" href="http://caelumtravel.com/hotels/1"/>
-     #      <content type="application/vnd.hotel+xml">
-     #        ' + first_entry + '
-     #      </content>
-     #    </entry>
-     #    <entry>
-     #      <id>urn:uuid:6fa8eca3-48ee-44a9-a899-37d047a3c5f2</id>
-     #      <title type="text">order</title>
-     #      <updated>2009-07-01T11:25:00Z</updated>
-     #      <author>
-     #        <name>caelum travel</name>
-     #      </author>
-     #      <link rel="self" href="http://caelumtravel.com/hotels/2"/>
-     #      <content type="application/vnd.hotel+xml">
-     #      ' + second_entry + '
-     #      </content>
-     #    </entry>
-     #  </feed>'
+    
+    it "should serialize every item together" do
+      first_entry = '<city>1</city>'
+      second_entry = '<city>2</city>'
+      first = City.new
+      second = City.new
+      controller = Object.new
+      first.should_receive(:updated_at).and_return(@now)
+      second.should_receive(:updated_at).and_return(@now)
+      first.should_receive(:to_xml).with(:controller => controller).and_return(first_entry)
+      second.should_receive(:to_xml).with(:controller => controller).and_return(second_entry)
+      
+      expected  = '          <entry>
+            <id>http://caelumtravel.com/hotels/1</id>
+            <title type="text">City</title>
+            <updated>' + @now.strftime("%Y-%m-%dT%H:%M:%S-08:00") + '</updated>
+            <link rel="self" href="http://caelumtravel.com/hotels/1"/>
+            <content type="application/vnd.caelum_city+xml">
+              ' + first_entry + '
+            </content>
+          </entry>
+          <entry>
+            <id>http://caelumtravel.com/hotels/2</id>
+            <title type="text">City</title>
+            <updated>' + @now.strftime("%Y-%m-%dT%H:%M:%S-08:00") + '</updated>
+            <link rel="self" href="http://caelumtravel.com/hotels/2"/>
+            <content type="application/vnd.caelum_city+xml">
+              ' + second_entry + '
+            </content>
+          </entry>
+'
+        controller.should_receive(:url_for).with(first).and_return('http://caelumtravel.com/hotels/1')
+        controller.should_receive(:url_for).with(second).and_return('http://caelumtravel.com/hotels/2')
+        feed = AtomFeed.new([first, second])
+        feed.should_receive(:self_link).with(controller, first).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/1\"/>")
+        feed.should_receive(:self_link).with(controller, second).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/2\"/>")
+        feed.items_to_atom_xml(controller).should eql(expected)
+    end
     
   end
   

@@ -42,12 +42,12 @@ class AtomFeed
   def to_atom(controller)
     last_modified = updated_at
     id = id_for(controller)
-    xml = items_to_atom_xml
+    xml = items_to_atom_xml(controller)
     """<?xml version=\"1.0\"?>
       <feed xmlns=\"http://www.w3.org/2005/Atom\">
-        <id>#{id}</id>""" +
-      "\n        <title type=\"text\">#{@title}</title>
-        <updated>"  + last_modified.strftime("%Y-%m-%dT%H:%M:%S-08:00") + """</updated>
+        <id>#{id}</id>
+        <title type=\"text\">#{@title}</title>
+        <updated>"""  + last_modified.strftime("%Y-%m-%dT%H:%M:%S-08:00") + """</updated>
         <author><name>#{@title}</name></author>
         #{self_link(controller)}
         #{xml}
@@ -63,8 +63,8 @@ class AtomFeed
     self
   end
   
-  def self_link(controller)
-    uri = controller.url_for({})
+  def self_link(controller, what = {})
+    uri = controller.url_for(what)
     "<link rel=\"self\" href=\"#{uri}\"/>"
   end
   
@@ -76,8 +76,26 @@ class AtomFeed
     last || Time.now
   end
   
-  def items_to_atom_xml
-    ""
+  def items_to_atom_xml(controller)
+    xml = ""
+    @feed.each do |item|
+      uri = controller.url_for(item)
+      media_type = item.class.respond_to?(:media_type_representations) ? item.class.media_type_representations[0] : 'application/xml'
+      xml += """          <entry>
+            <id>#{uri}</id>
+            <title type=\"text\">#{item.class.name}</title>
+            <updated>#{modification_for(item).strftime("%Y-%m-%dT%H:%M:%S-08:00")}</updated>
+            #{self_link(controller, item)}
+            <content type=\"#{media_type}\">
+              #{item.to_xml(:controller => controller)}
+            </content>
+          </entry>\n"""
+    end
+    xml
+  end
+  
+  def modification_for(item)
+    item.respond_to?(:updated_at) ? item.updated_at : Time.now
   end
 
 end
