@@ -2,23 +2,6 @@ require 'restfulie/media_type_control'
 
 module Restfulie
   
-  def self.HtmlType
-    @HTML ||= CustomType.new('html', self, lambda {})
-  end
-  def self.TextHtmlType
-    @TEXT_HTML ||= CustomType.new('text/html', self, lambda {})
-  end
-  
-  # TODO rename it and move it
-  def self.default_types
-    [Restfulie.HtmlType,
-      Restfulie.TextHtmlType,
-      rendering_type('application/xml', self),
-      rendering_type('application/json', self),
-      rendering_type('xml', self),
-      rendering_type('json', self)]
-  end
-  
   # TODO remove this nasty method
   def self.rendering_type(name, type)
     Restfulie::MediaType.media_types[name] || Type.new(name,type)
@@ -43,10 +26,13 @@ module Restfulie
       name[/(.*[\+\/])?(.*)/,2]
     end
     def execute_for(controller, resource, options, render_options)
-      formatted_resource = ["xml", "json"].include?(format_name) ? resource.send(:"to_#{format_name}", options) : resource
-      render_options[:text] = formatted_resource
-      render_options[:content_type] = name
-      controller.render render_options
+      response = ["xml", "json"].include?(format_name) ? resource.send(:"to_#{format_name}", options) : resource
+      render(controller, response, render_options)
+    end
+    def render(controller, response, options)
+      options[:text] = response
+      options[:content_type] = name
+      controller.render options
     end
   end
   
@@ -92,15 +78,6 @@ module Restfulie
     
   end
   
-  # TODO should allow aliases...
-  Restfulie::MediaType.register(Restfulie.HtmlType)
-  Restfulie::MediaType.register(Restfulie.TextHtmlType)
-  Restfulie::MediaType.register(rendering_type('application/xml', DefaultMediaTypes))
-  Restfulie::MediaType.register(rendering_type('application/json', DefaultMediaTypes))
-  Restfulie::MediaType.register(rendering_type('xml', DefaultMediaTypes))
-  Restfulie::MediaType.register(rendering_type('json', DefaultMediaTypes))
-  
-  
 end
 
 def safe_json_decode(json)
@@ -109,3 +86,5 @@ def safe_json_decode(json)
     ActiveSupport::JSON.decode json
   rescue ; {} end
 end
+
+require 'restfulie/media_type_defaults'

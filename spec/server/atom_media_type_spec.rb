@@ -5,7 +5,7 @@ class City
   media_type 'application/vnd.caelum_city+xml'
 end
 
-context Restfulie::Server::ArrayMediaType do
+context Restfulie::Server::AtomMediaType do
   
   it "should support atom feed media type by default" do
     atom = Restfulie::MediaType.media_types['application/atom+xml']
@@ -13,7 +13,7 @@ context Restfulie::Server::ArrayMediaType do
   end
 
   it "array serialization to atom will serialize every element" do
-    
+    [City.new, City.new]
     false.should be_true
   end
   
