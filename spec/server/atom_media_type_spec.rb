@@ -77,8 +77,8 @@ context Restfulie::Server::AtomMediaType do
       controller = Object.new
       first.should_receive(:updated_at).and_return(@now)
       second.should_receive(:updated_at).and_return(@now)
-      first.should_receive(:to_xml).with(:controller => controller).and_return(first_entry)
-      second.should_receive(:to_xml).with(:controller => controller).and_return(second_entry)
+      first.should_receive(:to_xml).with(:controller => controller, :skip_instruct=>true).and_return(first_entry)
+      second.should_receive(:to_xml).with(:controller => controller, :skip_instruct=>true).and_return(second_entry)
       
       expected  = '          <entry>
             <id>http://caelumtravel.com/hotels/1</id>
