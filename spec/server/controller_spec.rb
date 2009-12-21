@@ -53,5 +53,21 @@ context ActionController::Base do
       @controller.render_created resource
     end
   end
+  
+  context "when rendering html" do
+    it "should skip mime type checking when responds to html" do
+      responder = ActionController::MimeResponds::RestfulieResponder.new
+      @controller.should_receive(:mime_type_priority).and_return(["xml", "html"])
+      
+      responder.respond(@controller)
+    end
+    
+    it "should not skip mime type checking when responds to html" do
+      responder = ActionController::MimeResponds::RestfulieResponder.new
+      @controller.should_receive(:mime_type_priority).and_return(["xml"])
+      @controller.should_receive(:old_respond)
+      responder.respond(@controller)
+    end
+  end
 
 end

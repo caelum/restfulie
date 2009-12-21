@@ -50,4 +50,20 @@ module ActionController
       render_resource resource, options, {:status => :created, :location => location}
     end
   end
+  
+  module MimeResponds
+    class Responder
+      attr_reader :mime_type_priority
+      alias_method :old_respond, :respond
+      def respond
+        RestfulieResponder.new.respond(self)
+      end
+    end
+    
+    class RestfulieResponder
+      def respond(instance)
+        instance.old_respond unless instance.mime_type_priority.include? "html"
+      end
+    end
+  end
 end
