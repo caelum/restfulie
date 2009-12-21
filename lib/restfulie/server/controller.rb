@@ -54,7 +54,7 @@ module ActionController
   module MimeResponds
     class Responder
       attr_reader :mime_type_priority
-      alias_method :old_respond, :respond
+      alias_method :old_respond, :respond unless method_defined?(:old_respond)
       def respond
         RestfulieResponder.new.respond(self)
       end
