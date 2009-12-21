@@ -23,7 +23,7 @@ class Array
   media_type "application/atom+xml"
   
   def to_atom(options = {})
-    AtomFeed.new(self).title(options[:title]).to_atom
+    AtomFeed.new(self).title(options[:title]).to_atom(options[:controller])
   end
   
 end
@@ -87,7 +87,7 @@ class AtomFeed
             <updated>#{modification_for(item).strftime("%Y-%m-%dT%H:%M:%S-08:00")}</updated>
             #{self_link(controller, item)}
             <content type=\"#{media_type}\">
-              #{item.to_xml(:controller => controller)}
+              #{item.to_xml(:controller => controller, :skip_instruct => true)}
             </content>
           </entry>\n"""
     end

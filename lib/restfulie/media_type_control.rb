@@ -2,6 +2,7 @@ module Restfulie
   
   module MediaTypeControl
     
+    # defines a custom media_type for this type
     def media_type(*args)
       args.each do |name|
         custom_representations << name
@@ -21,7 +22,8 @@ module Restfulie
     end
     
     private
-    # this model custom representations
+    
+    # this model's custom representations. those representations were added through media_type definitions
     def custom_representations
       @custom_representations ||= []
     end
