@@ -104,7 +104,7 @@ context Restfulie::Server::AtomMediaType do
         feed = AtomFeed.new([first, second])
         feed.should_receive(:self_link).with(controller, first).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/1\"/>")
         feed.should_receive(:self_link).with(controller, second).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/2\"/>")
-        feed.items_to_atom_xml(controller).should eql(expected)
+        feed.items_to_atom_xml(controller, nil).should eql(expected)
     end
     
   end
