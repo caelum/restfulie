@@ -64,7 +64,6 @@ context Restfulie::Server::Base do
     def verify(all, expected)
       expected.each do |t|
         type = Restfulie::MediaType.media_types[t]
-        puts "looking for #{t}, #{type} at #{all}"
         all.include?(type).should be_true
       end
     end

@@ -52,24 +52,17 @@ module Restfulie
         @media_types ||= {}
       end
     
+      # TODO move to MediaTypeControl.custom_media_types
       def medias_for(type)
-        media_types.dup.delete_if {|key, value| value.type!=type}.values
+        found = {}
+        type.media_type_representations.each do |key|
+          found[key] = media_types[key]
+        end
+        found.values
       end
       
     end
     
-  end
-  
-  # deserializes data from a request body.
-  # uses the request 'Content-type' header to look for the corresponding media type.
-  # To register a media type use:
-  # class City
-  #  uses_restfulie
-  #  media_type 'application/vnd.caelum_city+xml'
-  # end
-  def self.from(request)
-    media_class = MediaType.media_type(request.headers['CONTENT_TYPE'])
-    media_class.from_xml(request.body.string)
   end
   
 end

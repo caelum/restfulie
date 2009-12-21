@@ -2,6 +2,20 @@ require 'restfulie/media_type_control'
 
 module Restfulie
   
+  # represents an error when we are unable to support the desired content type
+  class UnsupportedContentType < Exception
+    
+    attr_reader :msg
+    def initialize(msg)
+      @msg = msg
+    end
+    
+    def to_s
+      @msg
+    end
+    
+  end
+
   module MediaType
     
     # TODO removethis nasty method

@@ -17,7 +17,7 @@ module ActionController
 
  
    def add_media_responses(format, resource, options, render_options)
-     types = Restfulie.default_types
+     types = Restfulie::MediaType.default_types
      types = resource.class.media_types if resource.class.respond_to? :media_types
      types.each do |media_type|
        add_media_response(format, resource, media_type, options, render_options)
