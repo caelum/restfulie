@@ -106,6 +106,31 @@ context Restfulie::Server::AtomMediaType do
         feed.should_receive(:self_link).with(controller, second).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/2\"/>")
         feed.items_to_atom_xml(controller, nil).should eql(expected)
     end
+
+    
+    it "should serialize items invoking its block" do
+      first = City.new
+      controller = Object.new
+      first.should_receive(:updated_at).and_return(@now)
+      
+      expected  = '          <entry>
+            <id>http://caelumtravel.com/hotels/1</id>
+            <title type="text">City</title>
+            <updated>' + @now.strftime("%Y-%m-%dT%H:%M:%S-08:00") + '</updated>
+            <link rel="self" href="http://caelumtravel.com/hotels/1"/>
+            <content type="application/vnd.caelum_city+xml">
+              <city>1</city>
+            </content>
+          </entry>
+'
+
+        controller.should_receive(:url_for).with(first).and_return('http://caelumtravel.com/hotels/1')
+        feed = AtomFeed.new([first])
+        feed.should_receive(:self_link).with(controller, first).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/1\"/>")
+        b = lambda{ |item| "<city>1</city>" }
+        feed.items_to_atom_xml(controller, b).should eql(expected)
+    end
+
     
   end
   
