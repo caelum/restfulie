@@ -2,13 +2,14 @@ module Restfulie
   
   module Server
   
+    # Controller which adds default CRUD + search + other operations.
     module Controller
     
       # creates a model based on the request media-type extracted from its content-type
       # 
       def create
 
-        type = model_for_this_controller
+        type = model_type
         return head 415 unless fits_content(type, request.headers['CONTENT_TYPE'])
 
         @model = type.from_xml request.body.string
@@ -22,16 +23,23 @@ module Restfulie
     
       # renders this resource
       def show
-        @model = model_for_this_controller.find(params[:id])
+        @model = model_type.find(params[:id])
+        @model ? render_resource(@model) : head(404)
+      end
+
+      # destroys this resource
+      def destroy
+        @model = model_type.find(params[:id])
         if @model
-          render_resource @model
+          @model.destroy
+          head :ok
         else
           head 404
         end
       end
 
       # returns the model for this controller
-      def model_for_this_controller
+      def model_type
         self.class.name[/(.*)Controller/,1].singularize.constantize
       end
     

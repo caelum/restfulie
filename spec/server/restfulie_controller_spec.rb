@@ -16,7 +16,7 @@ describe Restfulie::Server::Controller do
   context "while preparing the request info" do
     
     it "should extract the model part from the Controller name" do
-      @controller.model_for_this_controller.should eql(Client)
+      @controller.model_type.should eql(Client)
     end
     
     it "should not fit content if it is not registered" do
@@ -78,7 +78,7 @@ describe Restfulie::Server::Controller do
 
       it "should return 404 if resource is not found" do
         id = 15
-        @controller.should_receive(:model_for_this_controller).and_return(Client)
+        @controller.should_receive(:model_type).and_return(Client)
         Client.should_receive(:find).with(id)
         @controller.should_receive(:head).with(404)
         @controller.should_receive(:params).and_return({:id=>id})
@@ -88,11 +88,34 @@ describe Restfulie::Server::Controller do
       it "should render the resource if it exists" do
         resource = Client.new
         id = 15
-        @controller.should_receive(:model_for_this_controller).and_return(Client)
+        @controller.should_receive(:model_type).and_return(Client)
         Client.should_receive(:find).with(id).and_return(resource)
         @controller.should_receive(:render_resource).with(resource)
         @controller.should_receive(:params).and_return({:id=>id})
         @controller.show
+      end
+    end
+
+    context "when destroying a resource" do
+
+      it "should return 404 if resource is not found" do
+        id = 15
+        @controller.should_receive(:model_type).and_return(Client)
+        Client.should_receive(:find).with(id)
+        @controller.should_receive(:head).with(404)
+        @controller.should_receive(:params).and_return({:id=>id})
+        @controller.destroy
+      end
+
+      it "should delete the resource if it exists" do
+        resource = Client.new
+        id = 15
+        @controller.should_receive(:model_type).and_return(Client)
+        Client.should_receive(:find).with(id).and_return(resource)
+        resource.should_receive(:destroy)
+        @controller.should_receive(:head).with(:ok)
+        @controller.should_receive(:params).and_return({:id=>id})
+        @controller.destroy
       end
     end
 
