@@ -39,10 +39,10 @@ class AtomFeed
     self
   end
   
-  def to_atom(controller, serializer)
+  def to_atom(controller, block = nil)
     last_modified = updated_at
     id = id_for(controller)
-    xml = items_to_atom_xml(controller, serializer)
+    xml = items_to_atom_xml(controller, block)
     """<?xml version=\"1.0\"?>
       <feed xmlns=\"http://www.w3.org/2005/Atom\">
         <id>#{id}</id>
@@ -76,12 +76,11 @@ class AtomFeed
     last || Time.now
   end
   
-  def items_to_atom_xml(controller, serializer)
+  def items_to_atom_xml(controller, serializer = nil)
     xml = ""
     @feed.each do |item|
       uri = controller.url_for(item)
       media_type = item.class.respond_to?(:media_type_representations) ? item.class.media_type_representations[0] : 'application/xml'
-      debugger
       item_xml = serializer.nil? ? item.to_xml(:controller => controller, :skip_instruct => true) : serializer.call(item)
       xml += """          <entry>
             <id>#{uri}</id>
