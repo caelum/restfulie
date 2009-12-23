@@ -20,6 +20,17 @@ module Restfulie
 
       end
     
+      # renders this resource
+      def show
+        @model = model_for_this_controller.find(params[:id])
+        if @model
+          render_resource @model
+        else
+          head 404
+        end
+      end
+
+      # returns the model for this controller
       def model_for_this_controller
         self.class.name[/(.*)Controller/,1].singularize.constantize
       end

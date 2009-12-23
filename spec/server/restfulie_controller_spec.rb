@@ -1,13 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class ClientsController
+class ClientsController < ActionController::Base
   include Restfulie::Server::Controller
   
 end
 class Client
 end
 
-context Restfulie::Server::Controller do
+describe Restfulie::Server::Controller do
   
   before do
     @controller = ClientsController.new
@@ -71,7 +71,29 @@ context Restfulie::Server::Controller do
       @controller.should_receive(:render).with({:xml => model.errors, :status => :unprocessable_entity}).and_return(@result)
       @controller.create.should eql(@result)
     end
-
+    
   end
+
+    context "when retrieving a resource" do
+
+      it "should return 404 if resource is not found" do
+        id = 15
+        @controller.should_receive(:model_for_this_controller).and_return(Client)
+        Client.should_receive(:find).with(id)
+        @controller.should_receive(:head).with(404)
+        @controller.should_receive(:params).and_return({:id=>id})
+        @controller.show
+      end
+
+      it "should render the resource if it exists" do
+        resource = Client.new
+        id = 15
+        @controller.should_receive(:model_for_this_controller).and_return(Client)
+        Client.should_receive(:find).with(id).and_return(resource)
+        @controller.should_receive(:render_resource).with(resource)
+        @controller.should_receive(:params).and_return({:id=>id})
+        @controller.show
+      end
+    end
 
 end
