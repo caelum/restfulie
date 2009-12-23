@@ -22,10 +22,8 @@ class Array
   extend Restfulie::MediaTypeControl
   media_type "application/atom+xml"
   
-  def to_atom(options = {})
-    AtomFeed.new(self).title(options[:title]).to_atom(options[:controller]) do |item|
-      yield item if block_given?
-    end
+  def to_atom(options = {}, &block)
+    AtomFeed.new(self).title(options[:title]).to_atom(options[:controller], block)
   end
   
 end
@@ -41,10 +39,10 @@ class AtomFeed
     self
   end
   
-  def to_atom(controller, &block)
+  def to_atom(controller, serializer)
     last_modified = updated_at
     id = id_for(controller)
-    xml = items_to_atom_xml(controller, block)
+    xml = items_to_atom_xml(controller, serializer)
     """<?xml version=\"1.0\"?>
       <feed xmlns=\"http://www.w3.org/2005/Atom\">
         <id>#{id}</id>
@@ -78,12 +76,13 @@ class AtomFeed
     last || Time.now
   end
   
-  def items_to_atom_xml(controller, block)
+  def items_to_atom_xml(controller, serializer)
     xml = ""
     @feed.each do |item|
       uri = controller.url_for(item)
       media_type = item.class.respond_to?(:media_type_representations) ? item.class.media_type_representations[0] : 'application/xml'
-      item_xml = block.nil? ? item.to_xml(:controller => controller, :skip_instruct => true) : block.call(item)
+      debugger
+      item_xml = serializer.nil? ? item.to_xml(:controller => controller, :skip_instruct => true) : serializer.call(item)
       xml += """          <entry>
             <id>#{uri}</id>
             <title type=\"text\">#{item.class.name}</title>

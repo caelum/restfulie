@@ -10,9 +10,26 @@ context Restfulie::Server::AtomMediaType do
   before do
     @now = Time.now
   end
+  
+  context Array do
 
-  it "should support atom feed media type by default" do
-    Array.media_type_representations.include?('application/atom+xml').should be_true
+    it "should support atom feed media type by default" do
+      Array.media_type_representations.include?('application/atom+xml').should be_true
+    end
+    
+    it "should invoke atom feed creation with the block if its given" do
+      controller = Object.new
+      controller.stub(:url_for).and_return('uri')
+      items = {'guilherme', 'silveira'}
+      result = ['guilherme', 'silveira'].to_atom({:title=>"caelum", :controller => controller}) do |item|
+        items.delete item
+        item
+      end
+      items.should be_empty
+      result.should include('guilherme')
+      result.should include('silveira')
+    end
+    
   end
   
   context AtomFeed do
