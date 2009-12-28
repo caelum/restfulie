@@ -82,6 +82,9 @@ module Restfulie
         req.add_field("Accept", @accepts) unless @accepts.nil?
       end
       
+      # parses a get response.
+      # if the result code is 301, redirect
+      # otherwise, parses an ok response
       def parse_get_response(res)
         
         code = res.code
@@ -90,30 +93,26 @@ module Restfulie
         
       end
       
+      # parses a successful get response.
+      # parses the entity and add extra (response related) fields.
       def parse_get_ok_response(res, code)
         result = parse_get_entity(res, code)
         add_extra_fields(result, res)
         result
       end
       
+      # add etag, last_modified and web_response fields to the resulting object
       def add_extra_fields(result,res)
         result.etag = res['Etag'] unless res['Etag'].nil?
         result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
         result.web_response = res
       end
       
-      def type_for(content_type)
-        if Restfulie::MediaType.supports? content_type
-          Restfulie::MediaType.media_type(content_type)
-        else
-          Restfulie::MediaType::DefaultMediaTypeDecoder
-        end
-      end
-      
+      # returns an entity for a specific response
       def parse_get_entity(res, code)
         if code=="200"
           content_type = res.content_type
-          type = type_for(content_type)
+          type = Restfulie::MediaType.type_for(content_type)
           if content_type[-3,3]=="xml"
             result = type.from_xml res.body
           elsif content_type[-4,4]=="json"

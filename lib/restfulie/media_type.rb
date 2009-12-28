@@ -18,6 +18,15 @@ module Restfulie
 
   module MediaType
     
+    # returns the decoder type for a specific content type
+    def self.type_for(content_type)
+      if Restfulie::MediaType.supports? content_type
+        Restfulie::MediaType.media_type(content_type)
+      else
+        Restfulie::MediaType::DefaultMediaTypeDecoder
+      end
+    end
+
     # TODO removethis nasty method
     def self.rendering_type(name, type)
       Restfulie::MediaType.media_types[name] || Type.new(name,type)
