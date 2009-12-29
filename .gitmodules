@@ -1,3 +1,0 @@
-[submodule "lib/vendor/plugins/jeokkarak"]
-	path = lib/vendor/plugins/jeokkarak
-	url = git://github.com/caelum/jeokkarak.git
