@@ -131,6 +131,6 @@ context Restfulie::Server::Base do
     
   end
   
-  type_for deve devolver o default ou o registradfo
+#  type_for deve devolver o default ou o registradfo
   
 end
