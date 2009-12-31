@@ -1,6 +1,6 @@
 require 'net/http'
 require 'uri'
-require 'vendor/jeokkarak/init'
+require 'vendor/jeokkarak/jeokkarak'
 
 require 'restfulie/media_type'
 require 'restfulie/client/base'
