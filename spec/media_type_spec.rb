@@ -131,6 +131,22 @@ context Restfulie::Server::Base do
     
   end
   
-#  type_for deve devolver o default ou o registradfo
+  context Restfulie::MediaType do
+    
+    it "should return the default handler if none is registered" do
+      type = Object.new
+      Restfulie::MediaType.should_receive(:supports?).with(type).and_return false
+      Restfulie::MediaType.type_for(type).should eql(Restfulie::MediaType::DefaultMediaTypeDecoder)
+    end
+
+    it "should return the overriden handler if none is registered" do
+      type = Object.new
+      handler = Object.new
+      Restfulie::MediaType.should_receive(:supports?).with(type).and_return true
+      Restfulie::MediaType.should_receive(:media_type).with(type).and_return handler
+      Restfulie::MediaType.type_for(type).should eql(handler)
+    end
+    
+  end
   
 end
