@@ -1,4 +1,4 @@
-require 'atom'
+# require 'atom'
 
 module Restfulie
   
