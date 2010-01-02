@@ -16,10 +16,6 @@ h2. Why would I use restfulie?
 4. HATEOAS --> clients you are unaware of will not bother if you change your URIs
 5. HATEOAS --> services that you consume will not affect your software whenever they change part of their flow or URIs
 
-h2. Restfulie
-
-The documentation is at "http://wiki.github.com/caelum/restfulie":http://wiki.github.com/caelum/restfulie
-
 
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
