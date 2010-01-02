@@ -73,6 +73,15 @@ describe Restfulie::Server::Controller do
     end
     
   end
+  
+  context "when defining the variable name" do
+    
+    it "should return the name of the type downcased" do
+      @controller.stub(:model_type).and_return(Client)
+      @controller.model_variable_name.should eql(:@client)
+    end
+    
+  end
 
     context "when retrieving a resource" do
 
