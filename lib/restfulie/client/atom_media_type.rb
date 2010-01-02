@@ -22,7 +22,9 @@ module Restfulie
       
       def [](position)
         hash = entry[position].content.hash
-        Restfulie::MediaType::DefaultMediaTypeDecoder.from_hash(hash)
+        hash = hash.dup
+        hash.delete("type")
+        Restfulie::MediaType::DefaultMediaTypeDecoder.from_hash(hash.values.first)
       end
       
     end
