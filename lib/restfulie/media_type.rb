@@ -71,30 +71,36 @@ module Restfulie
       end
     end
     
-    module DefaultMediaTypeDecoder
-    
-      # from rails source code
-      def self.constantize(camel_cased_word)
-       unless /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/ =~ camel_cased_word
-         raise NameError, "#{camel_cased_word.inspect} is not a valid constant name!"
-       end
+    # from rails source code
+    def self.constantize(camel_cased_word)
+     unless /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/ =~ camel_cased_word
+       raise NameError, "#{camel_cased_word.inspect} is not a valid constant name!"
+     end
 
-       Object.module_eval("::#{$1}", __FILE__, __LINE__)
-      end
+     Object.module_eval("::#{$1}", __FILE__, __LINE__)
+    end
+
+    module DefaultMediaTypeDecoder
     
       def self.from_xml(xml)
         hash = Hash.from_xml xml
-        raise "there should be only one root element" unless hash.keys.size==1
+        from_hash(hash)
+      end
+      
+      def self.from_hash(hash)
 
-        head = hash[self.to_s.underscore]
-        type = constantize(hash.keys.first.camelize) rescue Hashi
+        # TODO atom media type from_xml on entry is not working correctly
+        # raise "there should be only one root element but got #{hash.keys}" unless hash.keys.size==1
+
+        type = Restfulie::MediaType.constantize(hash.keys.first.camelize) rescue Hashi
       
         result = type.from_hash hash.values.first
         return nil if result.nil?
-        result._came_from = :xml if self.include?(Restfulie::Client::Instance)
+        result._came_from = :xml if type.include?(Restfulie::Client::Instance)
         result
+        
       end
-
+      
       def self.from_json(json)
         hash = safe_json_decode(json)
         type = hash.keys.first.camelize.constantize
