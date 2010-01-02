@@ -78,7 +78,7 @@ describe Restfulie::Server::Controller do
 
       it "should return 404 if resource is not found" do
         id = 15
-        @controller.should_receive(:model_type).and_return(Client)
+        @controller.stub(:model_type).and_return(Client)
         Client.should_receive(:find).with(id)
         @controller.should_receive(:head).with(404)
         @controller.should_receive(:params).and_return({:id=>id})
@@ -88,11 +88,12 @@ describe Restfulie::Server::Controller do
       it "should render the resource if it exists" do
         resource = Client.new
         id = 15
-        @controller.should_receive(:model_type).and_return(Client)
+        @controller.stub(:model_type).and_return(Client)
         Client.should_receive(:find).with(id).and_return(resource)
         @controller.should_receive(:render_resource).with(resource)
         @controller.should_receive(:params).and_return({:id=>id})
         @controller.show
+        @controller.instance_variable_get(:@client).should eql(resource)
       end
     end
 
