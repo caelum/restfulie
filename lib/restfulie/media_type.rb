@@ -93,10 +93,12 @@ module Restfulie
         # raise "there should be only one root element but got #{hash.keys}" unless hash.keys.size==1
 
         type = Restfulie::MediaType.constantize(hash.keys.first.camelize) rescue Hashi
-      
+
         result = type.from_hash hash.values.first
         return nil if result.nil?
-        result._came_from = :xml if type.include?(Restfulie::Client::Instance)
+        if result.respond_to? :_came_from=
+          result._came_from = :xml
+        end
         result
         
       end

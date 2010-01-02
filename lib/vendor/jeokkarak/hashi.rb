@@ -29,6 +29,10 @@ module Hashi
       end
     end
     
+    def respond_to?(symbol)
+      @hash.key? symbol.to_s
+    end
+    
     def [](x)
       transform(@hash[x])
     end

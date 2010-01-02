@@ -27,3 +27,9 @@ end
 Object.extend Restfulie
 
 require 'restfulie/unmarshalling'
+
+module Hashi
+  class CustomHash
+    uses_restfulie
+  end
+end

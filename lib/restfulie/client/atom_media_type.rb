@@ -25,7 +25,12 @@ module Restfulie
         hash = entry[position].content.hash
         hash = hash.dup
         hash.delete("type")
-        Restfulie::MediaType::DefaultMediaTypeDecoder.from_hash(hash.values.first)
+        result = Restfulie::MediaType::DefaultMediaTypeDecoder.from_hash(hash)
+        if entry[position].respond_to?(:link)
+          transitions = entry[position].link.hash
+          transitions = [transitions] if transitions.kind_of? Hash
+          result.add_transitions(transitions)
+        end
       end
       
     end

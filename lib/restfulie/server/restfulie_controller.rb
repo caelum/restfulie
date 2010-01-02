@@ -24,7 +24,12 @@ module Restfulie
       # renders this resource
       def show
         @model = model_type.find(params[:id])
+        instance_variable_set(model_variable_name, @model)
         @model ? render_resource(@model) : head(404)
+      end
+      
+      def model_variable_name
+        ("@" + model_type.to_s.downcase).to_sym
       end
 
       # destroys this resource

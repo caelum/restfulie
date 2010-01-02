@@ -19,7 +19,7 @@ module Restfulie
         req = method.new(url.path)
         req.body = options[:data] if options[:data]
         add_request_headers(req, name)
-
+        
         response = Net::HTTP.new(url.host, url.port).request(req)
 
         return block.call(response) if block
@@ -40,9 +40,9 @@ module Restfulie
       # inserts all transitions from this object as can_xxx and xxx methods
       def add_transitions(transitions)
 
-        transitions.each do |state|
-          self._possible_states[state["rel"] || state[:rel]] = state
-          self.add_state(state)
+        transitions.each do |t|
+          self._possible_states[t["rel"] || t[:rel]] = t
+          self.add_state(t)
         end
         self.extend Restfulie::Client::State
       end
