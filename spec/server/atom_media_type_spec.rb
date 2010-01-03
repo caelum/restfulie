@@ -183,40 +183,5 @@ context Restfulie::Server::AtomMediaType do
     end
     
   end
-  
-  describe Restfulie::Server::AtomMediaType do
-    
-    it "should create an atom feed decoded" do
-      feed = Object.new
-      first = Object.new
-      Hash.should_receive(:from_xml).with("<order></order>").and_return({ :first_key => first})
-      Restfulie::Server::AtomFeedDecoded.should_receive(:new).with(first).and_return(feed)
-      result = Restfulie::Server::AtomMediaType.from_xml "<order></order>"
-      result.should eql(feed)
-    end
-    
-  end
 
-  describe Restfulie::Server::AtomFeedDecoded do
-    
-    it "should access an entry position's content by using brackets" do
-      result = Object.new
-      entry = Hashi::CustomHash.new
-      entry.content = Hashi::CustomHash.new("hotel" => {:name => "caelum"})
-      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [entry] })
-      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with({:name => "caelum"}).and_return(result)
-      feed[0].should eql(result)
-    end
-    
-    it "should ignore the type attribute if its the first one" do
-      result = Object.new
-      entry = Hashi::CustomHash.new
-      entry.content = Hashi::CustomHash.new("type" => "hotel","hotel" => {:name => "caelum"})
-      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [entry] })
-      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with({:name => "caelum"}).and_return(result)
-      feed[0].should eql(result)
-    end
-    
-  end
-  
 end

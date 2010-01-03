@@ -31,6 +31,7 @@ module Restfulie
           transitions = [transitions] if transitions.kind_of? Hash
           result.add_transitions(transitions)
         end
+        result
       end
       
     end
