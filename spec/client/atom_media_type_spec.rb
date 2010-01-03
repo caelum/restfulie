@@ -24,25 +24,41 @@ context Restfulie::Server::AtomMediaType do
     
     before do
       @hotel = {"hotel" => {:name => "caelum"}}
+      @result = Object.new
+      @entry = Hashi::CustomHash.new
     end
     
     it "should access an entry position's content by using brackets" do
-      result = Object.new
-      entry = Hashi::CustomHash.new
-      entry.content = Hashi::CustomHash.new(@hotel)
-      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [entry] })
-      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(result)
-      feed[0].should eql(result)
+      @entry.content = Hashi::CustomHash.new(@hotel)
+      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
+      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
+      feed[0].should eql(@result)
     end
     
     it "should ignore the type attribute if its the first one" do
-      result = Object.new
-      entry = Hashi::CustomHash.new
       @hotel["type"] = "hotel"
-      entry.content = Hashi::CustomHash.new(@hotel)
-      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [entry] })
-      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with({"hotel" => {:name => "caelum"}}).and_return(result)
-      feed[0].should eql(result)
+      @entry.content = Hashi::CustomHash.new(@hotel)
+      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
+      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with({"hotel" => {:name => "caelum"}}).and_return(@result)
+      feed[0].should eql(@result)
+    end
+    
+    it "should add a link result if it exists" do
+      @entry.content = Hashi::CustomHash.new(@hotel)
+      @entry.link = {:href => "http://caelumobjects.com"}
+      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
+      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
+      @result.should_receive(:add_transitions).with([@entry.link.hash])
+      feed[0].should eql(@result)
+    end
+    
+    it "should add a series of link results if they exists" do
+      @entry.content = Hashi::CustomHash.new(@hotel)
+      @entry.link = [:first, :second]
+      feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
+      Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
+      @result.should_receive(:add_transitions).with(@entry.link.hash)
+      feed[0].should eql(@result)
     end
     
   end
