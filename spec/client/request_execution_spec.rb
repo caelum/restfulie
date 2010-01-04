@@ -129,6 +129,8 @@ context Restfulie::Client::RequestExecution do
     
     it "should deserialize correctly if its an xml" do
       mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>"
+      
+      NAO ROLA SHOULD RECEIVE EM HASH TAMBEM!
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
       model.status.should eql("CANCELLED")

@@ -35,8 +35,8 @@ describe Restfulie::Server::Controller do
   context "when creating a resource" do
     
     before do
-      @req = Hashi::CustomHash.new
-      @req.headers = {'CONTENT_TYPE' => 'vnd/my_custom+xml'}
+      @req = Object.new
+      @req.stub(:headers).and_return({'CONTENT_TYPE' => 'vnd/my_custom+xml'})
       @controller.should_receive(:request).at_least(1).and_return(@req)
       @result = "final result"
     end
@@ -52,6 +52,7 @@ describe Restfulie::Server::Controller do
       model.save = true
       body = Hashi::CustomHash.new
       body.string = "xml content"
+      
       @req.should_receive(:body).and_return(body)
       @controller.should_receive(:fits_content).with(Client, 'vnd/my_custom+xml').and_return(true)
       Client.should_receive(:from_xml).with(body.string).and_return(model)
