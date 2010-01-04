@@ -22,16 +22,31 @@ module Restfulie
   
       # retrieves the nth element from an atom feed
       def [](position)
+        
         hash = entry[position].content.hash
         hash = hash.dup
         hash.delete("type")
         result = Restfulie::MediaType::DefaultMediaTypeDecoder.from_hash(hash)
-        if entry[position].respond_to?(:link)
-          transitions = entry[position].link.hash
-          transitions = [transitions] if transitions.kind_of? Hash
-          result.add_transitions(transitions)
-        end
+        
+        add_links_to(result, entry[position]) if entry[position].respond_to?(:link)
         result
+        
+      end
+      
+      private
+      
+      def add_links_to(result, entry)
+        links = entry.link.hash
+        links = [links] if links.kind_of? Hash
+        self_definition = self_from(links)
+        links << {:rel => "destroy", :method => "delete", :href => self_definition["href"]} unless self_definition.nil?
+        result.add_transitions(links)
+      end
+      
+      def self_from(links)
+        links.find do |link|
+          link["rel"] == "self" || link[:rel] == "self"
+        end
       end
       
     end

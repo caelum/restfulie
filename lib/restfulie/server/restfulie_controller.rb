@@ -25,7 +25,7 @@ module Restfulie
       def show
         @model = model_type.find(params[:id])
         instance_variable_set(model_variable_name, @model)
-        @model ? render_resource(@model) : head(404)
+        render_resource(@model)
       end
       
       def model_variable_name
@@ -35,12 +35,8 @@ module Restfulie
       # destroys this resource
       def destroy
         @model = model_type.find(params[:id])
-        if @model
-          @model.destroy
-          head :ok
-        else
-          head 404
-        end
+        @model.destroy
+        head :ok
       end
 
       # returns the model for this controller
