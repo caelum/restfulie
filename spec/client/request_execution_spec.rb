@@ -78,6 +78,33 @@ context Restfulie::Client::RequestExecution do
       res = Restfulie::Client::RequestExecution.new(ClientOrder).at('http://www.caelumobjects.com/product').create @content
       res.should eql(@second_response)
     end
+    
+    it "should include response access methods when returning the result" do
+      response.should_receive(:code).and_return("200")
+      result = parse_post_request(response, content)
+      result.web_response.should eql(response)
+      result.include_module? Restfulie::Client::Response
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    end
 
   end
   

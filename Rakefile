@@ -9,7 +9,7 @@ GEM_VERSION = "0.5.0"
 SUMMARY = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
 AUTHOR = "Guilherme Silveira, Caue Guerra"
 EMAIL = "guilherme.silveira@caelum.com.br"
-HOMEPAGE = "http://github.com/caelum/restfulie"
+HOMEPAGE = "http://restfulie.caelumobjects.com"
 
 spec = Gem::Specification.new do |s|
   s.name = GEM
