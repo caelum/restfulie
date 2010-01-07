@@ -1,10 +1,11 @@
+require 'restfulie/client/extensions/http'
+
 module Restfulie
   module Client
     
+    # extension to all answers that allows you to access the web response
     module WebResponse
-      
       attr_accessor :web_response
-      
     end
     
     class Response
@@ -30,6 +31,7 @@ module Restfulie
       # gets a result object and enhances it with web response methods
       # by extending WebResponse and defining the attribute web_response
       def enhance(result, response)
+        response.extend Restfulie::Client::HTTPResponse
         result.extend Restfulie::Client::WebResponse
         result.web_response = response
         result
