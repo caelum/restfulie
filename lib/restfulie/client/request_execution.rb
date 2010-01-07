@@ -19,21 +19,20 @@ module Restfulie
         code = @response.code
         if code=="301" && @type.follows.moved_permanently? == :all
           result = @type.remote_post_to(@response["Location"], @response.body)
-          enhance(result, @response)
+          enhance(result)
         elsif code=="201"
           from_web(@response["Location"], "Accept" => "application/xml")
         else
-          enhance(@response, @response)
+          enhance(@response)
         end
       end
       
-      private
       # gets a result object and enhances it with web response methods
       # by extending WebResponse and defining the attribute web_response
-      def enhance(result, response)
-        response.extend Restfulie::Client::HTTPResponse
+      def enhance(result)
+        @response.extend Restfulie::Client::HTTPResponse
         result.extend Restfulie::Client::WebResponse
-        result.web_response = response
+        result.web_response = @response
         result
       end
       

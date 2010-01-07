@@ -13,6 +13,16 @@ end
 
 context Restfulie::Client::Response do
   
+  it "should enhance types by extending them with Web and Httpresponses" do
+    result = Object.new
+    response = Object.new
+    final = Restfulie::Client::Response.new(nil, response).enhance(result)
+    final.should eql(result)
+    final.is_a?(Restfulie::Client::WebResponse).should be_true
+    final.web_response.should eql(response)
+    final.web_response.is_a?(Restfulie::Client::HTTPResponse).should be_true
+  end
+  
   it "should include response access methods when returning the result" do
     response = Object.new
     content = Object.new
