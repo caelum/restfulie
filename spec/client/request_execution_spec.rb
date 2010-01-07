@@ -11,6 +11,56 @@ class ClientOrder < ActiveRecord::Base
   uses_restfulie
 end
 
+context Restfulie::Client::Response do
+  
+  it "should include response access methods when returning the result" do
+    response = Object.new
+    content = Object.new
+    response.should_receive(:code).and_return("200")
+    result = Restfulie::Client::Response.new(NotFollow, response).parse_post
+    result.is_a?(Restfulie::Client::WebResponse).should be_true
+    result.web_response.should eql(response)
+  end
+  
+  class NotFollow
+    def self.follows
+      o = Object.new
+      o.should_receive(:moved_permanently?).and_return(false)
+      o
+    end
+  end
+  class Follow
+    def self.follows
+      o = Object.new
+      o.should_receive(:moved_permanently?).and_return(:all)
+      o
+    end
+  end
+
+  it "should not follow moved permanently" do
+    response = Object.new
+    content = Object.new
+    response.should_receive(:code).and_return("301")
+    result = Restfulie::Client::Response.new(NotFollow, response).parse_post
+    result.is_a?(Restfulie::Client::WebResponse).should be_true
+    result.web_response.should eql(response)
+  end
+  
+  it "should follow 301 if instructed to do so" do
+    expected = Object.new
+    location = "http://newuri"
+    content = Object.new
+    response = {"Location" => location}
+    response.should_receive(:body).and_return(content)
+    response.should_receive(:code).and_return("301")
+    Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
+    result = Restfulie::Client::Response.new(Follow, response).parse_post
+    result.web_response.should eql(response)
+    result.should eql(expected)
+  end
+  
+end
+
 context Restfulie::Client::RequestExecution do
 
   def define_http_expectation(req, mock_response)
@@ -46,64 +96,16 @@ context Restfulie::Client::RequestExecution do
       req
     end
     
-    it "return the post response if got a 200" do
-      @mock_response.should_receive(:code).and_return("200")
+    it "invoke parse post content, create the post request, and return its content" do
       define_http_expectation(@req, @mock_response)
 
+      parsed_result = Object.new
+      result = mock Restfulie::Client::Response
+      result.should_receive(:parse_post).and_return(parsed_result)
+      Restfulie::Client::Response.should_receive(:new).and_return(result)
+      
       res = Restfulie::Client::RequestExecution.new(ClientOrder).at('http://www.caelumobjects.com/product').create @content
-      res.should eql(@mock_response)
-    end
-    
-    it "should not follow moved permanently" do
-      
-      @mock_response.should_receive(:code).and_return("301")
-      define_http_expectation(@req, @mock_response)
-
-      res = Restfulie::Client::RequestExecution.new(ClientOrder).at('http://www.caelumobjects.com/product').create @content
-      res.should eql(@mock_response)
-    end
-    
-    it "should follow 301 if instructed to do so" do
-    	ClientOrder.follows.moved_permanently
-      
-      @mock_response.should_receive(:code).and_return("301")
-      @mock_response.should_receive(:[]).with("Location").and_return("http://www.caelumobjects.com/product/new_location")
-      define_http_expectation(@req, @mock_response)
-
-      @second_req = expect_request('/product/new_location')
-      @second_response = mock Net::HTTPResponse
-      @second_response.should_receive(:code).and_return("200")
-      define_http_expectation(@second_req, @second_response)
-
-      res = Restfulie::Client::RequestExecution.new(ClientOrder).at('http://www.caelumobjects.com/product').create @content
-      res.should eql(@second_response)
-    end
-    
-    it "should include response access methods when returning the result" do
-      response.should_receive(:code).and_return("200")
-      result = parse_post_request(response, content)
-      result.web_response.should eql(response)
-      result.include_module? Restfulie::Client::Response
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+      res.should eql(parsed_result)
     end
 
   end

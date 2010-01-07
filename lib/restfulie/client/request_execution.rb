@@ -1,5 +1,41 @@
 module Restfulie
   module Client
+    
+    module WebResponse
+      
+      attr_accessor :web_response
+      
+    end
+    
+    class Response
+      
+      def initialize(type, response)
+        @type = type
+        @response = response
+      end
+      
+      def parse_post
+        code = @response.code
+        if code=="301" && @type.follows.moved_permanently? == :all
+          result = @type.remote_post_to(@response["Location"], @response.body)
+          enhance(result, @response)
+        elsif code=="201"
+          from_web(@response["Location"], "Accept" => "application/xml")
+        else
+          enhance(@response, @response)
+        end
+      end
+      
+      private
+      # gets a result object and enhances it with web response methods
+      # by extending WebResponse and defining the attribute web_response
+      def enhance(result, response)
+        result.extend Restfulie::Client::WebResponse
+        result.web_response = response
+        result
+      end
+      
+    end
 
     class RequestExecution
       
@@ -52,18 +88,7 @@ module Restfulie
         req.add_field("Content-type", @content_type)
 
         response = Net::HTTP.new(url.host, url.port).request(req)
-        parse_post_response(response, content)
-      end
-      
-      def parse_post_response(response, content)
-        code = response.code
-        if code=="301" && @type.follows.moved_permanently? == :all
-          remote_post_to(response["Location"], content)
-        elsif code=="201"
-          from_web(response["Location"], "Accept" => "application/xml")
-        else
-          response
-        end
+        Restfulie::Client::Response.new(response).parse_post
       end
 
       def from_web(uri, options = {})
