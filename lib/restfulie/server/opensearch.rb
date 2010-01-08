@@ -1,0 +1,1 @@
+require 'restfulie/server/opensearch/description'
