@@ -14,14 +14,15 @@ module Restfulie
         @type = type
         @response = response
       end
-      
-      def parse_post
+
+      # TODO remote_post can probably be moved, does not need to be on the object's class itself
+      def parse_post(expected_content_type)
         code = @response.code
         if code=="301" && @type.follows.moved_permanently? == :all
           result = @type.remote_post_to(@response["Location"], @response.body)
           enhance(result)
         elsif code=="201"
-          from_web(@response["Location"], "Accept" => "application/xml")
+          Restfulie.at(@response["Location"]).accepts(expected_content_type).get
         else
           enhance(@response)
         end
@@ -34,6 +35,51 @@ module Restfulie
         result.extend Restfulie::Client::WebResponse
         result.web_response = @response
         result
+      end
+
+      # parses a get response.
+      # if the result code is 301, redirect
+      # otherwise, parses an ok response
+      def parse_get_response
+        
+        code = @response.code
+        return enhance(from_web(@response["Location"])) if code=="301"
+        enhance parse_get_ok_response(code)
+        
+      end
+      
+      # parses a successful get response.
+      # parses the entity and add extra (response related) fields.
+      def parse_get_ok_response(code)
+        result = parse_get_entity(code)
+        add_extra_fields(result)
+        result
+      end
+      
+      
+      # add etag, last_modified and web_response fields to the resulting object
+      def add_extra_fields(result)
+        result.etag = @response['Etag'] unless @response['Etag'].nil?
+        result.last_modified = @response['Last-Modified'] unless @response['Last-Modified'].nil?
+        result.web_response = @response
+      end
+      
+      # returns an entity for a specific response
+      def parse_get_entity(code)
+        if code=="200"
+          content_type = @response.content_type
+          type = Restfulie::MediaType.type_for(content_type)
+          if content_type[-3,3]=="xml"
+            result = type.from_xml @response.body
+          elsif content_type[-4,4]=="json"
+            result = type.from_json @response.body
+          else
+            raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}'")
+          end
+          result
+        else
+          @response
+        end
       end
       
     end
@@ -89,7 +135,7 @@ module Restfulie
         req.add_field("Content-type", @content_type)
 
         response = Net::HTTP.new(url.host, url.port).request(req)
-        Restfulie::Client::Response.new(response).parse_post
+        Restfulie::Client::Response.new(@type, response).parse_post(@content_type)
       end
 
       def from_web(uri, options = {})
@@ -99,57 +145,13 @@ module Restfulie
         add_basic_request_headers(req)
         
         res = Net::HTTP.new(uri.host, uri.port).request(req)
-        parse_get_response(res)
+        Restfulie::Client::Response.new(@type, res).parse_get_response
       end
       
       private
       
       def add_basic_request_headers(req)
         req.add_field("Accept", @accepts) unless @accepts.nil?
-      end
-      
-      # parses a get response.
-      # if the result code is 301, redirect
-      # otherwise, parses an ok response
-      def parse_get_response(res)
-        
-        code = res.code
-        return from_web(res["Location"]) if code=="301"
-        parse_get_ok_response(res, code)
-        
-      end
-      
-      # parses a successful get response.
-      # parses the entity and add extra (response related) fields.
-      def parse_get_ok_response(res, code)
-        result = parse_get_entity(res, code)
-        add_extra_fields(result, res)
-        result
-      end
-      
-      # add etag, last_modified and web_response fields to the resulting object
-      def add_extra_fields(result,res)
-        result.etag = res['Etag'] unless res['Etag'].nil?
-        result.last_modified = res['Last-Modified'] unless res['Last-Modified'].nil?
-        result.web_response = res
-      end
-      
-      # returns an entity for a specific response
-      def parse_get_entity(res, code)
-        if code=="200"
-          content_type = res.content_type
-          type = Restfulie::MediaType.type_for(content_type)
-          if content_type[-3,3]=="xml"
-            result = type.from_xml res.body
-          elsif content_type[-4,4]=="json"
-            result = type.from_json res.body
-          else
-            raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}'")
-          end
-          result
-        else
-          res
-        end
       end
       
     end

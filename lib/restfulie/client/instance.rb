@@ -39,7 +39,6 @@ module Restfulie
   
       # inserts all links from this object as can_xxx and xxx methods
       def add_transitions(links)
-
         links.each do |t|
           self._possible_states[t["rel"] || t[:rel]] = t
           self.add_state(t)
@@ -47,7 +46,7 @@ module Restfulie
         self.extend Restfulie::Client::State
       end
 
-    
+      # adds the specific information for one state change or related resource
       def add_state(transition)
         name = transition["rel"] || transition[:rel]
       
