@@ -28,8 +28,6 @@ Object.extend Restfulie
 
 require 'restfulie/unmarshalling'
 
-module Hashi
-  class CustomHash
+class Hashi::CustomHash
     uses_restfulie
-  end
 end

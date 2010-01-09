@@ -96,9 +96,6 @@ module Restfulie
 
         result = type.from_hash hash.values.first
         return nil if result.nil?
-        if result.respond_to? :_came_from=
-          result._came_from = :xml
-        end
         result
         
       end

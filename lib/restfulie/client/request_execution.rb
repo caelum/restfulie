@@ -71,6 +71,7 @@ module Restfulie
             raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}' because '#{type}.#{method.to_s}' was not found") unless type.respond_to? method
             result = type.send(method, @response.body)
           end
+          result.instance_variable_set :@_came_from, content_type
           result
         else
           @response

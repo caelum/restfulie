@@ -30,7 +30,7 @@ module Hashi
     end
     
     def respond_to?(symbol)
-      super.respond_to?(symbol) || @hash.key?(symbol.to_s)
+      super(symbol) || @hash.key?(symbol.to_s)
     end
     
     def [](x)

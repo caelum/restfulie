@@ -8,7 +8,7 @@ module Restfulie
       end
 
       # which content-type generated this data
-      attr_accessor :_came_from
+      attr_reader :_came_from
       
       # prepares a new request
       def request
@@ -57,7 +57,7 @@ module Restfulie
       
       private
       def add_request_headers(req, name)
-        req.add_field("Accept", "application/xml") if (self._came_from == :xml && req.get_field("Accept").nil?)
+        req.add_field("Accept", self._came_from) if req.get_fields("Accept").nil?
         req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval?(name) && self.respond_to?(:etag)
         req.add_field("If-Modified-Since", self.last_modified) if self.class.is_self_retrieval?(name) && self.respond_to?(:last_modified)
       end
