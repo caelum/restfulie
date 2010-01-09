@@ -8,6 +8,7 @@ module Hashi
       add_transitions(link) if link.kind_of? Array
     end
   end
+  
 end
 
 # module Jeokkarak

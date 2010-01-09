@@ -8,6 +8,7 @@ module Restfulie
       attr_accessor :web_response
     end
     
+    # TODO there should be a response for each method type
     class Response
       
       def initialize(type, response)
@@ -16,6 +17,7 @@ module Restfulie
       end
 
       # TODO remote_post can probably be moved, does not need to be on the object's class itself
+      # the expected_content_type is used in case a redirection takes place
       def parse_post(expected_content_type)
         code = @response.code
         if code=="301" && @type.follows.moved_permanently? == :all
@@ -52,16 +54,7 @@ module Restfulie
       # parses the entity and add extra (response related) fields.
       def parse_get_ok_response(code)
         result = parse_get_entity(code)
-        add_extra_fields(result)
         result
-      end
-      
-      
-      # add etag, last_modified and web_response fields to the resulting object
-      def add_extra_fields(result)
-        result.etag = @response['Etag'] unless @response['Etag'].nil?
-        result.last_modified = @response['Last-Modified'] unless @response['Last-Modified'].nil?
-        result.web_response = @response
       end
       
       # returns an entity for a specific response
@@ -74,12 +67,28 @@ module Restfulie
           elsif content_type[-4,4]=="json"
             result = type.from_json @response.body
           else
-            raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}'")
+            method = "from_#{content_type}".to_sym
+            raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}' because '#{type}.#{method.to_s}' was not found") unless type.respond_to? method
+            result = type.send(method, @response.body)
           end
           result
         else
           @response
         end
+      end
+
+      # detects which type of method invocation it was and act accordingly
+      # TODO this should be called by RequestExcution, not instance
+      def parse(method, invoking_object, content_type)
+
+        return invoking_object if @response.code == "304"
+
+        # return block.call(@response) if block
+
+        return parse_get_response if method == Net::HTTP::Get
+        parse_post(content_type) if method == Net::HTTP::Post
+        parse_get_response
+        
       end
       
     end

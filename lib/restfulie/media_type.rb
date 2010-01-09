@@ -108,6 +108,10 @@ module Restfulie
         type = hash.keys.first.camelize.constantize
         type.from_hash(hash.values.first)
       end
+
+      def self.from_html(body)
+        Hashi::CustomHash.new :body => body
+      end
     
     end
   end

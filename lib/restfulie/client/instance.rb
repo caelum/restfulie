@@ -17,14 +17,17 @@ module Restfulie
         state = self._possible_states[name]
         url = URI.parse(state["href"] || state[:href])
         req = method.new(url.path)
-        req.body = options[:data] if options[:data]
+        if options[:data]
+          req.body = options[:data]
+          req.add_field("Content-type", "application/xml")
+        end
         add_request_headers(req, name)
         
         response = Net::HTTP.new(url.host, url.port).request(req)
+        
+        # TODO this should be calling RequestExecution... not parse
+        Restfulie::Client::Response.new(self.class, response).parse(method, self, "application/xml")
 
-        return block.call(response) if block
-        return response unless method == Net::HTTP::Get
-        self.class.from_response response, self
       end
       
       private

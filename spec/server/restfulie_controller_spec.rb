@@ -28,6 +28,7 @@ describe Restfulie::Server::Controller do
       Restfulie::MediaType.should_receive(:supports?).with('vnd/my_custom+xml').and_return(true)
       Client.should_receive(:media_type_representations).and_return([])
       @controller.fits_content(Client, 'vnd/my_custom+xml').should be_false
+      DEVERIA TER TESTS EXTRAS PARA QUANDO O CARA ESQUECEU DE ESTENDER
     end
     
   end

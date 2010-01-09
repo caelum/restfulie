@@ -22,24 +22,6 @@ module Restfulie
     module Base
 
       SELF_RETRIEVAL = [:latest, :refresh, :reload]
-      
-      # translates a response to an object
-      def from_response(res, invoking_object)
-        
-        return invoking_object if res.code=="304"
-        
-        raise UnsupportedContentType.new("unsupported content type '#{res.content_type}' '#{res.code}'") unless res.content_type=="application/xml"
-        
-        # TODO this method should use the RequestExecution process to parse the content type and body
-        # TODO add default html parser: do nothin
-
-        body = res.body
-        return {} if body.empty?
-        
-        hash = Hash.from_xml body
-        hash.to_object(body)
-        
-      end
     
       def requisition_method_for(overriden_option,name)
         basic_mapping = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}

@@ -2,10 +2,10 @@ module Restfulie
   
   module MediaType
     def self.HtmlType
-      custom_type('html', self, lambda {})
+      custom_type('html', DefaultMediaTypeDecoder, lambda {})
     end
     def self.TextHtmlType
-      custom_type('text/html', self, lambda {})
+      custom_type('text/html', DefaultMediaTypeDecoder, lambda {})
     end
   
     # TODO rename it and move it

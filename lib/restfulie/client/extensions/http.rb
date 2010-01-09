@@ -28,6 +28,14 @@ module Restfulie
       def is_server_error?
         code.to_i >= 500 && code.to_i <= 599
       end
+      
+      def etag
+        @response['Etag']
+      end
+
+      def last_modified
+        @response['Last-Modified']
+      end
         
     end
   end

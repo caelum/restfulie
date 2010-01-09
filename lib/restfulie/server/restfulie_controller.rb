@@ -46,6 +46,7 @@ module Restfulie
     
       def fits_content(type, content_type)
         Restfulie::MediaType.supports?(content_type) &&
+                type.respond_to?(:media_type_representations) &&
                 type.media_type_representations.include?(content_type)
       end
     
