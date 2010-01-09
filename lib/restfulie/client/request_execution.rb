@@ -19,7 +19,6 @@ module Restfulie
       # TODO remote_post can probably be moved, does not need to be on the object's class itself
       # the expected_content_type is used in case a redirection takes place
       def parse_post(expected_content_type)
-        debugger
         code = @response.code
         if code=="301" && @type.follows.moved_permanently? == :all
           result = @type.remote_post_to(@response["Location"], @response.body)

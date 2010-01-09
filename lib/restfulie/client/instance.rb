@@ -25,11 +25,11 @@ module Restfulie
             options = args[0]
           else
             data = args[0]
-            options = nil
+            options = {}
           end
         elsif args.size==2
           data = args[0]
-          options = args[1]
+          options = args[1] || {}
         end
         
         method = self.class.requisition_method_for options[:method], name
