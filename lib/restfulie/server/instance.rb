@@ -2,6 +2,15 @@ module Restfulie
   module Server
     module Instance
 
+      # checks whether this resource can execute a transition or has such a relation
+      def can?(what)
+        what = what.to_sym if what.kind_of? String
+        all_following_transitions.each do |t|
+          return true if t.name == what
+        end
+        false
+      end
+
       # returns a list of available transitions for this objects state
       # TODO rename because it should never be used by the client...
       def available_transitions

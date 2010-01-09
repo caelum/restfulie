@@ -1,7 +1,7 @@
 module Restfulie
   module Server
     module Base
-    
+
       # returns the definition for the transaction
       def existing_transition(name)
         transitions[name]
