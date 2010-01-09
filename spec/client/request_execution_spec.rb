@@ -73,6 +73,10 @@ end
 
 context Restfulie::Client::RequestExecution do
 
+  test method missing both cases
+  
+  test change_to_state
+
   def define_http_expectation(req, mock_response)
     http = mock Net::HTTP
     Net::HTTP.should_receive(:new).with('www.caelumobjects.com', 80).and_return(http)

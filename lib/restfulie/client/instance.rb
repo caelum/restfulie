@@ -10,16 +10,41 @@ module Restfulie
       # which content-type generated this data
       attr_accessor :_came_from
       
-      def invoke_remote_transition(name, options, block)
+      # prepares a new request
+      def request
+        Restfulie::Client::RequestExecution.new(self.class, self)
+      end
+      
+      def invoke_remote_transition(name, args, block = nil)
 
+        data = nil
+        if args.nil? || args.size==0
+          options = {}
+        elsif args.size==1
+          if args[0].kind_of?(Hash)
+            options = args[0]
+          else
+            data = args[0]
+            options = nil
+          end
+        elsif args.size==2
+          data = args[0]
+          options = args[1]
+        end
+        
         method = self.class.requisition_method_for options[:method], name
 
         state = self._possible_states[name]
         url = URI.parse(state["href"] || state[:href])
         req = method.new(url.path)
-        if options[:data]
-          req.body = options[:data]
-          req.add_field("Content-type", "application/xml")
+        if options[:headers]
+          options[:headers].each do |k, v|
+            req.add_field(k, v)
+          end
+        end
+        if data
+          req.body = data
+          req.add_field("Content-type", "application/xml") if req.get_fields("Content-type").nil?
         end
         add_request_headers(req, name)
         
@@ -32,7 +57,7 @@ module Restfulie
       
       private
       def add_request_headers(req, name)
-        req.add_field("Accept", "application/xml") if self._came_from == :xml
+        req.add_field("Accept", "application/xml") if (self._came_from == :xml && req.get_field("Accept").nil?)
         req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval?(name) && self.respond_to?(:etag)
         req.add_field("If-Modified-Since", self.last_modified) if self.class.is_self_retrieval?(name) && self.respond_to?(:last_modified)
       end

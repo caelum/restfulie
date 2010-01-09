@@ -19,6 +19,7 @@ module Restfulie
       # TODO remote_post can probably be moved, does not need to be on the object's class itself
       # the expected_content_type is used in case a redirection takes place
       def parse_post(expected_content_type)
+        debugger
         code = @response.code
         if code=="301" && @type.follows.moved_permanently? == :all
           result = @type.remote_post_to(@response["Location"], @response.body)
@@ -86,7 +87,7 @@ module Restfulie
         # return block.call(@response) if block
 
         return parse_get_response if method == Net::HTTP::Get
-        parse_post(content_type) if method == Net::HTTP::Post
+        return parse_post(content_type) if method == Net::HTTP::Post
         parse_get_response
         
       end
@@ -96,9 +97,14 @@ module Restfulie
     class RequestExecution
       
       def initialize(type)
+        initialize(type, nil)
+      end
+
+      def initialize(type, invoking_object)
         @type = type
         @content_type = "application/xml"
         @accepts = "application/xml"
+        @invoking_object = invoking_object
       end
 
       def at(uri)
@@ -132,6 +138,32 @@ module Restfulie
       # retrieves information from the server using a GET request
       def get(options = {})
         from_web(@uri, options)
+      end
+      
+      def add_headers_to(hash)
+        hash[:headers] = {} unless hash[:headers]
+        hash[:headers]["Content-type"] = @content_type
+        hash[:headers]["Accept"] = @accepts
+        hash
+      end
+      
+      def change_to_state(name, args)
+        if (args.size==2 && args.kind_of?(Hash))
+          add_headers_to(args[1])
+        elsif (args.size==1) && args.kind_of?(Hash)
+          add_headers_to(args[0])
+        else
+          args << add_headers_to({})
+        end
+        @invoking_object.invoke_remote_transition name, args
+      end
+      
+      def method_missing(name, *args)
+        if @invoking_object && @invoking_object._possible_states[name.to_s]
+          change_to_state(name.to_s, args)
+        else
+          super(name, args)
+        end
       end
 
       private

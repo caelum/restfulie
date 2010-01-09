@@ -14,22 +14,21 @@ module ActionController
          end
        end
      end
-
  
-   def add_media_responses(format, resource, options, render_options)
-     types = Restfulie::MediaType.default_types
-     types = resource.class.media_types if resource.class.respond_to? :media_types
-     types.each do |media_type|
-       add_media_response(format, resource, media_type, options, render_options)
+     def add_media_responses(format, resource, options, render_options)
+       types = Restfulie::MediaType.default_types
+       types = resource.class.media_types if resource.class.respond_to? :media_types
+       types.each do |media_type|
+         add_media_response(format, resource, media_type, options, render_options)
+       end
      end
-   end
 
-   def add_media_response(format, resource, media_type, options, render_options)
-     controller = self
-     format.send media_type.short_name.to_sym do
-       media_type.execute_for(controller, resource, options, render_options)
+     def add_media_response(format, resource, media_type, options, render_options)
+       controller = self
+       format.send media_type.short_name.to_sym do
+         media_type.execute_for(controller, resource, options, render_options)
+       end
      end
-   end
 
     # adds support to rendering resources, i.e.:
     # render :resource => @order, :with => { :except => [:paid_at] }

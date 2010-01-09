@@ -15,7 +15,7 @@ module Restfulie
 
   # will execute some action in a specific URI
   def self.at(uri)
-    Client::RequestExecution.new(nil).at uri
+    Client::RequestExecution.new(nil, nil).at uri
   end
 
   module Client
