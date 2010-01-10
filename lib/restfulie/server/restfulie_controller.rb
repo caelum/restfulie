@@ -47,9 +47,10 @@ module Restfulie
         type = model_type
         return head 415 unless fits_content(type, request.headers['CONTENT_TYPE'])
 
-        @model = Hash.from_xml request.body.string
+        @model = Hash.from_xml(request.body.string)[model_name]
         pre_update(@model) if self.respond_to?(:pre_update)
-        if @loaded.update_attributes(@model[:order])
+        
+        if @loaded.update_attributes(@model)
           render_resource @loaded
         else
           render :xml => @loaded.errors, :status => :unprocessable_entity
@@ -59,6 +60,11 @@ module Restfulie
       # returns the model for this controller
       def model_type
         self.class.name[/(.*)Controller/,1].singularize.constantize
+      end
+      
+      # retrieves the model name
+      def model_name
+        self.class.name[/(.*)Controller/,1].singularize.underscore
       end
     
       def fits_content(type, content_type)

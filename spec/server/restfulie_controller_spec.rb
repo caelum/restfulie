@@ -111,6 +111,9 @@ describe Restfulie::Server::Controller do
         @controller.should_receive(:params).and_return({:id=>id})
         @controller.destroy
       end
-    end
+  end
+
+  test model name
+  test update
 
 end
