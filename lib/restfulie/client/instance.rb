@@ -16,7 +16,7 @@ module Restfulie
       end
       
       def invoke_remote_transition(name, args, block = nil)
-
+        
         data = nil
         if args.nil? || args.size==0
           options = {}
@@ -37,15 +37,16 @@ module Restfulie
         state = self._possible_states[name]
         url = URI.parse(state["href"] || state[:href])
         req = method.new(url.path)
-        if options[:headers]
-          options[:headers].each do |k, v|
-            req.add_field(k, v)
-          end
-        end
+        
+        options[:headers].each do |k, v|
+          req.add_field(k, v)
+        end if options[:headers]
+        
         if data
           req.body = data
           req.add_field("Content-type", "application/xml") if req.get_fields("Content-type").nil?
         end
+        
         add_request_headers(req, name)
         
         response = Net::HTTP.new(url.host, url.port).request(req)
@@ -57,7 +58,7 @@ module Restfulie
       
       private
       def add_request_headers(req, name)
-        req.add_field("Accept", self._came_from) if req.get_fields("Accept").nil?
+        req.add_field("Accept", self._came_from) if req.get_fields("Accept")==["*/*"]
         req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval?(name) && self.respond_to?(:etag)
         req.add_field("If-Modified-Since", self.last_modified) if self.class.is_self_retrieval?(name) && self.respond_to?(:last_modified)
       end

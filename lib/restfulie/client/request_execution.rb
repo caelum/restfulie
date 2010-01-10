@@ -26,7 +26,7 @@ module Restfulie
         elsif code=="201"
           Restfulie.at(@response["Location"]).accepts(expected_content_type).get
         else
-          enhance(@response)
+          enhance parse_get_entity(code)
         end
       end
       
@@ -46,15 +46,8 @@ module Restfulie
         
         code = @response.code
         return enhance(from_web(@response["Location"])) if code=="301"
-        enhance parse_get_ok_response(code)
+        enhance parse_get_entity(code)
         
-      end
-      
-      # parses a successful get response.
-      # parses the entity and add extra (response related) fields.
-      def parse_get_ok_response(code)
-        result = parse_get_entity(code)
-        result
       end
       
       # returns an entity for a specific response
