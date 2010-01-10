@@ -141,9 +141,9 @@ module Restfulie
       end
       
       def change_to_state(name, args)
-        if (args.size==2 && args.kind_of?(Hash))
+        if (args.size==2 && args[1].kind_of?(Hash))
           add_headers_to(args[1])
-        elsif (args.size==1) && args.kind_of?(Hash)
+        elsif (args.size==1) && args[0].kind_of?(Hash)
           add_headers_to(args[0])
         else
           args << add_headers_to({})

@@ -82,8 +82,8 @@ module Restfulie
         # TODO: wrong, should be instance_eval
         self.class.module_eval do
         
-          def temp_method(options = {}, &block)
-            self.invoke_remote_transition(Restfulie::Client::Helper.current_method, options, block)
+          def temp_method(*args, &block)
+            self.invoke_remote_transition(Restfulie::Client::Helper.current_method, args, block)
           end
         
           alias_method name, :temp_method

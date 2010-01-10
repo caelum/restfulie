@@ -39,6 +39,23 @@ module Restfulie
         head :ok
       end
 
+      # updates a resouce
+      def update
+        @loaded = model_type.find(params[:id])
+        return head :status => 405 unless @loaded.can? :update
+
+        type = model_type
+        return head 415 unless fits_content(type, request.headers['CONTENT_TYPE'])
+
+        @model = Hash.from_xml request.body.string
+        pre_update(@model) if self.respond_to?(:pre_update)
+        if @loaded.update_attributes(@model[:order])
+          render_resource @loaded
+        else
+          render :xml => @loaded.errors, :status => :unprocessable_entity
+        end
+      end
+
       # returns the model for this controller
       def model_type
         self.class.name[/(.*)Controller/,1].singularize.constantize
