@@ -50,7 +50,7 @@ context RestfulieModel do
   context "when parsed to json" do
 
     it "should not add hypermedia if controller is nil" do
-      subject.to_json.should eql("{\"restfulie_model\":{\"status\":\"unpaid\"}}")
+      subject.to_json.should eql("{\"restfulie_model\": {\"status\": \"unpaid\"}}")
     end
     
     it "should add allowable actions to models json if controller is set" do
@@ -157,7 +157,7 @@ context RestfulieModel do
     it "should not add anything if in an unknown state" do
       my_controller = MockedController.new
       subject.status = :gone
-      subject.to_json(:controller => my_controller).should eql("{\"restfulie_model\":{\"status\":\"gone\"}}")
+      subject.to_json(:controller => my_controller).should eql("{\"restfulie_model\": {\"status\": \"gone\"}}")
     end
   end
   
