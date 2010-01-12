@@ -138,6 +138,60 @@ describe Restfulie::Server::Controller do
       end
   end
 
-  # test update
+  context "when updating a resource" do
+    
+    before do
+      @id = 15
+      @loaded = Object.new
+      @req = Object.new
+      @req.stub(:headers).and_return({'CONTENT_TYPE' => 'vnd/my_custom+xml'})
+      @controller.stub(:request).and_return(@req)
+      @controller.should_receive(:params).and_return({:id=>15})
+      @result = "give it back"
+      SchoolClient.should_receive(:find).with(15).and_return(@loaded)
+    end
+    
+    it "should return 405 if it can not be updated" do
+      @loaded.should_receive(:can?).with(:update).and_return(false)
+      @controller.should_receive(:head).with(:status => 405)
+      @controller.update
+    end
+    
+    it "should return 415 if the media type is not supported" do
+      @loaded.should_receive(:can?).with(:update).and_return(true)
+      @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(false)
+      @controller.should_receive(:head).with(415).and_return(@result)
+      @controller.update.should eql(@result)
+    end
+    
+    context "will update" do
+      
+      before do
+        @loaded.should_receive(:can?).with(:update).and_return(true)
+        @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(true)
+        body = Hashi::CustomHash.new({"string" => "my body"})
+        @req.should_receive(:body).and_return(body)
+        @client = SchoolClient.new
+        model = { "school_client" => @client}
+        Hash.should_receive(:from_xml).with(body.string).and_return(model)
+        @loaded.should_receive(:update_attributes).with(@client).and_return(true)
+        @controller.should_receive(:render_resource).with(@loaded).and_return(@result)
+      end
+
+      it "should render the resource if everything goes ok" do
+        @controller.update.should eql(@result)
+      end
+      
+      it "should invoke pre_update if available" do
+        def @controller.pre_update(model)
+          :nothing
+        end
+        @controller.should_receive(:pre_update).with(@client)
+        @controller.update.should eql(@result)
+      end
+    
+    end
+    
+  end
 
 end
