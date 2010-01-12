@@ -36,40 +36,6 @@ context "accepts client unmarshalling" do
   
   context "when invoking an state change" do
 
-    it "should send a DELETE request if the state transition name is cancel, destroy or delete" do
-      ["cancel", "destroy", "delete"].each do |method_name|
-        model = ClientRestfulieModel.from_xml xml_for(method_name)
-        req = mock Net::HTTP::Delete
-        Net::HTTP::Delete.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        res = model.send(method_name)
-        res.should eql(expected_response)
-      end
-    end
-    
-    it "should send a POST request if the state transition name is update" do
-        model = ClientRestfulieModel.from_xml xml_for('update')
-        req = mock Net::HTTP::Post
-        Net::HTTP::Post.should_receive(:new).with('/order/1').and_return(req)
-  
-        expected_response = prepare_http_for(req)
-        res = model.send('update')
-        res.should eql(expected_response)
-    end
-    
-    it "should send a GET request if the state transition name is refresh, reload, show or latest" do
-      ["refresh", "latest", "reload", "show"].each do |method_name|
-        model = ClientRestfulieModel.from_xml xml_for(method_name)
-        req = mock Net::HTTP::Get
-        Net::HTTP::Get.should_receive(:new).with('/order/1').and_return(req)
-
-        final_result = Object.new
-        ClientRestfulieModel.should_receive(:from_response).with(prepare_http_for(req), model).and_return(final_result)
-        model.send(method_name).should eql(final_result)
-      end
-    end
-    
     it "should allow method overriding for methods given as symbols" do
       model = ClientRestfulieModel.from_xml xml_for('execute')
 
