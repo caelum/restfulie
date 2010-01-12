@@ -11,8 +11,6 @@ class ClientOrder < ActiveRecord::Base
   uses_restfulie
 end
 
-TODO test parse_get_entity
-
 context Restfulie::Client::Response do
   
   it "should enhance types by extending them with Web and Httpresponses" do
@@ -23,6 +21,55 @@ context Restfulie::Client::Response do
     final.is_a?(Restfulie::Client::WebResponse).should be_true
     final.web_response.should eql(response)
     final.web_response.is_a?(Restfulie::Client::HTTPResponse).should be_true
+  end
+  
+  context "parsing an entity" do
+    
+    class Shipment
+    end
+    
+    before do
+      @response = Hashi::CustomHash.new({"body" => "response body"})
+      @instance = Restfulie::Client::Response.new(nil, @response)
+      @result = Object.new
+    end
+    
+    it "should complain about a generic type that doesnt match a from_ method" do
+      lambda {@instance.generic_parse_get_entity("html", Shipment)}.should raise_error(Restfulie::UnsupportedContentType)
+    end
+    
+    it "should invoke a generic existing from_ method" do
+      def Shipment.from_xhtml(content)
+        "resulting content"
+      end
+      @instance.generic_parse_get_entity("xhtml", Shipment).should eql("resulting content")
+    end
+    
+    it "should return a xml result from the content" do
+      @response.content_type = "application/vnd.app+xml"
+      Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
+      Shipment.should_receive(:from_xml).with(@response.body).and_return(@result)
+      @instance.parse_get_entity("200").should eql(@result)
+    end
+    
+    it "should return a json result from the content" do
+      @response.content_type = "application/json"
+      Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
+      Shipment.should_receive(:from_json).with(@response.body).and_return(@result)
+      @instance.parse_get_entity("200").should eql(@result)
+    end
+    
+    it "should return a generic result from the content" do
+      @response.content_type = "xhtml"
+      Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
+      @instance.should_receive(:generic_parse_get_entity).with("xhtml", Shipment).and_return(@result)
+      @instance.parse_get_entity("200").should eql(@result)
+    end
+    
+    it "should return the response if its not 200" do
+      @instance.parse_get_entity("500").should eql(@response)
+    end
+    
   end
   
   context "posting" do

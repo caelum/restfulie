@@ -52,23 +52,26 @@ module Restfulie
       
       # returns an entity for a specific response
       def parse_get_entity(code)
-        if code=="200"
-          content_type = @response.content_type
-          type = Restfulie::MediaType.type_for(content_type)
-          if content_type[-3,3]=="xml"
-            result = type.from_xml @response.body
-          elsif content_type[-4,4]=="json"
-            result = type.from_json @response.body
-          else
-            method = "from_#{content_type}".to_sym
-            raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}' because '#{type}.#{method.to_s}' was not found") unless type.respond_to? method
-            result = type.send(method, @response.body)
-          end
-          result.instance_variable_set :@_came_from, content_type
-          result
+        return @response unless code == "200"
+        
+        content_type = @response.content_type
+        type = Restfulie::MediaType.type_for(content_type)
+        if content_type[-3,3]=="xml"
+          result = type.from_xml @response.body
+        elsif content_type[-4,4]=="json"
+          result = type.from_json @response.body
         else
-          @response
+          result = generic_parse_get_entity content_type, type
         end
+        result.instance_variable_set :@_came_from, content_type
+        result
+        
+      end
+
+      def generic_parse_get_entity(content_type, type)
+        method = "from_#{content_type}".to_sym
+        raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}' because '#{type}.#{method.to_s}' was not found") unless type.respond_to? method
+        type.send(method, @response.body)
       end
 
       # detects which type of method invocation it was and act accordingly
