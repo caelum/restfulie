@@ -73,13 +73,27 @@ end
 
 context Restfulie::Client::RequestExecution do
 
-  test method missing both cases
-  
   context "when preparing a state change" do
     
     before do
       @object = Object.new
       @instance = Restfulie::Client::RequestExecution.new(nil, @object)
+    end
+    
+    it "should invoke a state change if there is a relation" do
+      @object.should_receive(:existing_relations).and_return({"pay" => true})
+      @instance.should_receive(:change_to_state).with("pay", [123])
+      @instance.pay 123
+    end
+    
+    it "should complain if there is no such state change" do
+      @object.should_receive(:existing_relations).and_return({})
+      lambda {@instance.pay 123}.should raise_error
+    end
+    
+    it "should complain if its an entry point (no executing object)" do
+      @instance = Restfulie::Client::RequestExecution.new(nil, nil)
+      lambda {@instance.pay 123}.should raise_error
     end
     
     it "should add headers if there is nothing" do

@@ -149,6 +149,7 @@ module Restfulie
         @invoking_object.invoke_remote_transition name, args
       end
       
+      # invokes an existing relation or delegates to the existing definition of method_missing
       def method_missing(name, *args)
         if @invoking_object && @invoking_object.existing_relations[name.to_s]
           change_to_state(name.to_s, args)
