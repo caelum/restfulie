@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 context Restfulie::Client::Instance do
   
-  context "when parsing a transition execution args" do
+  context "when parsing a transition execution" do
     
     before do
       @o = Object.new
@@ -33,6 +33,12 @@ context Restfulie::Client::Instance do
       data, options = @o.parse_args_from_transition([hash])
       data.should be_nil
       options.should eql(hash)
+    end
+
+    it "should invoke add header for every header" do
+      req = Object.new
+      req.should_receive(:add_field).with(:extra, :value)
+      @o.add_headers req, :headers => {:extra => :value}
     end
 
   end

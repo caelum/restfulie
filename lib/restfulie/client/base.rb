@@ -17,12 +17,12 @@ module Restfulie
   def self.at(uri)
     Client::RequestExecution.new(nil, nil).at uri
   end
-
+  
   module Client
-    module Base
+    module Config
 
       SELF_RETRIEVAL = [:latest, :refresh, :reload]
-    
+  
       def requisition_method_for(overriden_option,name)
         basic_mapping = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
         defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
@@ -31,12 +31,17 @@ module Restfulie
         return basic_mapping[overriden_option.to_sym] if overriden_option
         defaults[name.to_sym] || Net::HTTP::Post
       end
-      
+    
+    end
+    
+    module Base
+
       def is_self_retrieval?(name)
         name = name.to_sym if name.kind_of? String
-        SELF_RETRIEVAL.include? name
+        Restfulie::Client::Config.SELF_RETRIEVAL.include? name
       end
-      
+    
     end
+    
   end
 end

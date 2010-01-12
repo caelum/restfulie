@@ -13,6 +13,11 @@ module Restfulie::Client::Instance
     Restfulie::Client::RequestExecution.new(self.class, self)
   end
   
+  # parse arguments from a transition invocation (or relation)
+  # it will receive either zero, one or two args, if there are two args, return them
+  # if there is one hash arg, its the options, add a data = nil
+  # if there is one arg (not a hash), its the data, add a options = {}
+  # if there are no args, data is nil and options = {}
   def parse_args_from_transition(args)
     data = nil
     if args.nil? || args.size==0
@@ -31,19 +36,23 @@ module Restfulie::Client::Instance
     [data, options]
   end
   
+  def add_headers(req, options)
+    options[:headers].each do |k, v|
+      req.add_field(k, v)
+    end if options[:headers]
+  end
+  
   def invoke_remote_transition(name, args, block = nil)
     
     data, options = parse_args_from_transition(args)
     
-    method = self.class.requisition_method_for options[:method], name
+    method = Restfulie::Config.requisition_method_for options[:method], name
 
     state = self.existing_relations[name]
     url = URI.parse(state["href"] || state[:href])
-    req = method.new(url.path)
+    req = method.new url.path
     
-    options[:headers].each do |k, v|
-      req.add_field(k, v)
-    end if options[:headers]
+    add_headers req, options
     
     if data
       req.body = data
