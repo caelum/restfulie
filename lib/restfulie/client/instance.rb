@@ -46,7 +46,7 @@ module Restfulie::Client::Instance
     
     data, options = parse_args_from_transition(args)
     
-    method = Restfulie::Config.requisition_method_for options[:method], name
+    method = Restfulie::Client::Config.requisition_method_for options[:method], name
 
     state = self.existing_relations[name]
     url = URI.parse(state["href"] || state[:href])
