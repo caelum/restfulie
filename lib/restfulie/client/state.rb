@@ -12,7 +12,7 @@ module Restfulie
 
       # returns true if this resource has a state named name
       def has_state(name)
-        !@_possible_states[name].nil?
+        !@existing_relations[name].nil?
       end
     end
   end
