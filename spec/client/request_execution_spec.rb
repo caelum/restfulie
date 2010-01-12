@@ -75,7 +75,51 @@ context Restfulie::Client::RequestExecution do
 
   test method missing both cases
   
-  test change_to_state
+  context "when preparing a state change" do
+    
+    before do
+      @object = Object.new
+      @instance = Restfulie::Client::RequestExecution.new(nil, @object)
+    end
+    
+    it "should add headers if there is nothing" do
+      result = {}
+      @instance.should_receive(:add_headers_to).with({}).and_return(result)
+      @object.should_receive(:invoke_remote_transition).with(:name, [result])
+      @instance.change_to_state(:name, [])
+    end
+    
+    it "should add headers if there is data only" do
+      result = {}
+      @instance.should_receive(:add_headers_to).with({}).and_return(result)
+      @object.should_receive(:invoke_remote_transition).with(:name, [123, result])
+      @instance.change_to_state(:name, [123])
+    end
+    
+    it "should add headers to hash if there is the last is a hash" do
+      hash = {}
+      result = {}
+      @instance.should_receive(:add_headers_to).with(hash).and_return(result)
+      @object.should_receive(:invoke_remote_transition).with(:name, [123,result])
+      @instance.change_to_state(:name, [123, hash])
+    end
+    
+    it "should add headers to hash if non-existent" do
+      hash = {}
+      @instance.as(:as).accepts(:accepts).add_headers_to(hash).should eql(hash)
+      hash[:headers]["Content-type"].should eql(:as)
+      hash[:headers]["Accept"].should eql(:accepts)
+    end
+    
+    it "should add headers to hash if existent" do
+      hash = { :headers => {:already => :some_value}}
+      @instance.as(:as).accepts(:accepts).add_headers_to(hash).should eql(hash)
+      hash[:headers]["Content-type"].should eql(:as)
+      hash[:headers]["Accept"].should eql(:accepts)
+      hash[:headers][:already].should eql(:some_value)
+    end
+    
+  end
 
   def define_http_expectation(req, mock_response)
     http = mock Net::HTTP

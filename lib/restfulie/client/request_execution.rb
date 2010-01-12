@@ -141,10 +141,8 @@ module Restfulie
       end
       
       def change_to_state(name, args)
-        if (args.size==2 && args[1].kind_of?(Hash))
-          add_headers_to(args[1])
-        elsif (args.size==1) && args[0].kind_of?(Hash)
-          add_headers_to(args[0])
+        if !args.empty? && args[args.size-1].kind_of?(Hash)
+          add_headers_to(args[args.size-1])
         else
           args << add_headers_to({})
         end
@@ -152,7 +150,7 @@ module Restfulie
       end
       
       def method_missing(name, *args)
-        if @invoking_object && @invoking_object._possible_states[name.to_s]
+        if @invoking_object && @invoking_object.existing_relations[name.to_s]
           change_to_state(name.to_s, args)
         else
           super(name, args)
