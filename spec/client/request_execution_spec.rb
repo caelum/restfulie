@@ -11,6 +11,8 @@ class ClientOrder < ActiveRecord::Base
   uses_restfulie
 end
 
+TODO test parse_get_entity
+
 context Restfulie::Client::Response do
   
   it "should enhance types by extending them with Web and Httpresponses" do
@@ -23,13 +25,42 @@ context Restfulie::Client::Response do
     final.web_response.is_a?(Restfulie::Client::HTTPResponse).should be_true
   end
   
-  it "should include response access methods when returning the result" do
-    response = Object.new
-    content = Object.new
-    response.should_receive(:code).and_return("200")
-    result = Restfulie::Client::Response.new(NotFollow, response).parse_post
-    result.is_a?(Restfulie::Client::WebResponse).should be_true
-    result.web_response.should eql(response)
+  context "posting" do
+    
+    it "should treat a 200 post as an enhanced 200 get response entity" do
+      response = Object.new
+      content = Object.new
+      response.should_receive(:code).and_return("200")
+      instance = Restfulie::Client::Response.new(NotFollow, response)
+      entity = Object.new
+      instance.should_receive(:parse_get_entity).with("200").and_return(entity)
+      expected_result = Object.new
+      instance.should_receive(:enhance).with(entity).and_return(expected_result)
+      result = instance.parse_post :nothing
+      result.should eql(expected_result)
+    end
+
+    it "should not follow moved permanently" do
+      response = Object.new
+      content = Object.new
+      response.should_receive(:code).and_return("301")
+      result = Restfulie::Client::Response.new(NotFollow, response).parse_post :nothing
+      result.is_a?(Restfulie::Client::WebResponse).should be_true
+      result.web_response.should eql(response)
+    end
+
+    it "should follow 301 if instructed to do so" do
+      expected = Object.new
+      location = "http://newuri"
+      content = Object.new
+      response = {"Location" => location}
+      response.should_receive(:body).and_return(content)
+      response.should_receive(:code).and_return("301")
+      Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
+      result = Restfulie::Client::Response.new(Follow, response).parse_post :nothing
+      result.web_response.should eql(response)
+      result.should eql(expected)
+    end
   end
   
   class NotFollow
@@ -47,28 +78,6 @@ context Restfulie::Client::Response do
     end
   end
 
-  it "should not follow moved permanently" do
-    response = Object.new
-    content = Object.new
-    response.should_receive(:code).and_return("301")
-    result = Restfulie::Client::Response.new(NotFollow, response).parse_post
-    result.is_a?(Restfulie::Client::WebResponse).should be_true
-    result.web_response.should eql(response)
-  end
-  
-  it "should follow 301 if instructed to do so" do
-    expected = Object.new
-    location = "http://newuri"
-    content = Object.new
-    response = {"Location" => location}
-    response.should_receive(:body).and_return(content)
-    response.should_receive(:code).and_return("301")
-    Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
-    result = Restfulie::Client::Response.new(Follow, response).parse_post
-    result.web_response.should eql(response)
-    result.should eql(expected)
-  end
-  
 end
 
 context Restfulie::Client::RequestExecution do
@@ -145,7 +154,7 @@ context Restfulie::Client::RequestExecution do
   context "when creating" do
     it "should post" do
       content = "content to post"
-      execution = Restfulie::Client::RequestExecution.new(nil)
+      execution = Restfulie::Client::RequestExecution.new(nil, nil)
       execution.should_receive(:post).with(content)
       execution.create(content)
     end
@@ -176,7 +185,7 @@ context Restfulie::Client::RequestExecution do
       result.should_receive(:parse_post).and_return(parsed_result)
       Restfulie::Client::Response.should_receive(:new).and_return(result)
       
-      res = Restfulie::Client::RequestExecution.new(ClientOrder).at('http://www.caelumobjects.com/product').create @content
+      res = Restfulie::Client::RequestExecution.new(ClientOrder, nil).at('http://www.caelumobjects.com/product').create @content
       res.should eql(parsed_result)
     end
 
@@ -195,11 +204,12 @@ context Restfulie::Client::RequestExecution do
       
       req = expect_request('/product')
       req.should_receive(:add_field).with("Accept", "vnd/product+xml")
-      res = Hashi::CustomHash.new
-      res.code = "200"
+      res = Hashi::CustomHash.new({})
       define_http_expectation(req, res)
-      ex = Restfulie::Client::RequestExecution.new(nil)
-      ex.should_receive(:parse_get_ok_response).with(res, "200").and_return(result)
+      response = Object.new
+      response.should_receive(:parse_get_response).and_return(result)
+      Restfulie::Client::Response.should_receive(:new).with(String, res).and_return(response)
+      ex = Restfulie::Client::RequestExecution.new(String, nil)
       ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should eql(result)
     end
     
@@ -217,8 +227,6 @@ context Restfulie::Client::RequestExecution do
 
     def mock_request_for(type, body, etag = '"ETAGVALUE"')
       res = mock_response(:code => "200", :content_type => type, :body => body)
-      res.should_receive(:[]).with('Etag').at_least(1).and_return(etag)
-      res.should_receive(:[]).with('Last-Modified').at_least(1).and_return(etag)
       @response = res
       req = mock Net::HTTPRequest
       req.should_receive(:add_field).with('Accept', 'application/xml')
@@ -240,14 +248,6 @@ context Restfulie::Client::RequestExecution do
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
       model.web_response.should eql(@response)
-    end
-    
-    it "should save etag value" do
-      mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>", '"custom-etag"'
-  
-      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.etag.should be_eql('"custom-etag"')
-  
     end
     
     it "should deserialize correctly if its a json" do
