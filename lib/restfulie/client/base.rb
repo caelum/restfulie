@@ -21,9 +21,11 @@ module Restfulie
   module Client
     module Config
 
-      SELF_RETRIEVAL = [:latest, :refresh, :reload]
+      def self.self_retrieval
+        [:latest, :refresh, :reload]
+      end
   
-      def requisition_method_for(overriden_option,name)
+      def self.requisition_method_for(overriden_option,name)
         basic_mapping = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
         defaults = {:destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
                     :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get, :self => Net::HTTP::Get}
@@ -38,7 +40,7 @@ module Restfulie
 
       def is_self_retrieval?(name)
         name = name.to_sym if name.kind_of? String
-        Restfulie::Client::Config.SELF_RETRIEVAL.include? name
+        Restfulie::Client::Config.self_retrieval.include? name
       end
     
     end
