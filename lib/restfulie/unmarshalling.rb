@@ -1,14 +1,12 @@
 module Hashi
   class CustomHash
-    # uses_restfulie
     def initialize(h)
       @hash = h
-      link = h['link']
+      link = h['link'] if h.kind_of? Hash
       add_transitions([link]) if link.kind_of? Hash
       add_transitions(link) if link.kind_of? Array
     end
   end
-  
 end
 
 # module Jeokkarak
