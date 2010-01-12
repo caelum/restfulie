@@ -28,7 +28,22 @@ describe Restfulie::Server::Controller do
       Restfulie::MediaType.should_receive(:supports?).with('vnd/my_custom+xml').and_return(true)
       Client.should_receive(:media_type_representations).and_return([])
       @controller.fits_content(Client, 'vnd/my_custom+xml').should be_false
-      DEVERIA TER TESTS EXTRAS PARA QUANDO O CARA ESQUECEU DE ESTENDER
+    end
+    
+    it "should not fit content if it does not accept any custom media type" do
+      Restfulie::MediaType.should_receive(:supports?).with('vnd/my_custom+xml').and_return(true)
+      Client.should_receive(:respond_to?).with(:media_type_representations).and_return(false)
+      @controller.fits_content(Client, 'vnd/my_custom+xml').should be_false
+    end
+    
+    it "should fit content if it does not accept any custom media type, but its a basic one" do
+      Restfulie::MediaType.should_receive(:supports?).with('application/xml').and_return(true)
+      Client.should_receive(:respond_to?).with(:media_type_representations).and_return(false)
+      @controller.fits_content(Client, 'application/xml').should be_true
+    end
+    
+    it "should extract the model name from the controller name" do
+      @controller.model_name.should eql("client")
     end
     
   end
@@ -113,7 +128,6 @@ describe Restfulie::Server::Controller do
       end
   end
 
-  test model name
-  test update
+  # test update
 
 end

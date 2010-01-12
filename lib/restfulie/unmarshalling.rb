@@ -1,6 +1,6 @@
 module Hashi
   class CustomHash
-    def initialize(h)
+    def initialize(h = {})
       @hash = h
       link = h['link'] if h.kind_of? Hash
       add_transitions([link]) if link.kind_of? Hash
