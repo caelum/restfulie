@@ -8,6 +8,17 @@ context Restfulie::Client::Instance do
       @o = Object.new
       @o.extend Restfulie::Client::Instance
     end
+    
+    #test method parsing
+    #test with request body
+    # test with block
+    
+    it "should return the parsed response" do
+      args = Object.new
+      name = "pay"
+      @o.should_receive(:parse_args_from_transition).with(args).and_return([nil, {}])
+      Restfulie::Client::Config.should_receive(:requisition_method_for).with(nil, name).and_return()
+    end
 
     it "should leave data as nil and options as hash if there is no arg" do
       data, options = @o.parse_args_from_transition([])
