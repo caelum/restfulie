@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-class Product < ActiveRecord::Base
+class Product
 end
 class Player < ActiveRecord::Base
   uses_restfulie

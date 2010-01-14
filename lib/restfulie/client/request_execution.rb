@@ -47,7 +47,6 @@ module Restfulie
         code = @response.code
         return enhance(from_web(@response["Location"])) if code=="301"
         enhance parse_get_entity(code)
-        
       end
       
       # returns an entity for a specific response
@@ -177,9 +176,8 @@ module Restfulie
       def from_web(uri, options = {})
         uri = URI.parse(uri)
         req = Net::HTTP::Get.new(uri.path)
-        options.each do |key,value| req[key] = value end 
+        options.each { |key,value| req[key] = value }
         add_basic_request_headers(req)
-        
         res = Net::HTTP.new(uri.host, uri.port).request(req)
         Restfulie::Client::Response.new(@type, res).parse_get_response
       end
