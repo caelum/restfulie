@@ -8,12 +8,28 @@ module Restfulie
       attr_writer :options
       attr_accessor :result
       
-      def initialize(name, options = {}, result = nil, body = nil)
+      def initialize(*args)
+        args[0].kind_of?(Array) ? from_array(*args) : from(*args)
+      end
+      
+      private
+      def from_array(array)
+        @name = array[0]
+        @options = array.length>0 ? array[1] : nil
+        @result = array.length>1 ? array[2] : nil
+        puts "creating from base array: #{array.length}"
+        @body = nil
+      end
+      
+      def from(name, options = {}, result = nil, body = nil)
+        puts "creating from original #{name} s// #{options}ccccccs"
         @name = name
         @options = options
         @result = result
         @body = body
       end
+      
+      public
       
       def action
         @options || {}
@@ -31,6 +47,8 @@ module Restfulie
         specific_action = parse_specific_action(specific_action, model)
 
         rel = specific_action[:rel] || @name
+        puts "tenho: #{specific_action}/////#{action}////#{name}"
+        puts specific_action
         specific_action[:rel] = nil
 
         specific_action[:action] ||= @name
