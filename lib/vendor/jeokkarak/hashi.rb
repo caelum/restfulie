@@ -17,14 +17,14 @@ module Hashi
       @hash = h
     end
     
-    def method_missing(name, *args)
+    def method_missing(name, *args, &block)
       name = name.to_s if name.kind_of? Symbol
       if name[-1,1] == "?"
         parse(name, @hash[name.chop])
       elsif name[-1,1] == "="
         @hash[name.chop] = args[0]
       elsif name.respond_to? name
-        @hash.send(name, *args)
+        @hash.send(name, *args, &block)
       elsif name == "length" && @hash.kind_of?(Array)
         @hash.length
       else
