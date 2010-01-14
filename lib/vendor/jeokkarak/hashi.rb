@@ -23,10 +23,10 @@ module Hashi
         parse(name, @hash[name.chop])
       elsif name[-1,1] == "="
         @hash[name.chop] = args[0]
+      elsif @hash.kind_of?(Array) && name == "each"
+        @hash.each do |k| block.call(transform(k)) end
       elsif name.respond_to? name
         @hash.send(name, *args, &block)
-      elsif name == "length" && @hash.kind_of?(Array)
-        @hash.length
       else
         return nil if @hash.has_key?(name) && @hash[name].nil?
         parse(name, transform(@hash[name]))
