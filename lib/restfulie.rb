@@ -13,9 +13,9 @@ require 'restfulie/server/marshalling'
 require 'restfulie/server/transition'
 require 'restfulie/server/restfulie_controller'
 require 'restfulie/server/atom_media_type'
+require 'restfulie/unmarshalling'
 
 module Restfulie
-
   # Sets this class as a restfulie class.
   # You may pass a block defining your own transitions.
   #
@@ -49,4 +49,4 @@ end
 
 Object.extend Restfulie
 
-require 'restfulie/unmarshalling'
+include ActiveSupport::CoreExtensions::Hash

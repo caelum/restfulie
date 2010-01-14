@@ -48,26 +48,20 @@ module Restfulie
         end
         h.delete("xmlns") if key=="xmlns"
       end
-      result = self.new h
+      result = instantiate h
       if !(links.nil?) && self.include?(Restfulie::Client::Instance)
         result.add_transitions(links)
       end
       result
     end
-  end
-end  
-
-module ActiveRecord
-  class Base
-    extend Restfulie::Unmarshalling
-
-    def self.from_json(json)
+    
+    def from_json(json)
       from_hash(safe_json_decode(json).values.first)
     end
 
     # The xml has a surrounding class tag (e.g. ship-to),
     # but the hash has no counterpart (e.g. 'ship_to' => {} )
-    def self.from_xml(xml)
+    def from_xml(xml)
       hash = Hash.from_xml xml
       head = hash[self.to_s.underscore]
       result = self.from_hash head
@@ -76,9 +70,18 @@ module ActiveRecord
       result
     end
     
+    private
+    def instantiate(hash)
+      obj = self.new
+      hash.keys.each do |k|
+        obj.send("#{k}=", hash[k])
+      end
+      obj
+    end
   end
-end
+end  
 
+private
 def safe_json_decode(json)
   return {} if !json
   begin
