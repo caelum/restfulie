@@ -89,9 +89,6 @@ module Restfulie
       
       def self.from_hash(hash)
 
-        # TODO atom media type from_xml on entry is not working correctly
-        # raise "there should be only one root element but got #{hash.keys}" unless hash.keys.size==1
-
         type = Restfulie::MediaType.constantize(hash.keys.first.camelize) rescue Hashi
 
         result = type.from_hash hash.values.first
