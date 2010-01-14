@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class ClientRestfulieModel < ActiveRecord::Base
+class ClientRestfulieModel
   attr_accessor :content
   uses_restfulie
 end
 
-class ClientOrder < ActiveRecord::Base
+class ClientOrder
   attr_accessor :buyer
   uses_restfulie
 end

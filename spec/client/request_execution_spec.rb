@@ -1,12 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class ClientRestfulieModel < ActiveRecord::Base
+class ClientRestfulieModel
   attr_accessor :content
   uses_restfulie
 end
 
 
-class ClientOrder < ActiveRecord::Base
+class ClientOrder
   attr_accessor :buyer
   uses_restfulie
 end
@@ -231,7 +231,6 @@ context Restfulie::Client::RequestExecution do
       result = mock Restfulie::Client::Response
       result.should_receive(:parse_post).and_return(parsed_result)
       Restfulie::Client::Response.should_receive(:new).and_return(result)
-      
       res = Restfulie::Client::RequestExecution.new(ClientOrder, nil).at('http://www.caelumobjects.com/product').create @content
       res.should eql(parsed_result)
     end
