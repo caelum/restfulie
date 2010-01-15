@@ -37,6 +37,8 @@ module Restfulie
     extend Restfulie::MediaTypeControl
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
+    extend Restfulie::Unmarshalling #still needs testing. e.g. server model has from_xml
+    # and need to test (de)serialization with both AR and no-AR
     
     self.send :define_method, :following_transitions do
       transitions = []
