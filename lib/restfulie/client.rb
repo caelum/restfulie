@@ -10,6 +10,7 @@ require 'restfulie/client/helper'
 require 'restfulie/client/instance'
 require 'restfulie/client/request_execution'
 require 'restfulie/client/state'
+require 'restfulie/unmarshalling'
 
 module Restfulie
   
@@ -25,8 +26,6 @@ module Restfulie
 end
 
 Object.extend Restfulie
-
-require 'restfulie/unmarshalling'
 
 class Hashi::CustomHash
     uses_restfulie

@@ -8,12 +8,26 @@ module Restfulie
       attr_writer :options
       attr_accessor :result
       
-      def initialize(name, options = {}, result = nil, body = nil)
+      def initialize(*args)
+        args[0].kind_of?(Array) ? from_array(*args) : from(*args)
+      end
+      
+      private
+      def from_array(array)
+        @name = array[0]
+        @options = array.length>0 ? array[1] : nil
+        @result = array.length>1 ? array[2] : nil
+        @body = nil
+      end
+      
+      def from(name, options = {}, result = nil, body = nil)
         @name = name
         @options = options
         @result = result
         @body = body
       end
+      
+      public
       
       def action
         @options || {}
