@@ -120,10 +120,30 @@ module Restfulie
         @accepts = content_type
         self
       end
+      
+      def with(headers)
+        @headers = headers
+        self
+      end
 
       # asks to create this content on the server (post it)
       def create(content)
         post(content)
+      end
+      
+      def do(what, name, content = nil)
+        url = URI.parse(@uri)
+        req = what.new(url.path)
+        add_basic_request_headers(req, name)
+        
+        if content
+          req.body = content
+          req.add_field("Content-type", "application/xml") if req.get_fields("Content-type").nil?
+        end
+        
+        response = Net::HTTP.new(url.host, url.port).request(req)
+        Restfulie::Client::Response.new(@type, response).parse(what, @invoking_object, "application/xml")
+        
       end
 
       # post this content to the server
@@ -186,8 +206,18 @@ module Restfulie
       
       private
       
-      def add_basic_request_headers(req)
+      def add_basic_request_headers(req, name = "")
+        
         req.add_field("Accept", @accepts) unless @accepts.nil?
+        
+        @headers.each do |key, value|
+          req.add_field(key, value)
+        end if @headers
+        
+        req.add_field("Accept", @invoking_object._came_from) if req.get_fields("Accept")==["*/*"]
+        req.add_field("If-None-Match", @invoking_object.web_response.etag) if @type.is_self_retrieval?(name) && !@invoking_object.web_response.etag.nil?
+        req.add_field("If-Modified-Since", @invoking_object.web_response.last_modified) if type.is_self_retrieval?(name) && !@invoking_object.web_response.last_modified.nil?
+        
       end
       
     end

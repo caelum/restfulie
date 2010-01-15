@@ -22,7 +22,7 @@ module Restfulie
     module Config
 
       def self.self_retrieval
-        [:latest, :refresh, :reload]
+        [:latest, :refresh, :reload, :self]
       end
   
       def self.requisition_method_for(overriden_option,name)

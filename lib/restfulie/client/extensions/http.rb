@@ -27,11 +27,11 @@ module Restfulie::Client::HTTPResponse
   end
   
   def etag
-    @response['Etag']
+    self['Etag']
   end
 
   def last_modified
-    @response['Last-Modified']
+    self['Last-Modified']
   end
     
 end

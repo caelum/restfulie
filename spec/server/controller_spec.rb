@@ -25,6 +25,32 @@ context ActionController::Base do
     end
   
   end
+  
+  context "when rendering a collection" do
+    
+    before do
+      @collection = [1, 2]
+    end
+    
+    it "should serialize and render a collection to atom" do
+      content = Object.new
+      @collection.should_receive(:to_atom).with(:title => "Clients", :controller => @controller).and_return content
+      @controller.should_receive(:render_resource).with(@collection, nil, {:content_type => 'application/atom+xml', :text => content})
+      @controller.render_collection @collection
+    end
+    
+    it "should serialize in a custom way and render a collection to atom" do
+      def @collection.to_atom(h, &block)
+        raise "expected a block" if !block
+        "custom content"
+      end
+      @controller.should_receive(:render_resource).with(@collection, nil, {:content_type => 'application/atom+xml', :text => "custom content"})
+      @controller.render_collection @collection do |item|
+        1+1
+      end
+    end
+    
+  end
 
 
   context "when invoking render_resource" do

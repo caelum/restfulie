@@ -36,47 +36,17 @@ module Restfulie::Client::Instance
     [data, options]
   end
   
-  def add_headers(req, options)
-    options[:headers].each do |k, v|
-      req.add_field(k, v)
-    end if options[:headers]
-  end
-  
   def invoke_remote_transition(name, args, block = nil)
     
     data, options = parse_args_from_transition(args)
     
     method = Restfulie::Client::Config.requisition_method_for options[:method], name
-
     state = self.existing_relations[name]
-    url = URI.parse(state["href"] || state[:href])
-    req = method.new url.path
     
-    add_headers req, options
-    
-    if data
-      req.body = data
-      req.add_field("Content-type", "application/xml") if req.get_fields("Content-type").nil?
-    end
-    
-    add_request_headers(req, name)
-    
-    response = Net::HTTP.new(url.host, url.port).request(req)
-    
-    # TODO this should be calling RequestExecution... not parse
-    Restfulie::Client::Response.new(self.class, response).parse(method, self, "application/xml")
+    request = Restfulie::Client::RequestExecution.new(self.class, self).at(state["href"] || state[:href]).with(options[:headers])
+    request.do method, name, data
 
   end
-  
-  private
-  def add_request_headers(req, name)
-    req.add_field("Accept", self._came_from) if req.get_fields("Accept")==["*/*"]
-    req.add_field("If-None-Match", self.etag) if self.class.is_self_retrieval?(name) && self.respond_to?(:etag)
-    req.add_field("If-Modified-Since", self.last_modified) if self.class.is_self_retrieval?(name) && self.respond_to?(:last_modified)
-  end
-
-  public
-
 
   # inserts all links from this object as can_xxx and xxx methods
   def add_transitions(links)

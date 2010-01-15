@@ -35,12 +35,6 @@ context Restfulie::Client::Instance do
       options.should eql(hash)
     end
 
-    it "should invoke add header for every header" do
-      req = Object.new
-      req.should_receive(:add_field).with(:extra, :value)
-      @o.add_headers req, :headers => {:extra => :value}
-    end
-
   end
 
 end
