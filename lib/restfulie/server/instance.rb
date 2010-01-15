@@ -21,7 +21,6 @@ module Restfulie::Server::Instance
   def all_following_transitions
     all = [] + available_transitions[:allow]
     following_transitions.each do |t|
-      puts "vou adicionar a transition '#{t}' '#{t.kind_of? Array}'"
       t = Restfulie::Server::Transition.new(t) if t.kind_of? Array
       all << t
     end
