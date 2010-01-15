@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-class CustomType
+class CustomType < ActiveRecord::Base
   uses_restfulie
 end
 class Item
