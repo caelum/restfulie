@@ -182,6 +182,23 @@ module Restfulie
         end
       end
 
+      def add_basic_request_headers(req, name = nil)
+        
+        req.add_field("Accept", @accepts) unless @accepts.nil?
+        
+        @headers.each do |key, value|
+          req.add_field(key, value)
+        end if @headers
+        
+        req.add_field("Accept", @invoking_object._came_from) if req.get_fields("Accept")==["*/*"]
+        
+        if @type && name && @type.is_self_retrieval?(name) && @invoking_object.respond_to?(:web_response)
+          req.add_field("If-None-Match", @invoking_object.web_response.etag) if !@invoking_object.web_response.etag.nil?
+          req.add_field("If-Modified-Since", @invoking_object.web_response.last_modified) if !@invoking_object.web_response.last_modified.nil?
+        end
+        
+      end
+
       private
       def remote_post_to(uri, content)
         
@@ -205,22 +222,6 @@ module Restfulie
         Restfulie::Client::Response.new(@type, res).parse_get_response
       end
       
-      def add_basic_request_headers(req, name = nil)
-        
-        req.add_field("Accept", @accepts) unless @accepts.nil?
-        
-        @headers.each do |key, value|
-          req.add_field(key, value)
-        end if @headers
-        
-        req.add_field("Accept", @invoking_object._came_from) if req.get_fields("Accept")==["*/*"]
-        
-        if @type && name && @type.is_self_retrieval?(name) && @invoking_object.respond_to?(:web_response)
-          req.add_field("If-None-Match", @invoking_object.web_response.etag) if !@invoking_object.web_response.etag.nil?
-          req.add_field("If-Modified-Since", @invoking_object.web_response.last_modified) if !@invoking_object.web_response.last_modified.nil?
-        end
-        
-      end
       
     end
   end

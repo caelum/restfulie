@@ -259,7 +259,6 @@ context Restfulie::Client::RequestExecution do
       req = mock Net::HTTP::Post
       Net::HTTP::Post.should_receive(:new).with(uri).and_return(req)
       req.should_receive(:body=).with(@content)
-      req.should_receive(:add_field).with("Accept", "application/xml")
       req.should_receive(:add_field).with("Content-type", "application/xml")
       req
     end
@@ -271,8 +270,10 @@ context Restfulie::Client::RequestExecution do
       result = mock Restfulie::Client::Response
       result.should_receive(:parse_post).and_return(parsed_result)
       Restfulie::Client::Response.should_receive(:new).and_return(result)
-      
-      res = Restfulie::Client::RequestExecution.new(ClientOrder, nil).at('http://www.caelumobjects.com/product').create @content
+
+      req = Restfulie::Client::RequestExecution.new(ClientOrder, nil)
+      req.should_receive(:add_basic_request_headers)
+      res = req.at('http://www.caelumobjects.com/product').create @content
       res.should == parsed_result
     end
 
@@ -290,13 +291,13 @@ context Restfulie::Client::RequestExecution do
       result = Object.new
       
       req = expect_request('/product')
-      req.should_receive(:add_field).with("Accept", "vnd/product+xml")
       res = Hashi::CustomHash.new({})
       define_http_expectation(req, res)
       response = Object.new
       response.should_receive(:parse_get_response).and_return(result)
       Restfulie::Client::Response.should_receive(:new).with(String, res).and_return(response)
       ex = Restfulie::Client::RequestExecution.new(String, nil)
+      ex.should_receive(:add_basic_request_headers)
       ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should == result
     end
     
@@ -344,6 +345,63 @@ context Restfulie::Client::RequestExecution do
       model.status.should == "CANCELLED"
   
     end
+  end
+  
+  it "should add accepts if there is none" do
+    @req = Object.new
+    @origin = Object.new
+    @ex = Restfulie::Client::RequestExecution.new(String, @origin).accepts("nothing")
+    @origin.should_receive(:_came_from).and_return("html")
+    @req.stub(:get_fields).and_return(["*/*"])
+    @req.should_receive(:add_field).with("Accept", "nothing")
+    @req.should_receive(:add_field).with("Accept", "html")
+    @ex.add_basic_request_headers(@req, nil)
+  end
+  
+  context "when adding headers" do
+    
+    before do
+      @req = Object.new
+      @origin = Hashi::CustomHash.new
+      @ex = Restfulie::Client::RequestExecution.new(String, @origin).accepts("nothing")
+      def @origin.web_response
+        self
+      end
+    end
+    
+    it "should add Accepts if its there" do
+      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.stub(:get_fields).and_return(nil)
+      @ex.add_basic_request_headers(@req, nil)
+    end
+    
+    it "should add every header available" do
+      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("name", "value")
+      @req.stub(:get_fields).and_return(nil)
+      @ex.with({"name" => "value"}).add_basic_request_headers(@req, nil)
+    end
+        
+    it "should add etag if available" do
+      @origin.etag = "custom etag"
+      @origin.last_modified = nil
+      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("If-None-Match", "custom etag")
+      @req.stub(:get_fields).and_return(nil)
+      String.should_receive(:is_self_retrieval?).with("custom").and_return(true)
+      @ex.add_basic_request_headers(@req, "custom")
+    end
+    
+    it "should add last modified if available" do
+      @origin.etag = nil
+      @origin.last_modified = "date"
+      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("If-Modified-Since", "date")
+      @req.stub(:get_fields).and_return(nil)
+      String.should_receive(:is_self_retrieval?).with("custom").and_return(true)
+      @ex.add_basic_request_headers(@req, "custom")
+    end
+    
   end
 
 end
