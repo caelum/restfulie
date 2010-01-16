@@ -1,5 +1,7 @@
 # an extesion to http responses
 module Restfulie::Client::HTTPResponse
+  
+  attr_accessor :previous
         
   # determines if this response code was successful (according to http specs: 200~299)
   def is_successful?
@@ -27,11 +29,11 @@ module Restfulie::Client::HTTPResponse
   end
   
   def etag
-    @response['Etag']
+    self['Etag']
   end
 
   def last_modified
-    @response['Last-Modified']
+    self['Last-Modified']
   end
     
 end

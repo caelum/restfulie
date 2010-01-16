@@ -51,10 +51,10 @@ context RestfulieModel do
         RestfulieModel.state :paid
         
         subject.status = :unpaid
-        subject.can_pay?.should eql(true)
+        subject.can_pay?.should == true
   
         subject.status = :paid
-        subject.can_pay?.should eql(false)
+        subject.can_pay?.should == false
         
     end
   end

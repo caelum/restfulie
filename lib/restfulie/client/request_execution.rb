@@ -34,6 +34,7 @@ module Restfulie
       # by extending WebResponse and defining the attribute web_response
       def enhance(result)
         @response.extend Restfulie::Client::HTTPResponse
+        @response.previous = result.web_response if result.respond_to? :web_response
         result.extend Restfulie::Client::WebResponse
         result.web_response = @response
         result
@@ -77,7 +78,7 @@ module Restfulie
       # TODO this should be called by RequestExcution, not instance
       def parse(method, invoking_object, content_type)
 
-        return invoking_object if @response.code == "304"
+        return enhance(invoking_object) if @response.code == "304"
 
         # return block.call(@response) if block
 
@@ -119,10 +120,30 @@ module Restfulie
         @accepts = content_type
         self
       end
+      
+      def with(headers)
+        @headers = headers
+        self
+      end
 
       # asks to create this content on the server (post it)
       def create(content)
         post(content)
+      end
+      
+      def do(what, name, content = nil)
+        url = URI.parse(@uri)
+        req = what.new(url.path)
+        add_basic_request_headers(req, name)
+        
+        if content
+          req.body = content
+          req.add_field("Content-type", "application/xml") if req.get_fields("Content-type").nil?
+        end
+        
+        response = Net::HTTP.new(url.host, url.port).request(req)
+        Restfulie::Client::Response.new(@type, response).parse(what, @invoking_object, "application/xml")
+        
       end
 
       # post this content to the server
@@ -160,6 +181,23 @@ module Restfulie
         end
       end
 
+      def add_basic_request_headers(req, name = nil)
+        
+        req.add_field("Accept", @accepts) unless @accepts.nil?
+        
+        @headers.each do |key, value|
+          req.add_field(key, value)
+        end if @headers
+        
+        req.add_field("Accept", @invoking_object._came_from) if req.get_fields("Accept")==["*/*"]
+        
+        if @type && name && @type.is_self_retrieval?(name) && @invoking_object.respond_to?(:web_response)
+          req.add_field("If-None-Match", @invoking_object.web_response.etag) if !@invoking_object.web_response.etag.nil?
+          req.add_field("If-Modified-Since", @invoking_object.web_response.last_modified) if !@invoking_object.web_response.last_modified.nil?
+        end
+        
+      end
+
       private
       def remote_post_to(uri, content)
         
@@ -182,11 +220,6 @@ module Restfulie
         Restfulie::Client::Response.new(@type, res).parse_get_response
       end
       
-      private
-      
-      def add_basic_request_headers(req)
-        req.add_field("Accept", @accepts) unless @accepts.nil?
-      end
       
     end
   end

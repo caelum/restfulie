@@ -1,20 +1,38 @@
 module ActionController
   class Base
-    
+
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
     def render_resource(resource, options = {}, render_options = {})
-       cache_info = {:etag => resource}
-       cache_info[:last_modified] = resource.updated_at.utc if resource.respond_to? :updated_at
-       if stale? cache_info
-         options[:controller] = self
-     
-         respond_to do |format|
-           add_media_responses(format, resource, options, render_options)
-         end
+
+       return nil unless stale? resource.cache_info
+
+       return render(render_options) if render_options[:text]
+
+       options[:controller] = self
+       respond_to do |format|
+         add_media_responses(format, resource, options, render_options)
        end
+
      end
- 
+
+     # renders a resource collection, making full use of atom support
+     def render_collection(collection, &block)
+       if block
+         content = collection.to_atom(:title =>collection_name, :controller => self) do |item|
+           block.call item
+         end
+       else
+         content = collection.to_atom(:title => collection_name, :controller => self)
+       end
+       render_resource collection, nil, {:content_type => 'application/atom+xml', :text => content}
+     end
+
+     # returns the name of this controllers collection
+     def collection_name
+       self.class.name[/(.*)Controller/,1]
+     end
+
      def add_media_responses(format, resource, options, render_options)
        types = Restfulie::MediaType.default_types
        types = resource.class.media_types if resource.class.respond_to? :media_types

@@ -12,7 +12,7 @@ context Restfulie::OpenSearch::Description do
             template="http://example.com/?q={searchTerms}&amp;pw={startPage?}"/>
      </OpenSearchDescription>'
     xml = Restfulie::OpenSearch::Description.new("System search").accepts("application/atom+xml")
-    #     xml.should eql(expected)
+    #     xml.should == expected
   end
   
 end

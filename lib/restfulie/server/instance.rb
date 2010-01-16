@@ -1,5 +1,15 @@
+# acts_as_restfulie instances implement this module
 module Restfulie::Server::Instance
 
+  # returns specific cache information for this resource
+  # you may customize it and return a custom etag and last_modified fields
+  def cache_info
+    info = {:etag => self}
+    info[:etag] = self.etag if self.respond_to? :etag
+    info[:last_modified] = self.updated_at.utc if self.respond_to? :updated_at
+    info
+  end
+  
   # checks whether this resource can execute a transition or has such a relation
   def can?(what)
     what = what.to_sym if what.kind_of? String
