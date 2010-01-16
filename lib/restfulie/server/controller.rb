@@ -5,6 +5,7 @@ module ActionController
     # using any extra options to render it (invoke to_xml).
     def render_resource(resource, options = {}, render_options = {})
        cache_info = {:etag => resource}
+       cache_info[:etag] = resource.etag if resource.respond_to? :etag
        cache_info[:last_modified] = resource.updated_at.utc if resource.respond_to? :updated_at
 
        return nil unless stale? cache_info

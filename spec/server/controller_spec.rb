@@ -8,6 +8,8 @@ context ActionController::Base do
   before do
     @controller = ClientsController.new
   end
+  
+  test etag and last modified
 
   context "when generic rendering a resource" do
   
