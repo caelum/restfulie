@@ -34,7 +34,11 @@ module Hashi
     end
     
     def respond_to?(symbol)
-      super(symbol) || @hash.key?(symbol.to_s)
+      super(symbol) || (is_hash? && @hash.key?(symbol.to_s))
+    end
+    
+    def is_hash?
+      @hash.kind_of? Hash
     end
     
     def [](x)

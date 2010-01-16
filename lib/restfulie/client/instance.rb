@@ -77,8 +77,8 @@ module Restfulie::Client::Instance
   # extended fields are those unknown to this model but kept in a hash
   # to allow forward-compatibility.
   def extended_fields
-    @hash ||= {}
-    @hash
+    @extended_fields ||= {}
+    @extended_fields
   end
 
   def method_missing(name, *args)
@@ -98,7 +98,6 @@ module Restfulie::Client::Instance
 
   end
 
-  # TODO test this guy
   def respond_to?(sym)
     extended_fields[sym.to_s].nil? ? super(sym) : true
   end
