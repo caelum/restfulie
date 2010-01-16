@@ -144,5 +144,45 @@ describe Restfulie do
       player.respond_to?(:destroy).should be_true
     end
   end
+  
+  context "when unmarshalling with relations" do
+    
+    class Unit
+      extend Restfulie::Unmarshalling
+      attr_accessor :name
+      attr_accessor :children
+    end
+    
+    class Car
+      extend Restfulie::Unmarshalling
+      attr_accessor :brand
+    end
+    
+    it "should work with default data" do
+      Unit.from_hash({:name => "guilherme"}).name.should == "guilherme"
+    end
+    
+    it "should work with a collection of child elements" do
+      Unit.from_hash({:children => [{:brand => "fiat"}]}).children[0].brand.should == "fiat"
+    end
+    
+    it "should work with a ActiveRecord relationship" do
+      def Unit.reflect_on_association(key)
+        o = Object.new
+        def o.klass
+          :Car
+        end
+        o
+      end
+      child = Unit.from_hash({:children => [{:brand => "fiat"}]}).children[0]
+      child.should be_kind_of(Car)
+      child.brand.should == "fiat"
+    end
+    
+    it "should support Jeokkarak with a child which does not have from_hash" do
+      fail
+    end
+    
+  end
 
 end

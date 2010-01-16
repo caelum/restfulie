@@ -35,8 +35,11 @@ module Restfulie
           if key=="link"
             links = h[key]
             h.delete("link")
-          else #TODO this condition must be tested
-            h[key].map! { |e| reflect_on_association(key.to_sym ).klass.to_s.constantize.from_hash e }
+          else
+            h[key].map! { |e| 
+              who = respond_to?(:reflect_on_association) ? reflect_on_association(key.to_sym ).klass.to_s.constantize : Hashi::CustomHash
+              who.from_hash e
+            }
           end
         when /\AHash(WithIndifferentAccess)?\Z/
           if key=="link"
@@ -72,11 +75,7 @@ module Restfulie
     
     private
     def instantiate(hash={})
-      puts "aaaaa"
-      puts self.class
-      puts self.to_s
       obj = self.new
-      p "bbbbb"
       hash.keys.each do |k|
         obj.send("#{k}=", hash[k])
       end
