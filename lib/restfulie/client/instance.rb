@@ -38,7 +38,6 @@ module Restfulie::Client::Instance
   
   def invoke_remote_transition(name, args, block = nil)
     
-    debugger
     data, options = parse_args_from_transition(args)
     
     method = Restfulie::Client::Config.requisition_method_for options[:method], name

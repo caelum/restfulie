@@ -41,10 +41,11 @@ module Restfulie
 
       # updates a resouce
       def update
-        @loaded = model_type.find(params[:id])
+        type = model_type
+
+        @loaded = type.find(params[:id])
         return head :status => 405 unless @loaded.can? :update
 
-        type = model_type
         return head 415 unless fits_content(type, request.headers['CONTENT_TYPE'])
 
         @model = Hash.from_xml(request.body.string)[model_name]

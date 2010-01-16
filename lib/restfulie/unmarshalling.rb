@@ -51,7 +51,7 @@ module Restfulie
         end
         h.delete("xmlns") if key=="xmlns"
       end
-      result = instantiate h
+      result = self.new h
       if !(links.nil?) && self.include?(Restfulie::Client::Instance)
         result.add_transitions(links)
       end
@@ -73,14 +73,14 @@ module Restfulie
       result
     end
     
-    private
-    def instantiate(hash={})
-      obj = self.new
-      hash.keys.each do |k|
-        obj.send("#{k}=", hash[k])
-      end
-      obj
-    end
+    # private
+    # def instantiate(hash={})
+    #   obj = self.new
+    #   hash.keys.each do |k|
+    #     obj.send("#{k}=", hash[k])
+    #   end
+    #   obj
+    # end
   end
 end  
 
