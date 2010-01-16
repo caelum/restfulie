@@ -26,7 +26,7 @@ context Restfulie::Server::Instance do
       available = Object.new
       @o.should_receive(:following_transitions).and_return([])
       @o.should_receive(:available_transitions).and_return({:allow => [available]})
-      @o.all_following_transitions.should eql([available])
+      @o.all_following_transitions.should == [available]
       
     end
     
@@ -36,14 +36,14 @@ context Restfulie::Server::Instance do
       @o.should_receive(:available_transitions).and_return({:allow => []})
       trans = Object.new
       Restfulie::Server::Transition.should_receive(:new).with(available).and_return(trans)
-      @o.all_following_transitions.should eql([trans])
+      @o.all_following_transitions.should == [trans]
     end
     
     it "should add transition if itself is available" do
       available = Object.new
       @o.should_receive(:following_transitions).and_return([available])
       @o.should_receive(:available_transitions).and_return({:allow => []})
-      @o.all_following_transitions.should eql([available])
+      @o.all_following_transitions.should == [available]
     end
     
   end
@@ -51,7 +51,7 @@ context Restfulie::Server::Instance do
   context "when locating links" do
     
     it "should return no link if there is no controller" do
-      @o.links(nil).should eql([])
+      @o.links(nil).should == []
     end
     
     it "should return a link for every transition" do
@@ -62,10 +62,10 @@ context Restfulie::Server::Instance do
       @o.should_receive(:link_for).with(t1, controller).and_return(["rel1", "uri1"])
       @o.should_receive(:link_for).with(t2, controller).and_return(["rel2", "uri2"])
       links = @o.links(controller)
-      links[0][:rel].should eql("rel1")
-      links[0][:uri].should eql("uri1")
-      links[1][:rel].should eql("rel2")
-      links[1][:uri].should eql("uri2")
+      links[0][:rel].should == "rel1"
+      links[0][:uri].should == "uri1"
+      links[1][:rel].should == "rel2"
+      links[1][:uri].should == "uri2"
     end
     
   end

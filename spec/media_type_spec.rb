@@ -9,7 +9,7 @@ context Restfulie::Server::Base do
         extend Restfulie::MediaTypeControl
         media_type 'application/vnd.caelum_city+xml'
       end
-      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml').should eql(City)
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml').should == City
     end
 
     it "should be able to locate with encoding" do
@@ -17,7 +17,7 @@ context Restfulie::Server::Base do
         extend Restfulie::MediaTypeControl
         media_type 'application/vnd.caelum_city+xml'
       end
-      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml; charset=UTF-8').should eql(City)
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml; charset=UTF-8').should == City
     end
     
     it "should throw an exception if not found" do
@@ -39,8 +39,8 @@ context Restfulie::Server::Base do
         extend Restfulie::MediaTypeControl
         media_type 'application/vnd.caelum_city+xml', 'application/vnd.caelum_city+json'
       end
-      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml').should eql(City)
-      Restfulie::MediaType.media_type('application/vnd.caelum_city+json').should eql(City)
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+xml').should == City
+      Restfulie::MediaType.media_type('application/vnd.caelum_city+json').should == City
     end
     
     it "should return the list of media types for a specific type" do
@@ -91,8 +91,8 @@ context Restfulie::Server::Base do
       type.should_receive(:format_name).at_least(1).and_return('xml')
       controller.should_receive(:render).with(render_options)
       type.execute_for(controller, resource, options, render_options)
-      render_options[:content_type].should eql('content-type')
-      render_options[:text].should eql('content')
+      render_options[:content_type].should == 'content-type'
+      render_options[:text].should == 'content'
     end
     
     # move to server-side media type support only
@@ -105,8 +105,8 @@ context Restfulie::Server::Base do
       type.should_receive(:format_name).at_least(1).and_return('else')
       controller.should_receive(:render).with(render_options)
       type.execute_for(controller, resource, options, render_options)
-      render_options[:content_type].should eql('content-type')
-      render_options[:text].should eql(resource)
+      render_options[:content_type].should == 'content-type'
+      render_options[:text].should == resource
     end
     
   end
@@ -114,19 +114,19 @@ context Restfulie::Server::Base do
   context Restfulie::MediaType::Type do
     
     it "should translate /, . and + to _ when generating the short name" do
-      Restfulie::MediaType.rendering_type('application/vnd.city+xml',String).short_name.should eql('application_vnd_city_xml')
+      Restfulie::MediaType.rendering_type('application/vnd.city+xml',String).short_name.should == 'application_vnd_city_xml'
     end
     
     it "should retrieve the format from the last part of the media type" do
-      Restfulie::MediaType.rendering_type('vnd/city+xml',String).format_name.should eql('xml')
+      Restfulie::MediaType.rendering_type('vnd/city+xml',String).format_name.should == 'xml'
     end
     
     it "should retrieve the format if there is no +" do
-      Restfulie::MediaType.rendering_type('xml',String).format_name.should eql('xml')
+      Restfulie::MediaType.rendering_type('xml',String).format_name.should == 'xml'
     end
     
     it "should retrieve the format if there is a /" do
-      Restfulie::MediaType.rendering_type('application/xml',String).format_name.should eql('xml')
+      Restfulie::MediaType.rendering_type('application/xml',String).format_name.should == 'xml'
     end
     
   end
@@ -136,7 +136,7 @@ context Restfulie::Server::Base do
     it "should return the default handler if none is registered" do
       type = Object.new
       Restfulie::MediaType.should_receive(:supports?).with(type).and_return false
-      Restfulie::MediaType.type_for(type).should eql(Restfulie::MediaType::DefaultMediaTypeDecoder)
+      Restfulie::MediaType.type_for(type).should == Restfulie::MediaType::DefaultMediaTypeDecoder
     end
 
     it "should return the overriden handler if none is registered" do
@@ -144,7 +144,7 @@ context Restfulie::Server::Base do
       handler = Object.new
       Restfulie::MediaType.should_receive(:supports?).with(type).and_return true
       Restfulie::MediaType.should_receive(:media_type).with(type).and_return handler
-      Restfulie::MediaType.type_for(type).should eql(handler)
+      Restfulie::MediaType.type_for(type).should == handler
     end
     
   end

@@ -19,13 +19,13 @@ describe Restfulie::Server::Controller do
 
       it "should return the name of the type downcased" do
         @controller.stub(:model_type).and_return(SchoolClient)
-        @controller.model_variable_name.should eql(:@schoolclient)
+        @controller.model_variable_name.should == :@schoolclient
       end
 
     end
 
     it "should extract the model part from the Controller name" do
-      @controller.model_type.should eql(SchoolClient)
+      @controller.model_type.should == SchoolClient
     end
     
     it "should not fit content if it is not registered" do
@@ -52,7 +52,7 @@ describe Restfulie::Server::Controller do
     end
     
     it "should extract the model name from the controller name" do
-      @controller.model_name.should eql("school_client")
+      @controller.model_name.should == "school_client"
     end
     
   end
@@ -69,7 +69,7 @@ describe Restfulie::Server::Controller do
     it "should return 415 if the media type is not supported" do
       @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(false)
       @controller.should_receive(:head).with(415).and_return(@result)
-      @controller.create.should eql(@result)
+      @controller.create.should == @result
     end
 
     it "render the errors if something goes wrong" do
@@ -88,7 +88,7 @@ describe Restfulie::Server::Controller do
       @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(true)
       SchoolClient.should_receive(:from_xml).with(body.string).and_return(model)
       @controller.should_receive(:render).with({:xml => model.errors, :status => :unprocessable_entity}).and_return(@result)
-      @controller.create.should eql(@result)
+      @controller.create.should == @result
     end
 
     it "should save models if everything goes fine" do
@@ -105,7 +105,7 @@ describe Restfulie::Server::Controller do
       @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(true)
       SchoolClient.should_receive(:from_xml).with(body.string).and_return(model)
       @controller.should_receive(:render_created).with(model).and_return(@result)
-      @controller.create.should eql(@result)
+      @controller.create.should == @result
     end
 
   end
@@ -120,7 +120,7 @@ describe Restfulie::Server::Controller do
         @controller.should_receive(:render_resource).with(resource)
         @controller.should_receive(:params).and_return({:id=>id})
         @controller.show
-        @controller.instance_variable_get(:@schoolclient).should eql(resource)
+        @controller.instance_variable_get(:@schoolclient).should == resource
       end
     end
 
@@ -161,7 +161,7 @@ describe Restfulie::Server::Controller do
       @loaded.should_receive(:can?).with(:update).and_return(true)
       @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(false)
       @controller.should_receive(:head).with(415).and_return(@result)
-      @controller.update.should eql(@result)
+      @controller.update.should == @result
     end
     
     context "will update" do
@@ -179,7 +179,7 @@ describe Restfulie::Server::Controller do
       end
 
       it "should render the resource if everything goes ok" do
-        @controller.update.should eql(@result)
+        @controller.update.should == @result
       end
       
       it "should invoke pre_update if available" do
@@ -187,7 +187,7 @@ describe Restfulie::Server::Controller do
           :nothing
         end
         @controller.should_receive(:pre_update).with(@client)
-        @controller.update.should eql(@result)
+        @controller.update.should == @result
       end
     
     end

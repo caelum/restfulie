@@ -38,7 +38,7 @@ context Restfulie::Server::AtomMediaType do
       uri = 'http://caelumobjects.com'
       controller = Object.new
       controller.should_receive(:url_for).with({}).and_return(uri)
-      AtomFeed.new(nil).self_link(controller).should eql("<link rel=\"self\" href=\"#{uri}\"/>")
+      AtomFeed.new(nil).self_link(controller).should == "<link rel=\"self\" href=\"#{uri}\"/>"
     end
 
     it "array serialization to atom will serialize every element and allows id overriding" do
@@ -60,7 +60,7 @@ context Restfulie::Server::AtomMediaType do
       feed = AtomFeed.new([first, second]).id('custom_id')
       feed.should_receive(:items_to_atom_xml).and_return("<items/>")
       feed.should_receive(:self_link).with(controller).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels\"/>")
-      feed.title('Hotels list').to_atom(controller).should eql(expected)
+      feed.title('Hotels list').to_atom(controller).should == expected
     end
 
     it "array serialization to atom will use default id" do
@@ -83,7 +83,7 @@ context Restfulie::Server::AtomMediaType do
       feed = AtomFeed.new([first, second])
       feed.should_receive(:items_to_atom_xml).and_return("<items/>")
       feed.should_receive(:self_link).with(controller).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels\"/>")
-      feed.title('Hotels list').to_atom(controller).should eql(expected)
+      feed.title('Hotels list').to_atom(controller).should == expected
     end
     
     it "should serialize every item together" do
@@ -121,7 +121,7 @@ context Restfulie::Server::AtomMediaType do
         feed = AtomFeed.new([first, second])
         feed.should_receive(:self_link).with(controller, first).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/1\"/>")
         feed.should_receive(:self_link).with(controller, second).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/2\"/>")
-        feed.items_to_atom_xml(controller, nil).should eql(expected)
+        feed.items_to_atom_xml(controller, nil).should == expected
     end
 
     
@@ -145,7 +145,7 @@ context Restfulie::Server::AtomMediaType do
         feed = AtomFeed.new([first])
         feed.should_receive(:self_link).with(controller, first).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels/1\"/>")
         b = lambda{ |item| "<city>1</city>" }
-        feed.items_to_atom_xml(controller, b).should eql(expected)
+        feed.items_to_atom_xml(controller, b).should == expected
     end
 
     
@@ -162,24 +162,24 @@ context Restfulie::Server::AtomMediaType do
     
     it "should return now if there are no items" do
       Time.should_receive(:now).and_return(@now)
-      AtomFeed.new([]).updated_at.should eql(@now)
+      AtomFeed.new([]).updated_at.should == @now
     end
     
     it "should return now if the items dont answer to updated_at" do
       Time.should_receive(:now).and_return(@now)
-      AtomFeed.new(["first", "second"]).updated_at.should eql(@now)
+      AtomFeed.new(["first", "second"]).updated_at.should == @now
     end
     
     it "should return a date in the future if an item has such date" do
-      AtomFeed.new([Item.new(@now + 100)]).updated_at.should eql(@now+100)
+      AtomFeed.new([Item.new(@now + 100)]).updated_at.should == @now+100
     end
     
     it "should return any date if there is any date" do
-      AtomFeed.new([Item.new(@now - 100)]).updated_at.should eql(@now - 100)
+      AtomFeed.new([Item.new(@now - 100)]).updated_at.should == @now - 100
     end
     
     it "should return the most recent date if there is more than one date" do
-      AtomFeed.new([Item.new(@now - 100), Item.new(@now-50)]).updated_at.should eql(@now - 50)
+      AtomFeed.new([Item.new(@now - 100), Item.new(@now-50)]).updated_at.should == @now - 50
     end
     
   end

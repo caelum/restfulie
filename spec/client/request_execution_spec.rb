@@ -17,9 +17,9 @@ context Restfulie::Client::Response do
     result = Object.new
     response = Object.new
     final = Restfulie::Client::Response.new(nil, response).enhance(result)
-    final.should eql(result)
+    final.should == result
     final.is_a?(Restfulie::Client::WebResponse).should be_true
-    final.web_response.should eql(response)
+    final.web_response.should == response
     final.web_response.is_a?(Restfulie::Client::HTTPResponse).should be_true
   end
   
@@ -42,32 +42,32 @@ context Restfulie::Client::Response do
       def Shipment.from_xhtml(content)
         "resulting content"
       end
-      @instance.generic_parse_get_entity("xhtml", Shipment).should eql("resulting content")
+      @instance.generic_parse_get_entity("xhtml", Shipment).should == "resulting content"
     end
     
     it "should return a xml result from the content" do
       @response.content_type = "application/vnd.app+xml"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_xml).with(@response.body).and_return(@result)
-      @instance.parse_get_entity("200").should eql(@result)
+      @instance.parse_get_entity("200").should == @result
     end
     
     it "should return a json result from the content" do
       @response.content_type = "application/json"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_json).with(@response.body).and_return(@result)
-      @instance.parse_get_entity("200").should eql(@result)
+      @instance.parse_get_entity("200").should == @result
     end
     
     it "should return a generic result from the content" do
       @response.content_type = "xhtml"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       @instance.should_receive(:generic_parse_get_entity).with("xhtml", Shipment).and_return(@result)
-      @instance.parse_get_entity("200").should eql(@result)
+      @instance.parse_get_entity("200").should == @result
     end
     
     it "should return the response if its not 200" do
-      @instance.parse_get_entity("500").should eql(@response)
+      @instance.parse_get_entity("500").should == @response
     end
     
   end
@@ -84,7 +84,7 @@ context Restfulie::Client::Response do
       expected_result = Object.new
       instance.should_receive(:enhance).with(entity).and_return(expected_result)
       result = instance.parse_post :nothing
-      result.should eql(expected_result)
+      result.should == expected_result
     end
 
     it "should not follow moved permanently" do
@@ -93,7 +93,7 @@ context Restfulie::Client::Response do
       response.should_receive(:code).and_return("301")
       result = Restfulie::Client::Response.new(NotFollow, response).parse_post :nothing
       result.is_a?(Restfulie::Client::WebResponse).should be_true
-      result.web_response.should eql(response)
+      result.web_response.should == response
     end
 
     it "should follow 301 if instructed to do so" do
@@ -105,8 +105,8 @@ context Restfulie::Client::Response do
       response.should_receive(:code).and_return("301")
       Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
       result = Restfulie::Client::Response.new(Follow, response).parse_post :nothing
-      result.web_response.should eql(response)
-      result.should eql(expected)
+      result.web_response.should == response
+      result.should == expected
     end
   end
   
@@ -176,17 +176,17 @@ context Restfulie::Client::RequestExecution do
     
     it "should add headers to hash if non-existent" do
       hash = {}
-      @instance.as(:as).accepts(:accepts).add_headers_to(hash).should eql(hash)
-      hash[:headers]["Content-type"].should eql(:as)
-      hash[:headers]["Accept"].should eql(:accepts)
+      @instance.as(:as).accepts(:accepts).add_headers_to(hash).should == hash
+      hash[:headers]["Content-type"].should == :as
+      hash[:headers]["Accept"].should == :accepts
     end
     
     it "should add headers to hash if existent" do
       hash = { :headers => {:already => :some_value}}
-      @instance.as(:as).accepts(:accepts).add_headers_to(hash).should eql(hash)
-      hash[:headers]["Content-type"].should eql(:as)
-      hash[:headers]["Accept"].should eql(:accepts)
-      hash[:headers][:already].should eql(:some_value)
+      @instance.as(:as).accepts(:accepts).add_headers_to(hash).should == hash
+      hash[:headers]["Content-type"].should == :as
+      hash[:headers]["Accept"].should == :accepts
+      hash[:headers][:already].should == :some_value
     end
     
   end
@@ -266,7 +266,7 @@ context Restfulie::Client::RequestExecution do
       Restfulie::Client::Response.should_receive(:new).and_return(result)
       
       res = Restfulie::Client::RequestExecution.new(ClientOrder, nil).at('http://www.caelumobjects.com/product').create @content
-      res.should eql(parsed_result)
+      res.should == parsed_result
     end
 
   end
@@ -290,7 +290,7 @@ context Restfulie::Client::RequestExecution do
       response.should_receive(:parse_get_response).and_return(result)
       Restfulie::Client::Response.should_receive(:new).with(String, res).and_return(response)
       ex = Restfulie::Client::RequestExecution.new(String, nil)
-      ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should eql(result)
+      ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should == result
     end
     
   end
@@ -320,21 +320,21 @@ context Restfulie::Client::RequestExecution do
       mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>"
       
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.status.should eql("CANCELLED")
+      model.status.should == "CANCELLED"
     end
     
     it "should add the response" do
       mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>"
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.web_response.should eql(@response)
+      model.web_response.should == @response
     end
     
     it "should deserialize correctly if its a json" do
       mock_request_for "application/json", "{client_restfulie_model: { status : 'CANCELLED' }}"
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.status.should eql("CANCELLED")
+      model.status.should == "CANCELLED"
   
     end
   end

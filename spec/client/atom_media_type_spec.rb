@@ -15,7 +15,7 @@ context Restfulie::Server::AtomMediaType do
       Hash.should_receive(:from_xml).with("<order></order>").and_return({ :first_key => first})
       Restfulie::Server::AtomFeedDecoded.should_receive(:new).with(first).and_return(feed)
       result = Restfulie::Server::AtomMediaType.from_xml "<order></order>"
-      result.should eql(feed)
+      result.should == feed
     end
     
   end
@@ -32,7 +32,7 @@ context Restfulie::Server::AtomMediaType do
       @entry.content = Hashi::CustomHash.new(@hotel)
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
-      feed[0].should eql(@result)
+      feed[0].should == @result
     end
     
     it "should ignore the type attribute if its the first one" do
@@ -40,7 +40,7 @@ context Restfulie::Server::AtomMediaType do
       @entry.content = Hashi::CustomHash.new(@hotel)
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with({"hotel" => {:name => "caelum"}}).and_return(@result)
-      feed[0].should eql(@result)
+      feed[0].should == @result
     end
     
     it "should add a link result if it exists" do
@@ -49,7 +49,7 @@ context Restfulie::Server::AtomMediaType do
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
       @result.should_receive(:add_transitions).with([@entry.link.hash])
-      feed[0].should eql(@result)
+      feed[0].should == @result
     end
     
     it "should add a destroy link result if self exists" do
@@ -58,7 +58,7 @@ context Restfulie::Server::AtomMediaType do
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
       @result.should_receive(:add_transitions).with([@entry.link.hash, {:rel => "destroy", :method => "delete", :href => "http://caelumobjects.com"}])
-      feed[0].should eql(@result)
+      feed[0].should == @result
     end
     
     it "should add a series of link results if they exists" do
@@ -67,14 +67,14 @@ context Restfulie::Server::AtomMediaType do
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
       @result.should_receive(:add_transitions).with(@entry.link.hash)
-      feed[0].should eql(@result)
+      feed[0].should == @result
     end
     
     it "should find the self link if available" do
       expected = {:rel => "self"}
       feed = Restfulie::Server::AtomFeedDecoded.new({})
-      feed.send(:self_from, [expected]).should eql(expected)
-      feed.send(:self_from, []).should eql(nil)
+      feed.send(:self_from, [expected]).should == expected
+      feed.send(:self_from, []).should == nil
     end
     
   end

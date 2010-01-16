@@ -23,13 +23,13 @@ context "accepts client unmarshalling" do
     it "should be able to answer to the method rel name" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="pay" href="http://url_for/action_name"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></client-restfulie-model>'
       model = ClientRestfulieModel.from_xml xml
-      model.respond_to?('pay').should eql(true)
+      model.respond_to?('pay').should == true
     end
   
     it "should be able to answer to just one state change" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="cancel" href="http://url_for/action_name"/></client-restfulie-model>'
       model = ClientRestfulieModel.from_xml xml
-      model.respond_to?('cancel').should eql(true)
+      model.respond_to?('cancel').should == true
     end
   
   end  

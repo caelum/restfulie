@@ -35,7 +35,7 @@ context RestfulieModel do
     RestfulieModel.transition :pay
     RestfulieModel.state :unpaid, :allow => [:pay]
     subject.pay
-    subject.status.should eql(:unpaid)
+    subject.status.should == :unpaid
   end
   
   it "should use change status to its result when transitioning" do
@@ -44,13 +44,13 @@ context RestfulieModel do
     RestfulieModel.transition :pay, {}, :paid
     RestfulieModel.state :unpaid, :allow => [:pay]
     subject.pay
-    subject.status.should eql("paid")
+    subject.status.should == "paid"
   end
   
   context "when parsed to json" do
 
     it "should not add hypermedia if controller is nil" do
-      subject.to_json.should eql("{\"restfulie_model\":{\"status\":\"unpaid\"}}")
+      subject.to_json.should == "{\"restfulie_model\":{\"status\":\"unpaid\"}}"
     end
     
     it "should add allowable actions to models json if controller is set" do
@@ -157,14 +157,14 @@ context RestfulieModel do
     it "should not add anything if in an unknown state" do
       my_controller = MockedController.new
       subject.status = :gone
-      subject.to_json(:controller => my_controller).should eql("{\"restfulie_model\":{\"status\":\"gone\"}}")
+      subject.to_json(:controller => my_controller).should == "{\"restfulie_model\":{\"status\":\"gone\"}}"
     end
   end
   
   context "when parsed to xml" do
     
       it "should not add hypermedia if controller is nil" do
-        subject.to_xml.gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>')
+        subject.to_xml.gsub("\n", '').should == '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status></restfulie-model>'
       end
       
       it "should add allowable actions to models xml if controller is set" do
@@ -176,7 +176,7 @@ context RestfulieModel do
         expected = normalize_xml('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/show" rel="latest"/></restfulie-model>')
         got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
         
-        got.should eql(expected)
+        got.should == expected
       end
       
       it "should add more than 1 allowable actions to models xml if controller is set" do
@@ -188,7 +188,7 @@ context RestfulieModel do
         expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
         got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
         
-        got.should eql(expected)
+        got.should == expected
       end
       
       it "should add extra transitions if acts_as_restfulie receives a block" do
@@ -203,7 +203,7 @@ context RestfulieModel do
         expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/show','latest')+'  '+link('http://url_for/show','latest')+'</restfulie-model>')
         got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
         
-        got.should eql(expected)
+        got.should == expected
       end
       
       it "should add and create extra transition through acts_as_restfulie block" do
@@ -217,7 +217,7 @@ context RestfulieModel do
         expected = normalize_xml(base + '  <status>unpaid</status>  '+link('http://url_for/thanks','latest')+'</restfulie-model>')
         got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
         
-        got.should eql(expected)
+        got.should == expected
       end
       
       it "should add hypermedia link if controller is set and told to use name based link" do
@@ -225,7 +225,7 @@ context RestfulieModel do
         RestfulieModel.acts_as_restfulie
         RestfulieModel.transition :latest, {:controller => my_controller, :action => :show}
         RestfulieModel.state :unpaid, :allow => [:latest]
-        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
+        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should == '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>'
       end
       
       it "should use rel if there is a rel attribute" do
@@ -233,7 +233,7 @@ context RestfulieModel do
          RestfulieModel.acts_as_restfulie
          RestfulieModel.transition :latest, {:controller => my_controller, :action => :show, :rel => :show_me_the_latest}
          RestfulieModel.state :unpaid, :allow => [:latest]
-         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>')
+         subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should == '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <show_me_the_latest>http://url_for/show</show_me_the_latest></restfulie-model>'
       end
       
       it "should evaluate in runtime if there is a block to define the transition" do
@@ -244,7 +244,7 @@ context RestfulieModel do
         end
         RestfulieModel.state :unpaid, :allow => [:latest]
         subject.content = :show
-        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>')
+        subject.to_xml(:controller => my_controller, :use_name_based_link => true).gsub("\n", '').should == '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <latest>http://url_for/show</latest></restfulie-model>'
       end
       
       it "should use transition name if there is no action" do
@@ -256,13 +256,13 @@ context RestfulieModel do
         expected = normalize_xml('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>unpaid</status>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="http://url_for/pay" rel="pay"/></restfulie-model>')
         got      = normalize_xml(subject.to_xml(:controller => my_controller).gsub("\n", ''))
         
-        got.should eql(expected)
+        got.should == expected
       end
       
       it "should not add anything if in an unknown state" do
         my_controller = MockedController.new
         subject.status = :gone
-        subject.to_xml(:controller => my_controller).gsub("\n", '').should eql('<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>gone</status></restfulie-model>')
+        subject.to_xml(:controller => my_controller).gsub("\n", '').should == '<?xml version="1.0" encoding="UTF-8"?><restfulie-model>  <status>gone</status></restfulie-model>'
       end
     end
   
