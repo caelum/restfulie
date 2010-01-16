@@ -54,19 +54,24 @@ context ActionController::Base do
 
 
   context "when invoking render_resource" do
+    
+    before do
+      @info = {:hash_containing => "cache info"}
+      @resource = Object.new
+      @resource.should_receive(:cache_info).and_return(@info)
+    end
   
     it "should invoke to_xml with the specified parameters and controller" do
-      resource = Object.new
       xml = "<resource />"
       options = {:custom => :whatever}
-      @controller.should_receive(:stale?).and_return(true)
+      @controller.should_receive(:stale?).with(@info).and_return(true)
       @controller.should_receive(:respond_to)
-      @controller.render_resource(resource, options)
+      @controller.render_resource(@resource, options)
     end
     
     it "should not process if not stale" do
       @controller.should_receive(:stale?).and_return(false)
-      @controller.render_resource(Object.new, {})
+      @controller.render_resource(@resource, {})
     end
   end
   
