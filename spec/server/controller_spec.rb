@@ -9,8 +9,6 @@ context ActionController::Base do
     @controller = ClientsController.new
   end
   
-  test etag and last modified
-
   context "when generic rendering a resource" do
   
     it "should invoke the original rendering process if there is no resource" do

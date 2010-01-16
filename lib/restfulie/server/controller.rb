@@ -1,14 +1,11 @@
 module ActionController
   class Base
-    
+
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
     def render_resource(resource, options = {}, render_options = {})
-       cache_info = {:etag => resource}
-       cache_info[:etag] = resource.etag if resource.respond_to? :etag
-       cache_info[:last_modified] = resource.updated_at.utc if resource.respond_to? :updated_at
 
-       return nil unless stale? cache_info
+       return nil unless stale? resource.cache_info
 
        return render(render_options) if render_options[:text]
 

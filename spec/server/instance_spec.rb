@@ -6,6 +6,31 @@ context Restfulie::Server::Instance do
     @o = Object.new
     @o.extend Restfulie::Server::Instance
   end
+  
+  context "when retrieving the cache info" do
+    
+    it "should return the default resource as etag and no last modified by default" do
+      @o.cache_info[:etag].should == @o
+      @o.cache_info[:last_modified].should be_nil
+    end
+    
+    it "should return any overriden etag" do
+      def @o.etag
+        "custom"
+      end
+      @o.cache_info[:etag].should == "custom"
+    end
+
+    it "should return any utc date as last modified" do
+      def @o.updated_at
+        date = Date.new
+        date.stub(:utc).and_return(123)
+        date
+      end
+      @o.cache_info[:last_modified].should == 123
+    end
+    
+  end
 
   context "when checking available transitions" do
     
