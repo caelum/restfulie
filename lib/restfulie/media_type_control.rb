@@ -1,3 +1,15 @@
+# extends Rails mime type
+module Mime
+  class << self
+    alias_method :old_const_set, :const_set
+    
+    # ignores setting the contest again
+    def const_set(a,b)
+      super(a,b) unless Mime.const_defined?(a)
+    end
+  end
+end
+
 module Restfulie
   
   module MediaTypeControl
@@ -30,6 +42,14 @@ module Restfulie
     
   end
   
+
+  def register(string, symbol, mime_type_synonyms = [], extension_synonyms = [], skip_lookup = false)
+
+    SET << Mime.const_get(symbol.to_s.upcase)
+
+    ([string] + mime_type_synonyms).each { |string| LOOKUP[string] = SET.last } unless skip_lookup
+    ([symbol.to_s] + extension_synonyms).each { |ext| EXTENSION_LOOKUP[ext] = SET.last }
+  end
 
   module MediaType
     
