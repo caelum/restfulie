@@ -193,33 +193,40 @@ context Restfulie::Client::RequestExecution do
   
   context "when executing a generic request" do
     
-    it "should execute the request" do
-      httpMethod = Object.new
-      req = Object.new
-      httpMethod.should_receive(:new).with("/localhost").and_return(req)
+    before do
+      @httpMethod = Object.new
+      @req = Object.new
+      @httpMethod.should_receive(:new).with("/localhost").and_return(@req)
       
-      request = Restfulie::Client::RequestExecution.new(String, nil)
-      request.should_receive(:add_basic_request_headers).with(req, "delete")
+      @request = Restfulie::Client::RequestExecution.new(String, nil)
+      @request.should_receive(:add_basic_request_headers).with(@req, "delete")
 
       response = Object.new
 
       http = Object.new
-      http.should_receive(:request).with(req).and_return(response)
+      http.should_receive(:request).with(@req).and_return(response)
 
       responder = Object.new
       Restfulie::Client::Response.should_receive(:new).with(String, response).and_return(responder)
-      responder.should_receive(:parse).with(httpMethod, nil, "application/xml")
+      responder.should_receive(:parse).with(@httpMethod, nil, "application/xml")
       Net::HTTP.should_receive(:new).with("localhost", 80).and_return(http)
-
-      request.at("http://localhost/localhost").do(httpMethod, "delete", nil)
+    end
+    
+    it "should execute the request" do
+      @request.at("http://localhost/localhost").do(@httpMethod, "delete", nil)
     end
     
     it "should post data if it is a post" do
-      fail
+      @req.should_receive(:body=).with("content")
+      @req.should_receive(:get_fields).with("Content-type").and_return("txt")
+      @request.at("http://localhost/localhost").do(@httpMethod, "delete", "content")
     end
     
     it "should use the default post content type if none is provided" do
-      fail
+      @req.should_receive(:body=).with("content")
+      @req.should_receive(:get_fields).with("Content-type").and_return(nil)
+      @req.should_receive(:add_field).with("Content-type", "application/xml")
+      @request.at("http://localhost/localhost").do(@httpMethod, "delete", "content")
     end
     
   end
