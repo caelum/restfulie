@@ -27,6 +27,8 @@ end
 
 Object.extend Restfulie
 
+include ActiveSupport::CoreExtensions::Hash
+
 class Hashi::CustomHash
     uses_restfulie
 end
