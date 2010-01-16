@@ -34,6 +34,7 @@ module Restfulie
       # by extending WebResponse and defining the attribute web_response
       def enhance(result)
         @response.extend Restfulie::Client::HTTPResponse
+        @response.previous = result.web_response if result.respond_to? :web_response
         result.extend Restfulie::Client::WebResponse
         result.web_response = @response
         result
@@ -78,7 +79,7 @@ module Restfulie
       # TODO this should be called by RequestExcution, not instance
       def parse(method, invoking_object, content_type)
 
-        return invoking_object if @response.code == "304"
+        return enhance(invoking_object) if @response.code == "304"
 
         # return block.call(@response) if block
 

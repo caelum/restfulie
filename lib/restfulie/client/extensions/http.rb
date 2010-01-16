@@ -1,5 +1,7 @@
 # an extesion to http responses
 module Restfulie::Client::HTTPResponse
+  
+  attr_accessor :previous
         
   # determines if this response code was successful (according to http specs: 200~299)
   def is_successful?

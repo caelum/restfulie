@@ -1,12 +1,12 @@
 # extends Rails mime type
 module Mime
   class << self
-    alias_method :old_const_set, :const_set
+    # alias_method :old_const_set, :const_set
     
     # ignores setting the contest again
-    def const_set(a,b)
-      super(a,b) unless Mime.const_defined?(a)
-    end
+    # def const_set(a,b)
+      # super(a,b) unless Mime.const_defined?(a)
+    # end
   end
 end
 
