@@ -318,6 +318,7 @@ context Restfulie::Client::RequestExecution do
       @response = res
       req = mock Net::HTTPRequest
       req.should_receive(:add_field).with('Accept', 'application/xml')
+      req.stub(:get_fields).and_return(nil)
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
       http = Object.new
       Net::HTTP.should_receive(:new).with('localhost',3001).and_return(http)
