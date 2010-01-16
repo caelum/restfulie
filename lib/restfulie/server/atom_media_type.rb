@@ -69,11 +69,7 @@ class AtomFeed
   end
   
   def updated_at
-    last = nil
-    @feed.each do |item|
-      last = item.updated_at if item.respond_to?(:updated_at) && (last.nil? || item.updated_at > last)
-    end
-    last || Time.now
+    @feed.updated_at
   end
   
   def items_to_atom_xml(controller, serializer = nil)

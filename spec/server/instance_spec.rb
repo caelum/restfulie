@@ -95,4 +95,42 @@ context Restfulie::Server::Instance do
     
   end
 
+  
+  context "while checking the last modified date from an array" do
+    
+    before do
+      @now = Time.now
+    end
+    
+    class Item
+      def initialize(time)
+        @updated_at = time
+      end
+      attr_reader :updated_at
+    end
+    
+    it "should return now if there are no items" do
+      Time.should_receive(:now).and_return(@now)
+      [].updated_at.should == @now
+    end
+    
+    it "should return now if the items dont answer to updated_at" do
+      Time.should_receive(:now).and_return(@now)
+      ["first", "second"].updated_at.should == @now
+    end
+    
+    it "should return a date in the future if an item has such date" do
+      [Item.new(@now + 100)].updated_at.should == @now+100
+    end
+    
+    it "should return any date if there is any date" do
+      [Item.new(@now - 100)].updated_at.should == @now - 100
+    end
+    
+    it "should return the most recent date if there is more than one date" do
+      [Item.new(@now - 100), Item.new(@now-50)].updated_at.should == @now - 50
+    end
+    
+  end
+
 end

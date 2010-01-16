@@ -1,6 +1,5 @@
-# acts_as_restfulie instances implement this module
-module Restfulie::Server::Instance
-
+module Restfulie::Server::Cache
+  
   # returns specific cache information for this resource
   # you may customize it and return a custom etag and last_modified fields
   def cache_info
@@ -9,6 +8,13 @@ module Restfulie::Server::Instance
     info[:last_modified] = self.updated_at.utc if self.respond_to? :updated_at
     info
   end
+  
+end
+
+# acts_as_restfulie instances implement this module
+module Restfulie::Server::Instance
+
+  include Restfulie::Server::Cache
   
   # checks whether this resource can execute a transition or has such a relation
   def can?(what)
@@ -62,4 +68,18 @@ module Restfulie::Server::Instance
     transition.link_for(self, controller)
   end
 
+end
+
+class Array
+  
+  include Restfulie::Server::Cache
+
+  def updated_at
+    last = nil
+    each do |item|
+      last = item.updated_at if item.respond_to?(:updated_at) && (last.nil? || item.updated_at > last)
+    end
+    last || Time.now
+  end
+  
 end
