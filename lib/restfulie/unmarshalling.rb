@@ -46,12 +46,18 @@ module Restfulie
             links = [h[key]]
             h.delete("link")
           else
+            debugger
             h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
           end
         end
         h.delete("xmlns") if key=="xmlns"
       end
-      result = self.new h
+      if self.included_modules.include?(ActiveRecord::Serialization)
+        result = self.new(h)
+      else
+        puts "failing for #{self}"
+        fail #:this is what does not work
+      end
       if !(links.nil?) && self.include?(Restfulie::Client::Instance)
         result.add_transitions(links)
       end
@@ -73,7 +79,7 @@ module Restfulie
       result
     end
     
-    # private
+    private
     # def instantiate(hash={})
     #   obj = self.new
     #   hash.keys.each do |k|
@@ -83,6 +89,11 @@ module Restfulie
     # end
   end
 end  
+
+class ActiveRecord::Base
+  def build_from_hash(h)
+  end
+end
 
 private
 def safe_json_decode(json)
