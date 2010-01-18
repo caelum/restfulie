@@ -84,20 +84,20 @@ context Restfulie::Client::Response do
       response.should_receive(:code).and_return("200")
       instance = Restfulie::Client::Response.new(NotFollow, response)
       entity = Object.new
-      instance.should_receive(:parse_get_entity).with("200").and_return(entity)
-      expected_result = Object.new
-      instance.should_receive(:enhance).with(entity).and_return(expected_result)
+      instance.should_receive(:final_parse).and_return(entity)
       result = instance.parse_post :nothing
-      result.should == expected_result
+      result.should == entity
     end
 
     it "should not follow moved permanently" do
       response = Object.new
       content = Object.new
       response.should_receive(:code).and_return("301")
-      result = Restfulie::Client::Response.new(NotFollow, response).parse_post :nothing
-      result.is_a?(Restfulie::Client::WebResponse).should be_true
-      result.web_response.should == response
+      entity = Object.new
+      instance = Restfulie::Client::Response.new(NotFollow, response)
+      instance.should_receive(:final_parse).and_return(entity)
+      result = instance.parse_post :nothing
+      result.should == entity
     end
 
     it "should follow 301 if instructed to do so" do
@@ -297,7 +297,7 @@ context Restfulie::Client::RequestExecution do
       res = Hashi::CustomHash.new({})
       define_http_expectation(req, res)
       response = Object.new
-      response.should_receive(:parse_get_response).and_return(result)
+      response.should_receive(:final_parse).and_return(result)
       Restfulie::Client::Response.should_receive(:new).with(String, res).and_return(response)
       ex = Restfulie::Client::RequestExecution.new(String, nil)
       ex.should_receive(:add_basic_request_headers)
@@ -351,18 +351,18 @@ context Restfulie::Client::RequestExecution do
     end
   end
   
-  it "should add accepts if there is none" do
-    @req = Object.new
-    @origin = Object.new
-    @ex = Restfulie::Client::RequestExecution.new(String, @origin).accepts("nothing")
-    @origin.should_receive(:_came_from).and_return("html")
-    @req.stub(:get_fields).and_return(["*/*"])
-    @req.should_receive(:add_field).with("Accept", "nothing")
-    @req.should_receive(:add_field).with("Accept", "html")
-    @ex.add_basic_request_headers(@req, nil)
-  end
-  
   context "when adding headers" do
+    
+    it "should add accepts if there is none" do
+      @req = Object.new
+      @origin = Object.new
+      @ex = Restfulie::Client::RequestExecution.new(String, @origin).accepts("nothing")
+      @origin.should_receive(:_came_from).and_return("html")
+      @req.stub(:get_fields).and_return(["*/*"])
+      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("Accept", "html")
+      @ex.add_basic_request_headers(@req, nil)
+    end
     
     before do
       @req = Object.new
@@ -437,44 +437,40 @@ context Restfulie::Client::RequestExecution do
     end
 
     it "should test registering and using a specific handler" do
-      fail
+      result = false
+      Restfulie::Client::ResponseHandler.register(100,100) do |response|
+        result = true
+      end
+      response = Hashi::CustomHash.new({"response" => {"code" => "100"}})
+      Restfulie::Client::ResponseHandler.handle(response)
+      result.should be_true
     end
     
     it "should test overriding and using a specific handler" do
-      fail
+      result = false
+      Restfulie::Client::ResponseHandler.register(300,300) do |response|
+        result = false
+      end
+      Restfulie::Client::ResponseHandler.register(300,300) do |response|
+        result = true
+      end
+      response = Hashi::CustomHash.new({"response" => {"code" => "300"}})
+      Restfulie::Client::ResponseHandler.handle(response)
+      result.should be_true
     end
     
-    it "should test default handlers for 200 and 301" do
-      fail
+    it "should test default handlers for 200" do
+      response = Hashi::CustomHash.new({"response" => {"code" => "200"}})
+      Restfulie::Client::ResponseHandler.should_receive(:parse_entity).with(response)
+      Restfulie::Client::ResponseHandler.handle(response)
     end
     
-        #   def register(min_code, max_code, handler)
-        #     (min_code..max_code).each do |code|
-        #       handlers[code] = handler
-        #     end
-        #   end
-        #   def handle(restfulie_response)
-        #     handlers[restfulie_response.response.code.to_int].call(restfulie_response)
-        #   end
-
-        #   def parse_entity(restfulie_response)
-        #     response = restfulie_response.response
-        #     content_type = response.content_type
-        #     type = Restfulie::MediaType.type_for(content_type)
-        #     if content_type[-3,3]=="xml"
-        #       result = type.from_xml response.body
-        #     elsif content_type[-4,4]=="json"
-        #       result = type.from_json response.body
-        #     else
-        #       result = generic_parse_get_entity content_type, type
-        #     end
-        #     result.instance_variable_set :@_came_from, content_type
-        #     result
-        #   end
-        # 
-        #   register( 100, 599, Proc.new{ pure_response_return } )
-        #   register( 200, 200, Proc.new{ parse_entity } )
-        #   register( 301, 301, Proc.new{ execute_retrieval } )
+    it "should test default handlers for 301" do
+      response = Hashi::CustomHash.new({"response" => {"code" => "301"}})
+      Restfulie::Client::ResponseHandler.should_receive(:retrieve_resource_from_location).with(response)
+      Restfulie::Client::ResponseHandler.handle(response)
+    end
+    
   end
 
 end

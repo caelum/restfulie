@@ -15,9 +15,9 @@ module Restfulie
       
       class << self
 
-        def register(min_code, max_code, handler)
+        def register(min_code, max_code, &block)
           (min_code..max_code).each do |code|
-            handlers[code] = handler
+            handlers[code] = block
           end
         end
 
@@ -49,7 +49,7 @@ module Restfulie
         end
 
         def handle(restfulie_response)
-          handlers[restfulie_response.response.code.to_int].call(restfulie_response)
+          handlers[restfulie_response.response.code.to_i].call(restfulie_response)
         end
         
         def generic_parse_entity(restfulie_response)
@@ -65,12 +65,16 @@ module Restfulie
         def handlers
           @handlers ||= {}
         end
+        
+        def register_func(min, max, proc)
+          register(min, max) { |r| proc.call(r) }
+        end
 
       end
       
-      register( 100, 599, Proc.new{ pure_response_return } )
-      register( 200, 200, Proc.new{ parse_entity } )
-      register( 301, 301, Proc.new{ retrieve_resource_from_location } )
+      register_func( 100, 599, Proc.new{ |r| pure_response_return r} )
+      register_func( 200, 200, Proc.new{ |r| parse_entity r} )
+      register_func( 301, 301, Proc.new{ |r| retrieve_resource_from_location r} )
       
     end
 
