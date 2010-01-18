@@ -30,22 +30,24 @@ context Restfulie::Client::Response do
     
     before do
       @response = Hashi::CustomHash.new({"body" => "response body"})
-      @instance = Restfulie::Client::Response.new(nil, @response)
       @result = Object.new
     end
     
     it "should complain about a generic type that doesnt match a from_ method" do
-      lambda {@instance.generic_parse_get_entity("html", Shipment)}.should raise_error(Restfulie::UnsupportedContentType)
+      @response.content_type = "custom_xhtml"
+      lambda {Restfulie::Client::ResponseHandler.generic_parse_entity(restfulie_response)}.should raise_error(Restfulie::UnsupportedContentType)
     end
     
     it "should invoke a generic existing from_ method" do
       def Shipment.from_xhtml(content)
         "resulting content"
       end
-      @instance.generic_parse_get_entity("xhtml", Shipment).should == "resulting content"
+      Restfulie::MediaType.should_receive(:type_for).with("xhtml").and_return(Shipment)
+      @response.content_type = "xhtml"
+      Restfulie::Client::ResponseHandler.generic_parse_entity(restfulie_response).should == "resulting content"
     end
     
-    def restfulie_response(code)
+    def restfulie_response(code = "200")
       @response.code = code
       Hashi::CustomHash.new({"response"=>@response})
     end

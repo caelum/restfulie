@@ -107,6 +107,10 @@ module Restfulie
         Hashi::CustomHash.new :body => body
       end
     
+      def self.from_xhtml(body)
+        Hashi::CustomHash.new :body => body
+      end
+    
     end
   end
   
