@@ -8,8 +8,68 @@ module Restfulie
       attr_accessor :web_response
     end
     
+    class ResponseError < Exception
+    end
+    
+    module ResponseHandler
+      
+      class << self
+
+        def register(min_code, max_code, handler)
+          (min_code..max_code).each do |code|
+            handlers[code] = handler
+          end
+        end
+
+        def pure_response_return(restfulie_response)
+          restfulie_response.response
+        end
+
+        def raise_error(restfulie_response)
+          raise Restfulie::Client::ResponseError.new(restfulie_response.response)
+        end
+
+        def parse_entity(restfulie_response)
+          response = restfulie_response.response
+          content_type = response.content_type
+          type = Restfulie::MediaType.type_for(content_type)
+          if content_type[-3,3]=="xml"
+            result = type.from_xml response.body
+          elsif content_type[-4,4]=="json"
+            result = type.from_json response.body
+          else
+            result = generic_parse_get_entity content_type, type
+          end
+          result.instance_variable_set :@_came_from, content_type
+          result
+        end
+
+        def retrieve_resource_from_location(restfulie_response)
+          restfulie_response.type.from_web restfulie_response.response["Location"]
+        end
+
+        def handle(restfulie_response)
+          handlers[restfulie_response.response.code.to_int].call(restfulie_response)
+        end
+
+        private
+        def handlers
+          @handlers ||= {}
+        end
+
+      end
+      
+      register( 100, 599, Proc.new{ pure_response_return } )
+      register( 200, 200, Proc.new{ parse_entity } )
+      register( 301, 301, Proc.new{ retrieve_resource_from_location } )
+      
+    end
+
+    
     # TODO there should be a response for each method type
     class Response
+      
+      attr_reader :type, :response
       
       def initialize(type, response)
         @type = type
@@ -26,7 +86,7 @@ module Restfulie
         elsif code=="201"
           Restfulie.at(@response["Location"]).accepts(expected_content_type).get
         else
-          enhance parse_get_entity(code)
+          final_parse
         end
       end
       
@@ -39,33 +99,10 @@ module Restfulie
         result.web_response = @response
         result
       end
-
-      # parses a get response.
-      # if the result code is 301, redirect
-      # otherwise, parses an ok response
-      def parse_get_response
-        
-        code = @response.code
-        return enhance(from_web(@response["Location"])) if code=="301"
-        enhance parse_get_entity(code)
-      end
       
-      # returns an entity for a specific response
-      def parse_get_entity(code)
-        return @response unless code == "200"
-        
-        content_type = @response.content_type
-        type = Restfulie::MediaType.type_for(content_type)
-        if content_type[-3,3]=="xml"
-          result = type.from_xml @response.body
-        elsif content_type[-4,4]=="json"
-          result = type.from_json @response.body
-        else
-          result = generic_parse_get_entity content_type, type
-        end
-        result.instance_variable_set :@_came_from, content_type
-        result
-        
+      # parses this response using the correct ResponseHandler and enhances it
+      def final_parse
+        enhance Restfulie::Client::ResponseHandler.handle(@response, self)
       end
 
       def generic_parse_get_entity(content_type, type)
@@ -82,9 +119,9 @@ module Restfulie
 
         # return block.call(@response) if block
 
-        return parse_get_response if method == Net::HTTP::Get
+        return final_parse if method == Net::HTTP::Get
         return parse_post(content_type) if method == Net::HTTP::Post
-        parse_get_response
+        final_parse
         
       end
       
@@ -217,9 +254,8 @@ module Restfulie
         options.each { |key,value| req[key] = value }
         add_basic_request_headers(req)
         res = Net::HTTP.new(uri.host, uri.port).request(req)
-        Restfulie::Client::Response.new(@type, res).parse_get_response
+        Restfulie::Client::Response.new(@type, res).final_parse
       end
-      
       
     end
   end

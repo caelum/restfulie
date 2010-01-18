@@ -46,7 +46,6 @@ module Restfulie
             links = [h[key]]
             h.delete("link")
           else
-            debugger
             h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
           end
         end

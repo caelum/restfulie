@@ -403,5 +403,62 @@ context Restfulie::Client::RequestExecution do
     end
     
   end
+  
+  context "when handling responses" do
+    
+    it "should return the response when its a pure response return" do
+      response = Object.new
+      restfulie_response = Hashi::CustomHash.new({"response" => response})
+      result = Restfulie::Client::ResponseHandler.pure_response_return(restfulie_response)
+      result.should == response
+    end
+
+    it "should raise an error if raise_error is invoked" do
+      response = Object.new
+      restfulie_response = Hashi::CustomHash.new({"response" => response})
+      lambda {Restfulie::Client::ResponseHandler.raise_error(restfulie_response)}.should raise_error(Restfulie::Client::ResponseError)
+    end
+    
+    class CustomResource
+    end
+    
+    it "should execute a from web request when retrieveing a resource as a result" do
+      expected = Object.new
+      
+      response = {"Location" => "google"}
+      restfulie_response = Restfulie::Client::Response.new(CustomResource, response)
+      CustomResource.should_receive(:from_web).with("google").and_return(expected)
+      result = Restfulie::Client::ResponseHandler.retrieve_resource_from_location(restfulie_response)
+      result.should == expected
+    end
+
+        #   def register(min_code, max_code, handler)
+        #     (min_code..max_code).each do |code|
+        #       handlers[code] = handler
+        #     end
+        #   end
+        #   def handle(restfulie_response)
+        #     handlers[restfulie_response.response.code.to_int].call(restfulie_response)
+        #   end
+
+        #   def parse_entity(restfulie_response)
+        #     response = restfulie_response.response
+        #     content_type = response.content_type
+        #     type = Restfulie::MediaType.type_for(content_type)
+        #     if content_type[-3,3]=="xml"
+        #       result = type.from_xml response.body
+        #     elsif content_type[-4,4]=="json"
+        #       result = type.from_json response.body
+        #     else
+        #       result = generic_parse_get_entity content_type, type
+        #     end
+        #     result.instance_variable_set :@_came_from, content_type
+        #     result
+        #   end
+        # 
+        #   register( 100, 599, Proc.new{ pure_response_return } )
+        #   register( 200, 200, Proc.new{ parse_entity } )
+        #   register( 301, 301, Proc.new{ execute_retrieval } )
+  end
 
 end
