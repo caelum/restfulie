@@ -45,29 +45,31 @@ context Restfulie::Client::Response do
       @instance.generic_parse_get_entity("xhtml", Shipment).should == "resulting content"
     end
     
+    def restfulie_response(code)
+      @response.code = code
+      Hashi::CustomHash.new({"response"=>@response})
+    end
+    
     it "should return a xml result from the content" do
       @response.content_type = "application/vnd.app+xml"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_xml).with(@response.body).and_return(@result)
-      @instance.parse_get_entity("200").should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(restfulie_response("200")).should == @result
     end
     
     it "should return a json result from the content" do
       @response.content_type = "application/json"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_json).with(@response.body).and_return(@result)
-      @instance.parse_get_entity("200").should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(restfulie_response("200")).should == @result
     end
     
     it "should return a generic result from the content" do
       @response.content_type = "xhtml"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
-      @instance.should_receive(:generic_parse_get_entity).with("xhtml", Shipment).and_return(@result)
-      @instance.parse_get_entity("200").should == @result
-    end
-    
-    it "should return the response if its not 200" do
-      @instance.parse_get_entity("500").should == @response
+      response= restfulie_response("200")
+      Restfulie::Client::ResponseHandler.should_receive(:generic_parse_entity).with(response).and_return(@result)
+      Restfulie::Client::ResponseHandler.parse_entity(response).should == @result
     end
     
   end

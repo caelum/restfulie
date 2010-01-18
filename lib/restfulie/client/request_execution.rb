@@ -38,7 +38,7 @@ module Restfulie
           elsif content_type[-4,4]=="json"
             result = type.from_json response.body
           else
-            result = generic_parse_get_entity content_type, type
+            result = generic_parse_entity restfulie_response
           end
           result.instance_variable_set :@_came_from, content_type
           result
@@ -50,6 +50,15 @@ module Restfulie
 
         def handle(restfulie_response)
           handlers[restfulie_response.response.code.to_int].call(restfulie_response)
+        end
+        
+        def generic_parse_entity(restfulie_response)
+          response = restfulie_response.response
+          content_type = response.content_type
+          type = Restfulie::MediaType.type_for(content_type)
+          method = "from_#{content_type}".to_sym
+          raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}' because '#{type}.#{method.to_s}' was not found") unless type.respond_to? method
+          type.send(method, response.body)
         end
 
         private
@@ -103,12 +112,6 @@ module Restfulie
       # parses this response using the correct ResponseHandler and enhances it
       def final_parse
         enhance Restfulie::Client::ResponseHandler.handle(@response, self)
-      end
-
-      def generic_parse_get_entity(content_type, type)
-        method = "from_#{content_type}".to_sym
-        raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}' because '#{type}.#{method.to_s}' was not found") unless type.respond_to? method
-        type.send(method, @response.body)
       end
 
       # detects which type of method invocation it was and act accordingly
