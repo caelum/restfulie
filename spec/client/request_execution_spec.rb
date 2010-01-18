@@ -436,6 +436,18 @@ context Restfulie::Client::RequestExecution do
       result.should == expected
     end
 
+    it "should test registering and using a specific handler" do
+      fail
+    end
+    
+    it "should test overriding and using a specific handler" do
+      fail
+    end
+    
+    it "should test default handlers for 200 and 301" do
+      fail
+    end
+    
         #   def register(min_code, max_code, handler)
         #     (min_code..max_code).each do |code|
         #       handlers[code] = handler
