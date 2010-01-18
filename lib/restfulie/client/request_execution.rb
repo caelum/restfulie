@@ -115,7 +115,7 @@ module Restfulie
       
       # parses this response using the correct ResponseHandler and enhances it
       def final_parse
-        enhance Restfulie::Client::ResponseHandler.handle(@response, self)
+        enhance Restfulie::Client::ResponseHandler.handle(@response)
       end
 
       # detects which type of method invocation it was and act accordingly

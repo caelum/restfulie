@@ -308,16 +308,8 @@ context Restfulie::Client::RequestExecution do
 
   context "when de-serializing straight from a web request" do
     
-    def mock_response(options = {})
+    def mock_request_for(type)
       res = Object.new
-      options.each do |key, value|
-        res.should_receive(key).and_return(value)
-      end
-      res
-    end
-
-    def mock_request_for(type, body, etag = '"ETAGVALUE"')
-      res = mock_response(:code => "200", :content_type => type, :body => body)
       @response = res
       req = mock Net::HTTPRequest
       req.should_receive(:add_field).with('Accept', 'application/xml')
@@ -329,26 +321,23 @@ context Restfulie::Client::RequestExecution do
     end
     
     it "should deserialize correctly if its an xml" do
-      mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>"
+      mock_request_for "application/xml"
+      result = Object.new
+      Restfulie::Client::ResponseHandler.should_receive(:handle).with(@response).and_return(result)
       
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.status.should == "CANCELLED"
+      model.should == result
     end
     
-    it "should add the response" do
-      mock_request_for "application/xml", "<client-restfulie_model><status>CANCELLED</status></client-restfulie_model>"
+    it "should enhance the result adding the response" do
+      mock_request_for "application/xml"
+      result = Object.new
+      Restfulie::Client::ResponseHandler.should_receive(:handle).with(@response).and_return(result)
   
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
       model.web_response.should == @response
     end
-    
-    it "should deserialize correctly if its a json" do
-      mock_request_for "application/json", "{client_restfulie_model: { status : 'CANCELLED' }}"
-  
-      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.status.should == "CANCELLED"
-  
-    end
+
   end
   
   context "when adding headers" do
