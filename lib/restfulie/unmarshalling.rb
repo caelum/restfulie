@@ -33,7 +33,7 @@ module Restfulie
        h.each do |key,value|
          case value.class.to_s
          when 'Array'
-           if key=="link"
+           if key == "link"
              links = h[key]
              h.delete("link")
            else
@@ -43,20 +43,18 @@ module Restfulie
              end
            end
          when /\AHash(WithIndifferentAccess)?\Z/
-           if key=="link"
+           if key == "link"
              links = [h[key]]
              h.delete("link")
            else
              h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
            end
          end
-         h.delete("xmlns") if key=="xmlns"
+         h.delete("xmlns") if key == "xmlns"
        end
        
        result = make_new_object h
-
        result.add_transitions(links) if !(links.nil?) && self.include?(Restfulie::Client::Instance)
-
        result
      end
     
@@ -78,7 +76,7 @@ module Restfulie
     private
     def make_new_object(hash={})
       obj = self.new
-      hash.keys.each { |k| obj.send("#{k}=", hash[k]) }
+      hash.keys.each { |key| obj.send("#{key}=", hash[key]) }
       obj
     end
   end
