@@ -30,27 +30,21 @@ module Restfulie
     def from_hash( hash )
        h = hash ? hash.dup : {}
        links = nil
-       h.each do |key,value|
-         case value.class.to_s
-         when 'Array'
-           if key == "link"
-             links = h[key]
-             h.delete("link")
-           else
-             h[key].map! do |e| 
-               who = respond_to?(:reflect_on_association) ? reflect_on_association(key.to_sym ).klass.to_s.constantize : Hashi::CustomHash
-               who.from_hash e
-             end
-           end
-         when /\AHash(WithIndifferentAccess)?\Z/
-           if key == "link"
-             links = [h[key]]
-             h.delete("link")
-           else
-             h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
-           end
+       h.each do |key, value|
+         if key == "link"
+           links = value.instance_of?(Array) ? h[key] : [h[key]]
+         else
+           case value.class.to_s
+            when 'Array'
+              h[key].map! do |e| 
+                who = respond_to?(:reflect_on_association) ? reflect_on_association(key.to_sym).klass.to_s.constantize : Hashi::CustomHash
+                who.from_hash e
+              end
+            when /\AHash(WithIndifferentAccess)?\Z/
+              h[key] = reflect_on_association(key.to_sym).klass.from_hash value
+            end
          end
-         h.delete("xmlns") if key == "xmlns"
+         h.delete key if ["xmlns", "link"].include?(key)
        end
        
        result = make_new_object h
