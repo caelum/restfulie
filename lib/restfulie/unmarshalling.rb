@@ -26,42 +26,39 @@ module Restfulie
     # basic code from Matt Pulver
     # found at http://www.xcombinator.com/2008/08/11/activerecord-from_xml-and-from_json-part-2/
     # addapted to support links
+    
     def from_hash( hash )
-      h = hash ? hash.dup : {}
-      links = nil
-      h.each do |key,value|
-        case value.class.to_s
-        when 'Array'
-          if key=="link"
-            links = h[key]
-            h.delete("link")
-          else
-            h[key].map! { |e| 
-              who = respond_to?(:reflect_on_association) ? reflect_on_association(key.to_sym ).klass.to_s.constantize : Hashi::CustomHash
-              who.from_hash e
-            }
-          end
-        when /\AHash(WithIndifferentAccess)?\Z/
-          if key=="link"
-            links = [h[key]]
-            h.delete("link")
-          else
-            h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
-          end
-        end
-        h.delete("xmlns") if key=="xmlns"
-      end
-      if self.included_modules.include?(ActiveRecord::Serialization)
-        result = self.new(h)
-      else
-        puts "failing for #{self}"
-        fail #:this is what does not work
-      end
-      if !(links.nil?) && self.include?(Restfulie::Client::Instance)
-        result.add_transitions(links)
-      end
-      result
-    end
+       h = hash ? hash.dup : {}
+       links = nil
+       h.each do |key,value|
+         case value.class.to_s
+         when 'Array'
+           if key=="link"
+             links = h[key]
+             h.delete("link")
+           else
+             h[key].map! do |e| 
+               who = respond_to?(:reflect_on_association) ? reflect_on_association(key.to_sym ).klass.to_s.constantize : Hashi::CustomHash
+               who.from_hash e
+             end
+           end
+         when /\AHash(WithIndifferentAccess)?\Z/
+           if key=="link"
+             links = [h[key]]
+             h.delete("link")
+           else
+             h[key] = reflect_on_association(key.to_sym ).klass.from_hash value
+           end
+         end
+         h.delete("xmlns") if key=="xmlns"
+       end
+       
+       result = make_new_object h
+
+       result.add_transitions(links) if !(links.nil?) && self.include?(Restfulie::Client::Instance)
+
+       result
+     end
     
     def from_json(json)
       from_hash(safe_json_decode(json).values.first)
@@ -79,20 +76,13 @@ module Restfulie
     end
     
     private
-    # def instantiate(hash={})
-    #   obj = self.new
-    #   hash.keys.each do |k|
-    #     obj.send("#{k}=", hash[k])
-    #   end
-    #   obj
-    # end
+    def make_new_object(hash={})
+      obj = self.new
+      hash.keys.each { |k| obj.send("#{k}=", hash[k]) }
+      obj
+    end
   end
 end  
-
-class ActiveRecord::Base
-  def build_from_hash(h)
-  end
-end
 
 private
 def safe_json_decode(json)

@@ -10,6 +10,7 @@ end
 class Team < ActiveRecord::Base
   uses_restfulie
   has_many :players
+  accepts_nested_attributes_for :players
 end
 class Person < ActiveRecord::Base
   uses_restfulie
@@ -67,35 +68,34 @@ describe Restfulie do
       player.age.should == 29
     end
     it "should allow access to child element" do
-      hash = {"players" => {"name" => "guilherme silveira"}}
+      hash = {"players" => [{"name" => "guilherme silveira"}]}
       team = Team.from_hash(hash)
-      # puts team.players[0].class
-      # team.players[0].class.should == Player
-      # team.players[0].name.should == ("guilherme silveira")
+      team.players[0].class.should == Player
+      team.players[0].name.should == ("guilherme silveira")
     end
     it "should allow access to boolean element" do
-      hash = {"player" => {"name" => "guilherme silveira", "valid" => true}}
+      hash = {"players" => [{"name" => "guilherme silveira", "valid" => true}]}
       team = Team.from_hash(hash)
-      team.player.valid.should be_true
+      team.players[0].should be_valid
     end
     it "should allow access attribution to child element" do
-      hash = {"player" => {"name" => "guilherme silveira"}}
+      hash = {"players" => [{"name" => "guilherme silveira"}]}
       team = Team.from_hash(hash)
-      team.player.name = "donizetti"
-      team.player.name.should == ("donizetti")
+      team.players[0].name = "donizetti"
+      team.players[0].name.should == ("donizetti")
     end
     it "should allow access to an array element" do
-      hash = {"player" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
+      hash = {"players" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
       team = Team.from_hash(hash)
-      team.player[0].class.should == Player
-      team.player[1].class.should == Player
-      team.player[1].name.should == ("caue guerra")
+      team.players[0].class.should == Player
+      team.players[1].class.should == Player
+      team.players[1].name.should == ("caue guerra")
     end
     it "should allow access attribution to an array element" do
-      hash = {"player" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
+      hash = {"players" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
       team = Team.from_hash(hash)
-      team.player[1].name = "donizetti"
-      team.player[1].name.should == ("donizetti")
+      team.players[1].name = "donizetti"
+      team.players[1].name.should == ("donizetti")
     end
     it "should invoke the original method_missing if there is no attribute with that nem" do
       hash = {}
@@ -109,7 +109,7 @@ describe Restfulie do
     it "should extract no links if there are none" do
       hash = {}
       player = Player.from_hash hash
-      player.nil?.should be_false
+      player.should_not be_nil
     end
     it "should extract a link" do
       hash = {"link" => {:rel => "latest", :href => "http://www.caelumobjects.com/product/2"}}
