@@ -33,13 +33,13 @@ module Restfulie
       h.each do |key, value|
         if key == "link"
           links = value.instance_of?(Array) ? h[key] : [h[key]]
-        elsif value.instance_of?(Array)
-          h[key].map! do |e| 
-            who = respond_to?(:reflect_on_association) ? get_the_class(key) : Hashi::CustomHash
-            who.from_hash e
+        elsif [Array, Hash].include? value.class
+          klazz = get_the_class(key)
+          if value.instance_of?(Array)
+            h[key].map! { |e| (klazz || Hashi::CustomHash).send(:from_hash, e) }
+          else value.instance_of?(Hash)
+            h[key] = klazz.from_hash value
           end
-        elsif value.instance_of?(Hash)
-          h[key] = get_the_class(key).from_hash value
         end
          h.delete key if ["xmlns", "link"].include?(key)
        end
@@ -72,7 +72,7 @@ module Restfulie
     end
     
     def get_the_class(name)
-      reflect_on_association(name.to_sym).klass.to_s.constantize
+      respond_to?(:reflect_on_association) ? reflect_on_association(name.to_sym).klass.to_s.constantize : nil
     end
   end
 end  
