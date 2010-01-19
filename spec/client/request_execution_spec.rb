@@ -18,9 +18,9 @@ context Restfulie::Client::Response do
     response = Object.new
     final = Restfulie::Client::Response.new(nil, response).enhance(result)
     final.should == result
-    final.is_a?(Restfulie::Client::WebResponse).should be_true
+    final.should be_a(Restfulie::Client::WebResponse)
     final.web_response.should == response
-    final.web_response.is_a?(Restfulie::Client::HTTPResponse).should be_true
+    final.web_response.should be_a(Restfulie::Client::HTTPResponse)
   end
   
   context "parsing an entity" do
@@ -69,7 +69,7 @@ context Restfulie::Client::Response do
     it "should return a generic result from the content" do
       @response.content_type = "xhtml"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
-      response= restfulie_response("200")
+      response = restfulie_response("200")
       Restfulie::Client::ResponseHandler.should_receive(:generic_parse_entity).with(response).and_return(@result)
       Restfulie::Client::ResponseHandler.parse_entity(response).should == @result
     end

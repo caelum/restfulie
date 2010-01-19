@@ -76,7 +76,7 @@ context Restfulie::Server::Instance do
   context "when locating links" do
     
     it "should return no link if there is no controller" do
-      @o.links(nil).should == []
+      @o.links(nil).should be_empty
     end
     
     it "should return a link for every transition" do

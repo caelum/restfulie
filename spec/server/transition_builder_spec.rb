@@ -8,10 +8,10 @@ describe Restfulie::Server::Transition do
   
   context "when creating a transition" do
     it "should create a transition with no status change and action+rel equals to the transition name" do
-      GithubProject.new.respond_to?(:can_watch?).should be_false
+      GithubProject.new.should_not respond_to(:can_watch?)
       GithubProject.transition.watch
-      GithubProject.new.respond_to?(:can_watch?).should be_true
-      GithubProject.transitions.include?(:watch).should be_true
+      GithubProject.new.should respond_to(:can_watch?)
+      GithubProject.transitions.should include(:watch)
     end
     it "should create a transition with no status change and action+rel equals to the transition name" do
       result = :watching
@@ -19,10 +19,10 @@ describe Restfulie::Server::Transition do
       expected.should_receive(:result=).with(result)
       Restfulie::Server::Transition.should_receive(:new).with(:watching).and_return(expected)
 
-      GithubProject.new.respond_to?(:can_watching?).should be_false
+      GithubProject.new.should_not respond_to(:can_watching?)
       GithubProject.transition.watching.results_in(result)
-      GithubProject.new.respond_to?(:can_watching?).should be_true
-      GithubProject.transitions.include?(:watching).should be_true
+      GithubProject.new.should respond_to(:can_watching?)
+      GithubProject.transitions.should include(:watching)
     end
     it "should create a transition with no status change and action+rel equals to the transition name" do
       options = { :my_hash => :value }
@@ -31,10 +31,10 @@ describe Restfulie::Server::Transition do
       expected.should_receive(:options=).with(options)
       Restfulie::Server::Transition.should_receive(:new).with(:watcher).and_return(expected)
 
-      GithubProject.new.respond_to?(:can_watcher?).should be_false
+      GithubProject.new.should_not respond_to(:can_watcher?)
       GithubProject.transition.watcher.at(options)
-      GithubProject.new.respond_to?(:can_watcher?).should be_true
-      GithubProject.transitions.include?(:watcher).should be_true
+      GithubProject.new.should respond_to(:can_watcher?)
+      GithubProject.transitions.should include(:watcher)
     end
   end
   

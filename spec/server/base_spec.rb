@@ -14,7 +14,7 @@ context Restfulie::Server::Base do
     end
     it "should not add a pay method if it doesnt exist" do
       Account.transition :pay
-      AccountsController.respond_to?(:pay).should be_false
+      AccountsController.should_not respond_to(:pay)
     end
   end
   
@@ -23,7 +23,7 @@ context Restfulie::Server::Base do
       class City
         acts_as_restfulie
       end
-      City.kind_of?(Restfulie::MediaTypeControl).should be_true
+      City.should be_kind_of(Restfulie::MediaTypeControl)
     end
   end
   

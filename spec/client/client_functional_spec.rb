@@ -17,19 +17,19 @@ context "accepts client unmarshalling" do
     it "should ignore namespaces" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model xmlns="http://www.caelumobjects.com/restfulie"></client-restfulie-model>'
       model = ClientRestfulieModel.from_xml xml
-      model.should_not eql(nil)
+      model.should_not == nil
     end
   
     it "should be able to answer to the method rel name" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="pay" href="http://url_for/action_name"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="next_state" href="http://url_for/action_name"/></client-restfulie-model>'
       model = ClientRestfulieModel.from_xml xml
-      model.respond_to?('pay').should == true
+      model.should respond_to(:pay)
     end
   
     it "should be able to answer to just one state change" do
       xml = '<?xml version="1.0" encoding="UTF-8"?><client-restfulie-model>  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="cancel" href="http://url_for/action_name"/></client-restfulie-model>'
       model = ClientRestfulieModel.from_xml xml
-      model.respond_to?('cancel').should == true
+      model.should respond_to(:cancel)
     end
   
   end  
