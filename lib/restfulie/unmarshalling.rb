@@ -28,22 +28,19 @@ module Restfulie
     # addapted to support links
     
     def from_hash( hash )
-       h = hash ? hash.dup : {}
-       links = nil
-       h.each do |key, value|
-         if key == "link"
-           links = value.instance_of?(Array) ? h[key] : [h[key]]
-         else
-           case value.class.to_s
-            when 'Array'
-              h[key].map! do |e| 
-                who = respond_to?(:reflect_on_association) ? reflect_on_association(key.to_sym).klass.to_s.constantize : Hashi::CustomHash
-                who.from_hash e
-              end
-            when /\AHash(WithIndifferentAccess)?\Z/
-              h[key] = reflect_on_association(key.to_sym).klass.from_hash value
-            end
-         end
+      h = hash ? hash.dup : {}
+      links = nil
+      h.each do |key, value|
+        if key == "link"
+          links = value.instance_of?(Array) ? h[key] : [h[key]]
+        elsif value.instance_of?(Array)
+          h[key].map! do |e| 
+            who = respond_to?(:reflect_on_association) ? get_the_class(key) : Hashi::CustomHash
+            who.from_hash e
+          end
+        elsif value.instance_of?(Hash)
+          h[key] = get_the_class(key).from_hash value
+        end
          h.delete key if ["xmlns", "link"].include?(key)
        end
        
@@ -72,6 +69,10 @@ module Restfulie
       obj = self.new
       hash.keys.each { |key| obj.send("#{key}=", hash[key]) }
       obj
+    end
+    
+    def get_the_class(name)
+      reflect_on_association(name.to_sym).klass.to_s.constantize
     end
   end
 end  
