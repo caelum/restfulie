@@ -23,19 +23,19 @@ describe Restfulie do
     it "should extract no links if there are none" do
       hash = {}
       product = Hashi.to_object hash
-      product.nil?.should be_false
+      product.should_not be_nil
     end
     it "should extract a link" do
       hash = {"link" => {:rel => "latest", :href => "http://www.caelumobjects.com/product/2"}}
       product = Hashi.to_object hash
-      product.respond_to?(:latest).should be_true
+      product.should respond_to(:latest)
     end
     it "should extract all links" do
       hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
                          {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
       product = Hashi.to_object hash
-      product.respond_to?(:latest).should be_true
-      product.respond_to?(:destroy).should be_true
+      product.should respond_to(:latest)
+      product.should respond_to(:destroy)
     end
   end
   
@@ -48,13 +48,13 @@ describe Restfulie do
     it "should allow direct attribute access" do
       hash = {"name" => "guilherme silveira"}
       player = Player.from_hash(hash)
-      player.name.should == ("guilherme silveira")
+      player.name.should == "guilherme silveira"
     end
     it "should allow direct attribute attribution" do
       hash = {"name" => "guilherme silveira"}
       player = Player.from_hash(hash)
       player.name = "donizetti"
-      player.name.should == ("donizetti")
+      player.name.should == "donizetti"
     end
     it "should allow direct new attribute access" do
       hash = {"age" => 29}
@@ -71,7 +71,7 @@ describe Restfulie do
       hash = {"players" => [{"name" => "guilherme silveira"}]}
       team = Team.from_hash(hash)
       team.players[0].class.should == Player
-      team.players[0].name.should == ("guilherme silveira")
+      team.players[0].name.should == "guilherme silveira"
     end
     it "should allow access to boolean element" do
       hash = {"players" => [{"name" => "guilherme silveira", "valid" => true}]}
@@ -82,20 +82,20 @@ describe Restfulie do
       hash = {"players" => [{"name" => "guilherme silveira"}]}
       team = Team.from_hash(hash)
       team.players[0].name = "donizetti"
-      team.players[0].name.should == ("donizetti")
+      team.players[0].name.should == "donizetti"
     end
     it "should allow access to an array element" do
       hash = {"players" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
       team = Team.from_hash(hash)
       team.players[0].class.should == Player
       team.players[1].class.should == Player
-      team.players[1].name.should == ("caue guerra")
+      team.players[1].name.should == "caue guerra"
     end
     it "should allow access attribution to an array element" do
       hash = {"players" => [{"name" => "guilherme silveira"}, {"name" => "caue guerra"}]}
       team = Team.from_hash(hash)
       team.players[1].name = "donizetti"
-      team.players[1].name.should == ("donizetti")
+      team.players[1].name.should == "donizetti"
     end
     it "should invoke the original method_missing if there is no attribute with that nem" do
       hash = {}
@@ -114,14 +114,14 @@ describe Restfulie do
     it "should extract a link" do
       hash = {"link" => {:rel => "latest", :href => "http://www.caelumobjects.com/product/2"}}
       player = Player.from_hash hash
-      player.respond_to?(:latest).should be_true
+      player.should respond_to(:latest)
     end
     it "should extract all links" do
       hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
                          {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
       player = Player.from_hash hash
-      player.respond_to?(:latest).should be_true
-      player.respond_to?(:destroy).should be_true
+      player.should respond_to(:latest)
+      player.should respond_to(:destroy)
     end
   end
   
@@ -129,19 +129,19 @@ describe Restfulie do
     it "should extract no links if there are none" do
       hash = {}
       player = Person.from_hash hash
-      player.nil?.should be_false
+      player.should_not be_nil
     end
     it "should extract a link" do
       hash = {"link" => {:rel => "latest", :href => "http://www.caelumobjects.com/product/2"}}
       player = Person.from_hash hash
-      player.respond_to?(:latest).should be_true
+      player.should respond_to(:latest)
     end
     it "should extract all links" do
       hash = {"link" => [{:rel => "latest", :href => "http://www.caelumobjects.com/product/2"},
                          {:rel => "destroy", :href => "http://www.caelumobjects.com/product/2"}]}
       player = Person.from_hash hash
-      player.respond_to?(:latest).should be_true
-      player.respond_to?(:destroy).should be_true
+      player.should respond_to(:latest)
+      player.should respond_to(:destroy)
     end
   end
   
