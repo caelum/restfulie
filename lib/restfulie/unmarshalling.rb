@@ -65,7 +65,7 @@ module Restfulie
     end
     
     private
-    def make_new_object(hash={})
+    def make_new_object(hash = {})
       obj = self.new
       hash.keys.each { |key| obj.send("#{key}=", hash[key]) }
       obj

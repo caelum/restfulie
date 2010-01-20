@@ -156,10 +156,7 @@ describe Restfulie do
     class Truck
       uses_restfulie
       include ActiveRecord::Serialization
-      def initialize(h)
-        @hash = h
-      end
-      attr_accessor :hash
+      attr_accessor :brand
     end
     
     it "should work with default data" do
@@ -171,13 +168,6 @@ describe Restfulie do
     end
     
     it "should work with a ActiveRecord relationship" do
-      class Unit
-        include ActiveRecord::Serialization
-        def initialize(h={})
-          @hash = h
-          @children = @hash[:children]
-        end
-      end
       def Unit.reflect_on_association(key)
         o = Object.new
         def o.klass
@@ -187,7 +177,7 @@ describe Restfulie do
       end
       child = Unit.from_hash({:children => [{:brand => "fiat"}]}).children[0]
       child.should be_kind_of(Truck)
-      child.hash[:brand].should == "fiat"
+      child.brand.should == "fiat"
     end
     
     it "should support Jeokkarak with a child which does not have from_hash" do
