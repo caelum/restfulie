@@ -97,12 +97,6 @@ describe Restfulie do
       team.players[1].name = "donizetti"
       team.players[1].name.should == "donizetti"
     end
-    it "should invoke the original method_missing if there is no attribute with that nem" do
-      hash = {}
-      team = Team.from_hash(hash)
-      team.should_receive(:method_missing).with(:whatever)
-      team.whatever
-    end
         
   end
   context "when creating a Jeokkarak from a hash" do
@@ -180,8 +174,19 @@ describe Restfulie do
     end
     
     it "should support Jeokkarak with a child which does not have from_hash" do
-      fail
-      # should work exactly as the prior, but without the initialize and attributes, should populate them by default
+      class Car
+        uses_restfulie
+      end
+      def Unit.reflect_on_association(key)
+        o = Object.new
+        def o.klass
+          :Car
+        end
+        o
+      end
+      child = Unit.from_hash({:children => [{:brand => "fiat"}]}).children[0]
+      child.should be_kind_of(Car)
+      child.brand.should == "fiat"
     end
     
   end
