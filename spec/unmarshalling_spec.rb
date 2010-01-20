@@ -155,7 +155,6 @@ describe Restfulie do
     
     class Truck
       uses_restfulie
-      include ActiveRecord::Serialization
       attr_accessor :brand
     end
     
