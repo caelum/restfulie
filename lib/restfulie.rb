@@ -16,6 +16,14 @@ require 'restfulie/server/atom_media_type'
 require 'restfulie/unmarshalling'
 
 module Restfulie
+  def self.logger=(logger)
+    @logger = logger
+  end
+
+  def self.logger
+    @logger
+  end
+    
   # Sets this class as a restfulie class.
   # You may pass a block defining your own transitions.
   #
@@ -48,6 +56,9 @@ module Restfulie
   end
 
 end
+
+Restfulie.logger = ActiveSupport::BufferedLogger.new(STDOUT)
+Restfulie.logger.level = Logger::DEBUG
 
 Object.extend Restfulie
 

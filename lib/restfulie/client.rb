@@ -13,6 +13,13 @@ require 'restfulie/client/state'
 require 'restfulie/unmarshalling'
 
 module Restfulie
+  def self.logger=(logger)
+    @logger = logger
+  end
+
+  def self.logger
+    @logger
+  end
   
   # Extends your class to support restfulie-client side's code.
   # This will extends Restfulie::Client::Base methods as class methods,
@@ -24,6 +31,9 @@ module Restfulie
   end
   
 end
+
+Restfulie.logger = ActiveSupport::BufferedLogger.new(STDOUT)
+Restfulie.logger.level = Logger::DEBUG
 
 Object.extend Restfulie
 
