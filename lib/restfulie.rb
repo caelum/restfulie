@@ -32,11 +32,19 @@ require 'restfulie/server/restfulie_controller'
 require 'restfulie/server/atom_media_type'
 require 'restfulie/unmarshalling'
 
+# Author:: Guilherme Silveira (mailto:guilherme.silveira@caelum.com.br)
+
+# This module controls global options for the Restfulie framework.
 module Restfulie
+  
+  # Change the logger used within Restfulie
   def self.logger=(logger)
     @logger = logger
   end
 
+  # Retrieves the current used logger
+  # 
+  # The logger defaults to ActiveSupport::BufferedLogger.new(STDOUT)
   def self.logger
     @logger
   end
