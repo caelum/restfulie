@@ -25,27 +25,41 @@ module Restfulie
       attr_accessor :web_response
     end
     
+    # some error ocurred while processing the request
     class ResponseError < Exception
     end
     
+    # Handles response answered by servers by accessing the specific callback for a http response code.
     module ResponseHandler
       
       class << self
 
+        # registers a new callback for a specific range of response codes
+        #
+        # Restfulie::Client::ResponseHandler.register(400, 599) do |restfulie_response|
+        #   # returns the original reponse object
+        #   restfulie_response.response
+        # end
         def register(min_code, max_code, &block)
           (min_code..max_code).each do |code|
             handlers[code] = block
           end
         end
 
+        # callback that returns the http response object
         def pure_response_return(restfulie_response)
           restfulie_response.response
         end
 
+        # callback that raises a ResponseError
         def raise_error(restfulie_response)
           raise Restfulie::Client::ResponseError.new(restfulie_response.response)
         end
 
+        # callback that parses the response media type and body,
+        # returning a deserialized representation of the resource.
+        # note that this will also set the _came_from instance variable with the content type
+        # this resource was represented, in order to allow further requests to prefer this content type.
         def parse_entity(restfulie_response)
           response = restfulie_response.response
           content_type = response.content_type
@@ -61,10 +75,13 @@ module Restfulie
           result
         end
 
+        # callback taht executes a GET request to the response Location header.
+        # this is the typical callback for 200 response codes.
         def retrieve_resource_from_location(restfulie_response)
           restfulie_response.type.from_web restfulie_response.response["Location"]
         end
 
+        # given a restfulie response, extracts the response code and invoke the registered callback.
         def handle(restfulie_response)
           handlers[restfulie_response.response.code.to_i].call(restfulie_response)
         end
