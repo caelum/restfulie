@@ -40,7 +40,7 @@ module Restfulie
       # retrieves the nth element from an atom feed
       def [](position)
         
-        hash = entry[position].content.hash
+        hash = entry[position].content.internal_hash
         hash = hash.dup
         hash.delete("type")
         result = Restfulie::MediaType::DefaultMediaTypeDecoder.from_hash(hash)
@@ -53,7 +53,7 @@ module Restfulie
       private
       
       def add_links_to(result, entry)
-        links = entry.link.hash
+        links = entry.link.internal_hash
         links = [links] if links.kind_of? Hash
         self_definition = self_from(links)
         links << {:rel => "destroy", :method => "delete", :href => self_definition["href"]} unless self_definition.nil?

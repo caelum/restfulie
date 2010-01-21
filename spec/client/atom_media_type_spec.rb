@@ -65,7 +65,7 @@ context Restfulie::Server::AtomMediaType do
       @entry.link = {:href => "http://caelumobjects.com"}
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
-      @result.should_receive(:add_transitions).with([@entry.link.hash])
+      @result.should_receive(:add_transitions).with([@entry.link.internal_hash])
       feed[0].should == @result
     end
     
@@ -74,7 +74,7 @@ context Restfulie::Server::AtomMediaType do
       @entry.link = {:rel => "self", "href" => "http://caelumobjects.com"}
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
-      @result.should_receive(:add_transitions).with([@entry.link.hash, {:rel => "destroy", :method => "delete", :href => "http://caelumobjects.com"}])
+      @result.should_receive(:add_transitions).with([@entry.link.internal_hash, {:rel => "destroy", :method => "delete", :href => "http://caelumobjects.com"}])
       feed[0].should == @result
     end
     
@@ -83,7 +83,7 @@ context Restfulie::Server::AtomMediaType do
       @entry.link = [{:rel => :first}, {:rel => :second}]
       feed = Restfulie::Server::AtomFeedDecoded.new({ "entry" => [@entry] })
       Restfulie::MediaType::DefaultMediaTypeDecoder.should_receive(:from_hash).with(@hotel).and_return(@result)
-      @result.should_receive(:add_transitions).with(@entry.link.hash)
+      @result.should_receive(:add_transitions).with(@entry.link.internal_hash)
       feed[0].should == @result
     end
     

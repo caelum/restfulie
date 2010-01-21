@@ -18,7 +18,7 @@
 module Hashi
   class CustomHash
     def initialize(hash = {})
-      @hash = hash
+      @internal_hash = hash
       link = hash['link'] if hash.kind_of? Hash
       add_transitions([link]) if link.kind_of? Hash
       add_transitions(link) if link.kind_of? Array
