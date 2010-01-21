@@ -72,8 +72,13 @@ module Restfulie
     class << self
     
       def register(type)
+        old_verbose = $VERBOSE
+        $VERBOSE = nil
+        
         Mime::Type.register(type.name, type.short_name.to_sym)
         media_types[type.name] = type
+        
+        $VERBOSE = old_verbose
       end
     
       # TODO rename to type for mt
