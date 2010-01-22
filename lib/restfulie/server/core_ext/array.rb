@@ -1,0 +1,25 @@
+module Restfulie
+  module CoreExtensions
+    module Array
+  
+      def to_atom(options={})
+        raise "Not all elements respond to to_atom" unless all? { |e| e.respond_to? :to_atom }
+        
+        options = options.dup
+        options[:only_link] ||= false
+        
+        Atom::Feed.new do |feed|
+          # TODO: Define better feed attributes
+          # Array#to_s can return a very long string
+          feed.title   = to_s
+          feed.id      = hash
+          
+          each do |element|
+            feed.entries << element.to_atom
+          end
+        end
+      end
+    
+    end
+  end
+end

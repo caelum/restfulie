@@ -20,6 +20,7 @@ require 'restfulie/logger'
 require 'net/http'
 require 'uri'
 require 'vendor/jeokkarak/jeokkarak'
+require 'atom'
 
 require 'restfulie/media_type'
 

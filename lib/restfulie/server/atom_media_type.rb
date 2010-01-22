@@ -39,9 +39,10 @@ class Array
   extend Restfulie::MediaTypeControl
   media_type "application/atom+xml"
   
-  def to_atom(options = {}, &block)
-    AtomFeed.new(self).title(options[:title]).to_atom(options[:controller], block)
-  end
+  # def to_atom(options = {}, &block)
+  #   AtomFeed.new(self).title(options[:title]).to_atom(options[:controller], block)
+  # end
+
   
 end
 
