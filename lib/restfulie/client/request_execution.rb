@@ -227,7 +227,6 @@ module Restfulie
 
         response = Net::HTTP.new(url.host, url.port).request(http_request)
         Restfulie.cache_provider.put(url, http_request, response)
-        response
       end
       
       public

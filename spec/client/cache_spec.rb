@@ -22,11 +22,34 @@ context Restfulie::FakeCache do
   it "should always retrieve nil, even if it was put" do
     req = Object.new
     url = Object.new
+    response = mock Net::HTTPResponse
     cache = Restfulie::FakeCache.new
-    cache.put(url, req)
+    cache.put(url, req, response)
     cache.get(url, req).should be_nil
   end
   
+  it "putting should return the response" do
+    req = Object.new
+    url = Object.new
+    response = mock Net::HTTPResponse
+    cache = Restfulie::FakeCache.new
+    cache.put(url, req, response).should == response
+  end
+  
+end
+
+context Restfulie::BasicCache do
+  it "should put on the cache if Cache-Control is enabled" do
+    url = Object.new
+    request = Object.new
+    response = mock Net::HTTPResponse
+    cache = Restfulie::BasicCache.new
+    
+    Restfulie::Cache::Restrictions.should_receive(:may_cache).with(request, response).and_return(true)
+    
+    cache.put(url, request, response)
+    cache.get(url, request).should == response
+  end
 end
 
 context Restfulie::Cache::Restrictions do
@@ -79,5 +102,15 @@ context Restfulie::Cache::Restrictions do
     Restfulie::Cache::Restrictions.value_for('a=b,s-max-age=100', /^max-age=(\d+)/).should be_nil
   end
 
+  it "should cache if has the Cache-Control and max-age header" do
+    headers = 'max-age=100000'
 
+    request = Object.new
+    response = mock(Net::HTTPResponse)
+    Restfulie::Cache::Restrictions.should_receive(:may_cache_method).with(request).and_return true
+    Restfulie::Cache::Restrictions.should_receive(:may_cache_cache_control).with(headers).and_return true
+    response.should_receive(:get_fields).and_return headers
+        
+    Restfulie::Cache::Restrictions.may_cache(request, response).should be_true
+  end
 end
