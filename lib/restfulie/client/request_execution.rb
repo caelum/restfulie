@@ -215,6 +215,19 @@ module Restfulie
       # do(Net::HTTP::Get, 'self', nil)
       # do(Net::HTTP::Post, 'payment', '<payment/>')
       def do(verb, relation_name, body = nil)
+        url, http_request = prepare_request(verb, relation_name, body)
+        response = execute_request(url, http_request)
+        Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, "application/xml")
+      end
+      
+      private
+      def execute_request(url, http_request)
+        Restfulie.cache_provider.get(url, http_request) || Net::HTTP.new(url.host, url.port).request(http_request)
+      end
+      
+      public
+      
+      def prepare_request(verb, relation_name, body = nil)
         url = URI.parse(@uri)
         req = verb.new(url.path)
         add_basic_request_headers(req, relation_name)
@@ -223,10 +236,7 @@ module Restfulie
           req.body = body
           req.add_field("Content-type", "application/xml") if req.get_fields("Content-type").nil?
         end
-        
-        response = Net::HTTP.new(url.host, url.port).request(req)
-        Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, "application/xml")
-        
+        [url, req]
       end
       
       # post this content to the server

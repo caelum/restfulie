@@ -216,40 +216,76 @@ context Restfulie::Client::RequestExecution do
     
     before do
       @httpMethod = Object.new
-      @req = Object.new
-      @httpMethod.should_receive(:new).with("/localhost").and_return(@req)
+      @http_request = Object.new
+      @url = URI.parse "http://localhost" 
       
       @request = Restfulie::Client::RequestExecution.new(String, nil)
-      @request.should_receive(:add_basic_request_headers).with(@req, "delete")
+      @request.at("http://localhost/localhost")
 
-      response = Object.new
-
-      http = Object.new
-      http.should_receive(:request).with(@req).and_return(response)
-
-      responder = Object.new
-      Restfulie::Client::Response.should_receive(:new).with(String, response).and_return(responder)
-      responder.should_receive(:parse).with(@httpMethod, nil, "application/xml")
-      Net::HTTP.should_receive(:new).with("localhost", 80).and_return(http)
+      @request.should_receive(:prepare_request).with(@httpMethod, "delete", nil).and_return([@url, @http_request])
     end
     
     it "should execute the request" do
-      @request.at("http://localhost/localhost").do(@httpMethod, "delete", nil)
+      response = Object.new
+
+      http = Object.new
+      http.should_receive(:request).with(@http_request).and_return(response)
+
+      Restfulie.cache_provider.should_receive(:get).with(@url, @http_request).and_return(nil)
+      should_parse_response response
+      Net::HTTP.should_receive(:new).with("localhost", 80).and_return(http)
+      
+      @request.do(@httpMethod, "delete", nil)
     end
     
-    it "should post data if it is a post" do
+    it "should not execute the request when the cache contains it" do
+      cached_response = Object.new
+      Restfulie.cache_provider.should_receive(:get).with(@url, @http_request).and_return(cached_response)
+      should_parse_response cached_response
+      @request.do(@httpMethod, "delete", nil).should == "result"
+    end
+    
+    def should_parse_response(response)
+      responder = Object.new
+      Restfulie::Client::Response.should_receive(:new).with(String, response).and_return(responder)
+      responder.should_receive(:parse).with(@httpMethod, nil, "application/xml").and_return("result")      
+    end
+    
+  end
+
+  context "preparing a request" do
+  
+    before do
+      @httpMethod = Object.new
+      @req = Object.new
+      @httpMethod.should_receive(:new).with("/localhost").and_return(@req)
+    
+      @request = Restfulie::Client::RequestExecution.new(String, nil)
+      @request.should_receive(:add_basic_request_headers).with(@req, "delete")
+    end
+  
+    it "should add headers to the request" do
+      prepare_and_verify_request
+    end
+  
+    it "should add post data if it is a post" do
       @req.should_receive(:body=).with("content")
       @req.should_receive(:get_fields).with("Content-type").and_return("txt")
-      @request.at("http://localhost/localhost").do(@httpMethod, "delete", "content")
+      prepare_and_verify_request "content"
     end
-    
+  
     it "should use the default post content type if none is provided" do
       @req.should_receive(:body=).with("content")
       @req.should_receive(:get_fields).with("Content-type").and_return(nil)
       @req.should_receive(:add_field).with("Content-type", "application/xml")
-      @request.at("http://localhost/localhost").do(@httpMethod, "delete", "content")
+      prepare_and_verify_request "content"
     end
     
+    def prepare_and_verify_request (content = nil)
+      url, req = @request.at("http://localhost/localhost").prepare_request(@httpMethod, "delete", content)
+      req.should == @req
+    end
+
   end
 
   def define_http_expectation(req, mock_response)
