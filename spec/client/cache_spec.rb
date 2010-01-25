@@ -83,24 +83,21 @@ context Restfulie::Cache::Restrictions do
 
   it "should not cache DELETE, PUT, TRACE, HEAD, OPTIONS" do
     ['Delete', 'Put', 'Trace', 'Head', 'Options'].each do |verb|
-      Restfulie::Cache::Restrictions.may_cache_method("Net::HTTP::#{verb}".constantize).should be_false
+      Restfulie::Cache::Restrictions.may_cache_method?("Net::HTTP::#{verb}".constantize).should be_false
     end
   end
 
   it "should cache GET and POST" do
     ['Get', 'Post'].each do |verb|
-      Restfulie::Cache::Restrictions.may_cache_method("Net::HTTP::#{verb}".constantize).should be_true
+      Restfulie::Cache::Restrictions.may_cache_method?("Net::HTTP::#{verb}".constantize).should be_true
     end
   end
   
   it "should cache if has the Cache-Control and max-age header" do
-    headers = 'max-age=100000'
-
     request = Object.new
     response = mock(Net::HTTPResponse)
-    Restfulie::Cache::Restrictions.should_receive(:may_cache_method).with(request).and_return true
-    Restfulie::Cache::Restrictions.should_receive(:may_cache_cache_control).with(headers).and_return true
-    response.should_receive(:get_fields).and_return headers
+    Restfulie::Cache::Restrictions.should_receive(:may_cache_method?).with(request).and_return true
+    response.should_receive(:may_cache?).and_return true
         
     Restfulie::Cache::Restrictions.may_cache(request, response).should be_true
   end
