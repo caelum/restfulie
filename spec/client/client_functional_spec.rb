@@ -52,3 +52,11 @@ context "accepts client unmarshalling" do
   end  
 
 end
+
+context "when using defaults" do
+  
+  it "should use the basic cache" do
+    Restfulie.cache_provider.should be_kind_of(Restfulie::BasicCache)
+  end
+  
+end

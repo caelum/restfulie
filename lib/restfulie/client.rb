@@ -15,6 +15,8 @@
 #  limitations under the License. 
 #
 
+require 'restfulie/logger'
+
 require 'net/http'
 require 'uri'
 require 'vendor/jeokkarak/jeokkarak'
@@ -27,15 +29,13 @@ require 'restfulie/client/helper'
 require 'restfulie/client/instance'
 require 'restfulie/client/request_execution'
 require 'restfulie/client/state'
+require 'restfulie/client/cache'
 require 'restfulie/unmarshalling'
 
 module Restfulie
-  def self.logger=(logger)
-    @logger = logger
-  end
-
-  def self.logger
-    @logger
+  
+  class << self
+    attr_accessor :cache_provider
   end
   
   # Extends your class to support restfulie-client side's code.
@@ -49,9 +49,6 @@ module Restfulie
   
 end
 
-Restfulie.logger = ActiveSupport::BufferedLogger.new(STDOUT)
-Restfulie.logger.level = Logger::DEBUG
-
 Object.extend Restfulie
 
 include ActiveSupport::CoreExtensions::Hash
@@ -59,3 +56,5 @@ include ActiveSupport::CoreExtensions::Hash
 class Hashi::CustomHash
     uses_restfulie
 end
+
+Restfulie.cache_provider = Restfulie::BasicCache.new

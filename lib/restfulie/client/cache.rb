@@ -1,0 +1,5 @@
+class Restfulie::BasicCache
+  
+  
+  
+end

@@ -15,6 +15,8 @@
 #  limitations under the License. 
 #
 
+require 'restfulie/logger'
+
 require 'net/http'
 require 'uri'
 require 'vendor/jeokkarak/jeokkarak'
@@ -37,18 +39,6 @@ require 'restfulie/unmarshalling'
 # This module controls global options for the Restfulie framework.
 module Restfulie
   
-  # Change the logger used within Restfulie
-  def self.logger=(logger)
-    @logger = logger
-  end
-
-  # Retrieves the current used logger
-  # 
-  # The logger defaults to ActiveSupport::BufferedLogger.new(STDOUT)
-  def self.logger
-    @logger
-  end
-    
   # Sets this class as a restfulie class.
   # You may pass a block defining your own transitions.
   #
@@ -81,9 +71,6 @@ module Restfulie
   end
 
 end
-
-Restfulie.logger = ActiveSupport::BufferedLogger.new(STDOUT)
-Restfulie.logger.level = Logger::DEBUG
 
 Object.extend Restfulie
 
