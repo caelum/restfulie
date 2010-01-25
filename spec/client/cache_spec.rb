@@ -42,5 +42,42 @@ context Restfulie::Cache::Restrictions do
       Restfulie::Cache::Restrictions.may_cache_method("Net::HTTP::#{verb}".constantize).should be_true
     end
   end
+  
+  it "should not cache if Cache-Control is not available" do
+    Restfulie::Cache::Restrictions.may_cache_cache_control(nil).should be_false
+  end
+
+  it "should not cache if Cache-Control's max-age is not available" do
+    Restfulie::Cache::Restrictions.may_cache_cache_control('s-maxage=100000').should be_false
+  end
+
+  it "should cache if finds max-age" do
+    Restfulie::Cache::Restrictions.may_cache_cache_control('max-age=100000, please-store').should be_true
+  end
+  
+  it "should not cache if Cache-Control's no-store is set" do
+    Restfulie::Cache::Restrictions.may_cache_cache_control('max-age=100000, no-store').should be_false
+  end
+  
+  it "should use all headers if received more than one header" do
+    Restfulie::Cache::Restrictions.may_cache_cache_control(['max-age=100000', 'no-store']).should be_false
+  end
+  
+  it "should extract max-age from start" do
+    Restfulie::Cache::Restrictions.value_for('max-age=100', /^max-age=(\d+)/).should == "max-age=100"
+  end
+  
+  it "should extract max-age from the middle" do
+    Restfulie::Cache::Restrictions.value_for('a=b,max-age=100', /^max-age=(\d+)/).should == "max-age=100"
+  end
+  
+  it "should extract max-age from the middle even with whitespace" do
+    Restfulie::Cache::Restrictions.value_for('a=b, max-age=100', /^max-age=(\d+)/).should == " max-age=100"
+  end
+  
+  it "should return nil if not found" do
+    Restfulie::Cache::Restrictions.value_for('a=b,s-max-age=100', /^max-age=(\d+)/).should be_nil
+  end
+
 
 end
