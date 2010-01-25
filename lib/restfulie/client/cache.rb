@@ -11,10 +11,22 @@ class Restfulie::BasicCache
   end
   
   def get(url, req)
-    cache[key_for(url, req)]
+    response = cache[key_for(url, req)]
+    return nil if response.nil?
+    if response.has_expired_cache?
+      remove(key_for(url, req))
+      nil
+    else
+      response
+    end
   end
   
   private
+  
+  def remove(what)
+    @cache.delete(what)
+  end
+  
   def cache
     @cache ||= {}
   end
