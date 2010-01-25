@@ -222,7 +222,12 @@ module Restfulie
       
       private
       def execute_request(url, http_request)
-        Restfulie.cache_provider.get(url, http_request) || Net::HTTP.new(url.host, url.port).request(http_request)
+        cached = Restfulie.cache_provider.get(url, http_request) 
+        return cached if cached
+
+        response = Net::HTTP.new(url.host, url.port).request(http_request)
+        Restfulie.cache_provider.put(url, http_request, response)
+        response
       end
       
       public

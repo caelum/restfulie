@@ -225,7 +225,7 @@ context Restfulie::Client::RequestExecution do
       @request.should_receive(:prepare_request).with(@httpMethod, "delete", nil).and_return([@url, @http_request])
     end
     
-    it "should execute the request" do
+    it "should execute the request and cache it" do
       response = Object.new
 
       http = Object.new
@@ -234,6 +234,7 @@ context Restfulie::Client::RequestExecution do
       Restfulie.cache_provider.should_receive(:get).with(@url, @http_request).and_return(nil)
       should_parse_response response
       Net::HTTP.should_receive(:new).with("localhost", 80).and_return(http)
+      Restfulie.cache_provider.should_receive(:put).with(@url, @http_request, response)
       
       @request.do(@httpMethod, "delete", nil)
     end
