@@ -209,21 +209,26 @@ module Restfulie
         post(content)
       end
       
-      def do(what, name, content = nil)
+      # executes an http request using the specified verb
+      #
+      # example:
+      # do(Net::HTTP::Get, 'self', nil)
+      # do(Net::HTTP::Post, 'payment', '<payment/>')
+      def do(verb, relation_name, body = nil)
         url = URI.parse(@uri)
-        req = what.new(url.path)
-        add_basic_request_headers(req, name)
+        req = verb.new(url.path)
+        add_basic_request_headers(req, relation_name)
         
-        if content
-          req.body = content
+        if body
+          req.body = body
           req.add_field("Content-type", "application/xml") if req.get_fields("Content-type").nil?
         end
         
         response = Net::HTTP.new(url.host, url.port).request(req)
-        Restfulie::Client::Response.new(@type, response).parse(what, @invoking_object, "application/xml")
+        Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, "application/xml")
         
       end
-
+      
       # post this content to the server
       def post(content)
         remote_post_to(@uri, content)

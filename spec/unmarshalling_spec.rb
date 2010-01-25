@@ -84,6 +84,22 @@ describe Restfulie do
       player.age = 29
       player.age.should == 29
     end
+    
+    it "should allow access to child element when hash came from rails from_xml" do
+      hash = {"players" => {"player" => {"name" => "guilherme silveira"}}}
+      team = Team.from_hash(hash)
+      team.players[0].class.should == Player
+      team.players[0].name.should == "guilherme silveira"
+    end
+    it "should allow access to children when hash came from rails from_xml" do
+      hash = {"players" => {"player" => [{"name" => "guilherme silveira"},{"name" => "andre de santi"}]}}
+      team = Team.from_hash(hash)
+      team.players[0].class.should == Player
+      team.players[0].name.should == "guilherme silveira"
+      team.players[1].class.should == Player
+      team.players[1].name.should == "andre de santi"
+    end
+  
     it "should allow access to child element" do
       hash = {"players" => [{"name" => "guilherme silveira"}]}
       team = Team.from_hash(hash)
@@ -205,7 +221,7 @@ describe Restfulie do
       child.should be_kind_of(Car)
       child.brand.should == "fiat"
     end
-    
+     
   end
 
 end

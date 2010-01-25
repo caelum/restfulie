@@ -54,7 +54,18 @@ module Restfulie
           klazz = get_the_class(key)
           if value.instance_of?(Array)
             h[key].map! { |e| (klazz || Hashi::CustomHash).send(:from_hash, e) }
-          else value.instance_of?(Hash)
+          elsif value.instance_of?(Hash)
+            if value.size == 1 && value.keys.first == klazz.to_s.underscore
+              children = value.values.first
+              if children.instance_of?(Array)
+                h[key] = children.map do |child|
+                  klazz.from_hash(child)
+                end
+              else
+                h[key] = [klazz.from_hash(children)]
+              end
+            end
+          else
             h[key] = klazz.from_hash value
           end
         end
@@ -65,7 +76,6 @@ module Restfulie
        result.add_transitions(links) if !(links.nil?) && self.include?(Restfulie::Client::Instance)
        result
      end
-    
     def from_json(json)
       from_hash(safe_json_decode(json).values.first)
     end
