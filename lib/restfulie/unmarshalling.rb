@@ -55,7 +55,7 @@ module Restfulie
           if value.instance_of?(Array)
             h[key].map! { |e| (klazz || Hashi::CustomHash).send(:from_hash, e) }
           elsif value.instance_of?(Hash)
-            h[key] = build_related_member_from_hash(klazz, value)
+            h[key] = klazz.array_from_hash(value)
           else
             h[key] = klazz.from_hash value
           end
@@ -68,15 +68,28 @@ module Restfulie
        result
      end
      
-     def build_related_member_from_hash(klazz, hash)
+     # creates an array of this type based on a hash created using rails Hash.from_xml method
+     # because Hash.from_xml returns some no-cute hash structure when dealing with aligned elements
+     # we had to support it in a variety of ways.
+     # usage example:
+     #
+       # hash = {"player" => {"name" => "guilherme silveira"}}
+       # player = Player.array_from_hash(hash)
+       # puts player[0].name
+       # 
+       # hash = {"player" => [{"name" => "guilherme silveira"}, {"name" => "andre de santi"}]}
+       # player = Player.array_from_hash(hash)
+       # puts player[0].name
+       # puts player[1].name
+     def array_from_hash(hash)
        
-       return klazz.from_hash(hash) unless (hash.size == 1 && hash.keys.first == klazz.to_s.underscore)
+       return self.from_hash(hash) unless (hash.size == 1 && hash.keys.first == self.to_s.underscore)
        
        children = hash.values.first
        
-       return [klazz.from_hash(children)] unless children.instance_of?(Array)
+       return [self.from_hash(children)] unless children.instance_of?(Array)
 
-       children.map { |child| klazz.from_hash(child) }
+       children.map { |child| self.from_hash(child) }
        
      end
      

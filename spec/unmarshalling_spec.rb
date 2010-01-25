@@ -152,6 +152,23 @@ describe Restfulie do
     end
   end
   
+  context "when creating an array of elements from a hash which was created from rails from_xml" do
+
+    it "should create that class's object" do
+      hash = {"player" => {"name" => "guilherme silveira"}}
+      player = Player.array_from_hash(hash)
+      player[0].name.should == "guilherme silveira"
+    end
+
+    it "should create that class's object" do
+      hash = {"player" => [{"name" => "guilherme silveira"}, {"name" => "andre de santi"}]}
+      player = Player.array_from_hash(hash)
+      player[0].name.should == "guilherme silveira"
+      player[1].name.should == "andre de santi"
+    end
+
+  end
+  
   context "when creating a JeokkarakActiveRecord from a hash" do
     it "should extract no links if there are none" do
       hash = {}
