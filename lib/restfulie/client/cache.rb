@@ -57,41 +57,14 @@ module Restfulie::Cache
     
       # checks whether this request verb and its cache headers allow caching
       def may_cache(request,response)
-        may_cache_method(request) && may_cache_cache_control(response.get_fields)
+        may_cache_method?(request) && response.may_cache?
       end
       
       # only Post and Get requests are cacheable so far
-      def may_cache_method(verb)
+      def may_cache_method?(verb)
         verb==Net::HTTP::Post || verb==Net::HTTP::Get
       end
-      
-      # checks if the header's max-age is available and no no-store if available.
-      def may_cache_cache_control(field)
-        return false if field.nil?
-        
-        if field.kind_of? Array
-          field.each do |f|
-            return false if !may_cache_cache_control(f)
-          end
-          return true
-        end
 
-        max_age_header = value_for(field, /^max-age=(\d+)/)
-        return false if max_age_header.nil?
-        max_age = max_age_header[1]
-        
-        return false if value_for(field, /^no-store/)
-        
-        true
-        
-      end
-
-      # extracts the header value for an specific expression, which can be located at the start or in the middle
-      # of the expression
-      def value_for(value, expression)
-        value.split(",").find { |obj| obj.strip =~ expression }
-      end
-      
     end
     
   end

@@ -53,3 +53,59 @@ context Restfulie::Client::HTTPResponse do
   end
 
 end
+
+context Restfulie::Client::HTTPResponse do
+  
+  before do
+    @response = mock Net::HTTPResponse
+    @response.extend Restfulie::Client::HTTPResponse
+  end
+
+  context "while retrieveing cache information" do
+    
+    it "should invoke may_ache_field with cachec ontrol" do
+      response = Object.new
+      controls = [:cache_headers]
+      @response.should_receive(:get_fields).with('Cache-control').and_return(controls)
+      @response.should_receive(:may_cache_field?).with(controls).and_return(response)
+      @response.may_cache?.should == response
+    end
+    
+    it "should not cache if Cache-Control is not available" do
+      @response.may_cache_field?(nil).should be_false
+    end
+
+    it "should not cache if Cache-Control's max-age is not available" do
+      @response.may_cache_field?('s-maxage=100000').should be_false
+    end
+
+    it "should cache if finds max-age" do
+      @response.may_cache_field?('max-age=100000, please-store').should be_true
+    end
+  
+    it "should not cache if Cache-Control's no-store is set" do
+      @response.may_cache_field?('max-age=100000, no-store').should be_false
+    end
+  
+    it "should use all headers if received more than one header" do
+      @response.may_cache_field?(['max-age=100000', 'no-store']).should be_false
+    end
+  
+    it "should extract max-age from start" do
+      @response.value_for('max-age=100', /^max-age=(\d+)/).should == "max-age=100"
+    end
+  
+    it "should extract max-age from the middle" do
+      @response.value_for('a=b,max-age=100', /^max-age=(\d+)/).should == "max-age=100"
+    end
+  
+    it "should extract max-age from the middle even with whitespace" do
+      @response.value_for('a=b, max-age=100', /^max-age=(\d+)/).should == " max-age=100"
+    end
+  
+    it "should return nil if not found" do
+      @response.value_for('a=b,s-max-age=100', /^max-age=(\d+)/).should be_nil
+    end
+  end
+
+end

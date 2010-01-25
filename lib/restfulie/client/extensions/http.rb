@@ -52,5 +52,56 @@ module Restfulie::Client::HTTPResponse
   def last_modified
     self['Last-Modified']
   end
+  
+end
+  
+module Restfulie::Client::HTTPResponse
+
+  def cache_max_age
+    header = Restfulie::Cache::Restrictions.value_for(get_fields('Cache-control'), /^max-age=(\d+)/)
+    return nil if header.nil?
+    header[1].to_int
+  end
+  
+  def has_expired_cache?
+    return true if ['Date'].nil?
+    debugger
+    Time.now > http_date_to_time(['Date']) + cache_max_age.seconds
+  end
+  
+  def http_date_to_time(date)
+    debugger
+    puts date
+  end
+
+  # checks if the header's max-age is available and no no-store if available.
+  def may_cache?
+    may_cache_field?(get_fields('Cache-control'))
+  end
+  
+  def may_cache_field?(field)
+    return false if field.nil?
+    
+    if field.kind_of? Array
+      field.each do |f|
+        return false if !may_cache_field?(f)
+      end
+      return true
+    end
+
+    max_age_header = value_for(field, /^max-age=(\d+)/)
+    return false if max_age_header.nil?
+    max_age = max_age_header[1]
+    
+    return false if value_for(field, /^no-store/)
+    
+    true
+  end
+
+  # extracts the header value for an specific expression, which can be located at the start or in the middle
+  # of the expression
+  def value_for(value, expression)
+    value.split(",").find { |obj| obj.strip =~ expression }
+  end
     
 end
