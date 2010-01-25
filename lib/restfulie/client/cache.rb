@@ -14,3 +14,17 @@ class Restfulie::FakeCache
   end
   
 end
+
+module Restfulie::Cache
+  module Restrictions
+    
+    class << self
+    
+      def may_cache_method(verb)
+        verb==Net::HTTP::Post || verb==Net::HTTP::Get
+      end
+      
+    end
+    
+  end
+end

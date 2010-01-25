@@ -28,3 +28,19 @@ context Restfulie::FakeCache do
   end
   
 end
+
+context Restfulie::Cache::Restrictions do
+
+  it "should not cache DELETE, PUT, TRACE, HEAD, OPTIONS" do
+    ['Delete', 'Put', 'Trace', 'Head', 'Options'].each do |verb|
+      Restfulie::Cache::Restrictions.may_cache_method("Net::HTTP::#{verb}".constantize).should be_false
+    end
+  end
+
+  it "should cache GET and POST" do
+    ['Get', 'Post'].each do |verb|
+      Restfulie::Cache::Restrictions.may_cache_method("Net::HTTP::#{verb}".constantize).should be_true
+    end
+  end
+
+end
