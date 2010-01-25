@@ -61,9 +61,9 @@ module Restfulie
         type = model_type
 
         @loaded = type.find(params[:id])
-        return head :status => 405 unless @loaded.can? :update
+        return head(:status => 405) unless @loaded.can? :update
 
-        return head 415 unless fits_content(type, request.headers['CONTENT_TYPE'])
+        return head(415) unless fits_content(type, request.headers['CONTENT_TYPE'])
 
         @model = Hash.from_xml(request.body.string)[model_name]
         pre_update(@model) if self.respond_to?(:pre_update)
