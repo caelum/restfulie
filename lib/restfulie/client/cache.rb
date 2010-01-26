@@ -23,7 +23,10 @@
 class Restfulie::BasicCache
   
   def put(url, req, response)
-    cache[key_for(url, req)] = response if Restfulie::Cache::Restrictions.may_cache(req, response)
+    if Restfulie::Cache::Restrictions.may_cache?(req, response)
+      Restfulie.logger.debug "caching #{url} #{req} #{response}"
+      cache[key_for(url, req)] = response
+    end
     response
   end
   
@@ -31,8 +34,19 @@ class Restfulie::BasicCache
     
     response = cache[key_for(url, req)]
     return nil if response.nil?
-    response.has_expired_cache? ? remove(key_for(url, req)) : response
     
+    if response.has_expired_cache?
+      remove(key_for(url, req))
+    else
+      Restfulie.logger.debug "RETURNING cache #{url} #{req}"
+      response
+    end
+    
+  end
+
+  # removes all elements from the cache
+  def clear
+    cache.clear
   end
   
   private
@@ -47,7 +61,7 @@ class Restfulie::BasicCache
   end
   
   def key_for(url, req)
-    [url, req]
+    [url, req.class]
   end
   
 end
@@ -63,6 +77,9 @@ class Restfulie::FakeCache
   def get(url, req)
   end
   
+  def clear
+  end
+  
 end
 
 module Restfulie::Cache
@@ -71,13 +88,13 @@ module Restfulie::Cache
     class << self
     
       # checks whether this request verb and its cache headers allow caching
-      def may_cache(request,response)
+      def may_cache?(request,response)
         may_cache_method?(request) && response.may_cache?
       end
       
       # only Post and Get requests are cacheable so far
       def may_cache_method?(verb)
-        verb==Net::HTTP::Post || verb==Net::HTTP::Get
+        verb.kind_of?(Net::HTTP::Post) || verb.kind_of?(Net::HTTP::Get)
       end
 
     end
