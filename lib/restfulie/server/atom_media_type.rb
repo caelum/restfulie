@@ -38,12 +38,6 @@ end
 class Array
   extend Restfulie::MediaTypeControl
   media_type "application/atom+xml"
-  
-  # def to_atom(options = {}, &block)
-  #   AtomFeed.new(self).title(options[:title]).to_atom(options[:controller], block)
-  # end
-
-  
 end
 
 class AtomFeed
@@ -56,22 +50,7 @@ class AtomFeed
     @title = title
     self
   end
-  
-  def to_atom(controller, block = nil)
-    last_modified = updated_at
-    id = id_for(controller)
-    xml = items_to_atom_xml(controller, block)
-    """<?xml version=\"1.0\"?>
-      <feed xmlns=\"http://www.w3.org/2005/Atom\">
-        <id>#{id}</id>
-        <title type=\"text\">#{@title}</title>
-        <updated>"""  + last_modified.strftime("%Y-%m-%dT%H:%M:%S-08:00") + """</updated>
-        <author><name>#{@title}</name></author>
-        #{self_link(controller)}
-        #{xml}
-      </feed>"""
-  end
-  
+
   def id_for(controller)
     @id || controller.url_for({})
   end
