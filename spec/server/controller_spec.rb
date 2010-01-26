@@ -75,7 +75,14 @@ context ActionController::Base do
     before do
       @info = {:hash_containing => "cache info"}
       @resource = Object.new
+      headers = mock Hash
       @resource.should_receive(:cache_info).and_return(@info)
+      @controller.class.should_receive(:cache).and_return(Hashi::CustomHash.new("max_age" => 15))
+      
+      response = Object.new
+      @controller.should_receive(:response).and_return(response)
+      response.should_receive(:headers).and_return(headers)
+      headers.should_receive(:[]=).with("Cache-control", "max-age=15")
     end
   
     it "should invoke to_xml with the specified parameters and controller" do
@@ -90,6 +97,7 @@ context ActionController::Base do
       @controller.should_receive(:stale?).and_return(false)
       @controller.render_resource(@resource, {})
     end
+    
   end
   
   context "when rendering a creation" do
