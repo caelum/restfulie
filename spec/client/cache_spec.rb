@@ -45,7 +45,7 @@ context Restfulie::BasicCache do
     response = mock Net::HTTPResponse
     cache = Restfulie::BasicCache.new
     
-    Restfulie::Cache::Restrictions.should_receive(:may_cache).with(request, response).and_return(true)
+    Restfulie::Cache::Restrictions.should_receive(:may_cache?).with(request, response).and_return(true)
     
     cache.put(url, request, response)
     response.should_receive(:has_expired_cache?).and_return(false)
@@ -58,7 +58,7 @@ context Restfulie::BasicCache do
     response = mock Net::HTTPResponse
     cache = Restfulie::BasicCache.new
     
-    Restfulie::Cache::Restrictions.should_receive(:may_cache).with(request, response).and_return(false)
+    Restfulie::Cache::Restrictions.should_receive(:may_cache?).with(request, response).and_return(false)
     
     cache.put(url, request, response)
     cache.get(url, request).should be_nil
@@ -70,10 +70,23 @@ context Restfulie::BasicCache do
     response = mock Net::HTTPResponse
     cache = Restfulie::BasicCache.new
     
-    Restfulie::Cache::Restrictions.should_receive(:may_cache).with(request, response).and_return(true)
+    Restfulie::Cache::Restrictions.should_receive(:may_cache?).with(request, response).and_return(true)
     
     cache.put(url, request, response)
     response.should_receive(:has_expired_cache?).and_return(true)
+    cache.get(url, request).should be_nil
+  end
+
+  it "should allow cache clean up" do
+    url = Object.new
+    request = Object.new
+    response = mock Net::HTTPResponse
+    cache = Restfulie::BasicCache.new
+    
+    Restfulie::Cache::Restrictions.should_receive(:may_cache?).with(request, response).and_return(true)
+    
+    cache.put(url, request, response)
+    cache.clear
     cache.get(url, request).should be_nil
   end
 
@@ -82,15 +95,21 @@ end
 context Restfulie::Cache::Restrictions do
 
   it "should not cache DELETE, PUT, TRACE, HEAD, OPTIONS" do
-    ['Delete', 'Put', 'Trace', 'Head', 'Options'].each do |verb|
-      Restfulie::Cache::Restrictions.may_cache_method?("Net::HTTP::#{verb}".constantize).should be_false
-    end
+    mocked = Object.new
+    mocked.should_receive(:kind_of?).and_return(false)
+    mocked.should_receive(:kind_of?).and_return(false)
+    Restfulie::Cache::Restrictions.may_cache_method?(mocked).should be_false
   end
 
   it "should cache GET and POST" do
-    ['Get', 'Post'].each do |verb|
-      Restfulie::Cache::Restrictions.may_cache_method?("Net::HTTP::#{verb}".constantize).should be_true
-    end
+    mocked = Object.new
+    mocked.should_receive(:kind_of?).with(Net::HTTP::Post).and_return(true)
+    Restfulie::Cache::Restrictions.may_cache_method?(mocked).should be_true
+
+    mocked = Object.new
+    mocked.should_receive(:kind_of?).with(Net::HTTP::Get).and_return(true)
+    mocked.should_receive(:kind_of?).with(Net::HTTP::Post).and_return(false)
+    Restfulie::Cache::Restrictions.may_cache_method?(mocked).should be_true
   end
   
   it "should cache if has the Cache-Control and max-age header" do
@@ -99,6 +118,6 @@ context Restfulie::Cache::Restrictions do
     Restfulie::Cache::Restrictions.should_receive(:may_cache_method?).with(request).and_return true
     response.should_receive(:may_cache?).and_return true
         
-    Restfulie::Cache::Restrictions.may_cache(request, response).should be_true
+    Restfulie::Cache::Restrictions.may_cache?(request, response).should be_true
   end
 end
