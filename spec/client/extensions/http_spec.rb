@@ -107,5 +107,59 @@ context Restfulie::Client::HTTPResponse do
       @response.value_for('a=b,s-max-age=100', /^max-age=(\d+)/).should be_nil
     end
   end
+  
+  context "when retrieving caching values" do
+    
+    it "should return 0 if the header value is not present" do
+      @response.should_receive(:header_value_from).with('Cache-control', /^\s*max-age=(\d+)/).and_return(nil)
+      @response.cache_max_age.should == 0
+    end
+    
+    it "should return the parsed value if the header value is not present" do
+      @response.should_receive(:header_value_from).with('Cache-control', /^\s*max-age=(\d+)/).and_return("57")
+      @response.cache_max_age.should == 57
+    end
+    
+    it "should return nothing if the header is not there" do
+      field = Object.new
+      @response.should_receive(:get_fields).with('header').and_return([field])
+      @response.should_receive(:value_for).with(field, 'expression').and_return(nil)
+      @response.header_value_from('header','expression').should be_nil
+    end
+    
+    it "should return the matching expression when extracting the header value" do
+      field = Object.new
+      @response.should_receive(:get_fields).with('header').and_return([field])
+      @response.should_receive(:value_for).with(field, /as(df)/).and_return("asdf")
+      @response.header_value_from('header', /as(df)/).should == "df"
+    end
+    
+  end
+  
+  context "when retrieving caching values" do
+    it "should expire the response if there is no date" do
+      @response.should_receive(:[]).with('Date').and_return(nil)
+      @response.should be_has_expired_cache
+    end
+
+    it "should expire the response if its in the past with" do
+      Time.should_receive(:now).and_return(201)
+      Time.should_receive(:rfc2822).and_return(100)
+      @response.should_receive(:cache_max_age).and_return(100)
+      @response.should_receive(:[]).with('Date').and_return(Object.new)
+      @response.should_receive(:[]).with('Date').and_return(Object.new)
+      @response.has_expired_cache?.should be_true
+    end
+
+    it "should expire the response if its in the past with" do
+      Time.should_receive(:now).and_return(199)
+      Time.should_receive(:rfc2822).and_return(100)
+      @response.should_receive(:cache_max_age).and_return(100)
+      @response.should_receive(:[]).with('Date').and_return(Object.new)
+      @response.should_receive(:[]).with('Date').and_return(Object.new)
+      @response.has_expired_cache?.should be_false
+    end
+
+  end
 
 end
