@@ -14,14 +14,33 @@
 #  See the License for the specific language governing permissions and 
 #  limitations under the License. 
 #
+module Restfulie::Server::Cache
+  
+  class Config
+
+    def allow(seconds)
+      @max_age = seconds
+      self
+    end
+
+    def max_age
+      @max_age ||= 0
+    end
+  end
+end
 
 module ActionController
   class Base
+
+    def self.cache
+      @cache_config ||= Restfulie::Server::Cache::Config.new
+    end
 
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
     def render_resource(resource, options = {}, render_options = {})
 
+      response.headers['Cache-control'] = "max-age=#{self.class.cache.max_age}"
        return nil unless stale? resource.cache_info
 
        return render(render_options) if render_options[:text]
