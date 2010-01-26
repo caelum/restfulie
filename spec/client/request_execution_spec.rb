@@ -37,7 +37,6 @@ context Restfulie::Client::Response do
     final.should == result
     final.should be_a(Restfulie::Client::WebResponse)
     final.web_response.should == response
-    final.web_response.should be_a(Restfulie::Client::HTTPResponse)
   end
   
   context "parsing an entity" do
