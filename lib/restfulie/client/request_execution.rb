@@ -140,7 +140,6 @@ module Restfulie
       # gets a result object and enhances it with web response methods
       # by extending WebResponse and defining the attribute web_response
       def enhance(result)
-        @response.extend Restfulie::Client::HTTPResponse
         @response.previous = result.web_response if result.respond_to? :web_response
         result.extend Restfulie::Client::WebResponse
         result.web_response = @response

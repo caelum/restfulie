@@ -15,6 +15,8 @@
 #  limitations under the License. 
 #
 
+require 'time'
+
 # an extesion to http responses
 module Restfulie::Client::HTTPResponse
   
@@ -58,20 +60,23 @@ end
 module Restfulie::Client::HTTPResponse
 
   def cache_max_age
-    header = Restfulie::Cache::Restrictions.value_for(get_fields('Cache-control'), /^max-age=(\d+)/)
-    return nil if header.nil?
-    header[1].to_int
+    val = header_value_from('Cache-control', /^\s*max-age=(\d+)/)
+    if val
+      val.to_i
+    else
+      0
+    end
+  end
+  
+  def header_value_from(header, expression)
+    h = value_for(get_fields(header)[0], expression)
+    return nil if h.nil?
+    h.match(expression)[1]
   end
   
   def has_expired_cache?
-    return true if ['Date'].nil?
-    debugger
-    Time.now > http_date_to_time(['Date']) + cache_max_age.seconds
-  end
-  
-  def http_date_to_time(date)
-    debugger
-    puts date
+    return true if self['Date'].nil?
+    Time.now > Time.rfc2822(self['Date']) + cache_max_age.seconds
   end
 
   # checks if the header's max-age is available and no no-store if available.
@@ -104,4 +109,8 @@ module Restfulie::Client::HTTPResponse
     value.split(",").find { |obj| obj.strip =~ expression }
   end
     
+end
+
+class Net::HTTPResponse
+  include Restfulie::Client::HTTPResponse
 end
