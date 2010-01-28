@@ -35,11 +35,6 @@ module Restfulie
   
 end
 
-class Array
-  extend Restfulie::MediaTypeControl
-  media_type "application/atom+xml"
-end
-
 class AtomFeed
   def initialize(feed)
     @feed = feed
