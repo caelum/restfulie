@@ -2,7 +2,7 @@ module Restfulie
   module Server
     module CoreExtensions
       module Array
-  
+
         def to_atom
           raise "Not all elements respond to to_atom" unless all? { |e| e.respond_to? :to_atom }
           options = {}
@@ -18,6 +18,8 @@ module Restfulie
             each do |element|
               feed.entries << element.to_atom
             end
+            
+            yield feed if block_given?
           end
         end
     

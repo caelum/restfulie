@@ -25,4 +25,15 @@ context Restfulie::Server::CoreExtensions::Array do
     feed.should include("<title>#&lt;AtomifiedModel")
     feed.should include("</feed>")
   end
+  
+  it "accepts a block to customize fields" do
+    feed = @array.to_atom do |f|
+      f.title = "customized title" 
+      f.authors << Atom::Person.new(:name => 'John Doe')
+    end.to_xml
+    
+    feed.should include("<title>customized title</title")
+    feed.should include("<author>")
+    feed.should include("<name>John Doe</name")
+  end
 end
