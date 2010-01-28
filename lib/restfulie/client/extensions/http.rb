@@ -123,7 +123,7 @@ module Restfulie::Client::HTTPResponse
   # vary_headers_for({'Date' => '...', 'Accept-Language'=>'de'}) == [nil, 'de']
   def vary_headers_for(request)
     self['Vary'].split(',').map do |key|
-      request[key]
+      request[key.strip]
     end
   end
     

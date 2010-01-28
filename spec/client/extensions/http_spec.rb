@@ -180,11 +180,26 @@ context Restfulie::Client::HTTPResponse do
       @request.extend Restfulie::Client::HTTPResponse
     end
     
-    it "should answer with the from the request matching Vary header" do
+    it "should answer with the header from the request matching Vary header" do
       headers(@response)['Vary'] = 'Accept'
       headers(@request)['Accept'] = 'application/xml'
       @response.vary_headers_for(@request).should == ['application/xml']
     end
+
+    it "should answer with all headers from the request matching Vary header" do
+      headers(@response)['Vary'] = 'Accept, Accept-language'
+      headers(@request)['Accept'] = 'application/xml'
+      headers(@request)['Accept-language'] = 'de'
+      @response.vary_headers_for(@request).should == ['application/xml', 'de']
+    end
+
+    it "should answer with nil from the request matching Vary header when non-existent" do
+      headers(@response)['Vary'] = 'Accept,Accept-language'
+      headers(@request)['Accept'] = nil
+      headers(@request)['Accept-language'] = 'de'
+      @response.vary_headers_for(@request).should == [nil, 'de']
+    end
+    
     
   end
 
