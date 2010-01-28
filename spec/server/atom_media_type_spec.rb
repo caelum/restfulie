@@ -33,20 +33,6 @@ context Restfulie::Server::AtomMediaType do
     it "should support atom feed media type by default" do
       Array.media_type_representations.should include('application/atom+xml')
     end
-    
-    it "should invoke atom feed creation with the block if its given" do
-      controller = Object.new
-      controller.stub(:url_for).and_return('uri')
-      items = {'guilherme', 'silveira'}
-      result = ['guilherme', 'silveira'].to_atom({:title=>"caelum", :controller => controller}) do |item|
-        items.delete item
-        item
-      end
-      items.should be_empty
-      result.should include('guilherme')
-      result.should include('silveira')
-    end
-    
   end
   
   context AtomFeed do
@@ -56,51 +42,6 @@ context Restfulie::Server::AtomMediaType do
       controller = Object.new
       controller.should_receive(:url_for).with({}).and_return(uri)
       AtomFeed.new(nil).self_link(controller).should == "<link rel=\"self\" href=\"#{uri}\"/>"
-    end
-
-    it "array serialization to atom will serialize every element and allows id overriding" do
-      expected = '<?xml version="1.0"?>
-      <feed xmlns="http://www.w3.org/2005/Atom">
-        <id>custom_id</id>
-        <title type="text">Hotels list</title>
-        <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
-        <author><name>Hotels list</name></author>
-        <link rel="self" href="http://caelumtravel.com/hotels"/>
-        <items/>
-      </feed>'
-      first = City.new
-      first.should_receive(:updated_at).and_return(@now)
-      second = City.new
-      second.should_receive(:updated_at).and_return(@now)
-
-      controller = Object.new
-      feed = AtomFeed.new([first, second]).id('custom_id')
-      feed.should_receive(:items_to_atom_xml).and_return("<items/>")
-      feed.should_receive(:self_link).with(controller).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels\"/>")
-      feed.title('Hotels list').to_atom(controller).should == expected
-    end
-
-    it "array serialization to atom will use default id" do
-      expected = '<?xml version="1.0"?>
-      <feed xmlns="http://www.w3.org/2005/Atom">
-        <id>http://caelumtravel.com/hotels</id>
-        <title type="text">Hotels list</title>
-        <updated>' + @now.strftime('%Y-%m-%dT%H:%M:%S-08:00') + '</updated>
-        <author><name>Hotels list</name></author>
-        <link rel="self" href="http://caelumtravel.com/hotels"/>
-        <items/>
-      </feed>'
-      first = City.new
-      first.should_receive(:updated_at).and_return(@now)
-      second = City.new
-      second.should_receive(:updated_at).and_return(@now)
-
-      controller = Object.new
-      controller.should_receive(:url_for).with({}).and_return('http://caelumtravel.com/hotels')
-      feed = AtomFeed.new([first, second])
-      feed.should_receive(:items_to_atom_xml).and_return("<items/>")
-      feed.should_receive(:self_link).with(controller).and_return("<link rel=\"self\" href=\"http://caelumtravel.com/hotels\"/>")
-      feed.title('Hotels list').to_atom(controller).should == expected
     end
     
     it "should serialize every item together" do
