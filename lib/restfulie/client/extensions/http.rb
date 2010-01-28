@@ -84,6 +84,11 @@ module Restfulie::Client::HTTPResponse
     may_cache_field?(get_fields('Cache-control'))
   end
   
+  # Returns whether this cache control field allows caching
+  #
+  # may_cache_field(['max-age=2000', 'no-store']) == false
+  # may_cache_field('max-age=2000,no-store') == false
+  # may_cache_field('max-age=2000') == true
   def may_cache_field?(field)
     return false if field.nil?
     
@@ -107,6 +112,19 @@ module Restfulie::Client::HTTPResponse
   # of the expression
   def value_for(value, expression)
     value.split(",").find { |obj| obj.strip =~ expression }
+  end
+  
+  # extracts all header values related to the Vary header from this response, in order
+  # to implement Vary support from the HTTP Specification
+  # 
+  # example
+  # if the response Vary header is 'Accept','Accept-Language', we have
+  # vary_headers_for({'Accept'=>'application/xml', 'Date' =>'...', 'Accept-Language'=>'de'}) == ['application/xml', 'de']
+  # vary_headers_for({'Date' => '...', 'Accept-Language'=>'de'}) == [nil, 'de']
+  def vary_headers_for(request)
+    self['Vary'].split(',').map do |key|
+      request[key]
+    end
   end
     
 end
