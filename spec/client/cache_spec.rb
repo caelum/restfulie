@@ -44,12 +44,28 @@ context Restfulie::BasicCache do
     request = Object.new
     response = mock Net::HTTPResponse
     cache = Restfulie::BasicCache.new
+    response.should_receive(:vary_headers_for).with(request).and_return(1)
+    response.should_receive(:vary_headers_for).with(request).and_return(1)
     
     Restfulie::Cache::Restrictions.should_receive(:may_cache?).with(request, response).and_return(true)
     
     cache.put(url, request, response)
     response.should_receive(:has_expired_cache?).and_return(false)
     cache.get(url, request).should == response
+  end
+
+  it "should respect the vary header" do
+    url = Object.new
+    request = Object.new
+    response = mock Net::HTTPResponse
+    cache = Restfulie::BasicCache.new
+    response.should_receive(:vary_headers_for).with(request).and_return(1)
+    response.should_receive(:vary_headers_for).with(request).and_return(2)
+    
+    Restfulie::Cache::Restrictions.should_receive(:may_cache?).with(request, response).and_return(true)
+    
+    cache.put(url, request, response)
+    cache.get(url, request).should be_nil
   end
 
   it "should not put on the cache if Cache-Control is enabled" do
@@ -69,6 +85,8 @@ context Restfulie::BasicCache do
     request = Object.new
     response = mock Net::HTTPResponse
     cache = Restfulie::BasicCache.new
+    response.should_receive(:vary_headers_for).with(request).and_return(1)
+    response.should_receive(:vary_headers_for).with(request).and_return(1)
     
     Restfulie::Cache::Restrictions.should_receive(:may_cache?).with(request, response).and_return(true)
     

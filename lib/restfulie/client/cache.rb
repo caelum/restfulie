@@ -25,14 +25,14 @@ class Restfulie::BasicCache
   def put(url, req, response)
     if Restfulie::Cache::Restrictions.may_cache?(req, response)
       Restfulie.logger.debug "caching #{url} #{req} #{response}"
-      cache_add (key_for(url, req), response)
+      cache_add (key_for(url, req), req, response)
     end
     response
   end
   
   def get(url, req)
     
-    response = cache_get( key_for(url, req))
+    response = cache_get( key_for(url, req), req)
     return nil if response.nil?
     
     if response.has_expired_cache?
