@@ -14,6 +14,7 @@ module Restfulie
             # Array#to_s can return a very long string
             feed.title   = to_s
             feed.id      = hash
+            feed.updated = updated_at
           
             each do |element|
               feed.entries << element.to_atom
