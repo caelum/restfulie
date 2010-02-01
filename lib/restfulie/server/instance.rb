@@ -86,17 +86,3 @@ module Restfulie::Server::Instance
   end
 
 end
-
-class Array
-  
-  include Restfulie::Server::Cache
-
-  def updated_at
-    last = nil
-    each do |item|
-      last = item.updated_at if item.respond_to?(:updated_at) && (last.nil? || item.updated_at > last)
-    end
-    last || Time.now
-  end
-  
-end

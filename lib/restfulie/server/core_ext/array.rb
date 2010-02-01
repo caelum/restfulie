@@ -22,6 +22,10 @@ module Restfulie
             yield feed if block_given?
           end
         end
+        
+        def updated_at
+          map { |item| item.updated_at if item.respond_to?(:updated_at) }.compact.max || Time.now
+        end
     
       end
     end
