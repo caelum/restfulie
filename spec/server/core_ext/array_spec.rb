@@ -10,7 +10,7 @@ class AtomifiedModel
   end
 end
 
-context Restfulie::Server::CoreExtensions::Array do
+context Array do
 
   before(:each) do
     @array = []
@@ -22,7 +22,7 @@ context Restfulie::Server::CoreExtensions::Array do
     feed = feed.to_xml
     feed.should include("<feed xmlns=\"http://www.w3.org/2005/Atom\">")
     feed.should include("<published>123</published>")
-    feed.should include("<title>#&lt;AtomifiedModel")
+    feed.should include("<title>Collection of AtomifiedModel")
     feed.should include("</feed>")
   end
   
