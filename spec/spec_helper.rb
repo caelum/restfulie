@@ -28,12 +28,7 @@ require 'action_controller'
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'restfulie'
 
-ActiveRecord::Migration.verbose = false
-ActiveRecord::Base.establish_connection(
-  "adapter" => "sqlite3", "database" => File.join(File.dirname(__FILE__), '..', 'test.sqlite3')
-)
-
-load(File.dirname(__FILE__) + '/schema.rb')
+require 'schema'
 
 #
 # Some steroids on Spec::Example::ExampleGroup.
