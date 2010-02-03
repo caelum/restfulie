@@ -2,8 +2,9 @@ module Restfulie
   module Server
     module Serializers
       class Atom
+        
         include ActionController::UrlWriter
-        ATTRIBUTES_ALREADY_IN_ATOM_SPEC = [:id, :title, :updated_at, :created_at]
+        ATTRIBUTES_ALREADY_IN_ATOM_SPEC = ["id", "title", "updated_at", "created_at"]
 
         def initialize(record, options={}, &block)
           @record = record
@@ -19,14 +20,15 @@ module Restfulie
             entry.updated   = @record.updated_at
             entry.links     << atom_self_link
 
-            entry.links     << atom_associations_links if atom_associations
+            entry.links     += atom_associations_links if atom_associations
             
             # TODO: Deal with authors
             # TODO: Deal with content and summary
 
-            # atom_attributes.each do |attribute|
-            #             entry.send("#{model}_#{attribute}=", self.send(attribute))
-            #           end 
+            extension_attributes.each do |attribute|
+              register_element(attribute)
+              entry.send("#{namespaced_class}_#{attribute}=", @record.send(attribute))
+            end 
             
             yield entry if block_given?
           end
@@ -48,17 +50,20 @@ module Restfulie
           @record.class.reflect_on_all_associations.map(&:name)
         end
 
-        def atom_attributes
+        def extension_attributes
           @record.class.column_names - ATTRIBUTES_ALREADY_IN_ATOM_SPEC
         end
         
         def register_element(attribute)
           ::Atom::Entry.element(namespaced_class_and_attribute(attribute)) if element_unregistered?(namespaced_class_and_attribute(attribute))
         end
-        # alias :register_elements :register_element
+        
+        def register_elements(attribute)
+          ::Atom::Entry.elements(namespaced_class_and_attribute(attribute)) if element_unregistered?(namespaced_class_and_attribute(attribute))
+        end
         
         def element_unregistered?(element)
-          ::Atom::Entry.element_specs.select { |k,v|  v.name == element }.nil?
+          ::Atom::Entry.element_specs.select { |k,v|  v.name == element }.empty?
         end
         
         def namespaced_class_and_attribute(attribute)
