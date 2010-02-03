@@ -15,15 +15,18 @@ module Restfulie
           ::Atom::Entry.new do |entry|
             entry.id        = @record.id
             entry.title     = "Entry about #{@record.class}"
-            entry.published = @record.created_at if @record.created_at
-            entry.updated   = @record.updated_at if @record.updated_at
+            entry.published = @record.created_at
+            entry.updated   = @record.updated_at
             entry.links     << atom_self_link
 
             entry.links     << atom_associations_links if atom_associations
+            
+            # TODO: Deal with authors
+            # TODO: Deal with content and summary
 
             # atom_attributes.each do |attribute|
             #             entry.send("#{model}_#{attribute}=", self.send(attribute))
-            #           end
+            #           end 
             
             yield entry if block_given?
           end
@@ -50,7 +53,7 @@ module Restfulie
         end
         
         def register_element(attribute)
-          ::Atom::Entry.element namespaced_class_and_attribute(attribute) if element_unregistered?(namespaced_class_and_attribute(attribute))
+          ::Atom::Entry.element(namespaced_class_and_attribute(attribute)) if element_unregistered?(namespaced_class_and_attribute(attribute))
         end
         # alias :register_elements :register_element
         
@@ -62,12 +65,12 @@ module Restfulie
           "#{namespaced_class}:#{attribute}"
         end
         
-        def namespaced_class(klass)
+        def namespaced_class
           @record.class.name.downcase.gsub(/_/, ':')
         end
         
         def register_namespace(namespace)
-          Atom::Entry.add_extension_namespace(namespace, urn(namespace)) unless Atom::Entry.known_namespaces.include? urn(namespace)
+          ::Atom::Entry.add_extension_namespace(namespace, urn(namespace)) unless ::Atom::Entry.known_namespaces.include? urn(namespace)
         end
         
         def urn(name)
