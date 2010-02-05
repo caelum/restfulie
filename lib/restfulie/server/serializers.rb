@@ -1,1 +1,1 @@
-require 'restfulie/server/serializers/atom'
+require 'restfulie/server/serializers/active_record_atom'
