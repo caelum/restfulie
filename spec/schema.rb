@@ -30,7 +30,19 @@ ActiveRecord::Schema.define(:version => 1) do
     end
   end
   
-  create_table "players", :force => true do |t|
+  create_table :players, :force => true do |t|
     t.column :name, :string
+  end
+  
+  [:songs, :albums].each do |table|
+    create_table table do |t|
+      t.string :title
+      t.string :description
+      t.integer :length
+      
+      t.belongs_to :album if table == :songs
+      
+      t.timestamps
+    end
   end
 end
