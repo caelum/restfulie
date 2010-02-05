@@ -2,6 +2,42 @@ module Restfulie
   module Server
     module Serializers
       module ActiveRecord
+        
+        # Serializes an ActiveRecord model to an Atom representation.
+        # 
+        # It uses Ratom to generate the Atom XML, and it depends on Rails routes
+        # to generate the href of Atom links.
+        #
+        # So, to generate the atom self link for a model named Song, we use the 
+        # named route songs_url, passing the model as an argument.
+        #
+        # Similarly, if Songs belongs_to album, we use the named route 
+        # album_url(@song.album). So, we are using our routes to generate the
+        # necessary atom links.
+        #
+        # If the association is a has_many (Album has_many songs), we use the 
+        # named route album_songs_url to create the Atom::Link. We call it as 
+        #
+        #   album_songs_url([@album, :songs], :host => 'myhost.com')
+        #
+        # In order to have this named route, we can create it by hand, or using
+        # nested resources:
+        #
+        #   map.resources :albums do |album|
+        #     album.resources :songs, :controller => 'albums/songs'
+        #   end
+        #
+        # == Atom Extensions
+        #
+        # We need to extend the Atom to include the model's attribute, 
+        # keeping the XML valid.
+        #
+        # So, in an Atom XML for a model named Song, we register a namespace
+        # of "urn:song", and its attribute becomes <song:description>, <song:length>,
+        # and so on.
+        # 
+        # To do so, we register the namespace "urn:song" and each attribute.
+        #
         class Atom
           include ActionController::UrlWriter
           ATTRIBUTES_ALREADY_IN_ATOM_SPEC = ["id", "title", "updated_at", "created_at"]
