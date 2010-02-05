@@ -1,6 +1,6 @@
 h1. Web site
 
-Restulie's website can be found at "http://restfulie.caelum.com.br":http://restfulie.caelum.com.br
+Restfulie's website can be found at "http://restfulie.caelum.com.br":http://restfulie.caelum.com.br
 
 h1. Quit pretending
 
