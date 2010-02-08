@@ -18,16 +18,12 @@
 require 'rubygems'
 require 'spec'
 
-require 'atom'
 require 'ruby-debug'
 require 'rexml/document'
 
 require 'active_record'
-require 'action_controller'
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'restfulie'
-
+require File.join(File.dirname(__FILE__), '..', 'lib', 'restfulie')
 require 'schema'
 
 #
