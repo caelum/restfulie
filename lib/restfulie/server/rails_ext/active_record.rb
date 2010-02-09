@@ -4,7 +4,7 @@ module Restfulie
       module ActiveRecord       
         def to_atom(options={}, &block)         
           serializer = Restfulie::Server::Serializers::ActiveRecord::Atom.new(self, options, &block)
-          block_given? ? serializer.atomify(&block) : serializer.atomify
+          block_given? ? serializer.atomify(options, &block) : serializer.atomify(options)
         end
       end
     end
