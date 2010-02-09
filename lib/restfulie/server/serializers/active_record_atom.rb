@@ -63,7 +63,6 @@ module Restfulie
               # TODO: Deal with authors
               # TODO: Deal with content and summary
 
-
               extension_attributes.each do |attribute|
                 register_element(attribute)
                 entry.send("#{namespaced_class}_#{attribute}=", @record.send(attribute))
@@ -80,6 +79,9 @@ module Restfulie
           end
 
           def atom_associations_links(options={})
+            # TODO: Maybe use namespaced routes for polymorphic_url. 
+            # TODO: Create default options to be passed to polymorphic_url.
+            
             atom_associations.map do |association|
               if association.macro == :has_many
                 ::Atom::Link.new(:rel => association.name, :href => polymorphic_url([@record, association.name], :host => 'localhost:3000'))
