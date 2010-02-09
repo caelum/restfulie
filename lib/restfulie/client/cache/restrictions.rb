@@ -15,28 +15,25 @@
 #  limitations under the License. 
 #
 
-require 'restfulie/common'
+module Restfulie
+  module Client
+    module Cache
+      module Restrictions
+        class << self
 
-require 'restfulie/client/core_ext/hash.rb'
+          # checks whether this request verb and its cache headers allow caching
+          def may_cache?(request,response)
+            may_cache_method?(request) && response.may_cache?
+          end
 
-require 'restfulie/client/atom_media_type'
-require 'restfulie/client/base'
-require 'restfulie/client/entry_point'
-require 'restfulie/client/helper'
-require 'restfulie/client/instance'
-require 'restfulie/client/request_execution'
-require 'restfulie/client/state'
+          # only Post and Get requests are cacheable so far
+          def may_cache_method?(verb)
+            verb.kind_of?(Net::HTTP::Post) || verb.kind_of?(Net::HTTP::Get)
+          end
 
-require 'restfulie/client/cache/basic'
-require 'restfulie/client/cache/fake'
-require 'restfulie/client/cache/restrictions'
+        end
 
-Object.extend Restfulie
-
-include ActiveSupport::CoreExtensions::Hash
-
-class Hashi::CustomHash
-    uses_restfulie
+      end
+    end
+  end
 end
-
-Restfulie.cache_provider = Restfulie::Client::Cache::Basic.new

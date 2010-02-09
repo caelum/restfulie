@@ -15,28 +15,22 @@
 #  limitations under the License. 
 #
 
-require 'restfulie/common'
+# Fake cache that does not cache anything
+# Use Restfulie.cache_provider = Restfulie::Client::Cache::Fake.new
+module Restfulie
+  module Client
+    module Cache
+      class Fake
+        def put(url, req, response)
+          response
+        end
 
-require 'restfulie/client/core_ext/hash.rb'
+        def get(url, req)
+        end
 
-require 'restfulie/client/atom_media_type'
-require 'restfulie/client/base'
-require 'restfulie/client/entry_point'
-require 'restfulie/client/helper'
-require 'restfulie/client/instance'
-require 'restfulie/client/request_execution'
-require 'restfulie/client/state'
-
-require 'restfulie/client/cache/basic'
-require 'restfulie/client/cache/fake'
-require 'restfulie/client/cache/restrictions'
-
-Object.extend Restfulie
-
-include ActiveSupport::CoreExtensions::Hash
-
-class Hashi::CustomHash
-    uses_restfulie
+        def clear
+        end
+      end
+    end
+  end
 end
-
-Restfulie.cache_provider = Restfulie::Client::Cache::Basic.new
