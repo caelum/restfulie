@@ -15,20 +15,20 @@
 #  limitations under the License. 
 #
 
-class Hash
-  def to_object(body)
-    if keys.length>1
-      raise "unable to parse an xml with more than one root element"
-    elsif keys.length == 0
-      self
-    else
-      type = keys[0].camelize.constantize
-      type.from_xml(body)
-    end
-  end
-end
-
 module Restfulie
+
+  class << self
+    attr_accessor :cache_provider
+  end
+  
+  # Extends your class to support restfulie-client side's code.
+  # This will extends Restfulie::Client::Base methods as class methods,
+  # Restfulie::Client::Instance as instance methods and Restfulie::Unmarshalling as class methods.
+  def uses_restfulie
+    extend Restfulie::Client::Base
+    include Restfulie::Client::Instance
+    extend Restfulie::Unmarshalling
+  end
 
   # will execute some action in a specific URI
   def self.at(uri)
