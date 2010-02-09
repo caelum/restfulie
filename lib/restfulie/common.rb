@@ -15,15 +15,17 @@
 #  limitations under the License. 
 #
 
-require 'restfulie/common'
+require 'net/http'
+require 'uri'
+require 'atom'
 
-require 'restfulie/server/base'
-require 'restfulie/server/controller'
-require 'restfulie/server/instance'
-require 'restfulie/server/marshalling'
-require 'restfulie/server/transition'
-require 'restfulie/server/restfulie_controller'
-require 'restfulie/server/atom_media_type'
-require 'restfulie/server/core_ext'
-require 'restfulie/server/serializers'
-require 'restfulie/server/rails_ext'
+# TODO Remove this after remove Media Types (if need?)
+require 'action_controller'
+require 'active_support'
+
+require 'vendor/jeokkarak/jeokkarak'
+
+require 'restfulie/common/logger'
+require 'restfulie/common/media_type'
+require 'restfulie/common/unmarshalling'
+require 'restfulie/common/restfulie'

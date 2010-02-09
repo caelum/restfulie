@@ -15,7 +15,7 @@
 #  limitations under the License. 
 #
 
-require 'restfulie/media_type_control'
+require 'restfulie/common/media_type_control'
 
 module Restfulie
   
@@ -140,4 +140,4 @@ def safe_json_decode(json)
   rescue ; {} end
 end
 
-require 'restfulie/media_type_defaults'
+require 'restfulie/common/media_type_defaults'

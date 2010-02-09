@@ -15,15 +15,16 @@
 #  limitations under the License. 
 #
 
-require 'restfulie/common'
+module Restfulie 
+  module Logger
+    # Configure the logger used by Restfulie
+    # 
+    # The logger defaults to ActiveSupport::BufferedLogger.new(STDOUT)
+    class << self
+      attr_accessor :logger
+    end
+  end
+end
 
-require 'restfulie/server/base'
-require 'restfulie/server/controller'
-require 'restfulie/server/instance'
-require 'restfulie/server/marshalling'
-require 'restfulie/server/transition'
-require 'restfulie/server/restfulie_controller'
-require 'restfulie/server/atom_media_type'
-require 'restfulie/server/core_ext'
-require 'restfulie/server/serializers'
-require 'restfulie/server/rails_ext'
+Restfulie::Logger.logger = ActiveSupport::BufferedLogger.new(STDOUT)
+Restfulie::Logger.logger.level = Logger::DEBUG

@@ -19,22 +19,8 @@
 libdir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
-require 'net/http'
-require 'uri'
-require 'atom'
-
-# TODO Remove this after remove Media Types (if need?)
-require 'action_controller'
-require 'active_support'
-
-require 'vendor/jeokkarak/jeokkarak'
-
-require 'restfulie/logger'
-require 'restfulie/media_type'
 require 'restfulie/client'
 require 'restfulie/server'
-require 'restfulie/unmarshalling'
-require 'restfulie/restfulie'
 
 class Object
   extend Restfulie

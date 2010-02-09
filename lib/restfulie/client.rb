@@ -15,13 +15,8 @@
 #  limitations under the License. 
 #
 
-require 'restfulie/logger'
+require 'restfulie/common'
 
-require 'net/http'
-require 'uri'
-require 'vendor/jeokkarak/jeokkarak'
-
-require 'restfulie/media_type'
 require 'restfulie/client/atom_media_type'
 require 'restfulie/client/base'
 require 'restfulie/client/entry_point'
@@ -30,7 +25,6 @@ require 'restfulie/client/instance'
 require 'restfulie/client/request_execution'
 require 'restfulie/client/state'
 require 'restfulie/client/cache'
-require 'restfulie/unmarshalling'
 
 module Restfulie
   
