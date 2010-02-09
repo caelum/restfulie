@@ -20,6 +20,7 @@ require 'spec'
 
 require 'ruby-debug'
 require 'rexml/document'
+require 'rcov'
 
 require 'active_record'
 

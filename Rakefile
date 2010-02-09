@@ -34,6 +34,13 @@ Spec::Rake::SpecTask.new do |t|
   t.spec_opts = %w(-fs -fh:doc/specs.html --color)
 end
 
+Spec::Rake::SpecTask.new('rcov') do |t|
+  t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.rcov = true
+  t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
+end
+
 Rake::GemPackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
 end
