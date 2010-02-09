@@ -17,13 +17,13 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-context Restfulie::Client::Instance do
+context Restfulie::Client::InstanceMethods do
   
   context "when parsing a transition execution" do
     
     before do
       @o = Object.new
-      @o.extend Restfulie::Client::Instance
+      @o.extend Restfulie::Client::InstanceMethods
     end
     
     it "should leave data as nil and options as hash if there is no arg" do

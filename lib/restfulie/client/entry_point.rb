@@ -17,38 +17,6 @@
 
 module Restfulie
   module Client
-    module Base
-      
-      # configures an entry point
-      def entry_point_for
-        @entry_points ||= EntryPointControl.new(self)
-        @entry_points
-      end
-      
-      # executes a POST request to create this kind of resource at the server
-      def remote_create(content)
-        content = content.to_xml unless content.kind_of? String
-        remote_post content
-      end
-      
-      # handles which types of responses should be automatically followed
-      def follows
-        @follower ||= FollowConfig.new
-        @follower
-      end
-      
-      # retrieves a resource form a specific uri
-      def from_web(uri, options = {})
-        RequestExecution.new(self, nil).at(uri).get(options)
-      end
-
-      private
-      def remote_post(content)
-        RequestExecution.new(self, nil).at(entry_point_for.create.uri).post(content)
-      end
-
-    end
-
     class FollowConfig
       def initialize
         @entries = {

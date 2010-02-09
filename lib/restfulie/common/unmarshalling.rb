@@ -64,7 +64,7 @@ module Restfulie
        end
        
        result = make_new_object h
-       result.add_transitions(links) if !(links.nil?) && self.include?(Restfulie::Client::Instance)
+       result.add_transitions(links) if !(links.nil?) && self.include?(Restfulie::Client::InstanceMethods)
        result
      end
      
@@ -104,7 +104,7 @@ module Restfulie
       head = hash[self.to_s.underscore]
       result = self.from_hash head
       return nil if result.nil?
-      result._came_from = :xml if self.include?(Restfulie::Client::Instance)
+      result._came_from = :xml if self.include?(Restfulie::Client::InstanceMethods)
       result
     end
     

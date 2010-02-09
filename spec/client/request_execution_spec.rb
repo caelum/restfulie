@@ -230,17 +230,17 @@ context Restfulie::Client::RequestExecution do
       http = Object.new
       http.should_receive(:request).with(@http_request).and_return(response)
 
-      Restfulie.cache_provider.should_receive(:get).with(@url, @http_request).and_return(nil)
+      Restfulie::Client::Base.cache_provider.should_receive(:get).with(@url, @http_request).and_return(nil)
       should_parse_response response
       Net::HTTP.should_receive(:new).with("localhost", 80).and_return(http)
-      Restfulie.cache_provider.should_receive(:put).with(@url, @http_request, response).and_return(response)
+      Restfulie::Client::Base.cache_provider.should_receive(:put).with(@url, @http_request, response).and_return(response)
       
       @request.do(@httpMethod, "delete", nil)
     end
     
     it "should not execute the request when the cache contains it" do
       cached_response = Object.new
-      Restfulie.cache_provider.should_receive(:get).with(@url, @http_request).and_return(cached_response)
+      Restfulie::Client::Base.cache_provider.should_receive(:get).with(@url, @http_request).and_return(cached_response)
       should_parse_response cached_response
       @request.do(@httpMethod, "delete", nil).should == "result"
     end
