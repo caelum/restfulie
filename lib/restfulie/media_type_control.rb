@@ -14,19 +14,6 @@
 #  See the License for the specific language governing permissions and 
 #  limitations under the License. 
 
-# extends Rails mime type
-
-module Mime
-  class << self
-    # alias_method :old_const_set, :const_set
-    
-    # ignores setting the contest again
-    # def const_set(a,b)
-      # super(a,b) unless Mime.const_defined?(a)
-    # end
-  end
-end
-
 module Restfulie
   
   module MediaTypeControl

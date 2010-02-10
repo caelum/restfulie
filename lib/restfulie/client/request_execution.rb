@@ -214,6 +214,7 @@ module Restfulie
       # do(Net::HTTP::Get, 'self', nil)
       # do(Net::HTTP::Post, 'payment', '<payment/>')
       def do(verb, relation_name, body = nil)
+        Restfulie.logger.debug "sending a #{verb} to #{relation_name} with a #{body.class}"
         url, http_request = prepare_request(verb, relation_name, body)
         response = execute_request(url, http_request)
         Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, "application/xml")

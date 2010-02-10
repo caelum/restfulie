@@ -15,6 +15,8 @@
 #  limitations under the License. 
 #
 
+require 'activesupport'
+require 'action_controller'
 require 'restfulie/logger'
 
 require 'net/http'
