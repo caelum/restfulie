@@ -122,6 +122,7 @@ module Restfulie::Client::HTTPResponse
   # vary_headers_for({'Accept'=>'application/xml', 'Date' =>'...', 'Accept-Language'=>'de'}) == ['application/xml', 'de']
   # vary_headers_for({'Date' => '...', 'Accept-Language'=>'de'}) == [nil, 'de']
   def vary_headers_for(request)
+    return nil if self['Vary'].nil?
     self['Vary'].split(',').map do |key|
       request[key.strip]
     end

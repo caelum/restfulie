@@ -25,7 +25,7 @@ class Restfulie::BasicCache
   def put(url, req, response)
     if Restfulie::Cache::Restrictions.may_cache?(req, response)
       Restfulie.logger.debug "caching #{url} #{req} #{response}"
-      cache_add (key_for(url, req), req, response)
+      cache_add(key_for(url, req), req, response)
     end
     response
   end
@@ -66,15 +66,6 @@ class Restfulie::BasicCache
       return old_response if old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req)
     end
     nil
-  end
-  
-  def vary_headers_for(req)
-    return nil if ['Vary'].nil?
-    l = []
-    ['Vary'].split(',').each do |x|
-      l << req[x.strip] if req[x.strip]
-    end
-    l
   end
   
   def remove(what)
