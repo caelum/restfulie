@@ -58,27 +58,16 @@ module Restfulie
       # if there is one hash arg, its the options, add a data = nil
       # if there is one arg (not a hash), its the data, add a options = {}
       # if there are no args, data is nil and options = {}
-      def parse_args_from_transition(args)
-        data = nil
-        if args.nil? || args.size==0
-          options = {}
-        elsif args.size==1
-          if args[0].kind_of?(Hash)
-            options = args[0]
-          else
-            data = args[0]
-            options = {}
-          end
-        elsif args.size==2
-          data = args[0]
-          options = args[1] || {}
-        end
-        [data, options]
+      def parse_args_from_transition(*args)
+        args = [nil, args[0]] if args.size == 1 && args.first.kind_of?(Hash)
+        
+        # [data, options]
+        [args[0], args[1] || {}]
       end
 
       def invoke_remote_transition(name, args, block = nil)
 
-        data, options = parse_args_from_transition(args)
+        data, options = parse_args_from_transition(*args)
 
         method = Restfulie::Client::Config.requisition_method_for options[:method], name
         state = self.existing_relations[name]
