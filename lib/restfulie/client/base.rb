@@ -16,6 +16,12 @@
 #
 
 module Restfulie
+  
+  # will execute some action in a specific URI
+  def self.at(uri)
+    Client::RequestExecution.new(nil, nil).at uri
+  end
+  
   module Client
     module Base
 
@@ -31,12 +37,6 @@ module Restfulie
         include Restfulie::Client::InstanceMethods
         extend  Restfulie::Unmarshalling
       end
-
-      # will execute some action in a specific URI
-      def self.at(uri)
-        Client::RequestExecution.new(nil, nil).at uri
-      end
-      
     end
       
     module InstanceMethods
