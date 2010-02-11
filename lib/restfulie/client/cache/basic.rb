@@ -28,14 +28,14 @@ module Restfulie
         def put(url, req, response)
           if Restfulie::Client::Cache::Restrictions.may_cache?(req, response)
             Restfulie::Logger.logger.debug "caching #{url} #{req} #{response}"
-            cache[key_for(url, req)] = response
+            cache_add(key_for(url, req), req, response)
           end
           response
         end
 
         def get(url, req)
 
-          response = cache[key_for(url, req)]
+          response = cache_get( key_for(url, req), req)
           return nil if response.nil?
 
           if response.has_expired_cache?
@@ -52,7 +52,24 @@ module Restfulie
           cache.clear
         end
 
-        private
+      private
+
+        def cache_add(key, req, response)
+          if cache[key].nil?
+            cache[key] = []
+          end
+          cache[key] << [req, response]
+        end
+
+        def cache_get(key, req)
+          return nil if cache[key].nil?
+          cache[key].each do |cached|
+            old_req = cached.first
+            old_response = cached.last
+            return old_response if old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req)
+          end
+          nil
+        end
 
         def remove(what)
           @cache.delete(what)

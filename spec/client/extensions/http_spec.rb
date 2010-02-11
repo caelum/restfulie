@@ -136,9 +136,22 @@ context Restfulie::Client::HTTPResponse do
     
   end
   
+  class HeaderMock
+    def initialize(entity)
+      @entity=entity
+    end
+    def []=(key, value)
+      @entity.stub(:[]).with(key).and_return(value)
+    end
+  end
+  
+  def headers(entity)
+    HeaderMock.new(entity)
+  end
+
   context "when retrieving caching values" do
     it "should expire the response if there is no date" do
-      @response.should_receive(:[]).with('Date').and_return(nil)
+      headers(@response)['Date'] = nil
       @response.should be_has_expired_cache
     end
 
@@ -146,8 +159,7 @@ context Restfulie::Client::HTTPResponse do
       Time.should_receive(:now).and_return(201)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      @response.should_receive(:[]).with('Date').and_return(Object.new)
-      @response.should_receive(:[]).with('Date').and_return(Object.new)
+      headers(@response)['Date'] = Object.new
       @response.has_expired_cache?.should be_true
     end
 
@@ -155,11 +167,40 @@ context Restfulie::Client::HTTPResponse do
       Time.should_receive(:now).and_return(199)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      @response.should_receive(:[]).with('Date').and_return(Object.new)
-      @response.should_receive(:[]).with('Date').and_return(Object.new)
+      headers(@response)['Date'] = Object.new
       @response.has_expired_cache?.should be_false
     end
 
+  end
+
+  context "when checking response variants" do
+    
+    before do
+      @request = mock Net::HTTPResponse
+      @request.extend Restfulie::Client::HTTPResponse
+    end
+    
+    it "should answer with the header from the request matching Vary header" do
+      headers(@response)['Vary'] = 'Accept'
+      headers(@request)['Accept'] = 'application/xml'
+      @response.vary_headers_for(@request).should == ['application/xml']
+    end
+
+    it "should answer with all headers from the request matching Vary header" do
+      headers(@response)['Vary'] = 'Accept, Accept-language'
+      headers(@request)['Accept'] = 'application/xml'
+      headers(@request)['Accept-language'] = 'de'
+      @response.vary_headers_for(@request).should == ['application/xml', 'de']
+    end
+
+    it "should answer with nil from the request matching Vary header when non-existent" do
+      headers(@response)['Vary'] = 'Accept,Accept-language'
+      headers(@request)['Accept'] = nil
+      headers(@request)['Accept-language'] = 'de'
+      @response.vary_headers_for(@request).should == [nil, 'de']
+    end
+    
+    
   end
 
 end

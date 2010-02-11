@@ -34,7 +34,7 @@ module Hashi
     end
     
     def respond_to?(symbol)
-      super(symbol) || @internal_hash.key?(symbol.to_s)
+      super(symbol) || (@internal_hash.respond_to?(:key?) && @internal_hash.key?(symbol.to_s))
     end
     
     def [](x)
