@@ -6,3 +6,5 @@ pkg/*
 tmtags
 *~
 *.swp
+.rvmrc
+
