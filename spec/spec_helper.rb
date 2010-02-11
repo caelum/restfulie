@@ -25,7 +25,7 @@ require 'rcov'
 require 'active_record'
 
 require File.join(File.dirname(__FILE__), '..', 'lib', 'restfulie')
-require 'schema'
+require File.join(File.dirname(__FILE__), 'schema')
 
 #
 # Some steroids on Spec::Example::ExampleGroup.
