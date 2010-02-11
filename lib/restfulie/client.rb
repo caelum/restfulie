@@ -17,20 +17,24 @@
 
 require 'restfulie/common'
 
-require 'restfulie/client/core_ext/hash.rb'
+#initialize namespace
+module Restfulie::Client; end
 
-require 'restfulie/client/base'
-require 'restfulie/client/entry_point'
-require 'restfulie/client/config'
-
-require 'restfulie/client/helper'
-require 'restfulie/client/request_execution'
-require 'restfulie/client/state'
-require 'restfulie/client/atom_media_type'
-
-require 'restfulie/client/cache/basic'
-require 'restfulie/client/cache/fake'
-require 'restfulie/client/cache/restrictions'
+%w(
+  base
+  entry_point
+  config
+  core_ext/hash
+  helper
+  request_execution
+  state
+  atom_media_type
+  cache/basic
+  cache/fake
+  cache/restrictions
+).each do |file|
+  require "restfulie/client/#{file}"
+end
 
 Object.extend Restfulie::Client::Base
 

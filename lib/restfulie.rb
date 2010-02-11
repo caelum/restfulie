@@ -15,15 +15,11 @@
 #  limitations under the License. 
 #
 
-# Include resfulie in path load
-libdir = File.dirname(__FILE__)
-$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
+module Restfulie
+  ROOT_PATH = File.dirname(__FILE__)
+  $LOAD_PATH.unshift(ROOT_PATH) unless $LOAD_PATH.include?(ROOT_PATH)
+end
 
 require 'restfulie/client'
 require 'restfulie/server'
 
-class Object
-  extend Restfulie
-end
-
-include ActiveSupport::CoreExtensions::Hash

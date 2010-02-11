@@ -17,13 +17,25 @@
 
 require 'restfulie/common'
 
-require 'restfulie/server/base'
-require 'restfulie/server/controller'
-require 'restfulie/server/instance'
-require 'restfulie/server/marshalling'
-require 'restfulie/server/transition'
-require 'restfulie/server/restfulie_controller'
-require 'restfulie/server/atom_media_type'
-require 'restfulie/server/core_ext'
-require 'restfulie/server/serializers'
-require 'restfulie/server/rails_ext'
+#initialize server namespace
+module Restfulie::Server; end
+
+%w(
+  base
+  controller
+  instance
+  marshalling
+  transition
+  restfulie_controller
+  atom_media_type
+  core_ext
+  serializers
+  rails_ext
+).each do |file|
+  require "restfulie/server/#{file}"
+end
+
+class Object
+  extend Restfulie
+end
+

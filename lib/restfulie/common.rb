@@ -25,7 +25,17 @@ require 'active_support'
 
 require 'vendor/jeokkarak/jeokkarak'
 
-require 'restfulie/common/logger'
-require 'restfulie/common/media_type'
-require 'restfulie/common/unmarshalling'
-require 'restfulie/common/restfulie'
+#inittialize namespace
+module Restfulie::Common; end
+
+%w(
+  logger
+  media_type
+  unmarshalling
+  restfulie
+).each do |file| 
+  require "restfulie/common/#{file}"
+end
+
+include ActiveSupport::CoreExtensions::Hash
+
