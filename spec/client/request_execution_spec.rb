@@ -32,7 +32,8 @@ context Restfulie::Client::Response do
   
   it "should enhance types by extending them with Web and Httpresponses" do
     result = Object.new
-    response = Object.new
+    response = mock Net::HTTPResponse
+    response.stub(:code).and_return("200")
     final = Restfulie::Client::Response.new(nil, response).enhance(result)
     final.should == result
     final.should be_a(Restfulie::Client::WebResponse)
@@ -84,7 +85,6 @@ context Restfulie::Client::Response do
     
     it "should return a generic result from the content" do
       @response.content_type = "xhtml"
-      Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       response = restfulie_response("200")
       Restfulie::Client::ResponseHandler.should_receive(:generic_parse_entity).with(response).and_return(@result)
       Restfulie::Client::ResponseHandler.parse_entity(response).should == @result
@@ -362,7 +362,8 @@ context Restfulie::Client::RequestExecution do
   context "when de-serializing straight from a web request" do
     
     def mock_request_for(type)
-      res = Object.new
+      res = mock Net::HTTPResponse
+      res.stub(:code).and_return("200")
       @response = res
       req = mock Net::HTTPRequest
       req.should_receive(:add_field).with('Accept', 'application/xml')
