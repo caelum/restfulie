@@ -97,7 +97,7 @@ context Restfulie::Client::Response do
     it "should treat a 200 post as an enhanced 200 get response entity" do
       response = Object.new
       content = Object.new
-      response.should_receive(:code).and_return("200")
+      response.stub(:code).and_return("200")
       instance = Restfulie::Client::Response.new(NotFollow, response)
       entity = Object.new
       instance.should_receive(:final_parse).and_return(entity)
@@ -108,7 +108,7 @@ context Restfulie::Client::Response do
     it "should not follow moved permanently" do
       response = Object.new
       content = Object.new
-      response.should_receive(:code).and_return("301")
+      response.stub(:code).and_return("301")
       entity = Object.new
       instance = Restfulie::Client::Response.new(NotFollow, response)
       instance.should_receive(:final_parse).and_return(entity)
@@ -122,7 +122,7 @@ context Restfulie::Client::Response do
       content = Object.new
       response = {"Location" => location}
       response.should_receive(:body).and_return(content)
-      response.should_receive(:code).and_return("301")
+      response.stub(:code).and_return("301")
       Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
       result = Restfulie::Client::Response.new(Follow, response).parse_post :nothing
       result.web_response.should == response
