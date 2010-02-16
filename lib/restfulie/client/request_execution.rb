@@ -291,8 +291,13 @@ module Restfulie
       
       # invokes an existing relation or delegates to the existing definition of method_missing
       def method_missing(name, *args)
-        if @invoking_object && @invoking_object.existing_relations[name.to_s]
-          change_to_state(name.to_s, args)
+        if @invoking_object
+          if @invoking_object.existing_relations[name.to_s]
+            change_to_state(name.to_s, args)
+          else
+            Restfulie.logger.debug "Looking for a transition/relation named #{name} at #{invoking_object}, but didn't find it"
+            super(name, args)
+          end
         else
           super(name, args)
         end

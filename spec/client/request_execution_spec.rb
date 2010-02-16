@@ -163,7 +163,7 @@ context Restfulie::Client::RequestExecution do
     end
     
     it "should complain if there is no such state change" do
-      @object.should_receive(:existing_relations).and_return({})
+      @object.stub(:existing_relations).and_return({})
       lambda {@instance.pay 123}.should raise_error
     end
     
