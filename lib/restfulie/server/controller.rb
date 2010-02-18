@@ -41,14 +41,14 @@ module ActionController
     def render_resource(resource, options = {}, render_options = {})
 
       response.headers['Cache-control'] = "max-age=#{self.class.cache.max_age}"
-       return nil unless stale? resource.cache_info
+      return nil unless stale? resource.cache_info
 
-       return render(render_options) if render_options[:text]
+      return render(render_options) if render_options[:text]
 
-       options[:controller] = self
-       respond_to do |format|
-         add_media_responses(format, resource, options, render_options)
-       end
+      options[:controller] = self
+      respond_to do |format|
+       add_media_responses(format, resource, options, render_options)
+      end
 
      end
 
@@ -99,7 +99,7 @@ module ActionController
     # renders a created resource including its required headers:
     # Location and 201
     def render_created(resource, options = {})
-      location= url_for resource
+      location = url_for resource
       render_resource resource, options, {:status => :created, :location => location}
     end
   end
