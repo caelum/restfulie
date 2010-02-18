@@ -62,17 +62,36 @@ module Restfulie
         # this resource was represented, in order to allow further requests to prefer this content type.
         def parse_entity(restfulie_response)
           response = restfulie_response.response
+          response.content_type = "text/plain" unless response.content_type
           content_type = response.content_type
-          type = Restfulie::MediaType.type_for(content_type)
-          if content_type[-3,3]=="xml"
-            result = type.from_xml response.body
-          elsif content_type[-4,4]=="json"
-            result = type.from_json response.body
-          else
-            result = generic_parse_entity restfulie_response
-          end
+          result = coherce(content_type, restfulie_response, response)
           result.instance_variable_set :@_came_from, content_type
           result
+        end
+        
+        # coherce the response into a specific type
+        def coherce(to_type, restfulie_response, response)
+          case unmarshaller_for(to_type)
+          when "xml"
+            Restfulie::MediaType.type_for(to_type).from_xml response.body
+          when "json"
+            Restfulie::MediaType.type_for(to_type).from_json response.body
+          else
+            generic_parse_entity restfulie_response
+          end
+        end
+        
+        # returns which type of unmarshaller should be used
+        def unmarshaller_for(type)
+          if type[-3,3]=="xml"
+            "xml"
+          elsif type[-4,4]=="json"
+            "json"
+          elsif type[-5,5]=="plain"
+            "plain"
+          else
+            "generic"
+          end
         end
 
         # callback taht executes a GET request to the response Location header.
@@ -88,7 +107,7 @@ module Restfulie
         
         def generic_parse_entity(restfulie_response)
           response = restfulie_response.response
-          content_type = response.content_type
+          content_type = response.content_type[/(.*[\+\/])?(.*)/,2]
           type = Restfulie::MediaType.type_for(content_type)
           method = "from_#{content_type}".to_sym
           raise Restfulie::UnsupportedContentType.new("unsupported content type '#{content_type}' because '#{type}.#{method.to_s}' was not found") unless type.respond_to? method
@@ -143,6 +162,7 @@ module Restfulie
         @response.previous = result.web_response if result.respond_to? :web_response
         result.extend Restfulie::Client::WebResponse
         result.web_response = @response
+        Restfulie.logger.debug "Got a 405. Are you sure this is the correct method?" if @response.code=="405"
         result
       end
       
@@ -214,7 +234,7 @@ module Restfulie
       # do(Net::HTTP::Get, 'self', nil)
       # do(Net::HTTP::Post, 'payment', '<payment/>')
       def do(verb, relation_name, body = nil)
-        Restfulie.logger.debug "sending a #{verb} to #{relation_name} with a #{body.class}"
+        Restfulie.logger.debug "sending a #{verb} to #{relation_name} : has_body=#{body.nil?}"
         url, http_request = prepare_request(verb, relation_name, body)
         response = execute_request(url, http_request)
         Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, "application/xml")
@@ -271,8 +291,13 @@ module Restfulie
       
       # invokes an existing relation or delegates to the existing definition of method_missing
       def method_missing(name, *args)
-        if @invoking_object && @invoking_object.existing_relations[name.to_s]
-          change_to_state(name.to_s, args)
+        if @invoking_object
+          if @invoking_object.existing_relations[name.to_s]
+            change_to_state(name.to_s, args)
+          else
+            Restfulie.logger.debug "Looking for a transition/relation named #{name} at #{invoking_object}, but didn't find it"
+            super(name, args)
+          end
         else
           super(name, args)
         end
