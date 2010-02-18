@@ -17,11 +17,14 @@
 
 require 'net/http'
 require 'uri'
-require 'atom'
 
 # TODO Remove this after remove Media Types (if need?)
-require 'action_controller'
+require 'rubygems'
 require 'active_support'
+require 'action_controller'
+
+require 'atom'
+
 
 require 'vendor/jeokkarak/jeokkarak'
 

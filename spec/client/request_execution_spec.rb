@@ -32,7 +32,8 @@ context Restfulie::Client::Response do
   
   it "should enhance types by extending them with Web and Httpresponses" do
     result = Object.new
-    response = Object.new
+    response = mock Net::HTTPResponse
+    response.stub(:code).and_return("200")
     final = Restfulie::Client::Response.new(nil, response).enhance(result)
     final.should == result
     final.should be_a(Restfulie::Client::WebResponse)
@@ -84,7 +85,6 @@ context Restfulie::Client::Response do
     
     it "should return a generic result from the content" do
       @response.content_type = "xhtml"
-      Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       response = restfulie_response("200")
       Restfulie::Client::ResponseHandler.should_receive(:generic_parse_entity).with(response).and_return(@result)
       Restfulie::Client::ResponseHandler.parse_entity(response).should == @result
@@ -97,7 +97,7 @@ context Restfulie::Client::Response do
     it "should treat a 200 post as an enhanced 200 get response entity" do
       response = Object.new
       content = Object.new
-      response.should_receive(:code).and_return("200")
+      response.stub(:code).and_return("200")
       instance = Restfulie::Client::Response.new(NotFollow, response)
       entity = Object.new
       instance.should_receive(:final_parse).and_return(entity)
@@ -108,7 +108,7 @@ context Restfulie::Client::Response do
     it "should not follow moved permanently" do
       response = Object.new
       content = Object.new
-      response.should_receive(:code).and_return("301")
+      response.stub(:code).and_return("301")
       entity = Object.new
       instance = Restfulie::Client::Response.new(NotFollow, response)
       instance.should_receive(:final_parse).and_return(entity)
@@ -122,7 +122,7 @@ context Restfulie::Client::Response do
       content = Object.new
       response = {"Location" => location}
       response.should_receive(:body).and_return(content)
-      response.should_receive(:code).and_return("301")
+      response.stub(:code).and_return("301")
       Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
       result = Restfulie::Client::Response.new(Follow, response).parse_post :nothing
       result.web_response.should == response
@@ -163,7 +163,7 @@ context Restfulie::Client::RequestExecution do
     end
     
     it "should complain if there is no such state change" do
-      @object.should_receive(:existing_relations).and_return({})
+      @object.stub(:existing_relations).and_return({})
       lambda {@instance.pay 123}.should raise_error
     end
     
@@ -362,7 +362,8 @@ context Restfulie::Client::RequestExecution do
   context "when de-serializing straight from a web request" do
     
     def mock_request_for(type)
-      res = Object.new
+      res = mock Net::HTTPResponse
+      res.stub(:code).and_return("200")
       @response = res
       req = mock Net::HTTPRequest
       req.should_receive(:add_field).with('Accept', 'application/xml')

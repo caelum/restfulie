@@ -121,10 +121,14 @@ module Restfulie
       end
 
       def self.from_html(body)
-        Hashi::CustomHash.new :body => body
+        self.from_plain(body)
       end
     
       def self.from_xhtml(body)
+        self.from_plain(body)
+      end
+      
+      def self.from_plain(body)
         Hashi::CustomHash.new :body => body
       end
     
