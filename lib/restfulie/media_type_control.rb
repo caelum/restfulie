@@ -59,6 +59,10 @@ module Restfulie
     class << self
     
       def register(type)
+        silence_warnings do
+          Mime::Type.register(type.name, type.short_name.to_sym)
+        end
+
         media_types[type.name] = type
       end
     
