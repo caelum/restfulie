@@ -38,6 +38,7 @@ module Hashi
     end
     
     def [](x)
+      return CustomHash.new(@internal_hash.values.first)[x] if @internal_hash.length==1 && @internal_hash.values.first.kind_of?(Array)
       transform(@internal_hash[x])
     end
     
