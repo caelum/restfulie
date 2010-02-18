@@ -1,4 +1,4 @@
-module Retifulie::Client
+module Restfulie::Client
 
   class Initializer
 
