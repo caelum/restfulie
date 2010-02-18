@@ -26,5 +26,5 @@ module Restfulie
   end
 end
 
-Restfulie::Logger.logger = ActiveSupport::BufferedLogger.new(STDOUT)
-Restfulie::Logger.logger.level = Logger::DEBUG
+Restfulie.logger = ActiveSupport::BufferedLogger.new(StringIO.new)
+Restfulie.logger.level = ActiveSupport::BufferedLogger::DEBUG

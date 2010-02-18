@@ -86,7 +86,7 @@ describe Restfulie do
     end
     
     it "should allow access to child element when hash came from rails from_xml" do
-      hash = {"players" => {"player" => {"name" => "guilherme silveira"}}}
+      hash = {"players" => {"player" => [{"name" => "guilherme silveira"}]}}
       team = Team.from_hash(hash)
       team.players[0].class.should == Player
       team.players[0].name.should == "guilherme silveira"
@@ -107,9 +107,9 @@ describe Restfulie do
       team.players[0].name.should == "guilherme silveira"
     end
     it "should allow access to boolean element" do
-      hash = {"players" => [{"name" => "guilherme silveira", "valid" => true}]}
+      hash = {"players" => [{"name" => "guilherme silveira", "active" => true}]}
       team = Team.from_hash(hash)
-      team.players[0].should be_valid
+      team.players[0].should be_active
     end
     it "should allow access attribution to child element" do
       hash = {"players" => [{"name" => "guilherme silveira"}]}
