@@ -19,7 +19,7 @@
 #
 # It uses the request headers and uri to store it in memory.
 # This cache might not be optimal for long running clients, which should use a memcached based one.
-# Use Restfulie::Client::Base.cache_provider to change the provider
+# Use Restfulie::Client.cache_provider to change the provider
 module Restfulie::Client::Cache
   class Basic
 

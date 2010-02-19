@@ -23,12 +23,12 @@ module Restfulie
   end
   
   module Client
+    
+    class << self
+      attr_accessor :cache_provider
+    end
+    
     module Base
-
-      class << self
-        attr_accessor :cache_provider
-      end
-
       # Extends your class to support restfulie-client side's code.
       # This will extends Restfulie::Client::Base methods as class methods,
       # Restfulie::Client::InstanceMethods as instance methods and Restfulie::Unmarshalling as class methods.

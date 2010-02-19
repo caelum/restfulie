@@ -44,4 +44,4 @@ class Hashi::CustomHash
     uses_restfulie
 end
 
-Restfulie::Client::Base.cache_provider = Restfulie::Client::Cache::Basic.new
+Restfulie::Client.cache_provider = Restfulie::Client::Cache::Basic.new

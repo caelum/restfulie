@@ -56,7 +56,7 @@ end
 context "when using defaults" do
   
   it "should use the basic cache" do
-    Restfulie::Client::Base.cache_provider.should be_kind_of(Restfulie::Client::Cache::Basic)
+    Restfulie::Client.cache_provider.should be_kind_of(Restfulie::Client::Cache::Basic)
   end
   
 end

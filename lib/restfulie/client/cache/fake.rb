@@ -16,7 +16,7 @@
 #
 
 # Fake cache that does not cache anything
-# Use Restfulie::Client::Base.cache_provider = Restfulie::Client::Cache::Fake.new
+# Use Restfulie::Client.cache_provider = Restfulie::Client::Cache::Fake.new
 module Restfulie::Client::Cache
   class Fake
     def put(url, req, response)
