@@ -28,7 +28,8 @@ require 'atom'
 
 require 'vendor/jeokkarak/jeokkarak'
 
-#inittialize namespace
+#initialize namespace
+module Restfulie; end
 module Restfulie::Common; end
 
 %w(
