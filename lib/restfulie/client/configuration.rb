@@ -25,7 +25,7 @@ module Restfulie::Client
 
     attr_reader :environment
 
-    def initialize(file='./config/restifulie_client.yml',env=:development)
+    def initialize(file='./config/restfulie_client.yml',env=:development)
       if ::File.exist?(file)
         self.read file, env
       else
