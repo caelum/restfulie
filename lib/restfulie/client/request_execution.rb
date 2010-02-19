@@ -246,7 +246,7 @@ module Restfulie::Client
     # gives you access to the Net::HTTP object prepared to execute this request
     attr_accessor :request
     
-    def initialize(type)
+    def initialize(type=nil)
       initialize(type, nil)
     end
 
