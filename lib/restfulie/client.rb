@@ -7,6 +7,8 @@ module Restfulie::Client; end
   base
   entry_point
   config
+  configuration
+  initializer
   core_ext/hash
   helper
   request_execution
