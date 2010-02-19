@@ -33,6 +33,13 @@ module Restfulie::Client
     end
 
     def process
+      load_entry_points
+    end
+
+    def load_entry_points
+      @configuration.entry_points.each do |const_name,entry_point|
+        Object.const_set( const_name.to_s.camelize, Restfulie::Client::EntryPoint.at(entry_point) )
+      end
     end
 
   end

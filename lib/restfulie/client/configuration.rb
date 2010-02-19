@@ -20,7 +20,8 @@ module Restfulie::Client
   class Configuration
 
     @@default_configuration = {
-      :hosts => ['http://localhost:3000/']
+      :hosts => ['http://localhost:3000/'],
+      :entry_points => {}
     }
 
     @@default_configuration.keys.each do |conf_name|

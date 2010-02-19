@@ -37,7 +37,7 @@ module Restfulie::Client
     attr_accessor :uri
 
     def self.at(uri)
-      @uri = uri
+
     end
 
     def at(uri)
