@@ -19,6 +19,7 @@ module Restfulie::Common; end
   media_type
   unmarshalling
   restfulie
+  serializer
 ).each do |file| 
   require "restfulie/common/#{file}"
 end
