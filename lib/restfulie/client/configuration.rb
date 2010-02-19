@@ -23,6 +23,10 @@ module Restfulie::Client
       :hosts => ['http://localhost:3000/']
     }
 
+    @@default_configuration.keys.each do |conf_name|
+      attr_accessor conf_name
+    end
+
     attr_reader :environment
 
     def initialize(file='./config/restfulie_client.yml',env=:development)
