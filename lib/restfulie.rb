@@ -32,6 +32,7 @@ require 'restfulie/server/marshalling'
 require 'restfulie/server/transition'
 require 'restfulie/server/restfulie_controller'
 require 'restfulie/server/atom_media_type'
+require 'restfulie/server/configuration'
 require 'restfulie/unmarshalling'
 
 # Author:: Guilherme Silveira (mailto:guilherme.silveira@caelum.com.br)
