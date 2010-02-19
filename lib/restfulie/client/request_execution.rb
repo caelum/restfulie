@@ -255,6 +255,7 @@ module Restfulie::Client
       @content_type = "application/xml"
       @accepts = "application/xml"
       @invoking_object = invoking_object
+      @headers = {}
     end
 
     def at(uri)
@@ -289,9 +290,16 @@ module Restfulie::Client
       self
     end
 
-    # asks to create this content on the server (post it)
-    def create(content)
-      post(content)
+    def post(body)
+      remote_post_to(@uri, body)
+    end
+    
+    def get(header={})
+      from_web(@uri, header)
+    end
+
+    def create(body)
+      post(body)
     end
     
     # executes an http request using the specified verb
@@ -392,6 +400,17 @@ module Restfulie::Client
       end
     end
 
+    def remote_post_to(uri, body)
+      @uri  = uri
+      @body = body
+      http_post
+    end
+
+    def from_web(uri, headers = {})
+      @headers.merge!(headers)
+      http_get
+    end
+
     private
     def remote_post_to(uri, content)
       
@@ -405,5 +424,25 @@ module Restfulie::Client
       Restfulie::Client::Response.new(@type, response, self).parse_post(@content_type)
     end
 
+    def http_get
+      http_request :get
+    end
+
+    def http_post
+      @headers["Content-type"] = @content_type
+      http_request :post
+    end
+
+    def http_request(verb)
+      raise "Undefined uri" unless @uri
+      method = "Net::HTTP::#{verb.to_s.classify}".constantize
+      url = URI.parse(@uri)
+      req = method.new( url.path, @headers )
+      add_basic_request_headers(req)
+      req.body = @body if @body
+      response = Net::HTTP.new(url.host, url.port).request(req)
+      Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, @content_type)
+    end
+    
   end
 end

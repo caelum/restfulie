@@ -303,62 +303,6 @@ context Restfulie::Client::RequestExecution do
     end
   end
   
-  context "when posting" do
-  	
-  	before do
-      @content = "custom content"
-      @req = expect_request('/product')
-      @mock_response = mock Net::HTTPResponse
-    end
-    
-    def expect_request(uri)
-      req = mock Net::HTTP::Post
-      Net::HTTP::Post.should_receive(:new).with(uri).and_return(req)
-      req.should_receive(:body=).with(@content)
-      req.should_receive(:add_field).with("Content-type", "application/xml")
-      req
-    end
-    
-    it "invoke parse post content, create the post request, and return its content" do
-      define_http_expectation(@req, @mock_response)
-
-      parsed_result = Object.new
-      result = mock Restfulie::Client::Response
-      result.should_receive(:parse_post).and_return(parsed_result)
-      Restfulie::Client::Response.should_receive(:new).and_return(result)
-      req = Restfulie::Client::RequestExecution.new(ClientOrder, nil)
-      req.should_receive(:add_basic_request_headers)
-      res = req.at('http://www.caelumobjects.com/product').create @content
-      res.should == parsed_result
-    end
-
-  end
-  
-  context "when retrieving" do
-
-    def expect_request(uri)
-      req = mock Net::HTTP::Get
-      Net::HTTP::Get.should_receive(:new).with(uri).and_return(req)
-      req
-    end
-
-    it "should allow setting what to accept" do
-      result = Object.new
-      
-      req = expect_request('/product')
-      res = Hashi::CustomHash.new({})
-      define_http_expectation(req, res)
-      response = Object.new
-      response.should_receive(:parse).and_return(result)
-      ex = Restfulie::Client::RequestExecution.new(String, nil)
-      ex.should_receive(:add_basic_request_headers)
-
-      Restfulie::Client::Response.should_receive(:new).with(String, res, ex).and_return(response)
-      ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should == result
-    end
-    
-  end
-
   context "when de-serializing straight from a web request" do
     
     it "should deserialize correctly if its an xml" do
