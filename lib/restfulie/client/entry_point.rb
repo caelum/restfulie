@@ -35,6 +35,11 @@ module Restfulie::Client
   
   class EntryPoint
     attr_accessor :uri
+
+    def self.at(uri)
+      @uri = uri
+    end
+
     def at(uri)
       @uri = uri
     end

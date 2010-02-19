@@ -3,7 +3,7 @@ module Restfulie::Client
   class Configuration
 
     @@default_configuration = {
-      :hosts => []
+      :hosts => ['http://localhost:3000/']
     }
 
     attr_reader :environment

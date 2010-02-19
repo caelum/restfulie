@@ -4,7 +4,7 @@ module Restfulie::Client
 
     attr_accessor :configuration
 
-    def self.run(command = :process, configuration = Configuration.new)
+    def self.run(command = :process, configuration = Restfulie::Client::Configuration.new)
       yield configuration if block_given?
       initializer = new configuration
       initializer.send(command)
