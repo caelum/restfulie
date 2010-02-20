@@ -6,9 +6,9 @@ require 'spec/rake/spectask'
 
 GEM = "restfulie"
 GEM_VERSION = "0.7.0"
-SUMMARY = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
-AUTHOR = "Guilherme Silveira, Caue Guerra"
-EMAIL = "guilherme.silveira@caelum.com.br"
+SUMMARY  = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
+AUTHOR   = "Guilherme Silveira, Caue Guerra"
+EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
 spec = Gem::Specification.new do |s|
@@ -19,6 +19,11 @@ spec = Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
   s.add_dependency("ratom", [">= 0.6.3"])
+  s.add_dependency("actionpack", [">= 2.3.2"])
+  s.add_dependency("activesupport", [">= 2.3.2"])
+
+  # s.add_dependency(%q<rubigen>, [">= 1.3.4"])
+
   s.author = AUTHOR
   s.email = EMAIL
   s.homepage = HOMEPAGE
@@ -27,6 +32,13 @@ end
 Spec::Rake::SpecTask.new do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
   t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+end
+
+Spec::Rake::SpecTask.new('rcov') do |t|
+  t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.rcov = true
+  t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

@@ -15,15 +15,15 @@
 #  limitations under the License. 
 #
 
-# adds respond_to and has_state methods to resources
-module Restfulie::Client::State
-  # overrides the respond_to? method to check if this method is contained or was defined by a state
-  def respond_to?(sym)
-    has_state(sym.to_s) || super(sym)
-  end
-
-  # returns true if this resource has a state named name
-  def has_state(name)
-    !@existing_relations[name].nil?
+class Hash
+  def to_object(body)
+    if keys.length>1
+      raise "unable to parse an xml with more than one root element"
+    elsif keys.length == 0
+      self
+    else
+      type = keys[0].camelize.constantize
+      type.from_xml(body)
+    end
   end
 end

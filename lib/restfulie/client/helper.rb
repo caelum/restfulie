@@ -15,14 +15,10 @@
 #  limitations under the License. 
 #
 
-module Restfulie
-  module Client
-    module Helper
-      # retrieves the invoking method's name
-      def self.current_method
-        caller[0]=~/`(.*?)'/
-        $1
-      end
-    end
+module Restfulie::Client::Helper
+  # retrieves the invoking method's name
+  def self.current_method
+    caller[0]=~/`(.*?)'/
+    $1
   end
 end

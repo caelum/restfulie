@@ -15,15 +15,31 @@
 #  limitations under the License. 
 #
 
-# adds respond_to and has_state methods to resources
-module Restfulie::Client::State
-  # overrides the respond_to? method to check if this method is contained or was defined by a state
-  def respond_to?(sym)
-    has_state(sym.to_s) || super(sym)
-  end
+require 'net/http'
+require 'uri'
 
-  # returns true if this resource has a state named name
-  def has_state(name)
-    !@existing_relations[name].nil?
-  end
+# TODO Remove this after remove Media Types (if need?)
+require 'rubygems'
+require 'active_support'
+require 'action_controller'
+
+require 'atom'
+
+
+require 'vendor/jeokkarak/jeokkarak'
+
+#initialize namespace
+module Restfulie; end
+module Restfulie::Common; end
+
+%w(
+  logger
+  media_type
+  unmarshalling
+  restfulie
+).each do |file| 
+  require "restfulie/common/#{file}"
 end
+
+include ActiveSupport::CoreExtensions::Hash
+

@@ -15,15 +15,21 @@
 #  limitations under the License. 
 #
 
-# adds respond_to and has_state methods to resources
-module Restfulie::Client::State
-  # overrides the respond_to? method to check if this method is contained or was defined by a state
-  def respond_to?(sym)
-    has_state(sym.to_s) || super(sym)
-  end
+module Restfulie::Client::Cache
+  module Restrictions
+    class << self
 
-  # returns true if this resource has a state named name
-  def has_state(name)
-    !@existing_relations[name].nil?
+      # checks whether this request verb and its cache headers allow caching
+      def may_cache?(request,response)
+        may_cache_method?(request) && response.may_cache?
+      end
+
+      # only Post and Get requests are cacheable so far
+      def may_cache_method?(verb)
+        verb.kind_of?(Net::HTTP::Post) || verb.kind_of?(Net::HTTP::Get)
+      end
+
+    end
+
   end
 end

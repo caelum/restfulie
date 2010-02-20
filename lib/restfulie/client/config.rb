@@ -15,15 +15,17 @@
 #  limitations under the License. 
 #
 
-# adds respond_to and has_state methods to resources
-module Restfulie::Client::State
-  # overrides the respond_to? method to check if this method is contained or was defined by a state
-  def respond_to?(sym)
-    has_state(sym.to_s) || super(sym)
+module Restfulie::Client::Config
+  BASIC_MAPPING = { :delete => Net::HTTP::Delete, :put => Net::HTTP::Put, :get => Net::HTTP::Get, :post => Net::HTTP::Post}
+  DEFAULTS = { :destroy => Net::HTTP::Delete, :delete => Net::HTTP::Delete, :cancel => Net::HTTP::Delete,
+               :refresh => Net::HTTP::Get, :reload => Net::HTTP::Get, :show => Net::HTTP::Get, :latest => Net::HTTP::Get, :self => Net::HTTP::Get}
+
+  def self.self_retrieval
+    [:latest, :refresh, :reload, :self]
   end
 
-  # returns true if this resource has a state named name
-  def has_state(name)
-    !@existing_relations[name].nil?
+  def self.requisition_method_for(overriden_option,name)
+    return BASIC_MAPPING[overriden_option.to_sym] if overriden_option
+    DEFAULTS[name.to_sym] || Net::HTTP::Post
   end
 end

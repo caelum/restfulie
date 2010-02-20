@@ -1,5 +1,10 @@
+coverage
 test.sqlite3
 doc
 pkg/*
 .tmtags
 tmtags
+*~
+*.swp
+.rvmrc
+

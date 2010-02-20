@@ -15,15 +15,27 @@
 #  limitations under the License. 
 #
 
-# adds respond_to and has_state methods to resources
-module Restfulie::Client::State
-  # overrides the respond_to? method to check if this method is contained or was defined by a state
-  def respond_to?(sym)
-    has_state(sym.to_s) || super(sym)
-  end
+require 'restfulie/common'
 
-  # returns true if this resource has a state named name
-  def has_state(name)
-    !@existing_relations[name].nil?
-  end
+#initialize server namespace
+module Restfulie::Server; end
+
+%w(
+  base
+  controller
+  instance
+  marshalling
+  transition
+  restfulie_controller
+  atom_media_type
+  core_ext
+  serializers
+  rails_ext
+).each do |file|
+  require "restfulie/server/#{file}"
 end
+
+class Object
+  extend Restfulie
+end
+

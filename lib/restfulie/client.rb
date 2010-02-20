@@ -15,43 +15,28 @@
 #  limitations under the License. 
 #
 
-require 'activesupport'
-require 'action_controller'
-require 'restfulie/logger'
+require 'restfulie/common'
 
-require 'net/http'
-require 'uri'
-require 'vendor/jeokkarak/jeokkarak'
+#initialize namespace
+module Restfulie::Client; end
 
-require 'restfulie/media_type'
-require 'restfulie/client/atom_media_type'
-require 'restfulie/client/base'
-require 'restfulie/client/entry_point'
-require 'restfulie/client/helper'
-require 'restfulie/client/instance'
-require 'restfulie/client/request_execution'
-require 'restfulie/client/state'
-require 'restfulie/client/cache'
-require 'restfulie/unmarshalling'
-
-module Restfulie
-  
-  class << self
-    attr_accessor :cache_provider
-  end
-  
-  # Extends your class to support restfulie-client side's code.
-  # This will extends Restfulie::Client::Base methods as class methods,
-  # Restfulie::Client::Instance as instance methods and Restfulie::Unmarshalling as class methods.
-  def uses_restfulie
-    extend Restfulie::Client::Base
-    include Restfulie::Client::Instance
-    extend Restfulie::Unmarshalling
-  end
-  
+%w(
+  base
+  entry_point
+  config
+  core_ext/hash
+  helper
+  request_execution
+  state
+  atom_media_type
+  cache/basic
+  cache/fake
+  cache/restrictions
+).each do |file|
+  require "restfulie/client/#{file}"
 end
 
-Object.extend Restfulie
+Object.extend Restfulie::Client::Base
 
 include ActiveSupport::CoreExtensions::Hash
 
@@ -59,4 +44,4 @@ class Hashi::CustomHash
     uses_restfulie
 end
 
-Restfulie.cache_provider = Restfulie::BasicCache.new
+Restfulie::Client.cache_provider = Restfulie::Client::Cache::Basic.new

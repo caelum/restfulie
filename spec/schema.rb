@@ -15,28 +15,34 @@
 #  limitations under the License. 
 #
 
-ActiveRecord::Schema.define :version => 0 do
-  create_table "restfulie_models", :force => true do |t|
-    t.column :status, :string
+ActiveRecord::Migration.verbose = false
+ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ':memory:')
+
+ActiveRecord::Schema.define(:version => 1) do
+  [:restfulie_models, :client_restfulie_models].each do |table|
+    create_table table, :force => true do |t|
+      t.column :status, :string
+    end
   end
-  create_table "client_restfulie_models", :force => true do |t|
-    t.column :status, :string
+  
+  [:orders, :client_orders, :people, :teams].each do |table|
+    create_table table, :force => true do 
+    end
   end
-end
-ActiveRecord::Schema.define :version => 1 do
-  create_table "orders", :force => true do |t|
-  end
-  create_table "client_orders", :force => true do |t|
-  end
-end
-ActiveRecord::Schema.define :version => 2 do
-  create_table "people", :force => true do |t|
-  end
-end
-ActiveRecord::Schema.define :version => 3 do
-  create_table "players", :force => true do |t|
+  
+  create_table :players, :force => true do |t|
     t.column :name, :string
   end
-  create_table "teams", :force => true do |t|
+  
+  [:songs, :albums].each do |table|
+    create_table table do |t|
+      t.string :title
+      t.string :description
+      t.integer :length
+      
+      t.belongs_to :album if table == :songs
+      
+      t.timestamps
+    end
   end
 end
