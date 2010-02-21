@@ -341,7 +341,8 @@ module Restfulie::Client
 
     def add_basic_request_headers(req, name = nil)
       
-      req.add_field("Accept", @accepts) unless @accepts.nil?
+      req["Accept"] = @accepts unless @accepts.nil?
+      req.add_field("Accept", "application/xml") # always accept xml
       
       @headers.each do |key, value|
         req.add_field(key, value)

@@ -366,6 +366,7 @@ context Restfulie::Client::RequestExecution do
       res.stub(:code).and_return("200")
       @response = res
       req = mock Net::HTTPRequest
+      req.should_receive(:[]=).with('Accept', 'application/xml')
       req.should_receive(:add_field).with('Accept', 'application/xml')
       req.stub(:get_fields).and_return(nil)
       Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
@@ -402,7 +403,8 @@ context Restfulie::Client::RequestExecution do
       @ex = Restfulie::Client::RequestExecution.new(String, @origin).accepts("nothing")
       @origin.should_receive(:_came_from).and_return("html")
       @req.stub(:get_fields).and_return(["*/*"])
-      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:[]=).with('Accept', 'nothing')
+      @req.should_receive(:add_field).with("Accept", "application/xml")
       @req.should_receive(:add_field).with("Accept", "html")
       @ex.add_basic_request_headers(@req, nil)
     end
@@ -417,13 +419,15 @@ context Restfulie::Client::RequestExecution do
     end
     
     it "should add Accepts if its there" do
-      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:[]=).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("Accept", "application/xml")
       @req.stub(:get_fields).and_return(nil)
       @ex.add_basic_request_headers(@req, nil)
     end
     
     it "should add every header available" do
-      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:[]=).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("Accept", "application/xml")
       @req.should_receive(:add_field).with("name", "value")
       @req.stub(:get_fields).and_return(nil)
       @ex.with({"name" => "value"}).add_basic_request_headers(@req, nil)
@@ -432,7 +436,8 @@ context Restfulie::Client::RequestExecution do
     it "should add etag if available" do
       @origin.etag = "custom etag"
       @origin.last_modified = nil
-      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:[]=).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("Accept", "application/xml")
       @req.should_receive(:add_field).with("If-None-Match", "custom etag")
       @req.stub(:get_fields).and_return(nil)
       String.should_receive(:is_self_retrieval?).with("custom").and_return(true)
@@ -442,7 +447,8 @@ context Restfulie::Client::RequestExecution do
     it "should add last modified if available" do
       @origin.etag = nil
       @origin.last_modified = "date"
-      @req.should_receive(:add_field).with("Accept", "nothing")
+      @req.should_receive(:[]=).with("Accept", "nothing")
+      @req.should_receive(:add_field).with("Accept", "application/xml")
       @req.should_receive(:add_field).with("If-Modified-Since", "date")
       @req.stub(:get_fields).and_return(nil)
       String.should_receive(:is_self_retrieval?).with("custom").and_return(true)
