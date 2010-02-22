@@ -21,21 +21,23 @@ module Restfulie::Serializer
   class << self
     def method_missing(name, *args)
       if serializer_class_name = name.to_s.match(/to_(.*)/)
-        intialize_serialize(serializer_class_name[1], *args)
+        initialize_serialize(serializer_class_name[1], *args)
       else
         super
       end
     end
-    
-    # TODO: Implementar o autoload
-    def intialize_serialize(name, *args)
+
+    # TODO: Improve the autoload of serializers
+    def initialize_serialize(name, *args)
       unless self.const_defined?(name.capitalize.to_sym)
         begin
-          require "restfulie/common/serializers/#{name}"
+          require "#{SERIALIZERS_PATH}/#{name}"
         rescue MissingSourceFile
           raise Restfulie::Error::UndefinedSerializerError.new("Serializer #{name.capitalize} not fould.")
         end
       end
+
+      "#{self.ancestors.first}::#{name.capitalize}".constantize.new(*args)
     end
   end
 end

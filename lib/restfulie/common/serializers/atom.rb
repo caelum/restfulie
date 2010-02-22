@@ -16,4 +16,6 @@
 #
 
 class Restfulie::Serializer::Atom
+  def initialize(*args)
+  end
 end

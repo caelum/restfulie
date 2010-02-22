@@ -17,5 +17,9 @@ context Restfulie::Serializer do
       Restfulie::Serializer.to_foobar([])
     }.should raise_error(Restfulie::Error::UndefinedSerializerError, msg)
   end
-    
+
+  it "should return Atom object to call to_atom" do
+    Restfulie::Serializer.to_atom([]).should be_kind_of(Restfulie::Serializer::Atom)
+  end
+
 end # context Restfulie::Serializer
