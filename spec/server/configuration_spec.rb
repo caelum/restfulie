@@ -17,5 +17,10 @@ context Restfulie::Server do
     Restfulie::Server.host.should == "myhost.com"
     Restfulie::Server.named_route_prefix == :prefix
   end
+  
+  after(:all) do
+    Restfulie::Server.host = "localhost:3000"
+    Restfulie::Server.named_route_prefix = nil
+  end
 end
 
