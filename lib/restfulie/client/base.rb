@@ -121,7 +121,7 @@ module Restfulie
           parse(found)
         else
           found = extended_fields[name]
-          return super(name,args) if found.nil?
+          return super(name) if found.nil?
           parse(transform(found))
         end
 

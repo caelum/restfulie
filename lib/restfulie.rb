@@ -23,7 +23,4 @@ end
 require 'restfulie/client'
 require 'restfulie/server'
 
-<<<<<<< HEAD
-=======
 # include ActiveSupport::CoreExtensions::Hash
->>>>>>> rails 3 compatible

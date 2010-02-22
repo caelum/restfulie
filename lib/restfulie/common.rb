@@ -41,5 +41,5 @@ module Restfulie::Common; end
   require "restfulie/common/#{file}"
 end
 
-include ActiveSupport::CoreExtensions::Hash
+# include ActiveSupport::CoreExtensions::Hash
 
