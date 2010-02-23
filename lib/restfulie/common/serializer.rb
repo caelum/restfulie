@@ -16,30 +16,65 @@
 #
 
 module Restfulie::Serializer
-  SERIALIZERS_PATH = File.join(File.dirname(__FILE__), 'serializers')
-  
+  @@serializers_path = [File.join(File.dirname(__FILE__), 'serializers')]
+  mattr_accessor :serializers_path
+
   class << self
+    # Remove to_json from ActiveSupport in the class
+    # I want my own to_json
     undef_method :to_json if respond_to?(:to_json)
     
-    def method_missing(name, *args)
-      if serializer_class_name = name.to_s.match(/to_(.*)/)
-        initialize_serialize(serializer_class_name[1], *args)
+    def respond_to?(symbol, include_private = false)
+      unless (serializer_name = parse_name(symbol)).nil?
+        serializers.include?(serializer_name)
       else
         super
       end
     end
 
-    # TODO: Improve the autoload of serializers
-    def initialize_serialize(name, *args)
-      unless self.const_defined?(name.capitalize.to_sym)
-        begin
-          require "#{SERIALIZERS_PATH}/#{name}"
-        rescue MissingSourceFile
-          raise Restfulie::Error::UndefinedSerializerError.new("Serializer #{name.capitalize} not fould.")
+    def method_missing(symbol, *args)
+      serializer_name = parse_name(symbol)
+      if !serializer_name.nil? && serializers.include?(serializer_name)
+        initialize_serializer(serializer_name)
+      else
+        super
+      end
+    end
+    
+    def serializers
+      @serializers = [] unless defined? @serializers
+      load_serializers
+    end
+    
+  private
+
+    def parse_name(method)
+      if serializer_name = method.to_s.match(/to_(.*)/)
+        serializer_name[1]
+      end
+    end
+  
+    def load_serializers
+      self.serializers_path.reject! do |path|
+        Dir["#{path}/*.rb"].each do |file|
+          serializer_name = File.basename(file, ".rb").downcase
+          unless @serializers.include?(serializer_name)
+            @serializers << serializer_name 
+            self.autoload(serializer_name.capitalize.to_sym, file)
+          end
         end
       end
 
-      "#{self.ancestors.first}::#{name.capitalize}".constantize.new(*args)
+      @serializers
     end
+
+    def initialize_serializer(serializer_name, *args)
+      begin
+        "#{self.ancestors.first}::#{serializer_name.capitalize}".constantize.new(*args)
+      rescue NameError
+        raise Restfulie::Error::UndefinedSerializerError.new("Serializer #{serializer_name.capitalize} not fould.")
+      end
+    end
+
   end
 end
