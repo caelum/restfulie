@@ -58,10 +58,8 @@ module Restfulie::Serializer
       self.serializers_path.reject! do |path|
         Dir["#{path}/*.rb"].each do |file|
           serializer_name = File.basename(file, ".rb").downcase
-          unless @serializers.include?(serializer_name)
-            @serializers << serializer_name 
-            self.autoload(serializer_name.capitalize.to_sym, file)
-          end
+          @serializers << serializer_name unless @serializers.include?(serializer_name)
+          self.autoload(serializer_name.capitalize.to_sym, file) if self.autoload?(serializer_name.capitalize.to_sym).nil?
         end
       end
 
