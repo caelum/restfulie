@@ -11,6 +11,7 @@ module Restfulie::Client; end
   initializer
   core_ext/hash
   helper
+  http
   request_execution
   state
   atom_media_type

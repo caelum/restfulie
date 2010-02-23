@@ -21,16 +21,25 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
 
-  # s.add_dependency(%q<rubigen>, [">= 1.3.4"])
-
   s.author = AUTHOR
   s.email = EMAIL
   s.homepage = HOMEPAGE
 end
 
-Spec::Rake::SpecTask.new do |t|
-  t.spec_files = FileList['spec/**/*_spec.rb']
-  t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+namespace :test do
+  Spec::Rake::SpecTask.new(:all) do |t|
+    t.spec_files = FileList['spec/**/*_spec.rb']
+    t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+  end
+  task :run_fake_server do
+    pid = %x(ps -ef | grep fake_server | grep -v grep).split[1]
+    sh "kill #{pid}" if pid
+    sh "ruby ./spec/client/http/fake_server.rb &"
+    Rake::Task['test:all'].invoke
+    pid = %x(ps -ef | grep fake_server).split[1]
+    puts "pid >>>> #{pid}"
+    sh "kill #{pid}"
+  end
 end
 
 Spec::Rake::SpecTask.new('rcov') do |t|
@@ -60,4 +69,5 @@ desc "Builds the project"
 task :build => :spec
 
 desc "Default build will run specs"
-task :default => :spec
+task :default => ['test:run_fake_server']
+
