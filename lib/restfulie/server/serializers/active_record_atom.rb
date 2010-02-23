@@ -75,7 +75,7 @@ module Restfulie
         protected
 
           def atom_self_link(options={})
-            ::Atom::Link.new(:rel => :self, :href => polymorphic_url(@record, :host => 'localhost:3000'))
+            ::Atom::Link.new(:rel => :self, :href => route_generator(@record))
           end
 
           def atom_associations_links(options={})
