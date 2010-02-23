@@ -19,6 +19,8 @@ module Restfulie::Serializer
   SERIALIZERS_PATH = File.join(File.dirname(__FILE__), 'serializers')
   
   class << self
+    undef_method :to_json if respond_to?(:to_json)
+    
     def method_missing(name, *args)
       if serializer_class_name = name.to_s.match(/to_(.*)/)
         initialize_serialize(serializer_class_name[1], *args)
