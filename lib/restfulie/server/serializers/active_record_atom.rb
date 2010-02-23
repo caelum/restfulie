@@ -52,6 +52,7 @@ module Restfulie
           def atomify(options={})
           
             ::Atom::Entry.new do |entry|
+              # TODO: this id does not comply with Rest standards yet
               entry.id        = @record.id
               entry.title     = "Entry about #{@record.class}"
               entry.published = @record.created_at
