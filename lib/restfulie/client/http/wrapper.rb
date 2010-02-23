@@ -22,7 +22,7 @@ module Restfulie::Client::HTTP
       attr_reader :contents
       attr_reader :headers
 
-      def initialize(response)
+      def initialize(method, path, response)
         @code = response.code.to_i
         @contents = response.body || ""
         @headers = {}
@@ -33,8 +33,25 @@ module Restfulie::Client::HTTP
         response.header.each { |k, v| @headers[k] = v }
       end
 
+    end
+
+    module ResponseHandler
+
+      @@responses = { }
+
+      def self.register(code,response_class)
+        @@responses[code] = response_class 
+      end
+
       def self.handle(method, path, http_response)
-        response = new( http_response )
+        response_class = @@responses[http_response.code.to_i] || Response
+        response = response_class.new( method, path, http_response )
+      end
+
+      def self.handle!(method, path, http_response)
+
+        response = handle(method, path, http_response)
+
         case response.code
         when 100..299
           response 
@@ -107,7 +124,7 @@ module Restfulie::Client::HTTP
       def request(method, path, *args)
         logger.info(request_to_s(method, path, *(args + [get_headers]))) unless logger.nil?
         begin
-          Response.handle(method, path, @connection.send(method, path, *(args + [get_headers])))
+          ResponseHandler.handle!(method, path, @connection.send(method, path, *(args + [get_headers])))
         rescue Errno::ECONNREFUSED
           raise Error::ServerNotAvailableError.new("The server at #{@url} is not available.")
         rescue Error::Unauthorized => e

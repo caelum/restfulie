@@ -27,6 +27,27 @@ context Restfulie::Client::HTTP do
 
   end
 
+  context 'Response Handler' do
+
+    class FakeResponse < ::Restfulie::Client::HTTP::Response
+    end
+    ::Restfulie::Client::HTTP::ResponseHandler.register(200,FakeResponse)
+
+    before(:all) do
+      @host = "http://localhost:4567"
+      @client = ::Restfulie::Client::HTTP::Base.new(@host)
+    end
+
+    it 'should respond FakeResponse' do
+      @client.get('/test/200').class.should == FakeResponse
+    end
+
+    it 'should respond default Response' do
+      @client.get('/test/299').class.should == ::Restfulie::Client::HTTP::Response
+    end
+
+  end
+
   context "error conditions" do
 
     before(:all) do
