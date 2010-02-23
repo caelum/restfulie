@@ -131,8 +131,8 @@ module Restfulie
             host               = Restfulie::Server.host
             named_route_prefix = Restfulie::Server.named_route_prefix
             
-            array_of_segments = Array(record_or_array).compact
-            array_of_segments.unshift(named_route_prefix)
+            array_of_segments = Array(record_or_array)
+            array_of_segments.unshift(named_route_prefix).compact!
             
             polymorphic_url(array_of_segments, :host => host)
           end
