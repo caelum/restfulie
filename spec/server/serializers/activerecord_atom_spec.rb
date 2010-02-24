@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../../libs/models')
+require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 
 ActionController::Routing::Routes.draw do |map|
   map.resources :albums do |album|

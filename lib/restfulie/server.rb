@@ -34,6 +34,7 @@ module Restfulie::Server; end
   atom_media_type
   core_ext
   rails_ext
+  serializers
 ).each do |file|
   require "restfulie/server/#{file}"
 end
