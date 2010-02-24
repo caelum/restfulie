@@ -1,20 +1,3 @@
-#
-#  Copyright (c) 2009 Caelum - www.caelum.com.br/opensource
-#  All rights reserved.
-# 
-#  Licensed under the Apache License, Version 2.0 (the "License"); 
-#  you may not use this file except in compliance with the License. 
-#  You may obtain a copy of the License at 
-#  
-#   http://www.apache.org/licenses/LICENSE-2.0 
-#  
-#  Unless required by applicable law or agreed to in writing, software 
-#  distributed under the License is distributed on an "AS IS" BASIS, 
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-#  See the License for the specific language governing permissions and 
-#  limitations under the License.
-#
-
 module Restfulie::Serializer
   @@serializers_path = [File.join(File.dirname(__FILE__), 'serializers')]
   mattr_accessor :serializers_path
@@ -46,6 +29,15 @@ module Restfulie::Serializer
       load_serializers
     end
     
+    def load_serializer(serializer_name)
+      serializer_name = serializer_name.to_s.capitalize
+      begin
+        "#{self.ancestors.first}::#{serializer_name}".constantize
+      rescue NameError
+        raise Restfulie::Error::UndefinedSerializerError.new("Serializer #{serializer_name} not fould.")
+      end
+    end
+    
   private
 
     def parse_name(method)
@@ -67,11 +59,7 @@ module Restfulie::Serializer
     end
 
     def initialize_serializer(serializer_name, *args)
-      begin
-        "#{self.ancestors.first}::#{serializer_name.capitalize}".constantize.new(*args)
-      rescue NameError
-        raise Restfulie::Error::UndefinedSerializerError.new("Serializer #{serializer_name.capitalize} not fould.")
-      end
+      load_serializer(serializer_name).new(*args).to_s
     end
 
   end
