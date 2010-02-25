@@ -9,20 +9,60 @@ context Restfulie::Client::HTTP do
       @client = ::Restfulie::Client::HTTP::Base.new(@host)
     end
 
-    it "get" do
+    it "should get and respond 200 code" do
       @client.get("/test").code.to_i.should == 200
     end
 
-    it "post" do
+    it "should post and respond 201 code" do
       @client.post("/test", "test").code.to_i.should == 201
     end
 
-    it "put" do
+    it "should put and respond 200 code" do
       @client.put("/test", "test").code.to_i.should == 200
     end
 
-    it "delete " do
+    it "should delete and respond 200 code" do
       @client.delete("/test").code.to_i.should == 200
+    end
+
+  end
+
+  context 'HTTP Builder' do
+
+    before(:all) do
+      @builder = ::Restfulie::Client::HTTP::Builder.new("http://localhost:4567")
+    end
+
+    it 'should get and respond 200 code' do
+      @builder.at('/test/200').get.code.to_i.should == 200
+      @builder.at('/test/200').accepts('application/xml').get.code.to_i.should == 200
+      @builder.at('/test/200').as('application/xml').get.code.to_i.should == 200
+      @builder.at('/test/200').with('Accept-Language' => 'en').get.code.to_i.should == 200
+      @builder.at('/test/200').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code.to_i.should == 200
+    end
+
+    it "should post and respond 201 code" do
+      @builder.at("/test").post("test").code.to_i.should == 201
+      @builder.at('/test').accepts('application/xml').post("test").code.to_i.should == 201
+      @builder.at('/test').as('application/xml').post("test").code.to_i.should == 201
+      @builder.at('/test').with('Accept-Language' => 'en').post("test").code.to_i.should == 201
+      @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').post("test").code.to_i.should == 201
+    end
+
+    it "should put and respond 200 code" do
+      @builder.at("/test").put("test").code.to_i.should == 200
+      @builder.at('/test').accepts('application/xml').put("test").code.to_i.should == 200
+      @builder.at('/test').as('application/xml').put("test").code.to_i.should == 200
+      @builder.at('/test').with('Accept-Language' => 'en').put("test").code.to_i.should == 200
+      @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').put("test").code.to_i.should == 200
+    end
+
+    it "should delete and respond 200 code" do
+      @builder.at("/test").delete.code.to_i.should == 200
+      @builder.at('/test').accepts('application/xml').delete.code.to_i.should == 200
+      @builder.at('/test').as('application/xml').delete.code.to_i.should == 200
+      @builder.at('/test').with('Accept-Language' => 'en').delete.code.to_i.should == 200
+      @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').delete.code.to_i.should == 200
     end
 
   end

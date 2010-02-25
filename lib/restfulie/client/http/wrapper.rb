@@ -122,9 +122,17 @@ module Restfulie::Client::HTTP
       end
 
       def request(method, path, *args)
-        logger.info(request_to_s(method, path, *(args + [get_headers]))) unless logger.nil?
+
+        headers = @default_headers.merge(args.extract_options!)
+        unless @root.user.blank? && @root.password.blank?
+          headers["Authorization"] = "Basic " + ["#{@root.user}:#{@root.password}"].pack("m").delete("\r\n")
+        end
+        headers['cookie'] = @cookies if @cookies
+        args << headers
+
+        logger.info(request_to_s(method, path, *args)) unless logger.nil?
         begin
-          ResponseHandler.handle!(method, path, @connection.send(method, path, *(args + [get_headers])))
+          ResponseHandler.handle!(method, path, @connection.send(method, path, *args))
         rescue Errno::ECONNREFUSED
           raise Error::ServerNotAvailableError.new("The server at #{@url} is not available.")
         rescue Error::Unauthorized => e
@@ -151,11 +159,12 @@ module Restfulie::Client::HTTP
       def request_to_s(method, path, *args)
         result = ["#{method.to_s.upcase} #{path}"]
 
-        if [:post, :put].include?(method)
-          body = args.shift
-        end
+        arguments = args.dup
+        headers = arguments.extract_options!
 
-        headers = args.first.is_a?(Hash) ? args.shift.clone : {}
+        if [:post, :put].include?(method)
+          body = arguments.shift
+        end
 
         if body.is_a?(Hash)
           body = (body.map { |k,v| "#{k}=#{v}"}.join("&"))
@@ -167,13 +176,56 @@ module Restfulie::Client::HTTP
         (result + [body ? (body + "\n") : nil]).compact.join("\n") << "\n"
       end
 
-      def get_headers
-        returning headers = @default_headers do
-          unless @root.user.blank? && @root.password.blank?
-            headers["Authorization"] = "Basic " + ["#{@root.user}:#{@root.password}"].pack("m").delete("\r\n")
-          end
-          headers['cookie'] = @cookies if @cookies
-        end
+    end
+
+    class Builder < Base
+
+      def initialize(root, default_headers = {}, logger = nil)
+        super
+        @headers = {
+          'Accept'       => 'application/atom+xml',
+          'Content-Type' => 'application/atom+xml'
+        }
+      end
+
+      def at(uri)
+        @uri = uri
+        self
+      end
+      
+      def as(content_type)
+        @headers['Content-Type'] = content_type
+        accepts(content_type)
+      end
+      
+      def accepts(content_type)
+        @headers['Accept'] = content_type
+        self
+      end
+      
+      def with(headers)
+        @headers.merge!(headers)
+        self
+      end
+
+      def get
+        request(:get, @uri, @headers)
+      end
+
+      def head
+        request(:head, @uri, @headers)
+      end
+
+      def post(payload)
+        request(:post, @uri, payload, @headers)
+      end
+
+      def put(payload)
+        request(:put, @uri, payload, @headers)
+      end
+
+      def delete
+        request(:delete, @uri, @headers)
       end
 
     end
