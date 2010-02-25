@@ -32,12 +32,14 @@ context Restfulie::Client::Response do
   
   it "should enhance types by extending them with Web and Httpresponses" do
     result = Object.new
+    request = mock Net::HTTP::Get
     response = mock Net::HTTPResponse
     response.stub(:code).and_return("200")
-    final = Restfulie::Client::Response.new(nil, response).enhance(result)
+    final = Restfulie::Client::Response.new(nil, response, request).enhance(result)
     final.should == result
     final.should be_a(Restfulie::Client::WebResponse)
     final.web_response.should == response
+    final.web_request.should == request
   end
   
   context "parsing an entity" do
@@ -94,11 +96,15 @@ context Restfulie::Client::Response do
   
   context "posting" do
     
+    before do
+      @request = Object.new
+    end
+    
     it "should treat a 200 post as an enhanced 200 get response entity" do
       response = Object.new
       content = Object.new
       response.stub(:code).and_return("200")
-      instance = Restfulie::Client::Response.new(NotFollow, response)
+      instance = Restfulie::Client::Response.new(NotFollow, response, @request)
       entity = Object.new
       instance.should_receive(:final_parse).and_return(entity)
       result = instance.parse_post :nothing
@@ -110,7 +116,7 @@ context Restfulie::Client::Response do
       content = Object.new
       response.stub(:code).and_return("301")
       entity = Object.new
-      instance = Restfulie::Client::Response.new(NotFollow, response)
+      instance = Restfulie::Client::Response.new(NotFollow, response, @request)
       instance.should_receive(:final_parse).and_return(entity)
       result = instance.parse_post :nothing
       result.should == entity
@@ -124,7 +130,7 @@ context Restfulie::Client::Response do
       response.should_receive(:body).and_return(content)
       response.stub(:code).and_return("301")
       Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
-      result = Restfulie::Client::Response.new(Follow, response).parse_post :nothing
+      result = Restfulie::Client::Response.new(Follow, response, @request).parse_post :nothing
       result.web_response.should == response
       result.should == expected
     end
@@ -215,7 +221,7 @@ context Restfulie::Client::RequestExecution do
     
     before do
       @httpMethod = Object.new
-      @http_request = Object.new
+      @http_request = mock Net::HTTP::Get
       @url = URI.parse "http://localhost" 
       
       @request = Restfulie::Client::RequestExecution.new(String, nil)
@@ -247,7 +253,7 @@ context Restfulie::Client::RequestExecution do
     
     def should_parse_response(response)
       responder = Object.new
-      Restfulie::Client::Response.should_receive(:new).with(String, response).and_return(responder)
+      Restfulie::Client::Response.should_receive(:new).with(String, response, @http_request).and_return(responder)
       responder.should_receive(:parse).with(@httpMethod, nil, "application/xml").and_return("result")      
     end
     
@@ -351,7 +357,7 @@ context Restfulie::Client::RequestExecution do
       define_http_expectation(req, res)
       response = Object.new
       response.should_receive(:final_parse).and_return(result)
-      Restfulie::Client::Response.should_receive(:new).with(String, res).and_return(response)
+      Restfulie::Client::Response.should_receive(:new).with(String, res, req).and_return(response)
       ex = Restfulie::Client::RequestExecution.new(String, nil)
       ex.should_receive(:add_basic_request_headers)
       ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should == result
@@ -479,7 +485,7 @@ context Restfulie::Client::RequestExecution do
       expected = Object.new
       
       response = {"Location" => "google"}
-      restfulie_response = Restfulie::Client::Response.new(CustomResource, response)
+      restfulie_response = Restfulie::Client::Response.new(CustomResource, response, expected)
       CustomResource.should_receive(:from_web).with("google").and_return(expected)
       result = Restfulie::Client::ResponseHandler.retrieve_resource_from_location(restfulie_response)
       result.should == expected

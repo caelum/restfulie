@@ -19,9 +19,15 @@ require 'restfulie/client/extensions/http'
 
 module Restfulie::Client
 
-  # extension to all answers that allows you to access the web response
+  # extension to all answers that allows you to access the executed request and its response.
   module WebResponse
+    
+    # accessor to the web response
     attr_accessor :web_response
+    
+    # accessot to the web request
+    attr_accessor :web_request
+    
   end
   
   # some error ocurred while processing the request
@@ -179,9 +185,10 @@ module Restfulie::Client
     
     attr_reader :type, :response
     
-    def initialize(type, response)
+    def initialize(type, response, request)
       @type = type
       @response = response
+      @request = request
     end
 
     # TODO remote_post can probably be moved, does not need to be on the object's class itself
@@ -204,6 +211,7 @@ module Restfulie::Client
       @response.previous = result.web_response if result.respond_to? :web_response
       result.extend Restfulie::Client::WebResponse
       result.web_response = @response
+      result.web_request = @request
       result
     end
     
@@ -278,7 +286,7 @@ module Restfulie::Client
       Restfulie::Logger.logger.debug "sending a #{verb} to #{relation_name} with a #{body.class}"
       url, http_request = prepare_request(verb, relation_name, body)
       response = execute_request(url, http_request)
-      Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, "application/xml")
+      Restfulie::Client::Response.new(@type, response, http_request).parse(verb, @invoking_object, "application/xml")
     end
     
     private
@@ -381,7 +389,7 @@ module Restfulie::Client
       req.add_field("Content-type", @content_type)
 
       response = Net::HTTP.new(url.host, url.port).request(req)
-      Restfulie::Client::Response.new(@type, response).parse_post(@content_type)
+      Restfulie::Client::Response.new(@type, response, req).parse_post(@content_type)
     end
 
     def from_web(uri, options = {})
@@ -390,7 +398,7 @@ module Restfulie::Client
       options.each { |key,value| req[key] = value }
       add_basic_request_headers(req)
       res = Net::HTTP.new(uri.host, uri.port).request(req)
-      Restfulie::Client::Response.new(@type, res).final_parse
+      Restfulie::Client::Response.new(@type, res, req).final_parse
     end
     
   end
