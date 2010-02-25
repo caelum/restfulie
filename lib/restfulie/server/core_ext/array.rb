@@ -2,7 +2,12 @@ class Array
   def to_atom(options={}, &block)
     raise "Not all elements respond to to_atom" unless all? { |e| e.respond_to? :to_atom }
     options = options.dup
-  
+    
+    if options.delete :only_self_link
+      options[:skip_associations_links] = true
+      options[:skip_attributes]         = true      
+    end
+    
     Atom::Feed.new do |feed|
       # TODO: Define better feed attributes
       # Array#to_s can return a very long string

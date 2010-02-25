@@ -67,7 +67,7 @@ module Restfulie
               extension_attributes.each do |attribute|
                 register_element(attribute)
                 entry.send("#{namespaced_class}_#{attribute}=", @record.send(attribute))
-              end 
+              end unless options[:skip_attributes]
             
               yield entry if block_given?
             end
@@ -84,7 +84,7 @@ module Restfulie
             # TODO: Create default options to be passed to polymorphic_url.
             
             atom_associations.map do |association|
-              if association.macro == :has_many
+              if [:has_many, :has_and_belongs_to_many].include? association.macro
                 ::Atom::Link.new(:rel => association.name, :href => route_generator([@record, association.name]))
               else
                 ::Atom::Link.new(:rel => association.name, :href => route_generator(@record.send(association.name)))
