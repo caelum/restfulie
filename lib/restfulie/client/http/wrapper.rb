@@ -135,8 +135,6 @@ module Restfulie::Client::HTTP
           ResponseHandler.handle!(method, path, @connection.send(method, path, *args))
         rescue Errno::ECONNREFUSED
           raise Error::ServerNotAvailableError.new("The server at #{@url} is not available.")
-        rescue Error::Unauthorized => e
-          raise Error::Unauthorized.new(method, path, e.response) 
        end
       end
 
