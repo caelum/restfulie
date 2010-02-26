@@ -367,36 +367,18 @@ context Restfulie::Client::RequestExecution do
 
   context "when de-serializing straight from a web request" do
     
-    def mock_request_for(type)
-      res = mock Net::HTTPResponse
-      res.stub(:code).and_return("200")
-      @response = res
-      req = mock Net::HTTPRequest
-      req.should_receive(:[]=).with('Accept', 'application/xml')
-      req.should_receive(:add_field).with('Accept', 'application/xml')
-      req.stub(:get_fields).and_return(nil)
-      Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
-      http = Object.new
-      Net::HTTP.should_receive(:new).with('localhost',3001).and_return(http)
-      http.should_receive(:request).with(req).and_return(res)
-    end
-    
     it "should deserialize correctly if its an xml" do
-      mock_request_for "application/xml"
-      result = Object.new
-      Restfulie::Client::ResponseHandler.should_receive(:handle).with(@response).and_return(result)
       
+      type = "application/xml"
+      response = mock Net::HTTPResponse
+      
+      exec = mock Restfulie::Client::RequestExecution
+      Restfulie::Client::RequestExecution.should_receive(:new).with(ClientRestfulieModel, nil).and_return(exec)
+      exec.should_receive(:at).with('http://localhost:3001/order/15').and_return(exec)
+      exec.should_receive(:get).with({}).and_return(response)
+
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.should == result
-    end
-    
-    it "should enhance the result adding the response" do
-      mock_request_for "application/xml"
-      result = Object.new
-      Restfulie::Client::ResponseHandler.should_receive(:handle).with(@response).and_return(result)
-  
-      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.web_response.should == @response
+      model.should == response
     end
 
   end
@@ -465,6 +447,10 @@ context Restfulie::Client::RequestExecution do
   
   context "when handling responses" do
     
+    before do
+      @request = mock Restfulie::Client::RequestExecution
+    end
+    
     it "should return the response when its a pure response return" do
       response = Object.new
       restfulie_response = Hashi::CustomHash.new({"response" => response})
@@ -497,7 +483,7 @@ context Restfulie::Client::RequestExecution do
         result = true
       end
       response = Hashi::CustomHash.new({"response" => {"code" => "100"}})
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
       result.should be_true
     end
     
@@ -510,20 +496,20 @@ context Restfulie::Client::RequestExecution do
         result = true
       end
       response = Hashi::CustomHash.new({"response" => {"code" => "300"}})
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
       result.should be_true
     end
     
     it "should test default handlers for 200" do
       response = Hashi::CustomHash.new({"response" => {"code" => "200"}})
-      Restfulie::Client::ResponseHandler.should_receive(:parse_entity).with(response)
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.should_receive(:parse_entity).with(@request, response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
     end
     
     it "should test default handlers for 301" do
       response = Hashi::CustomHash.new({"response" => {"code" => "301"}})
       Restfulie::Client::ResponseHandler.should_receive(:retrieve_resource_from_location).with(response)
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
     end
     
   end
