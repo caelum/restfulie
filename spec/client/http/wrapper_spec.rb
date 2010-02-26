@@ -6,7 +6,7 @@ context Restfulie::Client::HTTP do
 
     before(:all) do
       @host = "http://localhost:4567"
-      @client = ::Restfulie::Client::HTTP::Base.new(@host)
+      @client = ::Restfulie::Client::HTTP::RequestExecutor.new(@host)
     end
 
     it "should get and respond 200 code" do
@@ -30,7 +30,7 @@ context Restfulie::Client::HTTP do
   context 'HTTP Builder' do
 
     before(:all) do
-      @builder = ::Restfulie::Client::HTTP::Builder.new("http://localhost:4567")
+      @builder = ::Restfulie::Client::HTTP::RequestExecutorBuilder.new("http://localhost:4567")
     end
 
     it 'should get and respond 200 code' do
@@ -75,7 +75,7 @@ context Restfulie::Client::HTTP do
 
     before(:all) do
       @host = "http://localhost:4567"
-      @client = ::Restfulie::Client::HTTP::Base.new(@host)
+      @client = ::Restfulie::Client::HTTP::RequestExecutor.new(@host)
     end
 
     it 'should respond FakeResponse' do
@@ -92,7 +92,7 @@ context Restfulie::Client::HTTP do
 
     before(:all) do
       @host = "http://localhost:4567"
-      @client = ::Restfulie::Client::HTTP::Base.new(@host)
+      @client = ::Restfulie::Client::HTTP::RequestExecutor.new(@host)
     end
 
     it "raise Error::Redirection error when 300..399  code is returned" do

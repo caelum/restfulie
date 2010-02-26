@@ -88,11 +88,11 @@ module Restfulie::Client::HTTP
 
     end
 
-    class Base
+    module Base
 
-      cattr_accessor :logger
+      mattr_accessor :logger
 
-      def initialize(root, default_headers = {}, logger = nil)
+      def init(root, default_headers = {}, logger = nil)
         @url = root
         @root = ::URI.parse(root)
         @default_headers = default_headers
@@ -178,9 +178,10 @@ module Restfulie::Client::HTTP
 
     end
 
-    class Builder < Base
+    module Builder
+      include Base
 
-      def initialize(root, default_headers = {}, logger = nil)
+      def init(root, default_headers = {}, logger = nil)
         super
         @headers = {
           'Accept'       => 'application/atom+xml',
@@ -228,6 +229,20 @@ module Restfulie::Client::HTTP
         request(:delete, @uri, @headers)
       end
 
+    end
+
+    class RequestExecutor
+      include Base
+      def initialize(root, default_headers = {}, logger = nil)
+        init(root, default_headers, logger)
+      end
+    end
+
+    class RequestExecutorBuilder
+      include Builder
+      def initialize(root, default_headers = {}, logger = nil)
+        init(root, default_headers, logger)
+      end
     end
 
 end
