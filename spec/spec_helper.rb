@@ -7,6 +7,11 @@ require 'rcov'
 
 require 'active_record'
 
+require 'action_controller'
+require 'action_controller/test_process'
+require 'action_controller/test_case'
+ApplicationController = Class.new(ActionController::Base)
+
 require File.join(File.dirname(__FILE__), '..', 'lib', 'restfulie')
 require File.join(File.dirname(__FILE__), 'schema')
 
@@ -20,5 +25,30 @@ class Spec::Example::ExampleGroup
   
   def normalize_json(json)
     ActiveSupport::JSON.decode(json)
+  end
+end
+
+class ActionController::TestCase
+  extend Spec::Example::ExampleGroupMethods
+  include Spec::Example::ExampleMethods
+
+  prepend_before(:each) do
+    run_callbacks :setup if respond_to?(:run_callbacks)
+  end
+
+  append_after(:each) do
+    run_callbacks :teardown if respond_to?(:run_callbacks)
+  end
+end
+
+Spec::Example::ExampleGroupFactory.register(:controller, ActionController::TestCase)
+
+class AtomifiedModel 
+  def to_atom(options={})
+    Atom::Entry.new do |entry|
+      entry.title     = "entry"
+      entry.published = '123'
+      entry.updated   = '123'
+    end
   end
 end
