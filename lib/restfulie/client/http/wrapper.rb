@@ -22,15 +22,10 @@ module Restfulie::Client::HTTP
       attr_reader :contents
       attr_reader :headers
 
-      def initialize(method, path, response)
-        @code = response.code.to_i
-        @contents = response.body || ""
-        @headers = {}
-        load_headers(response)
-      end
-
-      def load_headers(response)
-        response.header.each { |k, v| @headers[k] = v }
+      def initialize(method, path, code, contents, headers)
+        @code = code
+        @contents = contents 
+        @headers = headers
       end
 
     end
@@ -45,7 +40,9 @@ module Restfulie::Client::HTTP
 
       def self.handle(method, path, http_response)
         response_class = @@responses[http_response.code.to_i] || Response
-        response = response_class.new( method, path, http_response )
+        headers = {}
+        http_response.header.each { |k, v| headers[k] = v }
+        response = response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
       end
 
       def self.handle!(method, path, http_response)
