@@ -30,7 +30,7 @@ context Restfulie::Client::HTTP do
   context 'HTTP Builder' do
 
     before(:all) do
-      @builder = ::Restfulie::Client::HTTP::RequestExecutorBuilder.new("http://localhost:4567")
+      @builder = ::Restfulie::Client::HTTP::RequestBuilderExecutor.new("http://localhost:4567")
     end
 
     it 'should get and respond 200 code' do

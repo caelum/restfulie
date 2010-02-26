@@ -88,7 +88,7 @@ module Restfulie::Client::HTTP
 
     end
 
-    module Base
+    module RequestAdapter
 
       mattr_accessor :logger
 
@@ -96,7 +96,7 @@ module Restfulie::Client::HTTP
         @url = root
         @root = ::URI.parse(root)
         @default_headers = default_headers
-        @connection = get_connect
+        @connection = get_connection_provider
         @@logger = logger unless logger.nil?
         @cookies=nil
       end
@@ -148,7 +148,7 @@ module Restfulie::Client::HTTP
 
       private
 
-      def get_connect
+      def get_connection_provider
         ::Net::HTTP.new(@root.host, @root.port)
       end
 
@@ -176,8 +176,8 @@ module Restfulie::Client::HTTP
 
     end
 
-    module Builder
-      include Base
+    module RequestBuilder
+      include RequestAdapter
 
       def init(root, default_headers = {}, logger = nil)
         super
@@ -230,14 +230,14 @@ module Restfulie::Client::HTTP
     end
 
     class RequestExecutor
-      include Base
+      include RequestAdapter
       def initialize(root, default_headers = {}, logger = nil)
         init(root, default_headers, logger)
       end
     end
 
-    class RequestExecutorBuilder
-      include Builder
+    class RequestBuilderExecutor
+      include RequestBuilder
       def initialize(root, default_headers = {}, logger = nil)
         init(root, default_headers, logger)
       end
