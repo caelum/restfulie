@@ -23,24 +23,26 @@ module Restfulie::Client::HTTP
 
       class TranslationError < BaseError; end
 
-      class ServerNotAvailableError < StandardError; end
-
       class RESTError < StandardError
 
         attr_reader :response
+        attr_reader :request
 
-        def initialize(method, path, response)
-          @method = method.to_s.upcase
-          @path = path
+        def initialize(method, path, request, response)
+          @method   = method
+          @path     = path
+          @request  = request
           @response = response
         end
 
         def to_s
-          "HTTP error #{@response.code} when invoking #{::URI.decode(@path)} via #{@method}. " +
+          "HTTP error #{@response.code} when invoking #{@request.root}#{::URI.decode(@path)} via #{@method}. " +
             ((@response.contents.blank?) ? "No additional data was sent." : "The complete response was:\n" + @response.contents)
         end
 
       end
+
+      class ServerNotAvailableError < RESTError; end
 
       class UnknownError < RESTError;  end
 

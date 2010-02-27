@@ -45,44 +45,6 @@ module Restfulie::Client::HTTP
         response = response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
       end
 
-      def self.handle!(method, path, http_response)
-
-        response = handle(method, path, http_response)
-
-        case response.code
-        when 100..299
-          response 
-        when 300..399
-          raise Error::Redirection.new(method, path, response)
-        when 400
-          raise Error::BadRequest.new(method, path, response)
-        when 401
-          raise Error::Unauthorized.new(method, path, response)
-        when 403
-          raise Error::Forbidden.new(method, path, response)
-        when 404
-          raise Error::NotFound.new(method, path, response)
-        when 405
-          raise Error::MethodNotAllowed.new(method, path, response)
-        when 407
-          raise Error::ProxyAuthenticationRequired.new(method, path, response)
-        when 409
-          raise Error::Conflict.new(method, path, response)
-        when 410
-          raise Error::Gone.new(method, path, response)
-        when 412
-          raise Error::PreconditionFailed.new(method, path, response)
-        when 402, 406, 408, 411, 413..499
-          raise Error::ClientError.new(method, path, response)
-        when 501
-          raise Error::NotImplemented.new(method, path, response)
-        when 500, 502..599
-          raise Error::ServerError.new(method, path, response)
-        else
-          raise Error::UnknownError.new(method, path, response)
-        end
-      end
-
     end
 
     module RequestAdapter
@@ -118,8 +80,35 @@ module Restfulie::Client::HTTP
         request(:delete, path, *args)
       end
 
-      def request(method, path, *args)
+      def get!(path, *args)
+        request!(:get, path, *args)
+      end
 
+      def head!(path, *args)
+        request!(:head, path, *args)
+      end
+
+      def post!(path, payload, *args)
+        request!(:post, path, payload, *args)
+      end
+
+      def put!(path, payload, *args)
+        request!(:put, path, payload, *args)
+      end
+
+      def delete!(path, *args)
+        request!(:delete, path, *args)
+      end
+
+      def request(method, path, *args)
+        begin 
+          request!(method, path, *args) 
+        rescue Error::RESTError => se
+          se.response
+        end
+      end
+
+      def request!(method, path, *args)
         headers = @default_headers.merge(args.extract_options!)
         unless @root.user.blank? && @root.password.blank?
           headers["Authorization"] = "Basic " + ["#{@root.user}:#{@root.password}"].pack("m").delete("\r\n")
@@ -129,18 +118,43 @@ module Restfulie::Client::HTTP
 
         logger.info(request_to_s(method, path, *args)) unless logger.nil?
         begin
-          ResponseHandler.handle!(method, path, @connection.send(method, path, *args))
+          response = ResponseHandler.handle(method, path, @connection.send(method, path, *args))
         rescue Errno::ECONNREFUSED
-          raise Error::ServerNotAvailableError.new("The server at #{@url} is not available.")
-       end
-      end
+          raise Error::ServerNotAvailableError.new(method, path, self, Response.new(method, path, 503, nil, {}))
+        end 
 
-      def cookies=(value)
-        @cookies=value
-      end
-
-      def cookies
-        @cookies
+        case response.code
+        when 100..299
+          response 
+        when 300..399
+          raise Error::Redirection.new(method, path, self, response)
+        when 400
+          raise Error::BadRequest.new(method, path, self, response)
+        when 401
+          raise Error::Unauthorized.new(method, path, self, response)
+        when 403
+          raise Error::Forbidden.new(method, path, self, response)
+        when 404
+          raise Error::NotFound.new(method, path, self, response)
+        when 405
+          raise Error::MethodNotAllowed.new(method, path, self, response)
+        when 407
+          raise Error::ProxyAuthenticationRequired.new(method, path, self, response)
+        when 409
+          raise Error::Conflict.new(method, path, self, response)
+        when 410
+          raise Error::Gone.new(method, path, self, response)
+        when 412
+          raise Error::PreconditionFailed.new(method, path, self, response)
+        when 402, 406, 408, 411, 413..499
+          raise Error::ClientError.new(method, path, self, response)
+        when 501
+          raise Error::NotImplemented.new(method, path, self, response)
+        when 500, 502..599
+          raise Error::ServerError.new(method, path, self, response)
+        else
+          raise Error::UnknownError.new(method, path, self, response)
+        end
       end
 
       private
@@ -222,6 +236,26 @@ module Restfulie::Client::HTTP
 
       def delete
         request(:delete, @uri, @headers)
+      end
+
+      def get!
+        request!(:get, @uri, @headers)
+      end
+
+      def head!
+        request!(:head, @uri, @headers)
+      end
+
+      def post!(payload)
+        request!(:post, @uri, payload, @headers)
+      end
+
+      def put!(payload)
+        request!(:put, @uri, payload, @headers)
+      end
+
+      def delete!
+        request!(:delete, @uri, @headers)
       end
 
     end
