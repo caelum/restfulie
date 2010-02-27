@@ -27,18 +27,35 @@ spec = Gem::Specification.new do |s|
 end
 
 namespace :test do
+  def start_server_and_invoke_test(task_name)
+    pid = %x(ps -ef | grep fake_server | grep -v grep).split[1]
+    pid = %x(ps -ef | grep fake_server).split[1] unless pid 
+    Rake::Task[task_name].invoke
+    puts "pid >>>> #{pid}"
+    sh "kill #{pid}"
+  end
   Spec::Rake::SpecTask.new(:all) do |t|
     t.spec_files = FileList['spec/**/*_spec.rb']
     t.spec_opts = %w(-fs -fh:doc/specs.html --color)
   end
-  task :run_fake_server do
-    pid = %x(ps -ef | grep fake_server | grep -v grep).split[1]
-    sh "kill #{pid}" if pid
-    sh "ruby ./spec/client/http/fake_server.rb &"
-    Rake::Task['test:all'].invoke
-    pid = %x(ps -ef | grep fake_server).split[1]
-    puts "pid >>>> #{pid}"
-    sh "kill #{pid}"
+  Spec::Rake::SpecTask.new(:client) do |t|
+    t.spec_files = FileList['spec/client/**/*_spec.rb']
+    t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+  end
+  Spec::Rake::SpecTask.new(:server) do |t|
+    t.spec_files = FileList['spec/server/**/*_spec.rb']
+    t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+  end
+  namespace :run do
+    task :all do
+      start_server_and_invoke_test('test:all')
+    end
+    task :client do
+      start_server_and_invoke_test('test:client')
+    end
+    task :server do
+      start_server_and_invoke_test('test:server')
+    end
   end
 end
 
@@ -69,5 +86,5 @@ desc "Builds the project"
 task :build => :spec
 
 desc "Default build will run specs"
-task :default => ['test:run_fake_server']
+task :default => ['test:run:all']
 
