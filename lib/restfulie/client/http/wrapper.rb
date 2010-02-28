@@ -50,14 +50,15 @@ module Restfulie::Client::HTTP
     module RequestAdapter
 
       mattr_accessor :logger
+      @@logger = nil
+      @root = nil
+      @default_headers = nil
+      @cookies = nil
 
       def init(root, default_headers = {}, logger = nil)
-        @url = root
         @root = ::URI.parse(root)
         @default_headers = default_headers
-        @connection = get_connection_provider
-        @@logger = logger unless logger.nil?
-        @cookies=nil
+        @@logger = logger
       end
 
       def get(path, *args)
