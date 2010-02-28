@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  milk: MyString
+  size: MyString
+  drink: MyString
+
+two:
+  milk: MyString
+  size: MyString
+  drink: MyString
