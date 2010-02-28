@@ -8,7 +8,6 @@ class OrdersController < ApplicationController
     @orders = Order.all
   end
   
-
   def destroy
     @model = model_type.find(params[:id])
     if @model.can? :cancel

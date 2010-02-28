@@ -65,6 +65,7 @@ context Restfulie do
    it "should allow to pay" do
      order = create_order
      order.request.as('application/vnd.restbucks+xml').payment(payment(order.cost)).web_response.code.should == "200"
+     Restfulie::Client.cache_provider.clear
      order = order.self
      order.web_response.code.should == "200"
      order.status.should == "preparing"
@@ -86,10 +87,11 @@ context Restfulie do
       order = create_order
       order.request.as('application/vnd.restbucks+xml').payment(payment(order.cost), :method => :post)
       sleep 20
+      Restfulie::Client.cache_provider.clear
       order = order.self
       order.status.should == "ready"
       order.retrieve(:method => :delete)
-      Restfulie.cache_provider.clear
+      Restfulie::Client.cache_provider.clear
       order = order.self
       order.status.should == "delivered"
       receipt = order.receipt(:method => :get)
