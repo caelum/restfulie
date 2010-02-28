@@ -113,8 +113,16 @@ module ActionController
     end
 
     private
+    
+    # returns cache config to use, either an overriden local one for this controller and model
+    # or a generic one
     def cache_to_use
-      respond_to?(:configure_cache) ? cache : self.cache
+      if respond_to?(:configure_cache)
+        configure_cache(cache)
+        cache
+      else
+        self.cache
+      end
     end
 
   end
