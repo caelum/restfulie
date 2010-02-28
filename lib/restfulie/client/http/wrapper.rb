@@ -119,7 +119,7 @@ module Restfulie::Client::HTTP
 
         logger.info(request_to_s(method, path, *args)) unless logger.nil?
         begin
-          response = ResponseHandler.handle(method, path, @connection.send(method, path, *args))
+          response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
         rescue Errno::ECONNREFUSED
           raise Error::ServerNotAvailableError.new(method, path, self, Response.new(method, path, 503, nil, {}))
         end 
@@ -161,7 +161,8 @@ module Restfulie::Client::HTTP
       private
 
       def get_connection_provider
-        ::Net::HTTP.new(@root.host, @root.port)
+        @connection = ::Net::HTTP.new(@root.host, @root.port) unless @connection
+        @connection
       end
 
       protected
