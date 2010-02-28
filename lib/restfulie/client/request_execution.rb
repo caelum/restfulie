@@ -358,7 +358,7 @@ module Restfulie::Client
         with(options)
         Restfulie::Logger.logger.debug("Deprecated usage: options provided to a get method. This will be removed in a future version")
       end
-      self.do(Net::HTTP::Get, '', nil)
+      self.do(Net::HTTP::Get, 'get', nil)
     end
     
     def add_headers_to(hash)
