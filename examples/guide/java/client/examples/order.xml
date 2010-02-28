@@ -1,0 +1,11 @@
+<order>
+	<location>takeAway</location>
+	<items>
+		<item>
+			<name>latte</name>
+			<quantity>2</quantity>
+			<milk>skim</milk>
+			<size>medium</size>
+		</item>
+	</items>
+</order>

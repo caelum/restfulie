@@ -1,0 +1,28 @@
+<h1>Editing flight</h1>
+
+<% form_for(@flight) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :from %><br />
+    <%= f.text_field :from %>
+  </p>
+  <p>
+    <%= f.label :to %><br />
+    <%= f.text_field :to %>
+  </p>
+  <p>
+    <%= f.label :depature %><br />
+    <%= f.datetime_select :depature %>
+  </p>
+  <p>
+    <%= f.label :arrival %><br />
+    <%= f.datetime_select :arrival %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @flight %> |
+<%= link_to 'Back', flights_path %>

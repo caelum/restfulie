@@ -1,0 +1,202 @@
+[chapter The travel agency system]
+
+[section REST]
+
+Throughout the manual, we will create a web system that allow clients to book hotels and flights using a RESTful API, implying in a set of constraints which the architecture has to follow in order to obtain the advantages mentioned by Roy Fielding in his dissertation.[ref Roy_Fielding]
+
+This chapter will give a small introduction on some key aspects of a REST architecture and how it can be implemented through the web. Only on the next chapter we will have specific code that shall be created and run in your client and server boxes.
+
+[section Hypermedia]
+
+Our system is composed by two different client APIs, one allows ourselves to register hotels and browse them, searching for the one that matches our requirements.
+
+A typical web service as proposed by SOA based architecture, suggests to return a list of hotels whenever the client requires such list, resulting in a xml file enveloped by SOAP with specific namespaces. In order to simplify the structure proposed by such design, we have removed the soap envelope and the namespace:[ref SOAP][ref SOA]
+
+[xml]
+<hotels>
+	<hotel>
+		<name>Caelum Sao Paulo</name>
+	</hotel>
+	<hotel>
+		<name>Caelum Rio de Janeiro</name>
+	</hotel>
+	<hotel>
+		<name>Caelum London</name>
+	</hotel>
+</hotels>
+[/xml]
+
+In a hypermedia world, a simple entry point that provides us a list of hotels can add to its representation hints that guide the client within the processes built on the server, in our case the process of registering a new hotel, therefore a better representation of a hotel collection shall contain a link to adding new resources:
+
+[xml]
+<hotels>
+	<link rel="http://caelumobjects.com/hotels/add" href="http://localhost:3000/hotels" />
+	<hotel>
+		<name>Caelum Sao Paulo</name>
+	</hotel>
+	<hotel>
+		<name>Caelum Rio de Janeiro</name>
+	</hotel>
+	<hotel>
+		<name>Caelum London</name>
+	</hotel>
+</hotels>
+[/xml]
+
+Note that such change could also be implemented by using SOAP but unfortunately this is not how system integration through web services is marketed and used by most SOA architects. This manual will not focus on whether all REST capabilities can be implemented through web services, but that Restfulie - and thus Rest frameworks - force their developers to write systems with that in mind.
+
+Moving further in our representation, a collection of resources could link to the resources themselves, providing even more information for the client:
+
+[xml]
+<hotels>
+	<link rel="http://caelumobjects.com/hotels/add" href="http://localhost:3000/hotels" />
+	<hotel>
+		<name>Caelum Sao Paulo</name>
+		<link rel="self" href="http://localhost:3000/hotels/1524" />
+	</hotel>
+	<hotel>
+		<name>Caelum Rio de Janeiro</name>
+		<link rel="self" href="http://localhost:3000/hotels/1534" />
+	</hotel>
+</hotels>
+[/xml]
+
+If the entry point collection is addressable by its URI 'http://localhost/hotels' and there is a well known standard that defines that adding resources to such collection should be done via POSTing to this URI, there is no need for the first link, and all clients that understand such media type can either list, show and add resources to this collection without any further knowledge of your system:
+
+[xml]
+<hotels>
+	<hotel>
+		<name>Caelum Sao Paulo</name>
+		<link rel="self" href="http://localhost:3000/hotels/1524" />
+	</hotel>
+	<hotel>
+		<name>Caelum Rio de Janeiro</name>
+		<link rel="self" href="http://localhost:3000/hotels/1534" />
+	</hotel>
+</hotels>
+[/xml]
+
+[section Media types and hypermedia]
+
+Because our resource (a collection) was able to include links to other resources, our media type is a hypermedia format. If our clients can be guided throughout our processes by using such links, in the same way that human beings are able to do so on the web, reacting to responses as they arrive, we have let hypermedia guide our client.
+
+[section The client]
+ 
+On the client side, after requesting the representation for all hotels, one can access the add hotel relationship through Restfulie's API:
+
+[note]Diagrams from http://www.websequencediagrams.com/[/note]
+
+[ruby]
+irb
+require 'restfulie/client'
+
+hotels = Restfulie.at(HOTELS_ENTRY).get
+puts "There are currently #{hotels.length} hotels"
+hotels.add new_hotel
+[/ruby]
+
+[img src="2/resource-retrieval.jpg"]
+
+[note]
+client->restfulie: get
+restfulie->/hotels: GET
+note right of /hotels: content negotiation
+note right of /hotels: generates a list of all hotels
+/hotels->restfulie: hotels representation
+note right of restfulie: deserializing
+restfulie->hotels: create array
+hotels->client: all hotels are available
+[/note]
+
+[img src="2/resource-creation-and-retrieval.jpg"]
+
+[note]
+client->restfulie: get
+restfulie->/hotels: GET
+note right of /hotels: content negotiation
+note right of /hotels: generates a list of all hotels
+/hotels->restfulie: hotels representation
+note right of restfulie: deserializing
+restfulie->hotels: create array
+hotels->client: all hotels are available
+
+client->restfulie: add
+restfulie->/hotels: POST
+note right of /hotels: creates a new hotel
+/hotels->restfulie: 201 new hotel location
+restfulie->/hotel/541: GET
+note right of /hotels: retrieves the new hotel representation
+/hotel/541->restfulie: hotel representations
+restfulie->client: hotel
+[/note]
+
+The first two lines of code are to start irb, ruby's shell, and to load restfulie's client API.[ref irb]
+
+Due to the use of hypermedia within the resource representation, the POST request sent when invoking ::hotels.add:: is enough to create the new resource in the URI provided by the server.
+
+[section XML? Why? Why?]
+
+One of the commons questions is whether one is forced to use XML for formatting a resource representation. REST defines that content negotiation (conneg) is a important feature that clients and server should know how to handle.[ref content_negotiation][ref conneg]
+
+This means that the more generic your framework can get when generating the representation, the larger the number of representations it supports and the larger is your client's base that understands this representation.
+
+If you make no use of custom media types, Restfulie will take care of real content type negotation through HTTP headers, and provide the best representations that fits your client's request (xml, json, atom and so on).
+
+[section Searching]
+
+Following the same idea of hypermedia guiding the client, a search system could be implemented through a set of link relations, first locating hotels in 'Sao Paulo', then showing only those with 4 starts and finally sorting by price, each one represented by a hypermedia link being followed.
+
+[xml]
+hotels = Restfulie.at(HOTELS_ENTRY).get
+hotel = hotels.at('Sao Paulo').rated(4).sort_by(:price).first
+[/xml]
+
+Another approach is to access generic searches as those which implement the OpenSearch protocol [reference opensearch], one can register query parameters prior to executing the query. Assuming that the hotels representation provides us enough information to identify the OpenSearch definition document:
+
+[xml]
+<hotels>
+	<link rel="http://caelumobjects.com/hotels/search" href="http://localhost:3000/hotels/open_search" />
+	<link rel="http://caelumobjects.com/hotels/add" href="http://localhost:3000/hotels" />
+	<hotel>
+		<name>Caelum Sao Paulo</name>
+	</hotel>
+	<hotel>
+		<name>Caelum Rio de Janeiro</name>
+	</hotel>
+	<hotel>
+		<name>Caelum London</name>
+	</hotel>
+</hotels>
+[/xml]
+
+Restfulie allows access to such document and open search through method invocations on the client side:
+
+[ruby]
+hotels = Restfulie.at(HOTELS_ENTRY).get
+hotel = hotels.search.at('Sao Paulo').rated(4).sort_by(:price).first
+[/ruby]
+
+[section The advanced client]
+
+Unfortunately that will not be enough for the second set of clients, that want to book both hotels and flights together:
+
+[ruby]
+hotels = Restfulie.at(HOTELS_ENTRY).get
+hotel = hotels.at('Sao Paulo').rated(4).sort_by(:price).first
+flight = hotel.city.to('London').at(December.05.2010).first
+booking = Restfulie.at(BOOKING_ENTRY).post
+booking.hotels.add hotel
+booking.flights.add flight
+confirmation = booking.pay payment
+[/ruby]
+
+This code is a much richer and powerful example as it uses hypermedia to guide the client through a more complex process, finally finding the requested information as in ::hotels.at('Sao Paulo').rated(4).sort_by(:price).first::.
+
+Later, there is an atomic execution which involves more than one request:
+[ruby]
+booking.hotels.add hotel
+booking.flights.add flight
+confirmation = booking.pay payment
+[/ruby]
+
+All those examples can run after our system is built.

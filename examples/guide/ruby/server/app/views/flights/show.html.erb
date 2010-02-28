@@ -1,0 +1,23 @@
+<p>
+  <b>From:</b>
+  <%=h @flight.from %>
+</p>
+
+<p>
+  <b>To:</b>
+  <%=h @flight.to %>
+</p>
+
+<p>
+  <b>Depature:</b>
+  <%=h @flight.depature %>
+</p>
+
+<p>
+  <b>Arrival:</b>
+  <%=h @flight.arrival %>
+</p>
+
+
+<%= link_to 'Edit', edit_flight_path(@flight) %> |
+<%= link_to 'Back', flights_path %>

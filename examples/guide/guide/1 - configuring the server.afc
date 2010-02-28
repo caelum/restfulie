@@ -1,0 +1,88 @@
+[tag ruby]
+[chapter  Configuring the server]
+
+[section  Installing ruby and rails]
+
+The Ruby on Rails website [http://www.rubyonrails.org] provides a simple guide on how to install the latest version of the Ruby language and Rails framework.
+
+First of all, follow its instructions and we are ready to start a hypermedia based system using Rails.
+
+[section  Creating a new project]
+
+Running rails will allow the framework to create the entire project structure, ready to use:
+
+[code]rails hotel-system
+cd hotel-system
+[/code]
+
+But Rails standard projects still do not support hypermedia resources, therefore its required to add restfulie gem at **hotel-system/config/enviroment.rb**:
+
+[ruby]config.gem "restfulie", :version => "0.6.0", :source => "http://gemcutter.org"
+[/ruby]
+
+Because gems handles gem dependencies, one single command shall download all required gems: restfulie and its dependencies.
+
+[ruby]rake gems:install
+[/ruby]
+
+[section  Rails forgery protection]
+
+Because Rails provides out of the box support to 'forgery' we need to turn it off. This forgery protection does not allow a client to access a POST method without previously passing through the form display process. Because this is not the desired behavior for rest applications over http, we add one line of code to  **hotel-system/config/enviroments/development.rb**:
+
+[ruby]config.action_controller.allow_forgery_protection    = false
+[/ruby]
+
+[section  Running the server]
+
+In order to start the server in your machine and the default port 3000, run the following command in your terminal:
+
+[code]script/server
+[/code]
+
+Now we can access the hotel system by pointing our browser to **http://localhost:3000**.
+
+[code]curl http://localhost:3000[/code]
+
+[/tag ruby]
+[tag java]
+chocolat
+[chapter  Configuring the server]
+
+You can skip this chapter if you have already installed a servlet API compatible servlet container, including any of the Java EE Aplication Servers.
+
+[section  Installing Jetty]
+
+Download Jetty at [http://www.eclipse.org/jetty/] and install it in your machine.
+
+[code]curl http://download.eclipse.org/jetty/stable-7/dist/jetty-distribution-7.0.1.v20091125.tar.gz > jetty-distribution-7.0.1.v20091125.tar.gz
+tar zxf jetty-distribution-7.0.1.v20091125.tar.gz
+rm jetty*.gz
+mv jetty-distribution-7.0.1.v20091125 jetty
+cd jetty
+[/code]
+
+[section  Creating a new project]
+
+Now download VRaptor's [http://vraptor.caelum.com.br/en] blank project and extract it.
+
+[code]unzip vraptor3-blank*.zip[/code]
+
+[section  Configure it under your application server]
+
+[section  Running the server]
+
+Let's configure the server port to run at 3000 by opening the file ::etc/jetty.xml:::
+
+[code]
+	<Set name="port"><SystemProperty name="jetty.port" default="3000"/></Set>
+[/code]
+
+To run the server, invoke the jetty script with start:
+
+[code]cd bin
+./jetty.sh start[/code]
+
+Now we can access the hotel system by pointing our browser to **http://localhost:3000**.
+
+[code]curl http://localhost:3000[/code]
+[/tag java]

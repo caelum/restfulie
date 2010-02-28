@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  from: MyString
+  to: MyString
+  depature: 2010-01-05 16:38:08
+  arrival: 2010-01-05 16:38:08
+
+two:
+  from: MyString
+  to: MyString
+  depature: 2010-01-05 16:38:08
+  arrival: 2010-01-05 16:38:08
