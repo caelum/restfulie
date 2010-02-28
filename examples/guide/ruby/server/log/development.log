@@ -12772,3 +12772,301 @@ Processing HotelsController#show (for 127.0.0.1 at 2010-02-18 18:05:17) [GET]
   Parameters: {"id"=>"19"}
   [4;35;1mHotel Load (0.3ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 19) [0m
 Completed in 9ms (View: 1, DB: 0) | 304 Not Modified [http://localhost/hotels/19]
+  [4;36;1mSQL (0.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (2.8ms)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (1.2ms)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateHotels (20091213164027)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mCREATE TABLE "hotels" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "city" varchar(255), "room_count" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091213164027')[0m
+Migrating to AddHotelRate (20091213171438)
+  [4;36;1mSQL (0.6ms)[0m   [0;1mALTER TABLE "hotels" ADD "rate" integer[0m
+  [4;35;1mHotel Load (0.1ms)[0m   [0mSELECT * FROM "hotels" [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091213171438')[0m
+Migrating to CreateFlights (20100105183808)
+  [4;35;1mSQL (0.5ms)[0m   [0mCREATE TABLE "flights" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "from" varchar(255), "to" varchar(255), "depature" time, "arrival" time, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100105183808')[0m
+Migrating to InsertBasicFlightRoutes (20100105184029)
+
+
+Processing HotelsController#create (for 127.0.0.1 at 2010-02-28 17:35:40) [POST]
+  [4;36;1mHotel Create (0.5ms)[0m   [0;1mINSERT INTO "hotels" ("name", "city", "created_at", "room_count", "updated_at", "rate") VALUES('Caelum Objects Hotel', 'Sao Paulo', '2010-02-28 20:35:40', 3, '2010-02-28 20:35:40', 4)[0m
+Completed in 197ms (View: 3, DB: 0) | 201 Created [http://localhost/hotels]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:35:40) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mHotel Load (0.2ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 10ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (2.6ms)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (1.1ms)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateHotels (20091213164027)
+  [4;36;1mSQL (0.5ms)[0m   [0;1mCREATE TABLE "hotels" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "city" varchar(255), "room_count" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091213164027')[0m
+Migrating to AddHotelRate (20091213171438)
+  [4;36;1mSQL (0.4ms)[0m   [0;1mALTER TABLE "hotels" ADD "rate" integer[0m
+  [4;35;1mHotel Load (0.1ms)[0m   [0mSELECT * FROM "hotels" [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091213171438')[0m
+Migrating to CreateFlights (20100105183808)
+  [4;35;1mSQL (1.0ms)[0m   [0mCREATE TABLE "flights" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "from" varchar(255), "to" varchar(255), "depature" time, "arrival" time, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100105183808')[0m
+Migrating to InsertBasicFlightRoutes (20100105184029)
+
+
+Processing HotelsController#create (for 127.0.0.1 at 2010-02-28 17:37:04) [POST]
+  [4;36;1mHotel Create (0.5ms)[0m   [0;1mINSERT INTO "hotels" ("name", "city", "created_at", "room_count", "updated_at", "rate") VALUES('Caelum Objects Hotel', 'Sao Paulo', '2010-02-28 20:37:04', 3, '2010-02-28 20:37:04', 4)[0m
+Completed in 191ms (View: 3, DB: 0) | 201 Created [http://localhost/hotels]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:37:04) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mHotel Load (0.2ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 10ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:37:04) [GET]
+  Parameters: {"id"=>"1"}
+  [4;36;1mHotel Load (0.2ms)[0m   [0;1mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 10ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:37:04) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mHotel Load (0.2ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 66ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 17:37:05) [GET]
+  [4;36;1mHotel Load (0.5ms)[0m   [0;1mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (35.7ms)
+Rendered rescues/_request_and_response (1.2ms)
+Rendering rescues/layout (internal_server_error)
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 17:37:05) [GET]
+  [4;35;1mHotel Load (0.4ms)[0m   [0mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (38.8ms)
+Rendered rescues/_request_and_response (0.3ms)
+Rendering rescues/layout (internal_server_error)
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 17:37:05) [GET]
+  [4;36;1mHotel Load (0.5ms)[0m   [0;1mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (99.5ms)
+Rendered rescues/_request_and_response (0.2ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (2.4ms)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (1.2ms)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateHotels (20091213164027)
+  [4;36;1mSQL (0.5ms)[0m   [0;1mCREATE TABLE "hotels" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "city" varchar(255), "room_count" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091213164027')[0m
+Migrating to AddHotelRate (20091213171438)
+  [4;36;1mSQL (0.4ms)[0m   [0;1mALTER TABLE "hotels" ADD "rate" integer[0m
+  [4;35;1mHotel Load (0.1ms)[0m   [0mSELECT * FROM "hotels" [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091213171438')[0m
+Migrating to CreateFlights (20100105183808)
+  [4;35;1mSQL (0.8ms)[0m   [0mCREATE TABLE "flights" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "from" varchar(255), "to" varchar(255), "depature" time, "arrival" time, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100105183808')[0m
+Migrating to InsertBasicFlightRoutes (20100105184029)
+
+
+Processing HotelsController#create (for 127.0.0.1 at 2010-02-28 17:37:33) [POST]
+  [4;36;1mHotel Create (0.4ms)[0m   [0;1mINSERT INTO "hotels" ("name", "city", "created_at", "room_count", "updated_at", "rate") VALUES('Caelum Objects Hotel', 'Sao Paulo', '2010-02-28 20:37:33', 3, '2010-02-28 20:37:33', 4)[0m
+Completed in 192ms (View: 3, DB: 0) | 201 Created [http://localhost/hotels]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:37:33) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mHotel Load (0.2ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 9ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:37:34) [GET]
+  Parameters: {"id"=>"1"}
+  [4;36;1mHotel Load (0.2ms)[0m   [0;1mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 9ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:37:34) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mHotel Load (0.2ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 64ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 17:37:34) [GET]
+  [4;36;1mHotel Load (0.4ms)[0m   [0;1mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (36.5ms)
+Rendered rescues/_request_and_response (1.2ms)
+Rendering rescues/layout (internal_server_error)
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 17:37:34) [GET]
+  [4;35;1mHotel Load (0.5ms)[0m   [0mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (36.8ms)
+Rendered rescues/_request_and_response (0.3ms)
+Rendering rescues/layout (internal_server_error)
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 17:37:34) [GET]
+  [4;36;1mHotel Load (0.5ms)[0m   [0;1mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:58:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (100.8ms)
+Rendered rescues/_request_and_response (0.3ms)
+Rendering rescues/layout (internal_server_error)
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mselect sqlite_version(*)[0m
+  [4;36;1mSQL (2.6ms)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (1.0ms)[0m   [0mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateHotels (20091213164027)
+  [4;36;1mSQL (0.5ms)[0m   [0;1mCREATE TABLE "hotels" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "city" varchar(255), "room_count" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20091213164027')[0m
+Migrating to AddHotelRate (20091213171438)
+  [4;36;1mSQL (0.5ms)[0m   [0;1mALTER TABLE "hotels" ADD "rate" integer[0m
+  [4;35;1mHotel Load (0.1ms)[0m   [0mSELECT * FROM "hotels" [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20091213171438')[0m
+Migrating to CreateFlights (20100105183808)
+  [4;35;1mSQL (0.5ms)[0m   [0mCREATE TABLE "flights" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "from" varchar(255), "to" varchar(255), "depature" time, "arrival" time, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100105183808')[0m
+Migrating to InsertBasicFlightRoutes (20100105184029)
+
+
+Processing HotelsController#create (for 127.0.0.1 at 2010-02-28 17:38:42) [POST]
+  [4;36;1mHotel Create (0.5ms)[0m   [0;1mINSERT INTO "hotels" ("name", "city", "created_at", "room_count", "updated_at", "rate") VALUES('Caelum Objects Hotel', 'Sao Paulo', '2010-02-28 20:38:42', 3, '2010-02-28 20:38:42', 4)[0m
+Completed in 186ms (View: 3, DB: 0) | 201 Created [http://localhost/hotels]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:38:42) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mHotel Load (0.2ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 10ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]

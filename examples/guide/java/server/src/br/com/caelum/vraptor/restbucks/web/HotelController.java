@@ -18,7 +18,7 @@ import br.com.caelum.vraptor.view.Status;
  * @author guilherme silveira
  */
 @Resource
-public class HotelController implements ResourceController {
+public class HotelController {
 
 	private final Result result;
 	private final Status status;
@@ -43,10 +43,9 @@ public class HotelController implements ResourceController {
 		}
 	}
 	
-//	@Post
-//	@Path("/hotels")
-//	@Consumes
-	@DefaultBehavior
+	@Post
+	@Path("/hotels")
+	@Consumes
 	public void add(Hotel hotel) {
 		database.save(hotel);
 		routes.uriFor(HotelController.class).get(hotel);

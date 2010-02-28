@@ -94,5 +94,6 @@ context Restfulie do
       receipt = order.receipt(:method => :get)
       receipt.amount.to_f.should == 20
     end
+     
   
 end

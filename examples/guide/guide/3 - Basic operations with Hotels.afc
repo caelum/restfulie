@@ -100,21 +100,11 @@ render_resource resource, options, {:status => :created, :location => location}
 [/ruby]
 [/tag ruby]
 [tag java]
-[java]
-@Post
-@Path("/hotels")
-@Consumes
-public void add(Hotel hotel) {
-	database.save(hotel);
-	routes.uriFor(HotelController.class).get(hotel);
-	status.created(routes.getUri());
-}
-[/java]
+
 [/tag java]
 
 This code will generate a response 201 with the resource location in the **Location** header.
 
-[tag ruby]
 The controller still needs to check if the process was successfully completed or not and, if something goes wrong, render the related error messages.
 
 [ruby]class HotelsController < ApplicationController::Base
@@ -129,68 +119,44 @@ The controller still needs to check if the process was successfully completed or
 end
 [/ruby]
 
-There is one major validation step missing in the code above: the object created invoking *Restfulie.from* might not be a hotel and we are not checking its content-type. In order to check if the media-type sent matches the expected one:
+[box]
+Can I receive the hotel data as post/get parameters?
 
-[ruby]valid = Restfulie::MediaType.supports?(request.headers['CONTENT_TYPE']) &&
-       	Restfulie::MediaType.media_type(request.headers['CONTENT_TYPE']) == Hotel
-[/ruby]
-[/tag ruby]
-
-[note]
-client->/hotels: POST
-activate /hotels
-/hotels->deserializer: deserialize
-activate deserializer
-deserializer->/hotels: hotel
-deactivate deserializer
-/hotels->database: save
-activate database
-database->/hotels: ok
-deactivate database
-/hotels-->client: 201 Created + Location header
-deactivate /hotels
-[/note]
-[img 3/create.png "Creating a hotel"]
-
-[box Can I receive the hotel data as post/get parameters?]
 Yes, you can, but that is Non-REST. REST is based on content negotiation (media type negotiation) and resource representations. A client is uncapable of detecting your resource accepted parameters using the HTTP protocol if you use this approach. Some other styles and architectures (as SOA based ones) will define documents that describe which parameters are accepted and their meanings.
 
 In a REST over HTTP application, resources are **only** exchanged through its representations, that are accepted by both client and server.
 [/box]
 
-[note]
-client->/hotels: POST
-activate /hotels
-/hotels->client: 201 Created + Location header
-deactivate /hotels
-client->/hotels/157: GET
-activate /hotels/157
-/hotels/157->client: representation
-deactivate /hotels/157
-[/note]
-[img 3/create-and-retrieve.png "Creating and retrieving a hotel"]
+If the server wants to avoid one extra request-response trip, it can return the resource content with the 201 return code and the client will not need another request to retrieve this information:
 
-If the server wants to avoid one extra request-response trip, it can return the resource content with the 201 return code and the client will not need another request to retrieve this information.
+<TOLINK imagem com sequencia de 200, 201 e unprocessable>
 
-[section Default behavior]
+Note that render_created will already do it for us, returning a response as:
 
-The typical behavior for CRUD systems using a REST architectural style is to create resources through **post** by translating the resource to domain models, saving them to the database and responding with a 201, as shown earlier.
+[box]
+There is one major validation step missing in the code above: the object created invoking *Restfulie.from* might not be a hotel and we are not checking its content-type. In order to check if the media-type sent matches the expected one:
 
-[tag ruby]
+[ruby]valid = Restfulie::MediaType.supports?(request.headers['CONTENT_TYPE']) &&
+       	Restfulie::MediaType.media_type(request.headers['CONTENT_TYPE']) == Hotel
+[/ruby]
+[box]
+
+[section  Default behavior]
+
+The typical behavior for CRUD systems following REST is to create resources through **post** by translating the resource to domain models, saving them to the database and responding with a 201.
+
 When using Restfulie, those common cases are supported by default if your controller includes the **RestController** module, which includes the behavior displayed so far:
 
 [ruby]class HotelsController < ApplicationController
   include Restfulie::Server::RestController
 
-	# implicit declared the create method
+	# implicit declarated the create method
 	# including media-type checking
 
 end
 [/ruby]
-[/tag ruby]
 
-[tag ruby]
-On the client side, we first need to create a representation of our hotel and then post it to our known entry point:
+Because the application set up so far a POST entry point that allows hotel creation, the client can access it by using Restfulie's API with *one line of code*, which invokes the create method:
 
 [ruby]hotel = {:name => "Caelum Objects Hotel", :city => "Sao Paulo", :room_count => 3}
 
@@ -198,7 +164,6 @@ hotel = Restfulie.at('http://localhost:3000/hotels').as('vnd/caelum_hotel+xml').
 
 puts "Response was #{hotel.web_response}"
 [/ruby]
-[/tag ruby]
 
 [section  Accessing headers and the response itself]
 
@@ -206,15 +171,13 @@ The above example even shows how to access the response object itself, which has
 
 Sometimes those clients want to access the http response information itself and you can do it with Restfulie through the web_response method which is the Net::HTTPResponse object itself:
 
-[tag ruby]
 [ruby]hotel = Restfulie.at('http://localhost:30000/hotels/1').get
 puts "Hotel created at #{hotel.web_response['Content-type']}"
 [/ruby]
 
-[box Conventions]
-Because Restfulie promotes conventions over configuration, you can remove your ::new:: and ::create:: methods from **HotelsController**.
-[/box]
-[/tag ruby]
+<box>
+Now you can remove both new and create methods from your HotelsController as they are not needed.
+</box>
 
 [section  Evolving the server]
 

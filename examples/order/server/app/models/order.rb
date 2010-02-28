@@ -10,8 +10,8 @@ class Order < ActiveRecord::Base
       t << [:update]
     end
     # def t.relates_to(what)
-      # what = :items
-      # t << [what.to_s, {:action => :index, :controller => what, :order_id => order.id}]
+      what = :items
+      t << [what.to_s, {:action => :index, :controller => what, :order_id => order.id}]
     # end
     # t.relates_to :items
   end

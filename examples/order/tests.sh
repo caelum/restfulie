@@ -1,4 +1,6 @@
 cd server
+rake db:drop
+rake db:migrate
 script/server &
 PID=$!
 sleep 5
