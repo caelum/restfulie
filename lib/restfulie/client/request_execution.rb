@@ -130,7 +130,12 @@ module Restfulie::Client
       # callback taht executes a GET request to the response Location header.
       # this is the typical callback for 200 response codes.
       def retrieve_resource_from_location(restfulie_response)
-        restfulie_response.type.from_web restfulie_response.response["Location"]
+        location = restfulie_response.response["Location"]
+        if(restfulie_response.class.respond_to? :from_web)
+          restfulie_response.class.from_web(location)
+        else 
+          Restfulie.at(location).get
+        end
       end
 
       # given a restfulie response, extracts the response code and invoke the registered callback.
@@ -163,7 +168,24 @@ module Restfulie::Client
       end
       
       def register_func(min, max, proc)
-        register(min, max) { |r| proc.call(r) }
+        register(min, max) { |req, res| proc.call(req, res) }
+      end
+      
+      private
+
+      # parses the response body based on its media type
+      # treats xml and json in a specific matter, all other types in a generic_parse_entity way
+      def parse_body_from(content_type, response, restfulie_response)
+        type = Restfulie::MediaType.type_for(content_type)
+        if content_type[-3,3]=="xml"
+          result = type.from_xml response.body
+        elsif content_type[-4,4]=="json"
+          result = type.from_json response.body
+        else
+          result = generic_parse_entity restfulie_response
+        end
+        result.instance_variable_set :@_came_from, content_type
+        result
       end
 
     end
@@ -328,8 +350,13 @@ module Restfulie::Client
     end
     
     # retrieves information from the server using a GET request
-    def get(options = {})
-      from_web(@uri, options)
+    # all options are treated as headers (deprecated)
+    def get(options = nil)
+      if options
+        with(options)
+        Restfulie::Logger.logger.debug("Deprecated usage: options provided to a get method. This will be removed in a future version")
+      end
+      self.do(Net::HTTP::Get, '', nil)
     end
     
     def add_headers_to(hash)
@@ -395,35 +422,11 @@ module Restfulie::Client
       url = URI.parse(uri)
       @request = Net::HTTP::Post.new(url.path)
       @request.body = content
-      add_basic_request_headers(req)
+      add_basic_request_headers(@request)
       @request.add_field("Content-type", @content_type)
 
       response = Net::HTTP.new(url.host, url.port).request(@request)
       Restfulie::Client::Response.new(@type, response, self).parse_post(@content_type)
-    end
-
-    def from_web(uri, options = {})
-      uri = URI.parse(uri)
-      @request = Net::HTTP::Get.new(uri.path)
-      options.each { |key,value| @request[key] = value }
-      add_basic_request_headers(@request)
-      res = Net::HTTP.new(uri.host, uri.port).request(@request)
-      Restfulie::Client::Response.new(@type, res, self).final_parse
-    end
-    
-    # parses the response body based on its media type
-    # treats xml and json in a specific matter, all other types in a generic_parse_entity way
-    def parse_body_from(content_type, response, restfulie_response)
-      type = Restfulie::MediaType.type_for(content_type)
-      if content_type[-3,3]=="xml"
-        result = type.from_xml response.body
-      elsif content_type[-4,4]=="json"
-        result = type.from_json response.body
-      else
-        result = generic_parse_entity restfulie_response
-      end
-      result.instance_variable_set :@_came_from, content_type
-      result
     end
 
   end
