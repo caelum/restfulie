@@ -24069,3 +24069,1953 @@ ActionController::RoutingError (Need controller and action!):
   /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
 
 Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:44) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 549, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 549, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 549) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:44) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 550, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 550, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 550) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:44) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 551, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 551, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 551) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:44) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 552, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:44', '2010-02-28 20:03:44', 552, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 552) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:44) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 553, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 553, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 553) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:45) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 554, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 554, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 554) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:45) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 555, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 555, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 555) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:45) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 556, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 556, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 556) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:45) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 557, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 557, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 557) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:03:45) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 558, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:03:45', '2010-02-28 20:03:45', 558, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 558) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:47) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:47', '2010-02-28 20:04:47', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:47', '2010-02-28 20:04:47', 559, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:47', '2010-02-28 20:04:47', 559, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 559) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 560, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 560, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 560) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 561, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 561, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 561) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.7ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 562, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 562, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 562) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 563, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 563, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 563) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.7ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 564, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 564, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 564) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 565, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 565, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 565) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 566, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 566, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 566) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 567, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 567, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 567) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:04:48) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 568, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:04:48', '2010-02-28 20:04:48', 568, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 568) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:37) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 569, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 569, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.3ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 569) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:37) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 570, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 570, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 570) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:37) [POST]
+  [4;36;1mOrder Create (0.6ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 571, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 571, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 571) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:37) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 572, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:37', '2010-02-28 20:05:37', 572, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 572) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:38) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 573, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 573, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 573) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:38) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 574, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 574, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 574) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:38) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 'unpaid')[0m
+  [4;35;1mItem Create (0.3ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 575, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 575, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 575) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:38) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 576, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 576, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 576) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:38) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 577, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 577, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 577) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:05:38) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 'unpaid')[0m
+  [4;35;1mItem Create (0.3ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 578, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:05:38', '2010-02-28 20:05:38', 578, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 578) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:39) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:39', '2010-02-28 20:07:39', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:39', '2010-02-28 20:07:39', 579, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:39', '2010-02-28 20:07:39', 579, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 579) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 580, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 580, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 580) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 581, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 581, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 581) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 582, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 582, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 582) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 583, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 583, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 583) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 584, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 584, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 584) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 585, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.2ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 585, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 585) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.6ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 586, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 586, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.5ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 586) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 587, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 587, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.3ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 587) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:07:40) [POST]
+  [4;36;1mOrder Create (0.6ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 588, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:07:40', '2010-02-28 20:07:40', 588, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 588) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:32) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 589, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 589, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.3ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 589) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:32) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 590, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 590, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.3ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 590) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:32) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 591, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 591, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 591) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:32) [POST]
+  [4;36;1mOrder Create (0.5ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 'unpaid')[0m
+  [4;35;1mItem Create (0.2ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 592, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.2ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 592, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.6ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 592) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:32) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 593, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:32', '2010-02-28 20:09:32', 593, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 593) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:33) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 594, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 594, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 594) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:33) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 595, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 595, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 595) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:33) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 596, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 596, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 596) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:33) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 597, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 597, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 597) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
+
+
+Processing OrdersController#create (for 127.0.0.1 at 2010-02-28 17:09:33) [POST]
+  [4;36;1mOrder Create (0.4ms)[0m   [0;1mINSERT INTO "orders" ("location", "created_at", "updated_at", "status") VALUES('TO_TAKE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 'unpaid')[0m
+  [4;35;1mItem Create (0.1ms)[0m   [0mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('LARGE', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 598, 'LATTE', 'SEMI')[0m
+  [4;36;1mItem Create (0.1ms)[0m   [0;1mINSERT INTO "items" ("size", "created_at", "updated_at", "order_id", "drink", "milk") VALUES('SMALL', '2010-02-28 20:09:33', '2010-02-28 20:09:33', 598, 'LATTE', 'WHOLE')[0m
+  [4;35;1mPayment Load (0.4ms)[0m   [0mSELECT * FROM "payments" WHERE ("payments".order_id = 598) LIMIT 1[0m
+
+***** Debugger requested, but was not available: Start server with --debugger to enable *****
+
+ActionController::RoutingError (Need controller and action!):
+  app/controllers/orders_controller.rb:33:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:85:in `link_for'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:74:in `links'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `each'
+  restfulie (0.7.0) lib/restfulie/server/instance.rb:73:in `links'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/server/marshalling.rb:34:in `to_xml'
+  app/models/order.rb:35:in `to_xml'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `send'
+  restfulie (0.7.0) lib/restfulie/common/media_type.rb:71:in `execute_for'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:83
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `call'
+  /Users/guilherme/.rvm/gems/ruby-1.8.7-p249/gems/inherited_resources-1.0.3/lib/inherited_resources/legacy/respond_to.rb:59:in `respond_to'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:49:in `render_resource'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:103:in `render_created'
+  restfulie (0.7.0) lib/restfulie/server/restfulie_controller.rb:34:in `create'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendering rescues/layout (not_found)
