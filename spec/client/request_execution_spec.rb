@@ -50,6 +50,7 @@ context Restfulie::Client::Response do
     before do
       @response = Hashi::CustomHash.new({"body" => "response body"})
       @result = Object.new
+      @request = mock Restfulie::Client::RequestExecution
     end
     
     it "should complain about a generic type that doesnt match a from_ method" do
@@ -71,25 +72,34 @@ context Restfulie::Client::Response do
       Hashi::CustomHash.new({"response"=>@response})
     end
     
+    it "should return the raw content if required" do
+      @request.should_receive(:raw?).and_return(true)
+      @response.content_type = "application/vnd.app+xml"
+      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @response
+    end
+    
     it "should return a xml result from the content" do
+      @request.should_receive(:raw?).and_return(false)
       @response.content_type = "application/vnd.app+xml"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_xml).with(@response.body).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(restfulie_response("200")).should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @result
     end
     
     it "should return a json result from the content" do
+      @request.should_receive(:raw?).and_return(false)
       @response.content_type = "application/json"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_json).with(@response.body).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(restfulie_response("200")).should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @result
     end
     
     it "should return a generic result from the content" do
+      @request.should_receive(:raw?).and_return(false)
       @response.content_type = "xhtml"
       response = restfulie_response("200")
       Restfulie::Client::ResponseHandler.should_receive(:generic_parse_entity).with(response).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(response).should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(@request, response).should == @result
     end
     
   end
@@ -467,12 +477,14 @@ context Restfulie::Client::RequestExecution do
     class CustomResource
     end
     
-    it "should execute a from web request when retrieveing a resource as a result" do
+    it "should execute a get request when following a location header" do
       expected = Object.new
+      request = mock Restfulie::Client::RequestExecution
+      request.should_receive(:get).and_return(expected)
       
       response = {"Location" => "google"}
       restfulie_response = Restfulie::Client::Response.new(CustomResource, response, expected)
-      CustomResource.should_receive(:from_web).with("google").and_return(expected)
+      Restfulie.should_receive(:at).with("google").and_return(request)
       result = Restfulie::Client::ResponseHandler.retrieve_resource_from_location(restfulie_response)
       result.should == expected
     end
