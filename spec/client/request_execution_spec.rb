@@ -263,8 +263,8 @@ context Restfulie::Client::RequestExecution do
     
     def should_parse_response(response)
       responder = Object.new
-      Restfulie::Client::Response.should_receive(:new).with(String, response, @http_request).and_return(responder)
-      responder.should_receive(:parse).with(@httpMethod, nil, "application/xml").and_return("result")      
+      Restfulie::Client::Response.should_receive(:new).with(String, response, @request).and_return(responder)
+      responder.should_receive(:parse).with(@httpMethod, nil, "application/xml", @request).and_return("result")      
     end
     
   end
@@ -366,10 +366,11 @@ context Restfulie::Client::RequestExecution do
       res = Hashi::CustomHash.new({})
       define_http_expectation(req, res)
       response = Object.new
-      response.should_receive(:final_parse).and_return(result)
-      Restfulie::Client::Response.should_receive(:new).with(String, res, req).and_return(response)
+      response.should_receive(:parse).and_return(result)
       ex = Restfulie::Client::RequestExecution.new(String, nil)
       ex.should_receive(:add_basic_request_headers)
+
+      Restfulie::Client::Response.should_receive(:new).with(String, res, ex).and_return(response)
       ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should == result
     end
     
