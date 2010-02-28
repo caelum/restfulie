@@ -2,14 +2,12 @@ class OrdersController < ApplicationController
   
   include Restfulie::Server::Controller
 
-  cache.allow 2.hours
-
   def index
     @orders = Order.all
   end
   
   def configure_cache(model)
-    cache.allow 2.hours if model.status=="ready"
+    cache.allow(2.hours) if model.status=="ready"
   end
   
   def destroy

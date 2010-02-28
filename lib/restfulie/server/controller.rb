@@ -111,11 +111,12 @@ module ActionController
       location= url_for resource
       render_resource resource, options, {:status => :created, :location => location}
     end
-  end
-  
-  private
-  def cache_to_use
-    respond_to?(:configure_cache) ? cache : self.cache
+
+    private
+    def cache_to_use
+      respond_to?(:configure_cache) ? cache : self.cache
+    end
+
   end
   
   module MimeResponds

@@ -36,17 +36,10 @@ context Restfulie do
     items[1].drink.should == "LATTE"
   end
   
-  it "should load from cache" do
-    order = create_order
-    previous_response = order.self.web_response
-    order.self.web_response.should == previous_response
-  end
-  
    it "should cancel an order and delete it from the database" do
      order = create_order
      cancelled = order.cancel
      cancelled.web_response.should be_is_successful
-     Restfulie::Client.cache_provider.clear
      order.self.web_response.code.should == "404"
    end
    
@@ -65,7 +58,6 @@ context Restfulie do
    it "should allow to pay" do
      order = create_order
      order.request.as('application/vnd.restbucks+xml').payment(payment(order.cost)).web_response.code.should == "200"
-     Restfulie::Client.cache_provider.clear
      order = order.self
      order.web_response.code.should == "200"
      order.status.should == "preparing"
@@ -83,12 +75,11 @@ context Restfulie do
        order.request.as('application/vnd.restbucks+xml').payment(payment(order.cost)).web_response.code.should == "405"
      end
        
-    it "should allow to take out and receive receipt" do
+    it "should allow to take out and receive receipt and keep the cache" do
       order = create_order
       order.request.as('application/vnd.restbucks+xml').payment(payment(order.cost), :method => :post)
       sleep 20
-      Restfulie::Client.cache_provider.clear
-      order = order.request.without_cache.self!
+      order = order.self
       order.status.should == "ready"
       order.retrieve(:method => :delete)
       Restfulie::Client.cache_provider.clear
@@ -96,6 +87,9 @@ context Restfulie do
       order.status.should == "delivered"
       receipt = order.receipt(:method => :get)
       receipt.amount.to_f.should == 20
+
+      previous_response = order.self.web_response
+      order.self.web_response.should == previous_response
     end
      
   
