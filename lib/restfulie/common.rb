@@ -23,7 +23,7 @@ require 'rubygems'
 require 'active_support'
 require 'action_controller'
 
-require 'atom'
+require 'vendor/ratom-0.6.3/lib/atom'
 
 
 require 'vendor/jeokkarak/jeokkarak'

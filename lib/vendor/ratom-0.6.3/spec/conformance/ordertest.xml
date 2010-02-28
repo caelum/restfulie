@@ -1,0 +1,112 @@
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>tag:example.org,2006:atom/conformance/element_order</id>
+  <title>Order Matters</title>
+  <subtitle>Testing how feed readers handle the order of entry elements</subtitle>
+  <updated>2006-01-26T09:16:00Z</updated>
+  <author><name>James Snell</name></author>
+  <link href="http://www.snellspace.com/wp/?p=255" />
+  <link rel="self" href="http://www.snellspace.com/public/ordertest.xml" />
+  <entry>
+    <id>tag:example.org,2006:atom/conformance/element_order/1</id>
+    <title>Simple order, nothing fancy</title>
+    <summary>Simple ordering, nothing fancy</summary>
+    <updated>2006-01-26T09:20:01Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+  </entry>
+  <entry>
+    <updated>2006-01-26T09:20:02Z</updated>  
+    <summary>Same as the first, only mixed up a bit</summary>
+    <id>tag:example.org,2006:atom/conformance/element_order/2</id>
+    <link href="http://www.snellspace.com/public/alternate" />    
+    <title>Same as the first, only mixed up a bit</title>
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:atom/conformance/element_order/3</id>
+    <title>Multiple alt link elements, which one does your reader show?</title>
+    <summary>Multiple alt link elements, which does your reader show?</summary>
+    <updated>2006-01-26T09:20:03Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <link type="text/plain" href="http://www.snellspace.com/public/alternate2" />
+  </entry>  
+  <entry>
+    <id>tag:example.org,2006:atom/conformance/element_order/4</id>
+    <title>Multiple link elements, does your feed reader show the "alternate" correctly?</title>
+    <summary>Multiple link elements, does your feed reader show the "alternate" correctly? (also checks to see if the reader is paying attention to link rel values)</summary>
+    <updated>2006-01-26T09:20:04Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <link rel="related" href="http://www.snellspace.com/public/related" />
+    <link rel="urn:foo" href="http://www.snellspace.com/public/foo" />
+  </entry>
+  <entry>
+    <source>
+      <id>tag:example.org,2006:atom/conformance/element_order</id>
+      <title>Order Matters</title>
+      <subtitle>Testing how feed readers handle the order of entry elements</subtitle>
+      <updated>2006-01-26T09:16:00Z</updated>
+      <author><name>James Snell</name></author>
+      <link href="http://www.snellspace.com/wp/?p=255" />
+      <link rel="self" href="http://www.snellspace.com/public/ordertest.xml" />
+    </source>
+    <id>tag:example.org,2006:atom/conformance/element_order/5</id>
+    <title>Entry with a source first</title>
+    <summary>Entry with a source first.. does your feed reader show the right title, updated, and alt link?</summary>
+    <updated>2006-01-26T09:20:05Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:atom/conformance/element_order/6</id>
+    <title>Entry with a source last</title>
+    <summary>Entry with a source first.. does your feed reader show the right title, updated, and alt link?</summary>
+    <updated>2006-01-26T09:20:06Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <source>
+      <id>tag:example.org,2006:atom/conformance/element_order</id>
+      <title>Order Matters</title>
+      <subtitle>Testing how feed readers handle the order of entry elements</subtitle>
+      <updated>2006-01-26T09:16:00Z</updated>
+      <author><name>James Snell</name></author>
+      <link href="http://www.snellspace.com/wp/?p=255" />
+      <link rel="self" href="http://www.snellspace.com/public/ordertest.xml" />
+    </source>
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:atom/conformance/element_order/7</id>
+    <title>Entry with a source in the middle</title>
+    <source>
+      <id>tag:example.org,2006:atom/conformance/element_order</id>
+      <title>Order Matters</title>
+      <subtitle>Testing how feed readers handle the order of entry elements</subtitle>
+      <updated>2006-01-26T09:16:00Z</updated>
+      <author><name>James Snell</name></author>
+      <link href="http://www.snellspace.com/wp/?p=255" />
+      <link rel="self" href="http://www.snellspace.com/public/ordertest.xml" />
+    </source>
+    <summary>Entry with a source in the middle.. does your feed reader show the right id, title, updated, and alt link?</summary>
+    <updated>2006-01-26T09:20:07Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+  </entry>
+  <entry>
+    <x:foo xmlns:x="urn:foo">
+      <id>tag:example.org,2006:atom/conformance/element_order/9</id>
+      <title>Something is wrong if you're seeing this</title>
+      <updated>2006-01-26T09:20:00Z</updated>
+    </x:foo>
+    <id>tag:example.org,2006:atom/conformance/element_order/8</id>
+    <title>Atom elements in an extension element</title>
+    <summary>Atom elements in an extension element</summary>
+    <updated>2006-01-26T09:20:08Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:atom/conformance/element_order/9</id>
+    <title>Atom elements in an extension element</title>
+    <summary>Atom elements in an extension element</summary>
+    <updated>2006-01-26T09:20:09Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <x:foo xmlns:x="urn:foo">
+      <id>tag:example.org,2006:atom/conformance/element_order/8</id>
+      <title>Something is wrong if you're seeing this</title>
+      <updated>2006-01-26T09:20:00Z</updated>
+    </x:foo>
+  </entry>  
+</feed>

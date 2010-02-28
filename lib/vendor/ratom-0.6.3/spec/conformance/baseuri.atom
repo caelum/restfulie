@@ -1,0 +1,19 @@
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>title</title>
+  <link href="" rel="self" />
+  <link href="alternate" rel="alternate" />
+  <updated>2007-09-18T12:12:12-07:00</updated>
+  <author><name>James Snell</name></author>
+  <id>tag:example.org,2007:/foo</id>
+
+  <entry>
+  <link href="alternate" />
+  <title>Title</title>
+  <id>tag:example.org,2007:/foo/1</id>
+  <updated>2007-09-18T12:12:12-07:00</updated>
+  <summary>A feed reader will pass this test if it can properly resolve the 
+  Base URI for all of the relative references.  Because Content-Location is 
+  not used, the Request URI should be used as the Base URI.</summary>
+  <content src="alternate" type="text/plain" />
+  </entry>
+</feed>
