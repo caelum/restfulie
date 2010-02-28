@@ -46,6 +46,7 @@ context Restfulie do
      order = create_order
      cancelled = order.cancel
      cancelled.web_response.should be_is_successful
+     Restfulie::Client.cache_provider.clear
      order.self.web_response.code.should == "404"
    end
    
