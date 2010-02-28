@@ -7,4 +7,6 @@ tmtags
 *~
 *.swp
 .rvmrc
-
+*.sqlite3
+log
+*.log
