@@ -8,6 +8,10 @@ class OrdersController < ApplicationController
     @orders = Order.all
   end
   
+  def configure_cache(model)
+    cache.allow 2.hours if model.status=="ready"
+  end
+  
   def destroy
     @model = model_type.find(params[:id])
     if @model.can? :cancel

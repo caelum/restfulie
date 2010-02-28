@@ -88,7 +88,7 @@ context Restfulie do
       order.request.as('application/vnd.restbucks+xml').payment(payment(order.cost), :method => :post)
       sleep 20
       Restfulie::Client.cache_provider.clear
-      order = order.self
+      order = order.request.without_cache.self!
       order.status.should == "ready"
       order.retrieve(:method => :delete)
       Restfulie::Client.cache_provider.clear
