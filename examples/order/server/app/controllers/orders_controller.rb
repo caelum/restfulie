@@ -7,7 +7,7 @@ class OrdersController < ApplicationController
   end
   
   def configure_cache(model)
-    cache.allow(2.hours) if model.status=="ready"
+    cache.allow(2.hours) if model.status=="delivered"
   end
   
   def destroy

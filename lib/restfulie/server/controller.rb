@@ -42,7 +42,7 @@ module ActionController
     
     # adds cache-control header and returns true if the resource requires rendering
     def handle_cache_headers(resource)
-      response.headers['Cache-control'] = "max-age=#{cache_to_use.max_age}"
+      response.headers['Cache-control'] = "max-age=#{cache_to_use(resource).max_age}"
       stale? resource.cache_info
     end
 
@@ -116,9 +116,9 @@ module ActionController
     
     # returns cache config to use, either an overriden local one for this controller and model
     # or a generic one
-    def cache_to_use
+    def cache_to_use(resource)
       if respond_to?(:configure_cache)
-        configure_cache(cache)
+        configure_cache(resource)
         cache
       else
         self.cache
