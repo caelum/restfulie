@@ -13070,3 +13070,95 @@ Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 17:38:42) [GET]
   Parameters: {"id"=>"1"}
   [4;35;1mHotel Load (0.2ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
 Completed in 10ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#create (for 127.0.0.1 at 2010-02-28 19:03:08) [POST]
+  [4;36;1mHotel Create (0.4ms)[0m   [0;1mINSERT INTO "hotels" ("name", "city", "created_at", "room_count", "updated_at", "rate") VALUES('Caelum Objects Hotel', 'Sao Paulo', '2010-02-28 22:03:08', 3, '2010-02-28 22:03:08', 4)[0m
+Completed in 280ms (View: 3, DB: 0) | 201 Created [http://localhost/hotels]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 19:03:08) [GET]
+  Parameters: {"id"=>"2"}
+  [4;35;1mHotel Load (0.3ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 2) [0m
+Completed in 12ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/2]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 19:03:08) [GET]
+  Parameters: {"id"=>"1"}
+  [4;36;1mHotel Load (0.3ms)[0m   [0;1mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 12ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#show (for 127.0.0.1 at 2010-02-28 19:03:09) [GET]
+  Parameters: {"id"=>"1"}
+  [4;35;1mHotel Load (0.3ms)[0m   [0mSELECT * FROM "hotels" WHERE ("hotels"."id" = 1) [0m
+Completed in 13ms (View: 1, DB: 0) | 200 OK [http://localhost/hotels/1]
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 19:03:09) [GET]
+  [4;36;1mHotel Load (0.6ms)[0m   [0;1mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:67:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:67:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (112.6ms)
+Rendered rescues/_request_and_response (1.5ms)
+Rendering rescues/layout (internal_server_error)
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 19:03:09) [GET]
+  [4;35;1mHotel Load (0.6ms)[0m   [0mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:67:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:67:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (50.9ms)
+Rendered rescues/_request_and_response (0.3ms)
+Rendering rescues/layout (internal_server_error)
+
+
+Processing HotelsController#index (for 127.0.0.1 at 2010-02-28 19:03:09) [GET]
+  [4;36;1mHotel Load (0.6ms)[0m   [0;1mSELECT * FROM "hotels" [0m
+
+ArgumentError (wrong number of arguments (1 for 0)):
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:67:in `to_atom'
+  restfulie (0.7.0) lib/restfulie/server/controller.rb:67:in `render_collection'
+  app/controllers/hotels_controller.rb:11:in `index'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:95:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `each'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:92:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:23:in `start'
+  /Users/guilherme/.rvm/rubies/ruby-1.8.7-p249/lib/ruby/1.8/webrick/server.rb:82:in `start'
+
+Rendered rescues/_trace (50.7ms)
+Rendered rescues/_request_and_response (0.3ms)
+Rendering rescues/layout (internal_server_error)

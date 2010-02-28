@@ -193,12 +193,12 @@ module Restfulie
     
       # retrieves a resource form a specific uri
       def from_web(uri, options = {})
-        RequestExecution.new(self, nil).at(uri).get(options)
+        RequestExecution.new(self, "from_web").at(uri).get(options)
       end
 
       private
       def remote_post(content)
-        RequestExecution.new(self, nil).at(entry_point_for.create.uri).post(content)
+        RequestExecution.new(self, "remote_post").at(entry_point_for.create.uri).post(content)
       end
   
     end
