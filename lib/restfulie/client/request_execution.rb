@@ -253,6 +253,8 @@ module Restfulie::Client
     
   end
 
+  # Represents a request to be executed in a server.
+  # If the server is down, Net::HTTP raises an error (there is a bug in ruby 1.8.7 http://redmine.ruby-lang.org/issues/show/2708)
   class RequestExecution
     
     # whether this request should parse the entity body or return it raw
