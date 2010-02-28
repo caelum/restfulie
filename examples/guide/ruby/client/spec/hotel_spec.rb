@@ -58,7 +58,6 @@ context Restfulie do
     it "should deserialize from the web" do
       hotels = Hotel.from_web 'http://localhost:3000/hotels'
       hotels.web_response.kind_of?(Net::HTTPResponse).should be_true
-      debugger
       hotels.web_response['Content-type'].should begin_with('application/atom+xml')
       hotels[0].name.should == "Caelum Objects Hotel"
     end

@@ -8,9 +8,12 @@ class HotelsController < ApplicationController
   
   def index
     @hotels = Hotel.all
-    render_collection @hotels do |item|
-      item.to_xml :controller => self, :only => [:name, :room_count], :skip_instruct => true
+    respond_to do |format|
+     format.atom { render :xml => @hotels.to_atom.to_xml }
     end
+    # render_collection @hotels do |item|
+    #   item.to_xml :controller => self, :only => [:name, :room_count], :skip_instruct => true
+    # end
   end
 
   # def pre_update(hash, hotel)
