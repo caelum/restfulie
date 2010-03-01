@@ -35,6 +35,7 @@ module Restfulie::Server; end
   core_ext
   rails_ext
   serializers
+  template_handlers
 ).each do |file|
   require "restfulie/server/#{file}"
 end
