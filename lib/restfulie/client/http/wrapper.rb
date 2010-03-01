@@ -49,16 +49,18 @@ module Restfulie::Client::HTTP
 
     module RequestAdapter
 
-      mattr_accessor :logger
-      @@logger = nil
+      attr_reader :root
       @root = nil
+
+      attr_reader :default_headers
       @default_headers = nil
+
+      attr_accessor :cookies
       @cookies = nil
 
-      def init(root, default_headers = {}, logger = nil)
+      def init(root, default_headers = {})
         @root = ::URI.parse(root)
         @default_headers = default_headers
-        @@logger = logger
       end
 
       def get(path, *args)
@@ -115,7 +117,7 @@ module Restfulie::Client::HTTP
         headers['cookie'] = @cookies if @cookies
         args << headers
 
-        logger.info(request_to_s(method, path, *args)) unless logger.nil?
+        ::Restfulie::Logger.logger.info(request_to_s(method, path, *args)) unless ::Restfulie::Logger.logger
         begin
           response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
         rescue Errno::ECONNREFUSED
@@ -189,7 +191,7 @@ module Restfulie::Client::HTTP
     module RequestBuilder
       include RequestAdapter
 
-      def init(root, default_headers = {}, logger = nil)
+      def init(root, default_headers = {})
         super
         @headers = {
           'Accept'       => 'application/atom+xml',
@@ -261,15 +263,15 @@ module Restfulie::Client::HTTP
 
     class RequestExecutor
       include RequestAdapter
-      def initialize(root, default_headers = {}, logger = nil)
-        init(root, default_headers, logger)
+      def initialize(root, default_headers = {})
+        init(root, default_headers)
       end
     end
 
     class RequestBuilderExecutor
       include RequestBuilder
-      def initialize(root, default_headers = {}, logger = nil)
-        init(root, default_headers, logger)
+      def initialize(root, default_headers = {})
+        init(root, default_headers)
       end
     end
 
