@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 class AtomifiedModel 
-  def to_atom
+  def to_atom(options={})
     Atom::Entry.new do |entry|
       entry.title     = "entry"
       entry.published = '123'

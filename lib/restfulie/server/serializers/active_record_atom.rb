@@ -52,6 +52,7 @@ module Restfulie
           def atomify(options={})
           
             ::Atom::Entry.new do |entry|
+              # TODO: this id does not comply with Rest standards yet
               entry.id        = @record.id
               entry.title     = "Entry about #{@record.class}"
               entry.published = @record.created_at
@@ -66,7 +67,7 @@ module Restfulie
               extension_attributes.each do |attribute|
                 register_element(attribute)
                 entry.send("#{namespaced_class}_#{attribute}=", @record.send(attribute))
-              end 
+              end unless options[:skip_attributes]
             
               yield entry if block_given?
             end
@@ -75,7 +76,7 @@ module Restfulie
         protected
 
           def atom_self_link(options={})
-            ::Atom::Link.new(:rel => :self, :href => polymorphic_url(@record, :host => 'localhost:3000'))
+            ::Atom::Link.new(:rel => :self, :href => route_generator(@record))
           end
 
           def atom_associations_links(options={})
@@ -83,7 +84,7 @@ module Restfulie
             # TODO: Create default options to be passed to polymorphic_url.
             
             atom_associations.map do |association|
-              if association.macro == :has_many
+              if [:has_many, :has_and_belongs_to_many].include? association.macro
                 ::Atom::Link.new(:rel => association.name, :href => route_generator([@record, association.name]))
               else
                 ::Atom::Link.new(:rel => association.name, :href => route_generator(@record.send(association.name)))
@@ -131,8 +132,8 @@ module Restfulie
             host               = Restfulie::Server.host
             named_route_prefix = Restfulie::Server.named_route_prefix
             
-            array_of_segments = Array(record_or_array).compact
-            array_of_segments.unshift(named_route_prefix)
+            array_of_segments = Array(record_or_array)
+            array_of_segments.unshift(named_route_prefix).compact!
             
             polymorphic_url(array_of_segments, :host => host)
           end
