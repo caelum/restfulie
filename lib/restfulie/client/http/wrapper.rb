@@ -102,11 +102,9 @@ module Restfulie::Client::HTTP
       end
 
       def request(method, path, *args)
-        begin 
-          request!(method, path, *args) 
-        rescue Error::RESTError => se
-          se.response
-        end
+        request!(method, path, *args) 
+      rescue Error::RESTError => se
+        se.response
       end
 
       def request!(method, path, *args)
@@ -161,8 +159,7 @@ module Restfulie::Client::HTTP
       private
 
       def get_connection_provider
-        @connection = ::Net::HTTP.new(@root.host, @root.port) unless @connection
-        @connection
+        @connection ||= ::Net::HTTP.new(@root.host, @root.port)
       end
 
       protected
