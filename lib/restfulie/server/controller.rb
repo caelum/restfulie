@@ -35,22 +35,31 @@ module ActionController
     def self.cache
       @cache_config ||= Restfulie::Server::Cache::Config.new
     end
+    
+    def cache
+      @cache_config ||= Restfulie::Server::Cache::Config.new
+    end
+    
+    # adds cache-control header and returns true if the resource requires rendering
+    def handle_cache_headers(resource)
+      response.headers['Cache-control'] = "max-age=#{cache_to_use(resource).max_age}"
+      stale? resource.cache_info
+    end
 
     # renders an specific resource to xml
     # using any extra options to render it (invoke to_xml).
     def render_resource(resource, options = {}, render_options = {})
 
-      response.headers['Cache-control'] = "max-age=#{self.class.cache.max_age}"
-       return nil unless stale? resource.cache_info
+      return nil unless handle_cache_headers(resource)
 
-       return render(render_options) if render_options[:text]
+      return render(render_options) if render_options[:text]
 
-       options[:controller] = self
-       respond_to do |format|
-         add_media_responses(format, resource, options, render_options)
-       end
+      options[:controller] = self
+      respond_to do |format|
+        add_media_responses(format, resource, options, render_options)
+      end
 
-     end
+    end
 
      # renders a resource collection, making full use of atom support
      def render_collection(collection, &block)
@@ -102,6 +111,20 @@ module ActionController
       location= url_for resource
       render_resource resource, options, {:status => :created, :location => location}
     end
+
+    private
+    
+    # returns cache config to use, either an overriden local one for this controller and model
+    # or a generic one
+    def cache_to_use(resource)
+      if respond_to?(:configure_cache)
+        configure_cache(resource)
+        cache
+      else
+        self.cache
+      end
+    end
+
   end
   
   module MimeResponds

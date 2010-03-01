@@ -32,12 +32,14 @@ context Restfulie::Client::Response do
   
   it "should enhance types by extending them with Web and Httpresponses" do
     result = Object.new
+    request = mock Net::HTTP::Get
     response = mock Net::HTTPResponse
     response.stub(:code).and_return("200")
-    final = Restfulie::Client::Response.new(nil, response).enhance(result)
+    final = Restfulie::Client::Response.new(nil, response, request).enhance(result)
     final.should == result
     final.should be_a(Restfulie::Client::WebResponse)
     final.web_response.should == response
+    final.web_request.should == request
   end
   
   context "parsing an entity" do
@@ -48,6 +50,7 @@ context Restfulie::Client::Response do
     before do
       @response = Hashi::CustomHash.new({"body" => "response body"})
       @result = Object.new
+      @request = mock Restfulie::Client::RequestExecution
     end
     
     it "should complain about a generic type that doesnt match a from_ method" do
@@ -69,36 +72,49 @@ context Restfulie::Client::Response do
       Hashi::CustomHash.new({"response"=>@response})
     end
     
+    it "should return the raw content if required" do
+      @request.should_receive(:raw?).and_return(true)
+      @response.content_type = "application/vnd.app+xml"
+      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @response
+    end
+    
     it "should return a xml result from the content" do
+      @request.should_receive(:raw?).and_return(false)
       @response.content_type = "application/vnd.app+xml"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_xml).with(@response.body).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(restfulie_response("200")).should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @result
     end
     
     it "should return a json result from the content" do
+      @request.should_receive(:raw?).and_return(false)
       @response.content_type = "application/json"
       Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
       Shipment.should_receive(:from_json).with(@response.body).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(restfulie_response("200")).should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @result
     end
     
     it "should return a generic result from the content" do
+      @request.should_receive(:raw?).and_return(false)
       @response.content_type = "xhtml"
       response = restfulie_response("200")
       Restfulie::Client::ResponseHandler.should_receive(:generic_parse_entity).with(response).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(response).should == @result
+      Restfulie::Client::ResponseHandler.parse_entity(@request, response).should == @result
     end
     
   end
   
   context "posting" do
     
+    before do
+      @request = Object.new
+    end
+    
     it "should treat a 200 post as an enhanced 200 get response entity" do
       response = Object.new
       content = Object.new
       response.stub(:code).and_return("200")
-      instance = Restfulie::Client::Response.new(NotFollow, response)
+      instance = Restfulie::Client::Response.new(NotFollow, response, @request)
       entity = Object.new
       instance.should_receive(:final_parse).and_return(entity)
       result = instance.parse_post :nothing
@@ -110,7 +126,7 @@ context Restfulie::Client::Response do
       content = Object.new
       response.stub(:code).and_return("301")
       entity = Object.new
-      instance = Restfulie::Client::Response.new(NotFollow, response)
+      instance = Restfulie::Client::Response.new(NotFollow, response, @request)
       instance.should_receive(:final_parse).and_return(entity)
       result = instance.parse_post :nothing
       result.should == entity
@@ -124,7 +140,7 @@ context Restfulie::Client::Response do
       response.should_receive(:body).and_return(content)
       response.stub(:code).and_return("301")
       Follow.should_receive(:remote_post_to).with(location, content).and_return(expected)
-      result = Restfulie::Client::Response.new(Follow, response).parse_post :nothing
+      result = Restfulie::Client::Response.new(Follow, response, @request).parse_post :nothing
       result.web_response.should == response
       result.should == expected
     end
@@ -215,7 +231,7 @@ context Restfulie::Client::RequestExecution do
     
     before do
       @httpMethod = Object.new
-      @http_request = Object.new
+      @http_request = mock Net::HTTP::Get
       @url = URI.parse "http://localhost" 
       
       @request = Restfulie::Client::RequestExecution.new(String, nil)
@@ -247,8 +263,8 @@ context Restfulie::Client::RequestExecution do
     
     def should_parse_response(response)
       responder = Object.new
-      Restfulie::Client::Response.should_receive(:new).with(String, response).and_return(responder)
-      responder.should_receive(:parse).with(@httpMethod, nil, "application/xml").and_return("result")      
+      Restfulie::Client::Response.should_receive(:new).with(String, response, @request).and_return(responder)
+      responder.should_receive(:parse).with(@httpMethod, nil, "application/xml", @request).and_return("result")      
     end
     
   end
@@ -350,10 +366,11 @@ context Restfulie::Client::RequestExecution do
       res = Hashi::CustomHash.new({})
       define_http_expectation(req, res)
       response = Object.new
-      response.should_receive(:final_parse).and_return(result)
-      Restfulie::Client::Response.should_receive(:new).with(String, res).and_return(response)
+      response.should_receive(:parse).and_return(result)
       ex = Restfulie::Client::RequestExecution.new(String, nil)
       ex.should_receive(:add_basic_request_headers)
+
+      Restfulie::Client::Response.should_receive(:new).with(String, res, ex).and_return(response)
       ex.at('http://www.caelumobjects.com/product').accepts('vnd/product+xml').get.should == result
     end
     
@@ -361,36 +378,18 @@ context Restfulie::Client::RequestExecution do
 
   context "when de-serializing straight from a web request" do
     
-    def mock_request_for(type)
-      res = mock Net::HTTPResponse
-      res.stub(:code).and_return("200")
-      @response = res
-      req = mock Net::HTTPRequest
-      req.should_receive(:[]=).with('Accept', 'application/xml')
-      req.should_receive(:add_field).with('Accept', 'application/xml')
-      req.stub(:get_fields).and_return(nil)
-      Net::HTTP::Get.should_receive(:new).with('/order/15').and_return(req)
-      http = Object.new
-      Net::HTTP.should_receive(:new).with('localhost',3001).and_return(http)
-      http.should_receive(:request).with(req).and_return(res)
-    end
-    
     it "should deserialize correctly if its an xml" do
-      mock_request_for "application/xml"
-      result = Object.new
-      Restfulie::Client::ResponseHandler.should_receive(:handle).with(@response).and_return(result)
       
+      type = "application/xml"
+      response = mock Net::HTTPResponse
+      
+      exec = mock Restfulie::Client::RequestExecution
+      Restfulie::Client::RequestExecution.should_receive(:new).with(ClientRestfulieModel, nil).and_return(exec)
+      exec.should_receive(:at).with('http://localhost:3001/order/15').and_return(exec)
+      exec.should_receive(:get).with({}).and_return(response)
+
       model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.should == result
-    end
-    
-    it "should enhance the result adding the response" do
-      mock_request_for "application/xml"
-      result = Object.new
-      Restfulie::Client::ResponseHandler.should_receive(:handle).with(@response).and_return(result)
-  
-      model = ClientRestfulieModel.from_web 'http://localhost:3001/order/15'
-      model.web_response.should == @response
+      model.should == response
     end
 
   end
@@ -459,6 +458,10 @@ context Restfulie::Client::RequestExecution do
   
   context "when handling responses" do
     
+    before do
+      @request = mock Restfulie::Client::RequestExecution
+    end
+    
     it "should return the response when its a pure response return" do
       response = Object.new
       restfulie_response = Hashi::CustomHash.new({"response" => response})
@@ -475,12 +478,14 @@ context Restfulie::Client::RequestExecution do
     class CustomResource
     end
     
-    it "should execute a from web request when retrieveing a resource as a result" do
+    it "should execute a get request when following a location header" do
       expected = Object.new
+      request = mock Restfulie::Client::RequestExecution
+      request.should_receive(:get).and_return(expected)
       
       response = {"Location" => "google"}
-      restfulie_response = Restfulie::Client::Response.new(CustomResource, response)
-      CustomResource.should_receive(:from_web).with("google").and_return(expected)
+      restfulie_response = Restfulie::Client::Response.new(CustomResource, response, expected)
+      Restfulie.should_receive(:at).with("google").and_return(request)
       result = Restfulie::Client::ResponseHandler.retrieve_resource_from_location(restfulie_response)
       result.should == expected
     end
@@ -491,7 +496,7 @@ context Restfulie::Client::RequestExecution do
         result = true
       end
       response = Hashi::CustomHash.new({"response" => {"code" => "100"}})
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
       result.should be_true
     end
     
@@ -504,20 +509,20 @@ context Restfulie::Client::RequestExecution do
         result = true
       end
       response = Hashi::CustomHash.new({"response" => {"code" => "300"}})
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
       result.should be_true
     end
     
     it "should test default handlers for 200" do
       response = Hashi::CustomHash.new({"response" => {"code" => "200"}})
-      Restfulie::Client::ResponseHandler.should_receive(:parse_entity).with(response)
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.should_receive(:parse_entity).with(@request, response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
     end
     
     it "should test default handlers for 301" do
       response = Hashi::CustomHash.new({"response" => {"code" => "301"}})
       Restfulie::Client::ResponseHandler.should_receive(:retrieve_resource_from_location).with(response)
-      Restfulie::Client::ResponseHandler.handle(response)
+      Restfulie::Client::ResponseHandler.handle(@request, response)
     end
     
   end

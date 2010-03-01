@@ -1,0 +1,33 @@
+<p>
+  <b>Amount:</b>
+  <%=h @payment.amount %>
+</p>
+
+<p>
+  <b>Cardholdername:</b>
+  <%=h @payment.cardholderName %>
+</p>
+
+<p>
+  <b>Cardnumber:</b>
+  <%=h @payment.cardNumber %>
+</p>
+
+<p>
+  <b>Expirymonth:</b>
+  <%=h @payment.expiryMonth %>
+</p>
+
+<p>
+  <b>Expiryyear:</b>
+  <%=h @payment.expiryYear %>
+</p>
+
+<p>
+  <b>Paymentdate:</b>
+  <%=h @payment.paymentDate %>
+</p>
+
+
+<%= link_to 'Edit', edit_payment_path(@payment) %> |
+<%= link_to 'Back', payments_path %>

@@ -40,17 +40,22 @@ module Restfulie::Client::Cache
         remove(key_for(url, req))
       else
         Restfulie::Logger.logger.debug "RETURNING cache #{url} #{req}"
-        response
+        cache_hit response
       end
 
     end
-
+    
     # removes all elements from the cache
     def clear
       cache.clear
     end
 
   private
+
+    # allows response enhancement when the cache was hit with it
+    def cache_hit(response)
+      response
+    end
 
     def cache_add(key, req, response)
       if cache[key].nil?

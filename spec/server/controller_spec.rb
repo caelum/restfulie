@@ -72,30 +72,35 @@ context ActionController::Base do
 
   context "when invoking render_resource" do
     
-    before do
-      @info = {:hash_containing => "cache info"}
-      @resource = Object.new
-      headers = mock Hash
-      @resource.should_receive(:cache_info).and_return(@info)
-      @controller.class.should_receive(:cache).and_return(Hashi::CustomHash.new("max_age" => 15))
-      
-      response = Object.new
-      @controller.should_receive(:response).and_return(response)
-      response.should_receive(:headers).and_return(headers)
-      headers.should_receive(:[]=).with("Cache-control", "max-age=15")
-    end
-  
     it "should invoke to_xml with the specified parameters and controller" do
+      resource = Object.new
+      @controller.should_receive(:handle_cache_headers).with(resource).and_return(true)
       xml = "<resource />"
       options = {:custom => :whatever}
-      @controller.should_receive(:stale?).with(@info).and_return(true)
       @controller.should_receive(:respond_to)
-      @controller.render_resource(@resource, options)
+      @controller.render_resource(resource, options)
     end
     
-    it "should not process if not stale" do
-      @controller.should_receive(:stale?).and_return(false)
-      @controller.render_resource(@resource, {})
+  end
+  
+  context "when dealing with cache headers" do
+    
+    it "should add cache to use max age and return whether the representation is stale" do
+      @info = {:hash_containing => "cache info"}
+      @resource.should_receive(:cache_info).and_return(@info)
+      
+      cache = Object.new
+      cache.should_receive(:max_age).and_return(15)
+      @controller.should_receive(:cache_to_use).and_return(cache)
+
+      response = Object.new
+      @controller.should_receive(:response).and_return(response)
+      headers = mock Hash
+      headers.should_receive(:[]=).with("Cache-control", "max-age=15")
+      response.should_receive(:headers).and_return(headers)
+      
+      @controller.should_receive(:stale?).with(@info).and_return(false)
+      @controller.handle_cache_headers(@resource).should == false
     end
     
   end

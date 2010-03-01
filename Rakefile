@@ -18,7 +18,6 @@ spec = Gem::Specification.new do |s|
   s.summary = SUMMARY
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
-  s.add_dependency("ratom", [">= 0.6.3"])
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
 
@@ -47,7 +46,7 @@ end
 
 desc "Install the gem locally"
 task :install => [:package] do
-  sh %{sudo gem install pkg/#{GEM}-#{GEM_VERSION} -l}
+  sh %{gem install pkg/#{GEM}-#{GEM_VERSION} -l}
 end
 
 desc "Create a gemspec file"

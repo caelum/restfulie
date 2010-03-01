@@ -1,0 +1,24 @@
+<h1>Editing hotel</h1>
+
+<% form_for(@hotel) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :city %><br />
+    <%= f.text_field :city %>
+  </p>
+  <p>
+    <%= f.label :room_count %><br />
+    <%= f.text_field :room_count %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @hotel %> |
+<%= link_to 'Back', hotels_path %>

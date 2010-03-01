@@ -1,0 +1,16 @@
+[section  Searching through a list of resources]
+
+Our clients will want to search for a specific flight in our system, therefore an entry point that returns the entire list of flights as an atom feed is too much information: the entry point will display only a specific amount of results and then allow the client to filter it further, accessing a new list.
+
+We will use the open search API that allows you to.
+
+[section  Saving a search: creating a report]
+
+
+uris are ids while searching
+
+
+[section  Another solution: hypermedia and parameters]
+
+A simple example is to start by accessing the entry point and then filtering outgoing flights from Sao Paulo.
+

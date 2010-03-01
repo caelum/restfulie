@@ -1,0 +1,816 @@
+[chapter  Basic resource operations]
+
+This chapter will introduce how to use the basic HTTP verbs to create, remove and retrieve a resource or its collection using Restfulie. This simple usage of the HTTP verbs has been widely adopted by the development communities in every language although with a few modifications from the HTTP specification due to some PUT restrictions.
+
+Rails provides support for CRUD over HTTP using request parameters in order to pass information to the server. A REST architecture will use a resource representations through specific media types, therefore Restfulie will allow requests to pass through its body the resource representation or related content and deal with it.
+
+For the client, it means that he is supposed to make more use of request bodies instead of request parameters, while the server will worry about understanding such typically well-known representations.
+
+[section  Our hotels]
+
+We start creating our hotel model with three fields describing it, its name, city and total number of rooms.
+
+[tag ruby]
+Using Rail's scaffold feature that also generates some basic controllers:
+
+[ruby]script/generate scaffold hotel name:string city:string room_count:integer
+rake db:create:all
+rake db:migrate
+[/ruby]
+[/tag ruby]
+
+[tag java]
+There is also a need for a field describing the last modification occurred with this resource.
+
+[java]
+package br.com.caelum.travelandrest;
+
+import java.util.Calendar;
+
+public class Hotel {
+
+	private String name;
+	private String city;
+	private int roomCount;
+	private Calendar lastModifiedAt;
+	
+}
+[/java]
+[/tag java]
+
+As it is currently configured, our hotel representation as application/xml would be as following:
+
+[xml]<hotel>
+	<name>Caelum Objects Hotel</name>
+	<room_count>220</roomt_count>
+	<city>Sao Paulo</city>
+</hotel>
+[/xml]
+
+But plain application/xml representations as shown above are anemic in a sense that they do not provide enough information for consumers on what is possible to do with it (its state transitions) and what is related to it (its relations).
+
+[box]
+In fact, transitions can be considered a subset of all relations a resource contain. If a hotel needs to be accepted prior to shown on lists, the "acceptance" relation can be seen as a transition as creating such Acceptance resource would imply in a state change of the original Hotel resource. The key point is to use standard resource relations as much as possible.
+[/box]
+
+We will adopt a custom media-type that provides information for our hotel's relations, supporting links: **vnd/hotel+xml**.
+
+[tag ruby]
+In order to configure Restfulie to use this media type for our Hotel, one invokes the **media_type** method, passing any number of custom media types that your model can be mapped to:
+
+[ruby]class Hotel < ActiveRecord
+	acts_as_restfulie
+	media_type "vnd/hotel+xml"
+end
+[/ruby]
+
+Note that Restfulie still provides representations as application/xml and application/json if content negotiation requires so.
+[/tag ruby]
+
+Once our media types have been chosen, its time to understand what would be a valid representation of our hotel showing a relation to a similar one.
+By using atom's link element, which describe a relation to another resource, with its meaning described by its rel attribute. Such attribute comes from Atom's specification and if the rel element does not follow one of the possible values described by that file, it should be prefixed with its namespace:
+
+[xml]<hotel>
+	<name>Caelum Objects Hotel</name>
+	<room_count>220</roomt_count>
+	<city>Sao Paulo</city>
+	<link rel="http://caelumobjects.com/hotels/similar" href="http://localhost:3000/hotels/2" />
+</hotel>
+[/xml]
+
+In such case, our hotel resource has a similar one that can be retrieved by sending a GET request to ::http://localhost:3000/hotels/2::.
+
+The relation type is a well known or custom relation that is understood by clients: custom ones allows less clients to access your domain protocol, while standard ones gives your service more reach.
+
+Throughout the guide, standard relations will be emphasized over custom ones, as with media types.
+
+[section  Creating hotels]
+
+Once the client defined the mime-type and the server configured which classes represents each media types, we can focus on dealing with our resources.
+
+There are two HTTP verbs that allows us to create resources on the server side. In order to create hotels we will use the most widely adopted solution: sending a **post** request to /hotels.
+
+First we need to receive the **post** data (the resource representation) and transform it into our domain data.
+
+If the result was a success, the **post** method should return the resource location and a **201 Created** response, allowing the client to retrieve the resource data if required.
+
+[tag ruby]
+[ruby]location = url_for resource
+render_resource resource, options, {:status => :created, :location => location}
+[/ruby]
+[/tag ruby]
+[tag java]
+
+[/tag java]
+
+This code will generate a response 201 with the resource location in the **Location** header.
+
+The controller still needs to check if the process was successfully completed or not and, if something goes wrong, render the related error messages.
+
+[ruby]class HotelsController < ApplicationController::Base
+	def create
+	    @hotel = Restfulie.from request
+	    if @hotel.save
+	      render_created @city
+	    else
+	      render :xml => @city.errors, :status => :unprocessable_entity
+	    end
+	end
+end
+[/ruby]
+
+[box]
+Can I receive the hotel data as post/get parameters?
+
+Yes, you can, but that is Non-REST. REST is based on content negotiation (media type negotiation) and resource representations. A client is uncapable of detecting your resource accepted parameters using the HTTP protocol if you use this approach. Some other styles and architectures (as SOA based ones) will define documents that describe which parameters are accepted and their meanings.
+
+In a REST over HTTP application, resources are **only** exchanged through its representations, that are accepted by both client and server.
+[/box]
+
+If the server wants to avoid one extra request-response trip, it can return the resource content with the 201 return code and the client will not need another request to retrieve this information:
+
+<TOLINK imagem com sequencia de 200, 201 e unprocessable>
+
+Note that render_created will already do it for us, returning a response as:
+
+[box]
+There is one major validation step missing in the code above: the object created invoking *Restfulie.from* might not be a hotel and we are not checking its content-type. In order to check if the media-type sent matches the expected one:
+
+[ruby]valid = Restfulie::MediaType.supports?(request.headers['CONTENT_TYPE']) &&
+       	Restfulie::MediaType.media_type(request.headers['CONTENT_TYPE']) == Hotel
+[/ruby]
+[box]
+
+[section  Default behavior]
+
+The typical behavior for CRUD systems following REST is to create resources through **post** by translating the resource to domain models, saving them to the database and responding with a 201.
+
+When using Restfulie, those common cases are supported by default if your controller includes the **RestController** module, which includes the behavior displayed so far:
+
+[ruby]class HotelsController < ApplicationController
+  include Restfulie::Server::RestController
+
+	# implicit declarated the create method
+	# including media-type checking
+
+end
+[/ruby]
+
+Because the application set up so far a POST entry point that allows hotel creation, the client can access it by using Restfulie's API with *one line of code*, which invokes the create method:
+
+[ruby]hotel = {:name => "Caelum Objects Hotel", :city => "Sao Paulo", :room_count => 3}
+
+hotel = Restfulie.at('http://localhost:3000/hotels').as('vnd/caelum_hotel+xml').create(hotel.to_xml(:root => "hotel"))
+
+puts "Response was #{hotel.web_response}"
+[/ruby]
+
+[section  Accessing headers and the response itself]
+
+The above example even shows how to access the response object itself, which has been enhanced by Restfulie in order to provide extra useful methods for REST clients.
+
+Sometimes those clients want to access the http response information itself and you can do it with Restfulie through the web_response method which is the Net::HTTPResponse object itself:
+
+[ruby]hotel = Restfulie.at('http://localhost:30000/hotels/1').get
+puts "Hotel created at #{hotel.web_response['Content-type']}"
+[/ruby]
+
+<box>
+Now you can remove both new and create methods from your HotelsController as they are not needed.
+</box>
+
+[section  Evolving the server]
+
+The previous example demonstrates how our client code can be written detached from the resource model or server side model: there was no need to create a Hotel representation on the client side end to
+make things work.
+
+What would happen if the server wants to evolve its model with new fields?
+
+[ruby]script/generate migration add_hotel_rate
+[/ruby]
+
+And enter the new *rate* field
+
+[ruby]class AddHotelRate < ActiveRecord::Migration
+  def self.up
+    add_column :hotels, :rate, :integer
+    Hotel.all.each do |h|
+      h.rate = 3
+      h.save
+    end
+  end
+
+  def self.down
+    remove_column :hotels, :rate
+  end
+end
+[/ruby]
+
+Finally, run your database migration:
+
+[ruby]rake db:migrate
+[/ruby]
+
+Clients which are unaware of that new information available in the resource still work.
+Meanwhile, new or modified clients can make use of that available information:
+
+[ruby]hotel = {:name => "Caelum Objects Hotel", :city => "Sao Paulo", :room_count => 3, :rate => 4}
+hotel = Restfulie.at('http://localhost:3000/hotels').as('vnd/caelum_hotel+xml').create(hotel.to_xml(:root => "hotel"))
+puts "Rated: #{hotel.rate}"
+[/ruby]
+
+Following such principles, the server side can evolve its model without affecting running clients, therefore REST client frameworks should be written in a way that allows servers such evolution to take place.
+
+This behavior is called forward-compatibility and is implemented in Restfulie through the use of dynamic generated methods that allow access to the new unexpected content.
+
+Restfulie Rails and C# client implementation supports the creation of dynamic methods due to the language nature, while Java allow users to access resources state transitions and relations through a fixed API that allows custom parameters.
+
+REST APIs shall not deal only with HTTP headers, responses and URIs but implement content type negotiation and default serialization behavior that pushes developers towards REST systems, otherwise the developer is still open to write a "restless" system with a Rest-ready API.
+
+[box]
+Again, other architecture styles might support forward and backward compatibility if thought about it previously, but unfortunately most developers nowadays still have access and are teach to use fixed contracts which do not allow system evolution. With the strength of agile methods and the better understanding of the community that systems evolve and maintaining them when they are not ready for that is expensive, REST frameworks that force backward and forward compatibility, along with teaching them from the start, earn extra points.
+[/box]
+
+[section  Mapping responses to our domain]
+
+In most cases we want to map resource access responses to our domain models, so in our case we want to create a class
+which represents a Hotel in the client side:
+
+[ruby]class Hotel < ActiveRecord::Base
+	uses_restfulie
+end
+[/ruby]
+
+And now we can read it from a specific URI:
+
+[ruby]hotel = Hotel.from_web 'http://localhost:3000/hotels/1'
+puts "Hotel #{hotel.name} retrieved"
+[/ruby]
+
+[note]
+Content-type section
+
+TODO
+- Most of the web request [need reference] is based on data retrieval correctly using the GET verb.
+- Content type negotiation: if the existing resource can be represented in that media-type, gives it
+- Restfulie knows how to transform to xml and json by default
+- Otherwise, complain
+[/note]
+
+[section  Retrieving a list of resources]
+
+Either the entry point to an application can be a list of available resources of an specific type or at some point our client ends up retrieving a list of resources.
+In our hotel book management system, the entry point will be a choice of available hotels, so in the server side, one can render the list of hotels as a resource:
+
+[ruby]def index
+  @hotels = Hotel.all
+  render_resource @hotels
+end
+[/ruby]
+
+And a request to this URI accepting xml as its return content-type will give back a list of hotels:
+
+[ruby]GET /hotels
+Accept: application/xml
+[/ruby]
+
+[ruby]<?xml version="1.0" encoding="UTF-8"?>
+<hotels>
+  <hotel>
+    <city>Sao Paulo</city>
+    <created-at>2009-12-13T22:44:09Z</created-at>
+    <id>1</id>
+    <name>Caelum Objects Hotel</name>
+    <rate>4</rate>
+    <room-count>3</room-count>
+    <updated-at>2009-12-13T22:44:09Z</updated-at>
+  </hotel>
+  <hotel>
+    <city>Sao Paulo</city>
+    <created-at>2009-12-13T22:44:21Z</created-at>
+    <id>2</id>
+    <name>Some Other Hotel</name>
+    <rate>4</rate>
+    <room-count>3</room-count>
+    <updated-at>2009-12-13T22:44:21Z</updated-at>
+  </hotel>
+</hotels>
+[/ruby]
+
+Although the *render_resource* method handled content negotiation and generated valid *application/xml* content, in order to add extra behavior or flow control to the list of hotels we are required to create a new media type, one that encapsulates many instances of hotels.
+
+By following this path of new a media type creation for every different type of information retrieval, the project will end up with a high number of custom media types, making them useless for other systems and losing the ability to be understood by a larger number of clients.
+
+[section  The hotel list Atom feed]
+
+If we create an atom feed for our hotels, we are able to use a well-known and standard media type that other clients are already capable of understanding.
+
+An Atom feed representing the same response mentioned earlier would be:
+
+[ruby]<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<id>http://localhost:3000/hotels</id>
+	<title type="text">Hotels</title>
+	<updated>2009-12-21T00:22:24-08:00</updated>
+	<author><name>Hotels</name></author>
+	<link rel="self" href="http://localhost:3000/hotels"/>
+	 <entry>
+    <id>http://localhost:3000/hotels/1</id>
+     <title type="text">Hotel</title>
+     <updated>2009-12-13T22:44:09-08:00</updated>
+     <link rel="self" href="http://localhost:3000/hotels/1"/>
+     <content type="vnd/caelum_hotel+xml">
+       <hotel>
+			<city>Sao Paulo</city>
+			<created-at>2009-12-13T22:44:09Z</created-at>
+			<id>1</id>
+			<name>Caelum Objects Hotel</name>
+			<rate>4</rate>
+			<room-count>3</room-count>
+			<updated-at>2009-12-13T22:44:09Z</updated-at>
+		</hotel>
+     </content>
+   </entry>
+   <entry>
+     <id>http://localhost:3000/hotels/2</id>
+     <title type="text">Hotel</title>
+     <updated>2009-12-13T22:44:21-08:00</updated>
+     <link rel="self" href="http://localhost:3000/hotels/2"/>
+     <content type="vnd/caelum_hotel+xml">
+			<hotel>
+				<city>Sao Paulo</city>
+				<created-at>2009-12-13T22:44:21Z</created-at>
+				<id>2</id>
+				<name>Caelum Objects Hotel</name>
+				<rate>4</rate>
+				<room-count>3</room-count>
+				<updated-at>2009-12-13T22:44:21Z</updated-at>
+			</hotel>
+     </content>
+   </entry>
+</feed>
+[/ruby]
+
+And in order to generate such atom feed, we simply need to define its title:
+
+[ruby]  def index
+    @hotels = Hotel.all
+    render :text => @hotels.to_atom(:title=>'Hotels', :controller => self), :content_type => 'application/atom+xml'
+  end
+[/ruby]
+
+Again, the default inherited *index* method behaves returning an atom feed if one access the 'http://localhost:3000/hotels' URI: if there is no need for customization, there is less code to be written.
+
+[section  Hypermedia in our resource list]
+
+Another approach to creating a list of resources is to let hypermedia drive our client application and represent the list of resources as connections that can be accessed through their own URIs.
+
+Typical formats that allow representations with hypermedia support are application/xhtml with our custom format:
+
+<box>TOLINK add links here</box>
+
+[ruby]<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<body>
+	<table class="hotels">
+		<tr id="1">
+			<td>Sao Paulo</td>
+	    <td>2009-12-13T22:44:09Z</td>
+	    <td>Caelum Objects Hotel</td>
+	    <td>4</td>
+	    <td>3</td>
+	    <td>2009-12-13T22:44:09Z</td>
+			<td>http://localhost:3000/hotels/1</td>
+	  </tr>
+	  <tr>
+	    <td>Sao Paulo</td>
+	    <td>2009-12-13T22:44:21Z</td>
+	    <td>2</td>
+	    <td>Some Other Hotel</td>
+	    <td>4</td>
+	    <td>3</td>
+	    <td>2009-12-13T22:44:21Z</td>
+			<td>http://localhost:3000/hotels/1</td>
+	  </tr>
+	</table>
+</body>
+</html>
+[/ruby]
+
+[section  Atom feed and partial resource representation]
+
+In our atom feed representation, Restfulie inserts by default the link to every resource. If you want partial rendering for each resource, it can be achieved by customizing the *to_xml* invocation:
+
+[ruby]def index
+  @hotels = Hotel.all
+  render :text => @hotels.to_atom(:title=>'Hotels', :controller => self), :content_type => 'application/atom+xml' do |hotel|
+		hotel.to_xml(:skip_instruction => true, :only => :name)
+	end
+end
+[/ruby]
+
+In this case, our atom feed will look like:
+
+[ruby]	<?xml version="1.0"?>
+	      <feed xmlns="http://www.w3.org/2005/Atom">
+	        <id>http://localhost:3000/hotels</id>
+	        <title type="text">Hotels</title>
+	        <updated>2009-12-21T00:22:24-08:00</updated>
+	        <author><name>Hotels</name></author>
+	        <link rel="self" href="http://localhost:3000/hotels"/>
+	          <entry>
+	            <id>http://localhost:3000/hotels/1</id>
+	            <title type="text">Hotel</title>
+	            <updated>2009-12-13T22:44:09-08:00</updated>
+	            <link rel="self" href="http://localhost:3000/hotels/1"/>
+	            <content type="vnd/caelum_hotel+xml">
+	              <hotel>
+	  				<name>Caelum Objects Hotel</name>
+					</hotel>
+	            </content>
+	          </entry>
+	          <entry>
+	            <id>http://localhost:3000/hotels/2</id>
+	            <title type="text">Hotel</title>
+	            <updated>2009-12-13T22:44:21-08:00</updated>
+	            <link rel="self" href="http://localhost:3000/hotels/2"/>
+	            <content type="vnd/caelum_hotel+xml">
+	              <hotel>
+	  					<name>Caelum Objects Hotel</name>
+					</hotel>
+	            </content>
+	          </entry>
+	</feed>
+[/ruby]
+
+With such representation, one can retrieve the actual resource and act with it after accessing its URI. In the client side, the code will resemble navigating through connected resources:
+
+[ruby]	hotels = Restfulie.at(HOTELS_ENTRY_POINT).get
+	hotel = hotels[1]
+	puts "name: #{hotel.name}"
+	
+	# retrieves the resource through GET
+	hotel = hotel.self
+	puts "room count: #{hotel.room_count}"
+[/ruby]
+
+Note that if the hotel representation itself had a link to related resource, i.e. similar hotels, you could navigate through that link:
+
+[ruby]	<?xml version="1.0"?>
+	      <feed xmlns="http://www.w3.org/2005/Atom">
+	        <id>http://localhost:3000/hotels</id>
+	        <title type="text">Hotels</title>
+	        <updated>2009-12-21T00:22:24-08:00</updated>
+	        <author><name>Hotels</name></author>
+	        <link rel="self" href="http://localhost:3000/hotels"/>
+	          <entry>
+	            <id>http://localhost:3000/hotels/1</id>
+	            <title type="text">Hotel</title>
+	            <updated>2009-12-13T22:44:09-08:00</updated>
+	            <link rel="self" href="http://localhost:3000/hotels/1"/>
+	            <content type="vnd/caelum_hotel+xml">
+	              <hotel>
+	  				<name>Caelum Objects Hotel</name>
+						<link rel="related" href="http://localhost:3000/hotels/2" />
+					</hotel>
+	            </content>
+	          </entry>
+	          <entry>
+	            <id>http://localhost:3000/hotels/2</id>
+	            <title type="text">Hotel</title>
+	            <updated>2009-12-13T22:44:21-08:00</updated>
+	            <link rel="self" href="http://localhost:3000/hotels/2"/>
+	            <content type="vnd/caelum_hotel+xml">
+	              <hotel>
+	  					<name>Caelum Objects Hotel</name>
+							<link rel="related" href="http://localhost:3000/hotels/1" />
+					</hotel>
+	            </content>
+	          </entry>
+	</feed>
+[/ruby]
+
+<pre>hotels = Restfulie.at(HOTELS_ENTRY_POINT).get
+hotel = hotels[1]
+puts "name: #{hotel.name}"
+puts "similar hotel: #{hotel.related.name}"
+[/ruby]
+
+[section  Segmentation by freshness]
+
+Sometimes a resource is composed by a list of other resources as our hotel list example. Another one is an human entry point containing four sections: the top 10, my bookings, random items, and special deals.
+
+In this case, all information come from the same source, but every part has a different probable validity if it is going to be cached. If the page is served as one big chunck of information, it will always be stale due to the random items section. "My orders" is stale only when I place a new order and, in the same way, the top 10 is only stale if any item is bought and surpasses the number of times the 10th item was bought so far.
+
+One of the main issues with this type of pages which aggregate information from one or many sources with different expire-expectations (http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21) is that cached versions in proxies and clients become stale faster than it should for some elements: once one of this providing sources publishes new information or is updated, the entire representation becomes stale.[ref expire]
+
+Martin Fowler described a well spread approach to allow those pages to be partially cached within local proxies and clients, thus sharing requested representations between multiple users (http://www.martinfowler.com/bliki/SegmentationByFreshness.html). [ref segmentation_by_freshness]
+
+Given the hotel scenario, we could create different resources:
+
+<ul>
+<li>http://caelumhotels.com/top_sellers</li>
+<li>http://caelumhotels.com/myself/bookings</li>
+<li>http://caelumhotels.com/random</li>
+<li>http://caelumhotels.com/special</li>
+</ul>
+
+<box>myself/bookings should be my username itself due to caching capabilities for intermediate layers</box>
+
+And finally an aggregating page:
+
+[ruby]<html>
+<a class="lazy_load" href="http://caelumhotels.com/top_sellers">Top sellers</a>
+<a class="lazy_load" href="http://caelumhotels.com/myself/bookings">My bookings</a>
+<a class="lazy_load" href="http://caelumhotels.com/random">Random items</a>
+<a class="lazy_load" href="http://caelumhotels.com/special">Special items</a>
+
+[/ruby]
+
+And then, for each **lazy_load** link, we create a **div** with its content:
+
+[ruby]<script>
+$('.lazy_load').each(function(link) {
+  uri = link.attr('href'); 
+  div = $('<div></div>').load(uri); // cache hits!
+  link.after(div);
+});
+</script>
+</html>
+[/ruby]
+
+This allows our proxies to cache each component in our page apart from the page itself: whenever its content becomes stale in a proxy, only part of that page needs to be updated.
+
+In a web were most data can be cached and does not become stale so fast, this technique should usually lessen the amount of data being transfered between client and server.
+
+All one needs to do is properly use the http headers for caching (http://www.mnot.net/cache_docs).
+
+<box>Remember that if your client supports either parallel requests to the server and/or keep-alive connection, the results might be even better.</box>
+
+Pretty much in the same way as with the human web, a distributed system using the web as its infrastructure will gain the same cache benefits as long as they implement correct caching policies through http headers (and correct http verbs).
+
+When your server provides a resource representation linking to a series of other related resources the client and proxies staying on the way will be allowed to cache each and every other resource on its own.
+
+This approach results in changes applied to one resource not affecting cached representations of other resources. An stale representation will not affect those accessing other resources within the same context.
+
+Sometimes the decision whether to change latency for scalability might depend on how you think your clients will use your resources: in the human web mentioned above, the developer knew exactly how its clients would access it.
+
+<box>Remember: there is zero latency for unexpired resources and there is small latency for retrieving cached versions of a resource from a shared proxy</box>
+
+<box>TOLINK image shared proxy: show the advantage</box>
+
+In distributed systems using REST, guessing how resources will be used can be dangerous as it allows you to tight couple yourself to this behavior while published resources can and would be used in unforeseen ways.
+
+Giving information that will help most cases is fine and providing links to further resources details allow you to balance between latency and scalability - due to caching - as you wish.
+
+[title  Dynamic contracts]
+
+This is only possible because we have signed dynamic contracts with our clients (http://guilhermesilveira.wordpress.com/2009/12/08/hypermedia-making-it-easier-to-create-dynamic-contracts). They expect us to follow some formal format definition (defined in xhtml http://www.w3.org/TR/xhtml1) and processes. How our processes are presented within our representations is the dynamic part of the contract.
+
+While the fixed part can be validated with the use of schema validators (http://www.w3.org/XML/Schema), the dynamic part - the process - which is guided by our server needs to be validated through testing the behavior of our applications: asserting that hypermedia guided transitions should be reflected in our application state.
+
+[section  Progressive enhancement]
+
+Martin notes that this is a kind of progressive enhancement (http://en.wikipedia.org/wiki/Progressive_enhancement): although its definition is related to accessibility, its control over bandwidth benefits are similar to the approach mentioned ones.
+
+[section  Domain mapping to resources]
+
+The one to one mapping between our domain model and published resource types might not be the best solution, so you can configure Restfulie how to generate a resource representation based on some specific conditions to your system: one or more domain objects that are mapped to a web resource through the arguments passed to the resource representation serialization method.
+
+In such cases our **Hotel** type can have its **to_xml** method overriden:
+
+[ruby]class Hotel < ActiveRecord::Base
+	acts_as_restfulie
+	media_type "vnd/caelum_hotel+xml", "vnd/caelum_hotel+json"
+	
+	def logo
+		logo_url self.id
+	end
+	
+	def to_xml(options)
+		options[:methods] => :logo
+		super(options)
+	end
+end
+[/ruby]
+
+[section  Hotel atom entry]
+
+<box>TOLINK explain how to use atom to access every hotel.</box>
+
+[section  Updating hotels]
+
+There are two common options to allow resource update, you can either use the verb PUT sending the entire resource representation or PATCH to change parts of the resource [reference: PATCH verb approved proposal].
+
+PUT requests were used sometimes with partial resource representations due to the non existence of the PATCH verb, which has only lately been approved as a standard.
+
+A typical update behavior with full resource representation include a few steps. Once an URI represents an specific resource, the resource id can be extracted from it. Then it needs to check that the required resource exists returning a **404** in case it does not, and Rails takes care of both features for us while loading a model:
+
+[ruby]def update
+  @hotel = Hotel.find(params[:id])
+end
+[/ruby]
+
+After that the resource might be in such a state that it can not be updated. In our hotel system, a hotel can always be updated, therefore we shall configure it to allow updates to be always executed:
+
+<pre>class Hotel < ActiveRecord::Base
+	acts_as_restfulie do |hotel, t|
+	  t << [:update]
+  end
+	media_type "vnd/caelum_hotel+xml", "vnd/caelum_hotel+json"
+end
+[/ruby]
+
+Now our hotel representation presents a new link to our clients, letting them know that they can update their hotels through the hotel resource URI with a PUT request. The URI is discovered by asking Rails for the **update** URI, which was configured in the **routes.rb** file when the scaffold generator was run.
+
+[ruby]HTTP 1.1
+GET http://localhost:3000/hotels/1
+[/ruby]
+
+Such a GET request to retrieve a hotel now returns:
+
+<pre><hotel>
+	<city>Sao Paulo</city>
+	<created-at>2010-01-01T15:10:22Z</created-at>
+	<id>1</id>
+	<name>Caelum Objects Hotel</name>
+	<rate>4</rate>
+	<room-count>3</room-count>
+	<updated-at>2010-01-01T15:10:22Z</updated-at>
+	<atom:link rel="update" href="http://localhost:3000/hotels/1"/>
+</hotel>
+[/ruby]
+
+Our server should check if the hotel can be updated and answer with a **405** response in case it does not. Such check is provided by Restfulie by invoking the **can?** method passing an argument, the symbol which is the transition or relation name to our resource.
+
+After that, content negotiation takes place so the server checks whether the content sent by the client is comprehensible and makes sense to update this resource. The code to achieve this check is exactly the same as when creating a resource:
+
+[ruby]  return head :status => 405 unless @loaded.can? :update
+
+  return head 415 unless fits_content(Hotel, request.headers['CONTENT_TYPE'])
+[/ruby]
+
+Finally the server should read the data from the request body, extracting the root element. This parsed data is then stored in a hash because Rails will use this hash to update our model:
+
+[ruby]  @model = Hash.from_xml(request.body.string)[model_name]
+[/ruby]
+
+[section  ]
+
+if @loaded.update_attributes(@model)
+  render_resource @loaded
+else
+  render :xml => @loaded.errors, :status => :unprocessable_entity
+end
+
+[section  Update callback]
+
+Because the entire resource representation might override any domain objects relations hidden from the resource view, it is important to give the controller a chance to modify the loaded information from the server prior to using it to update the related objects in the database.
+
+In order to do it, a **pre update** callback can be implemented by configuring Restfulie to invoke it prior to update:
+
+<pre>class HotelsController < ApplicationController
+  as_restfulie_controller do |config|
+		config.update.invoke_before(:pre_update)
+	end
+
+	# other controller's content here
+end
+[/ruby]
+
+Our system does not need to execute any parsing on the hash prior to updating the loaded object, but it could, for example, increase the number of updates executed with it:
+
+<pre>def pre_update(hash, hotel)
+	hotel.update_count++
+end
+[/ruby]
+
+[note]
+TODO
+Partial resource update section
+Restfulie provides callbacks for every possible operation with resources.
+[/note]
+
+[section  Removing hotels]
+
+In order to remove hotels from the database, we need to write a **destroy** method that loads the required domain object and removes it. If it does not exist, the server should answer with a **404** response and to achieve it we can simply implement the method invoking the find and destroy methods:
+
+[ruby]def destroy
+  @hotel = Hotel.find(params[:id])
+  @hotel.destroy
+  head :ok
+end
+[/ruby]
+
+Because Rails already answer with a **404 not found** response if the model is not not found, we do not need a conditional check.
+
+Once again, RestfulieController default **destroy** behavior is to locate the resource and remove it from the database, answering with a **404 not found** if it is not found. Once our controller includes RestfulieController's behavior, there is no need to write the **destroy** method again, only if we want to customize it:
+
+[ruby]class HotelsController < ApplicationController
+  include Restfulie::Server::RestController
+
+	# implicit declared the destroy method
+
+end
+[/ruby]
+
+The client will not access the **destroy** process as an entry point: it will first need to access the resource in order to find out whether it can be removed or not from the server and this will be achieved now, through the use of hypermedia as a guiding feature to our processes and transitions.
+
+[section  Hypermedia guided resource removal]
+
+But how do we know that in order to remove that resource, I need to <strong>DELETE</strong> that specific URI?
+
+[ruby]hotels = Hotel.at('http://localhost:3000/hotels').get
+hotel = hotels[0]
+[/ruby]
+
+In other words, I want to delete the first hotel found, where should I send a <strong>DELETE</strong> request to?
+
+The hotel representation can include a <strong>self</strong> link, which gives the client an URI which identifies the resource itself. By sending a <strong>DELETE</strong> request to this URI, the resource should be deleted.
+
+An atom entry already contains a <strong>self</strong> link and therefore Restfulie can use it to delete the resource from the server:
+
+[ruby]<entry>
+	<id>http://localhost:3000/hotels/1</id>
+	<title type="text">Hotel</title>
+	<updated>2009-12-13T22:44:09-08:00</updated>
+	<link rel="self" href="http://localhost:3000/hotels/1"/>
+	<content type="vnd/caelum_hotel+xml">
+		<hotel>
+			<name>Caelum Objects Hotel</name>
+		</hotel>
+	</content>
+</entry>
+[/ruby]
+
+[ruby]hotels = Hotel.at('http://localhost:3000/hotels').get
+hotel = hotels[0]
+hotel.destroy
+[/ruby]
+
+Because the hotels entry point gave us an hotel feed, Restfulie knowns that the first entry's URI is http://localhost:3000/hotels/1 and will send a DELETE request	upon the <strong>destroy</strong> method invocation.
+
+[note]
+sections:
+Removing non-atom entry representations
+Learning more about our resources (OPTIONS)
+[/note]
+
+[section  Flight routes]
+
+Flight routes will be statically created in our system and include an origin, destination, local time of departure and arrival. In order to model a simpler system, we will assume all flights are available every day. Using Rails scaffold we create the Flight class:
+
+[ruby]script/generate scaffold Flight from:string to:string departure:time arrival_after:integer
+rake db:migrate
+[/ruby]
+
+And insert a few flights through a custom migration:
+
+[ruby]script/generate migration insert_basic_flight_routes
+[/ruby]
+
+[ruby]class InsertBasicFlightRoutes < ActiveRecord::Migration
+
+	def new_flight(from, to, departure, arrival)
+  	Flight.new(:from => from, :to => to, :departure => departure, :arrival_after => arrival).save
+	end
+	
+  def self.up
+    new_fligth("Sao Paulo", "Miami", Time.parse("08:55"), (12.hours + 50.minutes))
+    new_fligth("Sao Paulo", "Miami", Time.parse("09:25"), (11.hours + 50.minutes))
+    new_fligth("Sao Paulo", "Miami", Time.parse("13:45"), (12.hours + 50.minutes))
+    new_fligth("Sao Paulo", "Miami", Time.parse("16:50"), (13.hours + 50.minutes))
+    new_fligth("Miami", "Los Angeles", Time.parse("15:45"), (8.hours + 15.minutes))
+    new_fligth("Miami", "Los Angeles", Time.parse("17:50"), (7.hours + 50.minutes))
+  end
+
+  def self.down
+    Flight.destroy_all
+  end
+end
+[/ruby]
+
+<box>Note: online travel agencies will usually locate airports near your city prior to executing your search.</box>
+
+We will also add new hotels in Miami and Los Angeles to our travel system:
+
+[ruby]	script/generate migration insert_extra_hotels
+[/ruby]
+
+[ruby]	class InsertExtraHotels < ActiveRecord::Migration
+	  def self.up
+	    Hotel.new({:name => "Miami Objects", :city => "Miami", :room_count => 8, :rate => 4}).save
+	    Hotel.new({:name => "Resting in Miami", :city => "Miami", :room_count => 10, :rate => 3}).save
+	    Hotel.new({:name => "Restfulie in LA", :city => "Los Angeles", :room_count => 2, :rate => 5}).save
+	    Hotel.new({:name => "Los Angeles Objects", :city => "Los Angeles", :room_count => 16, :rate => 3}).save
+	  end
+
+	  def self.down
+	  end
+	end
+[/ruby]
+
+And execute everything:
+
+[ruby]	rake db:migrate
+[/ruby]

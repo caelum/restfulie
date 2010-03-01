@@ -19,9 +19,15 @@ require 'restfulie/client/extensions/http'
 
 module Restfulie::Client
 
-  # extension to all answers that allows you to access the web response
+  # extension to all answers that allows you to access the executed request and its response.
   module WebResponse
+    
+    # accessor to the web response
     attr_accessor :web_response
+    
+    # accessot to the web request
+    attr_accessor :web_request
+    
   end
   
   # some error ocurred while processing the request
@@ -111,30 +117,30 @@ module Restfulie::Client
       # returning a deserialized representation of the resource.
       # note that this will also set the _came_from instance variable with the content type
       # this resource was represented, in order to allow further requests to prefer this content type.
-      def parse_entity(restfulie_response)
+      def parse_entity(request, restfulie_response)
         response = restfulie_response.response
         content_type = response.content_type
-        type = Restfulie::MediaType.type_for(content_type)
-        if content_type[-3,3]=="xml"
-          result = type.from_xml response.body
-        elsif content_type[-4,4]=="json"
-          result = type.from_json response.body
+        if request.raw?
+          response
         else
-          result = generic_parse_entity restfulie_response
+          parse_body_from content_type, response, restfulie_response
         end
-        result.instance_variable_set :@_came_from, content_type
-        result
       end
 
       # callback taht executes a GET request to the response Location header.
       # this is the typical callback for 200 response codes.
       def retrieve_resource_from_location(restfulie_response)
-        restfulie_response.type.from_web restfulie_response.response["Location"]
+        location = restfulie_response.response["Location"]
+        if(restfulie_response.class.respond_to? :from_web)
+          restfulie_response.class.from_web(location)
+        else 
+          Restfulie.at(location).get
+        end
       end
 
       # given a restfulie response, extracts the response code and invoke the registered callback.
-      def handle(restfulie_response)
-        handlers[restfulie_response.response.code.to_i].call(restfulie_response)
+      def handle(request, restfulie_response)
+        handlers[restfulie_response.response.code.to_i].call request, restfulie_response
       end
       
       def generic_parse_entity(restfulie_response)
@@ -162,14 +168,31 @@ module Restfulie::Client
       end
       
       def register_func(min, max, proc)
-        register(min, max) { |r| proc.call(r) }
+        register(min, max) { |req, res| proc.call(req, res) }
+      end
+      
+      private
+
+      # parses the response body based on its media type
+      # treats xml and json in a specific matter, all other types in a generic_parse_entity way
+      def parse_body_from(content_type, response, restfulie_response)
+        type = Restfulie::MediaType.type_for(content_type)
+        if content_type[-3,3]=="xml"
+          result = type.from_xml response.body
+        elsif content_type[-4,4]=="json"
+          result = type.from_json response.body
+        else
+          result = generic_parse_entity restfulie_response
+        end
+        result.instance_variable_set :@_came_from, content_type
+        result
       end
 
     end
     
-    register_func( 100, 599, Proc.new{ |r| pure_response_return r} )
-    register_func( 200, 200, Proc.new{ |r| parse_entity r} )
-    register_func( 301, 301, Proc.new{ |r| retrieve_resource_from_location r} )
+    register_func( 100, 599, Proc.new{ |req, res| pure_response_return res} )
+    register_func( 200, 200, Proc.new{ |req, res| parse_entity req, res} )
+    register_func( 301, 301, Proc.new{ |req, res| retrieve_resource_from_location res} )
     
   end
 
@@ -179,9 +202,10 @@ module Restfulie::Client
     
     attr_reader :type, :response
     
-    def initialize(type, response)
+    def initialize(type, response, request)
       @type = type
       @response = response
+      @request = request
     end
 
     # TODO remote_post can probably be moved, does not need to be on the object's class itself
@@ -204,17 +228,18 @@ module Restfulie::Client
       @response.previous = result.web_response if result.respond_to? :web_response
       result.extend Restfulie::Client::WebResponse
       result.web_response = @response
+      result.web_request = @request
       result
     end
     
     # parses this response using the correct ResponseHandler and enhances it
     def final_parse
-      enhance Restfulie::Client::ResponseHandler.handle(@response)
+      enhance Restfulie::Client::ResponseHandler.handle(@request, @response)
     end
 
     # detects which type of method invocation it was and act accordingly
     # TODO this should be called by RequestExcution, not instance
-    def parse(method, invoking_object, content_type)
+    def parse(method, invoking_object, content_type, request)
 
       return enhance(invoking_object) if @response.code == "304"
 
@@ -228,7 +253,15 @@ module Restfulie::Client
     
   end
 
+  # Represents a request to be executed in a server.
+  # If the server is down, Net::HTTP raises an error (there is a bug in ruby 1.8.7 http://redmine.ruby-lang.org/issues/show/2708)
   class RequestExecution
+    
+    # whether this request should parse the entity body or return it raw
+    @raw = false
+    
+    # gives you access to the Net::HTTP object prepared to execute this request
+    attr_accessor :request
     
     def initialize(type)
       initialize(type, nil)
@@ -244,6 +277,15 @@ module Restfulie::Client
     def at(uri)
       @uri = uri
       self
+    end
+    
+    def raw
+      @raw = true
+      self
+    end
+    
+    def raw?
+      @raw
     end
     
     # sets the Content-type AND Accept headers for this request
@@ -276,9 +318,9 @@ module Restfulie::Client
     # do(Net::HTTP::Post, 'payment', '<payment/>')
     def do(verb, relation_name, body = nil)
       Restfulie::Logger.logger.debug "sending a #{verb} to #{relation_name} with a #{body.class}"
-      url, http_request = prepare_request(verb, relation_name, body)
-      response = execute_request(url, http_request)
-      Restfulie::Client::Response.new(@type, response).parse(verb, @invoking_object, "application/xml")
+      url, @request = prepare_request(verb, relation_name, body)
+      response = execute_request(url, @request)
+      Restfulie::Client::Response.new(@type, response, self).parse(verb, @invoking_object, "application/xml", self)
     end
     
     private
@@ -310,8 +352,13 @@ module Restfulie::Client
     end
     
     # retrieves information from the server using a GET request
-    def get(options = {})
-      from_web(@uri, options)
+    # all options are treated as headers (deprecated)
+    def get(options = nil)
+      if options
+        with(options)
+        Restfulie::Logger.logger.debug("Deprecated usage: options provided to a get method. This will be removed in a future version")
+      end
+      self.do(Net::HTTP::Get, 'get', nil)
     end
     
     def add_headers_to(hash)
@@ -375,23 +422,14 @@ module Restfulie::Client
     def remote_post_to(uri, content)
       
       url = URI.parse(uri)
-      req = Net::HTTP::Post.new(url.path)
-      req.body = content
-      add_basic_request_headers(req)
-      req.add_field("Content-type", @content_type)
+      @request = Net::HTTP::Post.new(url.path)
+      @request.body = content
+      add_basic_request_headers(@request)
+      @request.add_field("Content-type", @content_type)
 
-      response = Net::HTTP.new(url.host, url.port).request(req)
-      Restfulie::Client::Response.new(@type, response).parse_post(@content_type)
+      response = Net::HTTP.new(url.host, url.port).request(@request)
+      Restfulie::Client::Response.new(@type, response, self).parse_post(@content_type)
     end
 
-    def from_web(uri, options = {})
-      uri = URI.parse(uri)
-      req = Net::HTTP::Get.new(uri.path)
-      options.each { |key,value| req[key] = value }
-      add_basic_request_headers(req)
-      res = Net::HTTP.new(uri.host, uri.port).request(req)
-      Restfulie::Client::Response.new(@type, res).final_parse
-    end
-    
   end
 end

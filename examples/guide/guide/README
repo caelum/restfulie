@@ -1,0 +1,12 @@
+h2. to run server tests
+
+cd hotel-system
+rake db:migrate RAILS_ENV=test
+cucumber
+
+
+h2. to run client tests
+
+hotel-system/script/server &
+cd client
+rake
