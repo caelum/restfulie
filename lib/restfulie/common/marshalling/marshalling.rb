@@ -33,7 +33,7 @@ module Restfulie::Marshalling
       if marshallings.include?(marshalling_name.to_s)
         marshalling_name = marshalling_name.to_s.capitalize
         begin
-          "#{self.ancestors.first}::#{marshalling_name}".constantize
+          "::#{self.ancestors.first}::#{marshalling_name}".constantize
         rescue NameError
           raise Restfulie::Error::UndefinedMarshallingError.new("Marshalling #{marshalling_name} not fould.")
         end
