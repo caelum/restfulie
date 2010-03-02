@@ -19,10 +19,9 @@ module Restfulie::Common; end
   media_type
   unmarshalling
   restfulie
-  serializer
+  marshalling/marshalling
 ).each do |file| 
   require "restfulie/common/#{file}"
 end
 
 include ActiveSupport::CoreExtensions::Hash
-

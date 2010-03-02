@@ -11,23 +11,23 @@ describe Restfulie::Error do
     end
   end
 
-  describe Restfulie::Error::SerializerError do
-    it "SerializerError should have RestfulieError as ancestors class" do
-      msg = "Restfulie Serializer Error test"
-      Restfulie::Error::SerializerError.ancestors.should be_include Restfulie::Error::RestfulieError
+  describe Restfulie::Error::MarshallingError do
+    it "MarshallingError should have RestfulieError as ancestors class" do
+      msg = "Restfulie Marshalling Error test"
+      Restfulie::Error::MarshallingError.ancestors.should be_include Restfulie::Error::RestfulieError
       lambda {
-        raise Restfulie::Error::SerializerError.new(msg)
-      }.should raise_error(Restfulie::Error::SerializerError, msg)
+        raise Restfulie::Error::MarshallingError.new(msg)
+      }.should raise_error(Restfulie::Error::MarshallingError, msg)
     end
   end
 
-  describe Restfulie::Error::UndefinedSerializerError do
-    it "UndefinedSerializerError should have SerializerError as ancestors class" do
-      msg = "Restfulie Serializer Error test"
-      Restfulie::Error::UndefinedSerializerError.ancestors.should be_include Restfulie::Error::SerializerError
+  describe Restfulie::Error::UndefinedMarshallingError do
+    it "UndefinedMarshallingError should have MarshallingError as ancestors class" do
+      msg = "Restfulie Marshalling Error test"
+      Restfulie::Error::UndefinedMarshallingError.ancestors.should be_include Restfulie::Error::MarshallingError
       lambda {
-        raise Restfulie::Error::UndefinedSerializerError.new(msg)
-      }.should raise_error(Restfulie::Error::UndefinedSerializerError, msg)
+        raise Restfulie::Error::UndefinedMarshallingError.new(msg)
+      }.should raise_error(Restfulie::Error::UndefinedMarshallingError, msg)
     end
   end
 end
