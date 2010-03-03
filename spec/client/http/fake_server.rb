@@ -1,5 +1,19 @@
 require 'rubygems'
 require 'sinatra'
+require 'rack/conneg'
+
+require File.join(File.dirname(__FILE__),'..','..','data','data_helper')
+
+use(Rack::Conneg) do |conneg|
+  conneg.set :accept_all_extensions, false
+  conneg.set :fallback, :html
+  conneg.ignore('/public/')
+  conneg.provide([:atom])
+end
+
+before do
+  content_type negotiated_type
+end
 
 get "/test/?" do
   'OK'
@@ -19,5 +33,11 @@ end
 
 get "/test/:error" do
   Rack::Response.new('OK', params[:error].to_i).finish
+end
+
+get '/:file_name' do
+  respond_to do |wants|
+    wants.atom { response_data( 'atoms', params[:file_name] ) } 
+  end
 end
 

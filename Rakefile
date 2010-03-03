@@ -34,27 +34,30 @@ namespace :test do
     puts "pid >>>> #{pid}"
     sh "kill #{pid}"
   end
-  Spec::Rake::SpecTask.new(:all) do |t|
-    t.spec_files = FileList['spec/**/*_spec.rb']
-    t.spec_opts = %w(-fs -fh:doc/specs.html --color)
-  end
-  Spec::Rake::SpecTask.new(:client) do |t|
-    t.spec_files = FileList['spec/client/**/*_spec.rb']
-    t.spec_opts = %w(-fs -fh:doc/specs.html --color)
-  end
-  Spec::Rake::SpecTask.new(:server) do |t|
-    t.spec_files = FileList['spec/server/**/*_spec.rb']
-    t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+  namespace :spec do
+    spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'spec.opts')]
+    Spec::Rake::SpecTask.new(:all) do |t|
+      t.spec_files = FileList['spec/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
+    Spec::Rake::SpecTask.new(:client) do |t|
+      t.spec_files = FileList['spec/client/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
+    Spec::Rake::SpecTask.new(:server) do |t|
+      t.spec_files = FileList['spec/server/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
   end
   namespace :run do
     task :all do
-      start_server_and_invoke_test('test:all')
+      start_server_and_invoke_test('test:spec:all')
     end
     task :client do
-      start_server_and_invoke_test('test:client')
+      start_server_and_invoke_test('test:spec:client')
     end
     task :server do
-      start_server_and_invoke_test('test:server')
+      start_server_and_invoke_test('test:spec:server')
     end
   end
 end

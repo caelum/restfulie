@@ -1,7 +1,7 @@
-module AtomHelper
+module DataHelper
   
-  def stub_atom_response(url, filename)
-    filename = File.join(File.dirname(__FILE__), filename)
+  def response_data(format, filename)
+    filename = File.join(File.dirname(__FILE__), format.to_s, filename)
     raise "File not found: #{filename}. Check atoms spec folder for available samples." if !File.exist?(filename)
     file_dump = ""
     File.open(filename, "r") do |file|
@@ -11,3 +11,5 @@ module AtomHelper
   end
   
 end
+include DataHelper
+

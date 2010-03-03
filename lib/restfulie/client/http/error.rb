@@ -28,21 +28,24 @@ module Restfulie::Client::HTTP
         attr_reader :response
         attr_reader :request
 
-        def initialize(method, path, request, response)
-          @method   = method
-          @path     = path
+        def initialize(request, response)
           @request  = request
           @response = response
         end
 
         def to_s
-          "HTTP error #{@response.code} when invoking #{@request.root}#{::URI.decode(@path)} via #{@method}. " +
-            ((@response.contents.blank?) ? "No additional data was sent." : "The complete response was:\n" + @response.contents)
+          "HTTP error #{@response.code} when invoking #{@request.host}#{::URI.decode(@response.path)} via #{@response.method}. " +
+            ((@response.body.blank?) ? "No additional data was sent." : "The complete response was:\n" + @response.body)
         end
 
       end
 
-      class ServerNotAvailableError < RESTError; end
+      class ServerNotAvailableError < RESTError
+        def initialize(request, response, exception)
+          super(request, response)
+          set_backtrace(exception.backtrace)
+        end
+      end
 
       class UnknownError < RESTError;  end
 

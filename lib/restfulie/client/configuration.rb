@@ -17,50 +17,77 @@
 #
 module Restfulie::Client
 
-  class Configuration
+  class Configuration < ::Hash
 
-    @@default_configuration = {
-      :hosts => ['http://localhost:3000/'],
-      :entry_points => {}
-    }
-
-    @@default_configuration.keys.each do |conf_name|
-      attr_accessor conf_name
-    end
-
+    attr_reader :entry_point_host 
+    attr_reader :entry_point_path 
     attr_reader :environment
 
-    def initialize(file='./config/restfulie_client.yml',env=:development)
-      if ::File.exist?(file)
-        self.read file, env
+    @@default_configuration = {
+      :entry_point     => '',
+      :default_headers => { 
+        :get  => { 'Accept'       => 'application/atom+xml' },
+        :post => { 'Content-Type' => 'application/atom+xml' } 
+      },
+      :auto_follows => {} #:auto_follows => { 301 => [:post,:put,:delete] }
+    }
+
+    def initialize
+      super
+      @environment = :development
+      store(@environment , @@default_configuration.dup)
+    end
+
+    def environment=(value)
+      @environment = value
+      unless has_key?(@environment) 
+        store(@environment,@@default_configuration.dup)
+      end
+      @environment
+    end
+
+    #def initialize(file,env=:development)
+      #raise "Undefined file" unless file
+      #raise "File #{file} not found" unless ::File.exist?(file)
+      #merge!( ::YAML.load_file(file).sympolyse_keys! )
+    #end
+
+    def [](key)
+      fetch(environment)[key]
+    end
+
+    def []=(key,value)
+      fetch(environment)[key] = value
+    end 
+
+    def entry_point_path
+      parse_entry_point
+      @entry_point_path
+    end
+
+    def entry_point_host
+      parse_entry_point
+      @entry_point_host
+    end
+
+    def method_missing(name, *args, &block)
+      method_name = name.to_s
+      if method_name.last == '='
+        fetch(environment)[method_name.chop.to_sym] = args[0]
       else
-        @@config = { env => @@default_configuration.dup }
-        self.environment = env
+        value = fetch(environment)[name]
+        super unless value
+        value
       end
     end
 
-    def read(file,env=:development)
-      raise "Undefined file" if file.nil?
-      raise "File #{file} not found" unless ::File.exist?(file)
-      @@config = ::YAML.load_file(file)
-      self.environment = env.to_sym
-    end
+    private 
 
-    def environment=(env)
-      raise "Undefined env" if env.nil?
-      @@env = env
-      load_config @environment = env
-    end
-
-    def self.[](conf_name)
-      @@config[@@env.to_sym][conf_name]
-    end
-
-    private
-    def load_config(env)
-      raise "Undefined configuration" if @@config.nil?
-      key = env
-      raise "Undefined env=#{key} in config=#{@@config.inspect}" unless @@config.has_key?(key)
+    def parse_entry_point
+      return @entry_point_host = @entry_point_path = nil if entry_point.empty?
+      uri = ::URI.parse(entry_point)
+      @entry_point_host = "#{uri.scheme}://#{uri.host}:#{uri.port}"
+      @entry_point_path = uri.path
     end
 
   end

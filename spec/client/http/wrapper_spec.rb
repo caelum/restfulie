@@ -71,7 +71,7 @@ context Restfulie::Client::HTTP do
 
     class FakeResponse < ::Restfulie::Client::HTTP::Response
     end
-    ::Restfulie::Client::HTTP::ResponseHandler.register(200,FakeResponse)
+    ::Restfulie::Client::HTTP::ResponseHandler.register(201,FakeResponse)
 
     before(:all) do
       @host = "http://localhost:4567"
@@ -79,7 +79,7 @@ context Restfulie::Client::HTTP do
     end
 
     it 'should respond FakeResponse' do
-      @client.get('/test/200').class.should == FakeResponse
+      @client.get('/test/201').class.should == FakeResponse
     end
 
     it 'should respond default Response' do

@@ -18,13 +18,17 @@ module Restfulie::Client::HTTP
 
     class Response
 
+      attr_reader :method
+      attr_reader :path
       attr_reader :code
-      attr_reader :contents
+      attr_reader :body
       attr_reader :headers
 
-      def initialize(method, path, code, contents, headers)
+      def initialize(method, path, code, body, headers)
+        @method = method
+        @path = path
         @code = code
-        @contents = contents 
+        @body = body 
         @headers = headers
       end
 
@@ -32,14 +36,17 @@ module Restfulie::Client::HTTP
 
     module ResponseHandler
 
-      @@responses = { }
+      @@response_hanlders = {}
+      def self.handlers(code)
+        @@response_hanlders[code] 
+      end
 
       def self.register(code,response_class)
-        @@responses[code] = response_class 
+        @@response_hanlders[code] = response_class 
       end
 
       def self.handle(method, path, http_response)
-        response_class = @@responses[http_response.code.to_i] || Response
+        response_class = @@response_hanlders[http_response.code.to_i] || Response
         headers = {}
         http_response.header.each { |k, v| headers[k] = v }
         response = response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
@@ -49,8 +56,8 @@ module Restfulie::Client::HTTP
 
     module RequestAdapter
 
-      attr_reader :root
-      @root = nil
+      attr_reader :host
+      @host = nil
 
       attr_reader :default_headers
       @default_headers = nil
@@ -58,8 +65,8 @@ module Restfulie::Client::HTTP
       attr_accessor :cookies
       @cookies = nil
 
-      def init(root, default_headers = {})
-        @root = ::URI.parse(root)
+      def init(host, default_headers = {})
+        @host = ::URI.parse(host)
         @default_headers = default_headers
       end
 
@@ -111,8 +118,8 @@ module Restfulie::Client::HTTP
 
       def request!(method, path, *args)
         headers = @default_headers.merge(args.extract_options!)
-        unless @root.user.blank? && @root.password.blank?
-          headers["Authorization"] = "Basic " + ["#{@root.user}:#{@root.password}"].pack("m").delete("\r\n")
+        unless @host.user.blank? && @host.password.blank?
+          headers["Authorization"] = "Basic " + ["#{@host.user}:#{@host.password}"].pack("m").delete("\r\n")
         end
         headers['cookie'] = @cookies if @cookies
         args << headers
@@ -120,48 +127,48 @@ module Restfulie::Client::HTTP
         ::Restfulie::Logger.logger.info(request_to_s(method, path, *args)) unless ::Restfulie::Logger.logger
         begin
           response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
-        rescue Errno::ECONNREFUSED
-          raise Error::ServerNotAvailableError.new(method, path, self, Response.new(method, path, 503, nil, {}))
+        rescue Exception => e
+          raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
         end 
 
         case response.code
         when 100..299
           response 
         when 300..399
-          raise Error::Redirection.new(method, path, self, response)
+          raise Error::Redirection.new(self, response)
         when 400
-          raise Error::BadRequest.new(method, path, self, response)
+          raise Error::BadRequest.new(self, response)
         when 401
-          raise Error::Unauthorized.new(method, path, self, response)
+          raise Error::Unauthorized.new(self, response)
         when 403
-          raise Error::Forbidden.new(method, path, self, response)
+          raise Error::Forbidden.new(self, response)
         when 404
-          raise Error::NotFound.new(method, path, self, response)
+          raise Error::NotFound.new(self, response)
         when 405
-          raise Error::MethodNotAllowed.new(method, path, self, response)
+          raise Error::MethodNotAllowed.new(self, response)
         when 407
-          raise Error::ProxyAuthenticationRequired.new(method, path, self, response)
+          raise Error::ProxyAuthenticationRequired.new(self, response)
         when 409
-          raise Error::Conflict.new(method, path, self, response)
+          raise Error::Conflict.new(self, response)
         when 410
-          raise Error::Gone.new(method, path, self, response)
+          raise Error::Gone.new(self, response)
         when 412
-          raise Error::PreconditionFailed.new(method, path, self, response)
+          raise Error::PreconditionFailed.new(self, response)
         when 402, 406, 408, 411, 413..499
-          raise Error::ClientError.new(method, path, self, response)
+          raise Error::ClientError.new(self, response)
         when 501
-          raise Error::NotImplemented.new(method, path, self, response)
+          raise Error::NotImplemented.new(self, response)
         when 500, 502..599
-          raise Error::ServerError.new(method, path, self, response)
+          raise Error::ServerError.new(self, response)
         else
-          raise Error::UnknownError.new(method, path, self, response)
+          raise Error::UnknownError.new(self, response)
         end
       end
 
       private
 
       def get_connection_provider
-        @connection ||= ::Net::HTTP.new(@root.host, @root.port)
+        @connection ||= ::Net::HTTP.new(@host.host, @host.port)
       end
 
       protected
@@ -191,12 +198,9 @@ module Restfulie::Client::HTTP
     module RequestBuilder
       include RequestAdapter
 
-      def init(root, default_headers = {})
+      def init(host, default_headers = {})
         super
-        @headers = {
-          'Accept'       => 'application/atom+xml',
-          'Content-Type' => 'application/atom+xml'
-        }
+        @headers = {}
       end
 
       def at(uri)
@@ -263,15 +267,15 @@ module Restfulie::Client::HTTP
 
     class RequestExecutor
       include RequestAdapter
-      def initialize(root, default_headers = {})
-        init(root, default_headers)
+      def initialize(host, default_headers = {})
+        init(host, default_headers)
       end
     end
 
     class RequestBuilderExecutor
       include RequestBuilder
-      def initialize(root, default_headers = {})
-        init(root, default_headers)
+      def initialize(host, default_headers = {})
+        init(host, default_headers)
       end
     end
 

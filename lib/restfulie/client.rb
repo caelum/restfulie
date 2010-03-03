@@ -4,30 +4,12 @@ require 'restfulie/common'
 module Restfulie::Client; end
 
 %w(
-  base
-  entry_point
-  config
-  configuration
-  initializer
-  core_ext/hash
-  helper
   http
-  request_execution
-  state
-  atom_media_type
-  cache/basic
-  cache/fake
-  cache/restrictions
+  configuration
+  response_body_handler
+  entry_point
+  base
 ).each do |file|
   require "restfulie/client/#{file}"
 end
 
-Object.extend Restfulie::Client::Base
-
-include ActiveSupport::CoreExtensions::Hash
-
-class Hashi::CustomHash
-    uses_restfulie
-end
-
-Restfulie::Client.cache_provider = Restfulie::Client::Cache::Basic.new

@@ -4,7 +4,7 @@ module Restfulie::Client::HTTP; end
 %w(
   error
   wrapper
-  extensions
+  cache
 ).each do |file|
   require "restfulie/client/http/#{file}"
 end
