@@ -19,7 +19,7 @@ module Restfulie::Common; end
   media_type
   unmarshalling
   restfulie
-  marshalling/marshalling
+  builder
 ).each do |file| 
   require "restfulie/common/#{file}"
 end
