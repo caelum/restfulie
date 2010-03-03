@@ -8,7 +8,10 @@ require 'rcov'
 require 'active_record'
 
 require File.join(File.dirname(__FILE__), '..', 'lib', 'restfulie')
-require File.join(File.dirname(__FILE__), 'schema')
+require File.join(File.dirname(__FILE__), 'lib', 'schema')
+
+# Change output logger
+Restfulie::Logger.logger = ActiveSupport::BufferedLogger.new(File.join(File.dirname(__FILE__), "logs", "spec.log"))
 
 #
 # Some steroids on Spec::Example::ExampleGroup.
