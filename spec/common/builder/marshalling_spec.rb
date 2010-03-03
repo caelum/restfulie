@@ -45,12 +45,12 @@ context ::Restfulie::Marshalling do
     
     end # context "load marshallings"
   
-    it "should raiser error for a marshalling not found" do
-      msg = "Marshalling Bar not fould."
-      lambda {
-        ::Restfulie::Marshalling.load_marshalling(:bar)
-      }.should raise_error(::Restfulie::Error::UndefinedMarshallingError, msg)
-    end
+    # it "should raiser error for a marshalling not found" do
+    #   msg = "Marshalling Bar not fould."
+    #   lambda {
+    #     ::Restfulie::Marshalling.load_marshalling(:bar)
+    #   }.should raise_error(::Restfulie::Error::UndefinedMarshallingError, msg)
+    # end
   end # context "load marshallings"
   
   # context "marshalling objects" do
