@@ -1,4 +1,4 @@
-class Restfulie::Marshalling::Base
+class Restfulie::Builder::Marshalling::Base
   attr_accessor :title
 
   def initialize(*args, &block)
