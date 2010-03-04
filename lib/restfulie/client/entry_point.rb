@@ -1,8 +1,12 @@
 module Restfulie::Client
   
-  class EntryPoint
+  module EntryPoint
+    include ::Restfulie::Client::HTTP::RequestBuilder
+    extend self
 
-    def self.at(url)
+    def request!(method, path, *args)
+      response = super(method, path, *args)
+      response.unmarshal
     end
 
   end

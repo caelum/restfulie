@@ -33,3 +33,5 @@ module Restfulie::Client::ResponseBodyHandler
 
 end
 
+::Restfulie::Client::HTTP::ResponseHandler.register(200,::Restfulie::Client::ResponseBodyHandler::Base)
+

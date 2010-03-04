@@ -31,7 +31,6 @@ module Restfulie::Client
 
     end
 
-    ::Restfulie::Client::HTTP::ResponseHandler.register(200,::Restfulie::Client::ResponseBodyHandler::Base)
   end
 
 end
