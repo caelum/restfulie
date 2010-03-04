@@ -19,7 +19,11 @@ module Restfulie::Client
 
       def request!(method, path, *args)
         if config.default_headers and config.default_headers[method]
-          self.default_headers = config.default_headers[method]
+          if self.default_headers
+            self.default_headers = config.default_headers[method].dup.merge!( self.default_headers ) 
+          else 
+            self.default_headers = config.default_headers[method]
+          end
         end
         response = super(method, path, *args)
         response.unmarshal
