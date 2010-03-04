@@ -6,9 +6,7 @@ require 'rubygems'
 require 'active_support'
 require 'action_controller'
 
-require 'atom'
-
-
+require 'vendor/atom'
 require 'vendor/jeokkarak/jeokkarak'
 
 #initialize namespace

@@ -10,7 +10,7 @@ require 'delegate'
 require 'rubygems'
 gem 'libxml-ruby', '>= 1.1.2'
 require 'xml/libxml'
-require 'atom/xml/parser.rb'
+require 'vendor/atom/xml/parser.rb'
 
 module Atom # :nodoc:
   NAMESPACE = 'http://www.w3.org/2005/Atom' unless defined?(NAMESPACE)
@@ -282,7 +282,7 @@ module Atom # :nodoc:
       def to_xml(nodeonly = true, name = 'content', namespace = nil, namespace_map = Atom::Xml::NamespaceMap.new)
         node = XML::Node.new("#{namespace_map.prefix(Atom::NAMESPACE, name)}")
         node['type'] = 'xhtml'
-        node['xml:lang'] = self.xml_lang
+        node['xml:lang'] = self.xml_lang.to_s
         
         div = XML::Node.new('div')
         div['xmlns'] = XHTML

@@ -5,10 +5,10 @@
 # Please visit http://www.peerworks.org/contact for further information.
 #
 
-require 'atom'
-require 'atom/configuration'
-require 'atom/xml/parser'
-require 'atom/version'
+require 'vendor/atom'
+require 'vendor/atom/configuration'
+require 'vendor/atom/xml/parser'
+require 'vendor/atom/version'
 require 'xml/libxml'
 require 'uri'
 require 'net/http'
