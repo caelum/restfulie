@@ -29,7 +29,8 @@ end
 namespace :test do
   def start_server_and_invoke_test(task_name)
     pid = %x(ps -ef | grep fake_server | grep -v grep).split[1]
-    pid = %x(ps -ef | grep fake_server).split[1] unless pid 
+    sh "ruby ./spec/client/http/fake_server.rb &" unless pid 
+    pid = %x(ps -ef | grep fake_server).split[1]  
     Rake::Task[task_name].invoke
     puts "pid >>>> #{pid}"
     sh "kill #{pid}"
