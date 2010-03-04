@@ -56,18 +56,20 @@ module Restfulie::Client::HTTP
 
     module RequestAdapter
 
-      attr_reader :host
-      @host = nil
-
-      attr_reader :default_headers
-      @default_headers = nil
-
+      attr_reader   :host
       attr_accessor :cookies
-      @cookies = nil
+      attr_writer   :default_headers
 
-      def init(host, default_headers = {})
-        @host = ::URI.parse(host)
-        @default_headers = default_headers
+      def host=(host)
+        if host.is_a?(URI)
+          @host = host
+        else
+          @host = ::URI.parse(host)
+        end
+      end
+
+      def default_headers
+        @default_headers ||= {}
       end
 
       def get(path, *args)
@@ -117,7 +119,7 @@ module Restfulie::Client::HTTP
       end
 
       def request!(method, path, *args)
-        headers = @default_headers.merge(args.extract_options!)
+        headers = default_headers.merge(args.extract_options!)
         unless @host.user.blank? && @host.password.blank?
           headers["Authorization"] = "Basic " + ["#{@host.user}:#{@host.password}"].pack("m").delete("\r\n")
         end
@@ -198,69 +200,68 @@ module Restfulie::Client::HTTP
     module RequestBuilder
       include RequestAdapter
 
-      def init(host, default_headers = {})
-        super
-        @headers = {}
-      end
-
-      def at(uri)
-        @uri = uri
+      def at(url)
+        self.host = url
         self
       end
       
       def as(content_type)
-        @headers['Content-Type'] = content_type
+        default_headers['Content-Type'] = content_type
         accepts(content_type)
       end
       
       def accepts(content_type)
-        @headers['Accept'] = content_type
+        default_headers['Accept'] = content_type
         self
       end
       
       def with(headers)
-        @headers.merge!(headers)
+        default_headers.merge!(headers)
         self
       end
 
+      def path
+        host.path
+      end
+
       def get
-        request(:get, @uri, @headers)
+        request(:get, path, {})
       end
 
       def head
-        request(:head, @uri, @headers)
+        request(:head, path, {})
       end
 
       def post(payload)
-        request(:post, @uri, payload, @headers)
+        request(:post, path, payload, {})
       end
 
       def put(payload)
-        request(:put, @uri, payload, @headers)
+        request(:put, path, payload, {})
       end
 
       def delete
-        request(:delete, @uri, @headers)
+        request(:delete, path, {})
       end
 
       def get!
-        request!(:get, @uri, @headers)
+        request!(:get, path, {})
       end
 
       def head!
-        request!(:head, @uri, @headers)
+        request!(:head, path, {})
       end
 
       def post!(payload)
-        request!(:post, @uri, payload, @headers)
+        request!(:post, path, payload, {})
       end
 
       def put!(payload)
-        request!(:put, @uri, payload, @headers)
+        request!(:put, path, payload, {})
       end
 
       def delete!
-        request!(:delete, @uri, @headers)
+        request!(:delete, path, {})
       end
 
     end
@@ -268,14 +269,23 @@ module Restfulie::Client::HTTP
     class RequestExecutor
       include RequestAdapter
       def initialize(host, default_headers = {})
-        init(host, default_headers)
+        self.host=host
+        self.default_headers=default_headers
       end
     end
 
     class RequestBuilderExecutor
       include RequestBuilder
       def initialize(host, default_headers = {})
-        init(host, default_headers)
+        self.host=host
+        self.default_headers=default_headers
+      end
+      def at(path)
+        @path = path
+        self
+      end
+      def path
+        @path
       end
     end
 

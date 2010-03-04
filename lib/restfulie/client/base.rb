@@ -14,14 +14,12 @@ module Restfulie::Client
       def uses_restfulie(cnf = Configuration.new)
         @config = cnf
         yield cnf
-        init(cnf.entry_point_host)
-        at(config.entry_point_path)
+        at(config.entry_point)
       end
 
       def request!(method, path, *args)
         if config.default_headers and config.default_headers[method]
-          custom_header = args.extract_options! 
-          args << config.default_headers[method].merge(custom_header)
+          self.default_headers = config.default_headers[method]
         end
         response = super(method, path, *args)
         response.unmarshal

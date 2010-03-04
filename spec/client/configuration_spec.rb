@@ -11,8 +11,6 @@ context Restfulie::Client::Configuration do
     @configuration.default_headers[:get]['Accept'].should == 'application/atom+xml'
     @configuration.default_headers[:post]['Content-Type'].should == 'application/atom+xml'
     @configuration.entry_point.should be_empty
-    @configuration.entry_point_host.should be_nil
-    @configuration.entry_point_path.should be_nil
     @configuration.auto_follows.should be_empty
     @configuration[:entry_point].should be_empty
   end
@@ -28,12 +26,8 @@ context Restfulie::Client::Configuration do
     @configuration.default_headers[:post]['Content-Type'].should == 'text/html'
 
     @configuration.entry_point.should be_empty
-    @configuration.entry_point_host.should be_nil
-    @configuration.entry_point_path.should be_nil
     @configuration.entry_point = "http://foo.com/bar"
     @configuration.entry_point.should == 'http://foo.com/bar'
-    @configuration.entry_point_host.should == 'http://foo.com:80'
-    @configuration.entry_point_path.should == '/bar'
 
     @configuration.auto_follows.should be_empty
     @configuration.auto_follows = { 301 => [:post,:put,:delete] }

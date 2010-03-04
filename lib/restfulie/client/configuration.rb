@@ -19,8 +19,6 @@ module Restfulie::Client
 
   class Configuration < ::Hash
 
-    attr_reader :entry_point_host 
-    attr_reader :entry_point_path 
     attr_reader :environment
 
     @@default_configuration = {
@@ -60,16 +58,6 @@ module Restfulie::Client
       fetch(environment)[key] = value
     end 
 
-    def entry_point_path
-      parse_entry_point
-      @entry_point_path
-    end
-
-    def entry_point_host
-      parse_entry_point
-      @entry_point_host
-    end
-
     def method_missing(name, *args, &block)
       method_name = name.to_s
       if method_name.last == '='
@@ -79,15 +67,6 @@ module Restfulie::Client
         super unless value
         value
       end
-    end
-
-    private 
-
-    def parse_entry_point
-      return @entry_point_host = @entry_point_path = nil if entry_point.empty?
-      uri = ::URI.parse(entry_point)
-      @entry_point_host = "#{uri.scheme}://#{uri.host}:#{uri.port}"
-      @entry_point_path = uri.path
     end
 
   end
