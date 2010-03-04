@@ -36,17 +36,17 @@ module Restfulie::Client::HTTP
 
     module ResponseHandler
 
-      @@response_hanlders = {}
+      @@response_handlers = {}
       def self.handlers(code)
-        @@response_hanlders[code] 
+        @@response_handlers[code] 
       end
 
       def self.register(code,response_class)
-        @@response_hanlders[code] = response_class 
+        @@response_handlers[code] = response_class 
       end
 
       def self.handle(method, path, http_response)
-        response_class = @@response_hanlders[http_response.code.to_i] || Response
+        response_class = @@response_handlers[http_response.code.to_i] || Response
         headers = {}
         http_response.header.each { |k, v| headers[k] = v }
         response = response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
