@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Song 4 feed</title>
+  <link href="http://localhost:4567/song_4" rel="self" type='application/atom+xml'/>
+  <link href="http://localhost:4567/related_songs" rel="related_songs" type='application/atom+xml'/>
+  <updated>2010-12-13T18:30:02Z</updated>
+  <author>
+    <name>Your company</name>
+  </author>
+  <id>http://localhost:4567/song_4</id>
+</feed>

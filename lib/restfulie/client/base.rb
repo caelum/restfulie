@@ -1,5 +1,10 @@
 module Restfulie::Client
 
+  module EntryPoint
+    include ::Restfulie::Client::RequestBuilderUnmarshal
+    extend self
+  end
+
   module Base
 
     def self.included(base)
@@ -7,7 +12,7 @@ module Restfulie::Client
     end
 
     module ClassMethods
-      include ::Restfulie::Client::HTTP::RequestBuilder
+      include ::Restfulie::Client::RequestBuilderUnmarshal
 
       attr_accessor :config
 
@@ -25,8 +30,7 @@ module Restfulie::Client
             self.default_headers = config.default_headers[method]
           end
         end
-        response = super(method, path, *args)
-        response.unmarshal
+        super
       end
 
     end

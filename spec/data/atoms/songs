@@ -1,10 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Songs feed</title>
-  <link href="http://localhost:4567/songs" rel="self"/>
+  <link href="http://localhost:4567/songs" rel="self" type='application/atom+xml'/>
+  <link href="http://localhost:4567/songs_top_ten" rel="top_ten" type='application/atom+xml'/>
   <updated>2010-12-13T18:30:02Z</updated>
   <author>
     <name>Your company</name>
   </author>
   <id>http://localhost:4567/songs</id>
+  <entry>
+    <title>Song 1</title>
+    <id>http://localhost:4567/songs_1</id>
+    <updated>2010-01-18T16:35:18Z</updated>
+    <published>2010-01-18T16:35:18Z</published>
+    <link href="http://localhost:4567/songs_1" rel="self" type='application/atom+xml'/>
+    <link href="http://localhost:4567/related_songs" rel="related_songs" type='application/atom+xml'/>
+    <link href="http://localhost:4567/image/1/1" rel="images"/> 
+    <link href="http://localhost:4567/image/1/2" rel="images"/>
+  </entry>
+  <entry>
+    <title>Song 2</title>
+    <id>http://localhost:4567/songs_2</id>
+    <updated>2010-01-18T16:35:18Z</updated>
+    <published>2010-01-18T16:35:18Z</published>
+    <link href="http://localhost:4567/songs_2" rel="self" type='application/atom+xml'/>
+    <link href="http://localhost:4567/related_songs" rel="related_songs" type='application/atom+xml'/>
+    <link href="http://localhost:4567/image/2/1" rel="images"/> 
+    <link href="http://localhost:4567/image/2/1" rel="images"/>
+  </entry>
+  <entry>
+    <title>Entry about Song 3</title>
+    <id>http://localhost:4567/song_3</id>
+    <updated>2010-01-18T16:35:18Z</updated>
+    <published>2010-01-18T16:35:18Z</published>
+    <link href="http://localhost:4567/song_3" rel="self" type='application/atom+xml'/>
+    <link href="http://localhost:4567/related_songs" rel="related_songs" type='application/atom+xml'/>
+    <link href="http://localhost:4567/image/3/1" rel="images"/> 
+    <link href="http://localhost:4567/image/3/2" rel="images"/>
+  </entry>
+  <entry>
+    <title>Entry about Song 4</title>
+    <id>http://localhost:4567/song_4</id>
+    <updated>2010-01-18T16:35:18Z</updated>
+    <published>2010-01-18T16:35:18Z</published>
+    <link href="http://localhost:4567/song_4" rel="self" type='application/atom+xml'/>
+    <link href="http://localhost:4567/related_songs" rel="related_songs" type='application/atom+xml'/>
+    <link href="http://localhost:4567/image/4/1" rel="images"/> 
+    <link href="http://localhost:4567/image/4/1" rel="images"/>
+  </entry>
 </feed>

@@ -7,7 +7,6 @@ module Restfulie::Client; end
   http
   configuration
   response_body_handler
-  entry_point
   base
 ).each do |file|
   require "restfulie/client/#{file}"
