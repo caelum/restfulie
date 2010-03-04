@@ -19,9 +19,10 @@ context Restfulie::Builder::Base do
     end
 
     it "should raiser error for a marshalling not found" do
+      ::Restfulie::Builder::Marshalling.add_autoload_path(File.expand_path(File.dirname(__FILE__) + '/../../lib/marshalling'))
       lambda {
         @builder.to_bar()
-      }.should raise_error(NoMethodError, "undefined method `to_bar' for #{@builder}")
+      }.should raise_error(Restfulie::Error::UndefinedMarshallingError, "Marshalling Bar not fould.")
     end
   end # context "load marshallings"
 end

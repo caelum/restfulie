@@ -6,7 +6,7 @@ module Restfulie::Builder; end
   helpers
   rules
   entry_rules
-  feed_rules
+  collections_rules
   marshalling
 ).each do |file|
   require File.join(File.dirname(__FILE__), 'builder', file)

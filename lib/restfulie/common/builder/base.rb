@@ -18,8 +18,14 @@ private
 
   def marshalling_class(method)
     if marshalling_name = method.to_s.match(/to_(.*)/)
-      marshalling = marshalling_name[1].downcase.capitalize.to_sym 
-      Restfulie::Builder::Marshalling.const_get(marshalling) if Restfulie::Builder::Marshalling.const_defined?(marshalling)
+      marshalling = marshalling_name[1].downcase.capitalize.to_sym
+      if Restfulie::Builder::Marshalling.const_defined?(marshalling)
+        begin
+          Restfulie::Builder::Marshalling.const_get(marshalling) 
+        rescue NameError
+          raise Restfulie::Error::UndefinedMarshallingError.new("Marshalling #{marshalling} not fould.")
+        end
+      end
     end
   end
 end
