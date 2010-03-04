@@ -23,7 +23,15 @@ module Restfulie::Client::HTTP::Cache
   class RequestBuilderExecutor 
     include RequestBuilder
     def initialize(host, default_headers = {})
-      init(host, default_headers)
+      self.host=host
+      self.default_headers=default_headers
+    end
+    def at(path)
+      @path = path
+      self
+    end
+    def path
+      @path
     end
   end
 
