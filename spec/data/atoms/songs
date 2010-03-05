@@ -13,7 +13,7 @@
     <id>http://localhost:4567/songs_1</id>
     <updated>2010-01-18T16:35:18Z</updated>
     <published>2010-01-18T16:35:18Z</published>
-    <link href="http://localhost:4567/songs_1" rel="self" type='application/atom+xml'/>
+    <link href="http://localhost:4567/song_1" rel="self" type='application/atom+xml'/>
     <link href="http://localhost:4567/related_songs" rel="related_songs" type='application/atom+xml'/>
     <link href="http://localhost:4567/image/1/1" rel="images"/> 
     <link href="http://localhost:4567/image/1/2" rel="images"/>
@@ -23,7 +23,7 @@
     <id>http://localhost:4567/songs_2</id>
     <updated>2010-01-18T16:35:18Z</updated>
     <published>2010-01-18T16:35:18Z</published>
-    <link href="http://localhost:4567/songs_2" rel="self" type='application/atom+xml'/>
+    <link href="http://localhost:4567/song_2" rel="self" type='application/atom+xml'/>
     <link href="http://localhost:4567/related_songs" rel="related_songs" type='application/atom+xml'/>
     <link href="http://localhost:4567/image/2/1" rel="images"/> 
     <link href="http://localhost:4567/image/2/1" rel="images"/>
