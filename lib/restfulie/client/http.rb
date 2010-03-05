@@ -1,9 +1,8 @@
-
 module Restfulie::Client::HTTP; end
 
 %w(
   error
-  wrapper
+  adapter
   cache
   marshal
   marshals/atom
