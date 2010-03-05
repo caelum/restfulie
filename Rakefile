@@ -30,7 +30,7 @@ namespace :test do
   def start_server_and_invoke_test(task_name)
     pid = %x(ps -ef | grep fake_server | grep -v grep).split[1]
     unless pid
-      sh "ruby ./spec/client/http/fake_server.rb &"  
+      sh "ruby ./spec/client/fake_server.rb &"  
       pid = %x(ps -ef | grep fake_server).split[1]  
     end
     Rake::Task[task_name].invoke
