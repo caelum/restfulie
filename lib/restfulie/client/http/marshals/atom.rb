@@ -1,13 +1,13 @@
-module Restfulie::Client::ResponseBodyHandler
+module Restfulie::Client::HTTP::Marshal
 
-  module AtomBodyHandler
+  module Atom
 
     def self.unmarshal(response)
       ::Atom::Feed.load_feed(response.body)
     end
 
     module AtomRequestBuilder
-      include ::Restfulie::Client::RequestBuilderUnmarshal
+      include RequestBuilder
       def method_missing(method_sym,*args)
         selected_links = links.select{ |l| l.rel == method_sym.to_s }
         super if selected_links.empty?
@@ -16,7 +16,7 @@ module Restfulie::Client::ResponseBodyHandler
     end
 
     module LinkRequestBuilder
-      include ::Restfulie::Client::RequestBuilderUnmarshal
+      include RequestBuilder
       def path
         at(href)
         as(type) if type
@@ -29,5 +29,7 @@ module Restfulie::Client::ResponseBodyHandler
     ::Atom::Link.instance_eval { include LinkRequestBuilder }
   end
 
-  Base.register('application/atom+xml',AtomBodyHandler)
 end
+
+Restfulie::Client::HTTP::Marshal::Response.register('application/atom+xml',Restfulie::Client::HTTP::Marshal::Atom)
+

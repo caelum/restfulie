@@ -1,7 +1,7 @@
 module Restfulie::Client
 
   module EntryPoint
-    include ::Restfulie::Client::RequestBuilderUnmarshal
+    include HTTP::Marshal::RequestBuilder
     extend self
   end
 
@@ -12,7 +12,7 @@ module Restfulie::Client
     end
 
     module ClassMethods
-      include ::Restfulie::Client::RequestBuilderUnmarshal
+      include HTTP::Marshal::RequestBuilder
 
       attr_accessor :config
 
