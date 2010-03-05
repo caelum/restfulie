@@ -1,6 +1,5 @@
 require File.join(File.dirname(__FILE__),'..','..','spec_helper')
 
-
 context Restfulie::Client::HTTP::Marshal::Response do
   
   it 'should unmarshal raw response for undefined content-type' do
