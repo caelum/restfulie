@@ -79,7 +79,7 @@ end
 
 YARD::Rake::YardocTask.new do |t|
   t.files   = ['lib/**/**/*.rb']   # optional
-  t.options = [] # optional
+  t.options = ['--title="Restfulie Documentation"'] # optional
 end
 
 desc "Install the gem locally"
