@@ -6,6 +6,7 @@ module Restfulie::Client::HTTP
 
       class TranslationError < BaseError; end
 
+      # Standard error thrown on major client exceptions
       class RESTError < StandardError
 
         attr_reader :response
@@ -32,33 +33,43 @@ module Restfulie::Client::HTTP
 
       class UnknownError < RESTError;  end
 
-      class Redirection < RESTError; end
+      # 300 range
+      class Redirection < RESTError; end 
 
       class ClientError < RESTError; end
 
-      class BadRequest < ClientError; end
+      # 400
+      class BadRequest < ClientError; end 
 
-      class Unauthorized < ClientError; end
+      # 401
+      class Unauthorized < ClientError; end 
 
-      class Forbidden < ClientError; end
+      # 403
+      class Forbidden < ClientError; end 
 
-      class NotFound < ClientError; end
+      # 404
+      class NotFound < ClientError; end 
 
-      class MethodNotAllowed < ClientError; end
+      # 405
+      class MethodNotAllowed < ClientError; end 
 
-      class PreconditionFailed < ClientError; end
+      # 412
+      class PreconditionFailed < ClientError; end 
 
-      class ProxyAuthenticationRequired < ClientError; end
+      # 407
+      class ProxyAuthenticationRequired < ClientError; end 
 
-      class Conflict < ClientError; end
+      # 409
+      class Conflict < ClientError; end 
 
-      class Gone < ClientError; end
+      # 410
+      class Gone < ClientError; end 
 
-      class ServerError < RESTError; end
+      # 500
+      class ServerError < RESTError; end 
 
-      class NotImplemented < ServerError; end
-
+      # 501
+      class NotImplemented < ServerError; end 
     end
-
 end
 
