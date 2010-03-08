@@ -16,7 +16,6 @@ module Restfulie::Common; end
 %w(
   errors
   logger
-  media_type
   unmarshalling
   restfulie
   builder

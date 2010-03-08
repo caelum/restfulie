@@ -21,7 +21,6 @@ module Restfulie
   # the transition's uri.
   def acts_as_restfulie
     extend  Restfulie::Server::Base
-    extend  Restfulie::MediaTypeControl
     include Restfulie::Server::Instance
     include Restfulie::Server::Marshalling
     extend  Restfulie::Unmarshalling #TODO still needs testing. e.g. server model has from_xml

@@ -31,7 +31,6 @@ module Restfulie::Server; end
   marshalling
   transition
   restfulie_controller
-  atom_media_type
   core_ext
   rails_ext
   serializers

@@ -11,7 +11,6 @@ module Restfulie::Client; end
   helper
   request_execution
   state
-  atom_media_type
   cache/basic
   cache/fake
   cache/restrictions

@@ -16,15 +16,5 @@ context Restfulie::Server::Base do
       Account.transition :pay
       AccountsController.should_not respond_to(:pay)
     end
-  end
-  
-  context "when acting as restfulie" do
-    it "should import module MimeType" do
-      class City
-        acts_as_restfulie
-      end
-      City.should be_kind_of(Restfulie::MediaTypeControl)
-    end
-  end
-  
+  end  
 end

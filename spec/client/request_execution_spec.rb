@@ -36,20 +36,6 @@ context Restfulie::Client::Response do
       @request = mock Restfulie::Client::RequestExecution
     end
     
-    it "should complain about a generic type that doesnt match a from_ method" do
-      @response.content_type = "custom_xhtml"
-      lambda {Restfulie::Client::ResponseHandler.generic_parse_entity(restfulie_response)}.should raise_error(Restfulie::UnsupportedContentType)
-    end
-    
-    it "should invoke a generic existing from_ method" do
-      def Shipment.from_xhtml(content)
-        "resulting content"
-      end
-      Restfulie::MediaType.should_receive(:type_for).with("xhtml").and_return(Shipment)
-      @response.content_type = "xhtml"
-      Restfulie::Client::ResponseHandler.generic_parse_entity(restfulie_response).should == "resulting content"
-    end
-    
     def restfulie_response(code = "200")
       @response.code = code
       Hashi::CustomHash.new({"response"=>@response})
@@ -59,30 +45,6 @@ context Restfulie::Client::Response do
       @request.should_receive(:raw?).and_return(true)
       @response.content_type = "application/vnd.app+xml"
       Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @response
-    end
-    
-    it "should return a xml result from the content" do
-      @request.should_receive(:raw?).and_return(false)
-      @response.content_type = "application/vnd.app+xml"
-      Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
-      Shipment.should_receive(:from_xml).with(@response.body).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @result
-    end
-    
-    it "should return a json result from the content" do
-      @request.should_receive(:raw?).and_return(false)
-      @response.content_type = "application/json"
-      Restfulie::MediaType.should_receive(:type_for).and_return(Shipment)
-      Shipment.should_receive(:from_json).with(@response.body).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(@request, restfulie_response("200")).should == @result
-    end
-    
-    it "should return a generic result from the content" do
-      @request.should_receive(:raw?).and_return(false)
-      @response.content_type = "xhtml"
-      response = restfulie_response("200")
-      Restfulie::Client::ResponseHandler.should_receive(:generic_parse_entity).with(response).and_return(@result)
-      Restfulie::Client::ResponseHandler.parse_entity(@request, response).should == @result
     end
     
   end
