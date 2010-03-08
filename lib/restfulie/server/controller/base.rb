@@ -2,10 +2,12 @@ module Restfulie
   module Server
     module Controller
       class Base < ::ApplicationController
-        unloadable  
+        unloadable
         
       protected
       
+        # If your controller inherits from Restfulie::Server::Controller::Base,
+        # it will have an :atom option, very similar to render :xml
         def render(options = nil, extra_options = {}, &block)
           if atom = options[:atom]
             response.content_type ||= Mime::ATOM
