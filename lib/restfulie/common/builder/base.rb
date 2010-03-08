@@ -1,4 +1,10 @@
 class Restfulie::Builder::Base
+  attr_accessor :rules
+
+  def initialize(rules = [])
+    @rules = rules
+  end
+
   # Remove to_json from ActiveSupport in the class
   # I want my own to_json
   undef_method :to_json if respond_to?(:to_json)

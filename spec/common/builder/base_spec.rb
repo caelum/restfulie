@@ -1,6 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 context Restfulie::Builder::Base do
+  it "should respond by rules" do
+    rules   = [Restfulie::Builder::ResourceRules.new, Restfulie::Builder::CollectionRules.new]
+    builder = Restfulie::Builder::Base.new(rules)
+    builder.rules.should eql(rules)
+  end
+  
   context "load marshallings" do
     before do
       @builder = Restfulie::Builder::Base.new
