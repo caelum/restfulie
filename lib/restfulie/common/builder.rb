@@ -9,8 +9,8 @@ module Restfulie::Builder; end
   rules/link
   rules/links
   rules/namespace
-  rules/member_rules
-  rules/collection_rules
+  rules/member_rule
+  rules/collection_rule
 ).each do |file|
   require File.join(File.dirname(__FILE__), 'builder', file)
 end

@@ -1,11 +1,11 @@
 module Restfulie::Builder::Helpers
 
   def member(&block)
-    create_rule(Restfulie::Builder::MemberRules, &block)
+    create_rule(Restfulie::Builder::MemberRule, &block)
   end
 
   def collection(&block)
-    create_rule(Restfulie::Builder::CollectionRules, &block)
+    create_rule(Restfulie::Builder::CollectionRule, &block)
   end
 
 private
