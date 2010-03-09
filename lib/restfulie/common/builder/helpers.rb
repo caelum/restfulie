@@ -1,7 +1,7 @@
 module Restfulie::Builder::Helpers
 
-  def resource(&block)
-    create_rule(Restfulie::Builder::ResourceRules, &block)
+  def member(&block)
+    create_rule(Restfulie::Builder::MemberRules, &block)
   end
 
   def collection(&block)

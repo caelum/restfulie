@@ -4,15 +4,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 context Restfulie::Builder::Helpers do
   include Restfulie::Builder::Helpers
 
-  context "entry" do
+  context "member" do
     it "should create a builder for a simple call" do
-      builder = resource()
+      builder = member()
       builder.should be_kind_of(Restfulie::Builder::Base)
     end
     
     it "should create a entry rule and set in builder rules" do
       block   = lambda {}
-      builder = resource(&block)
+      builder = member(&block)
       builder.rules.should_not be_blank()
       builder.rules.first.block.should eql(block)
     end
