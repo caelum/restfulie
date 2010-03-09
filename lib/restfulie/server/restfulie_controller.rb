@@ -3,6 +3,7 @@ module Restfulie
   module Server
   
     # Controller which adds default CRUD + search + other operations.
+    # TODO: move these actions to controller/base.rb (maybe using InheritedResources, maybe not)
     module Controller
     
       # creates a model based on the request media-type extracted from its content-type

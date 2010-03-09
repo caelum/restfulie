@@ -28,29 +28,6 @@ describe Restfulie::Server::Controller do
       @controller.model_type.should == SchoolClient
     end
     
-    it "should not fit content if it is not registered" do
-      Restfulie::MediaType.should_receive(:supports?).with('vnd/my_custom+xml').and_return(false)
-      @controller.fits_content(SchoolClient, 'vnd/my_custom+xml').should be_false
-    end
-    
-    it "should not fit content if it does not accept any custom media type" do
-      Restfulie::MediaType.should_receive(:supports?).with('vnd/my_custom+xml').and_return(true)
-      @controller.fits_content(SchoolClient, 'vnd/my_custom+xml').should be_false
-    end
-    
-    it "should fit content if it does not accept any custom media type, but its a basic one" do
-      Restfulie::MediaType.should_receive(:supports?).with('application/xml').and_return(true)
-      @controller.fits_content(SchoolClient, 'application/xml').should be_true
-    end
-    
-    it "should not fit content if is registered for another type" do
-      Restfulie::MediaType.should_receive(:supports?).with('vnd/my_custom+xml').and_return(true)
-      def SchoolClient.media_type_representations
-        []
-      end
-      @controller.fits_content(SchoolClient, 'vnd/my_custom+xml').should be_false
-    end
-    
     it "should extract the model name from the controller name" do
       @controller.model_name.should == "school_client"
     end

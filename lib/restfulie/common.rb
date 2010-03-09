@@ -14,13 +14,13 @@ module Restfulie; end
 module Restfulie::Common; end
 
 %w(
+  errors
   logger
-  media_type
   unmarshalling
   restfulie
+  builder
 ).each do |file| 
   require "restfulie/common/#{file}"
 end
 
 include ActiveSupport::CoreExtensions::Hash
-

@@ -31,10 +31,10 @@ module Restfulie::Server; end
   marshalling
   transition
   restfulie_controller
-  atom_media_type
   core_ext
-  serializers
   rails_ext
+  serializers
+  template_handlers
 ).each do |file|
   require "restfulie/server/#{file}"
 end
