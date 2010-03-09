@@ -1,4 +1,4 @@
-module Restfulie::Client::HTTP::Marshal
+module Restfulie::Client::HTTP::Marshal#:nodoc:
 
   # Implements the interface for unmarshal Atom media type responses (application/atom+xml) to ruby objects instantiated by rAtom library.
   #
@@ -10,12 +10,10 @@ module Restfulie::Client::HTTP::Marshal
       ::Atom::Feed.load_feed(response.body)
     end
 
+    # Offer easily access to Atom link relationships, such as <tt>post.next</tt> for 
+    # <tt>&lt;link rel="next" href="http://resource.entrypoint.com/post/12" type="application/atom+xml" /&gt;</tt> relationships.
     module AtomRequestBuilder
-      include RequestBuilder
-      
-      # Offer easily access to Atom link relationships, such as <tt>post.next</tt> for 
-      # <tt>&lt;link rel="next" href="http://resource.entrypoint.com/post/12" type="application/atom+xml" /&gt;</tt> relationships.
-      def method_missing(method_sym,*args)
+      def method_missing(method_sym,*args)#:nodoc:
         selected_links = links.select{ |l| l.rel == method_sym.to_s }
         super if selected_links.empty?
         selected_links.size == 1 ? selected_links.first : selected_links
@@ -25,7 +23,7 @@ module Restfulie::Client::HTTP::Marshal
     # Gives RequestBuilder module capabilities to Atom::Link to allow easy fetching of the resources related to current resource.
     module LinkRequestBuilder
       include RequestBuilder
-      def path
+      def path#:nodoc:
         at(href)
         as(type) if type
         super

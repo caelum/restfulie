@@ -3,7 +3,7 @@ require 'rubygems/specification'
 require 'rake'
 require 'rake/gempackagetask'
 require 'spec/rake/spectask'
-require 'yard'
+require 'rake/rdoctask'
 
 GEM = "restfulie"
 GEM_VERSION = "0.7.0"
@@ -77,9 +77,9 @@ Rake::GemPackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
 end
 
-YARD::Rake::YardocTask.new do |t|
-  t.files   = ['lib/**/**/*.rb']   # optional
-  t.options = ['--title="Restfulie Documentation"'] # optional
+Rake::RDocTask.new("rdoc") do |rdoc|
+   rdoc.options << '--line-numbers' << '--inline-source'
+#   rdoc.rdoc_files.include('lib/**/**/*.rb')
 end
 
 desc "Install the gem locally"

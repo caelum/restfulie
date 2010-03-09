@@ -1,4 +1,5 @@
-module Restfulie::Client::HTTP; end
+module Restfulie::Client::HTTP#:nodoc:
+end
 
 %w(
   error
