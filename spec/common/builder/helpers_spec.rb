@@ -3,6 +3,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 
 context Restfulie::Builder::Helpers do
   include Restfulie::Builder::Helpers
+  
+  context "link" do
+    it "create a Link" do
+      lk = link(:self)
+      lk.should be_kind_of(Restfulie::Builder::Rules::Link)
+    end
+  end
 
   context "member" do
     it "should create a builder for a simple call" do

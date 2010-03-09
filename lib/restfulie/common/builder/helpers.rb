@@ -8,4 +8,9 @@ module Restfulie::Builder::Helpers
     rule = block_given? ? [rule_class.new(&block)] : []
     Restfulie::Builder::Base.new(object, rule)
   end
+  
+  # Helper to create objects link
+  def link(*args)
+    Restfulie::Builder::Rules::Link.new(*args)
+  end
 end
