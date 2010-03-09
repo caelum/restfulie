@@ -6,38 +6,29 @@ context Restfulie::Builder::Helpers do
 
   context "member" do
     it "should create a builder for a simple call" do
-      builder = member()
+      builder = describe(Object.new)
       builder.should be_kind_of(Restfulie::Builder::Base)
     end
     
     it "should create a entry rule and set in builder rules" do
       block   = lambda {}
-      builder = member(&block)
+      builder = describe(Object.new, &block)
       builder.rules.should_not be_blank()
-      builder.rules.first.block.should eql(block)
+      builder.rules.find { |r| r.block == block }.should be_kind_of(Restfulie::Builder::MemberRule)
     end
-
-    # context "builder a representation" do
-    #   it "should create a simple represenatation" do
-    #     album   = Album.first
-    #     builder = entry(album)
-    #     builder.to_atom().should eql()
-    #   end
-    # end
-    
   end # context "entry"
   
   context "collection" do
     it "should create a builder for a simple call" do
-      builder = collection()
+      builder = describe([])
       builder.should be_kind_of(Restfulie::Builder::Base)
     end
     
     it "should create a entry rule and set in builder rules" do
       block   = lambda {}
-      builder = collection(&block)
+      builder = describe([], &block)
       builder.rules.should_not be_blank()
-      builder.rules.first.block.should eql(block)
+      builder.rules.find { |r| r.block == block }.should be_kind_of(Restfulie::Builder::CollectionRule)
     end
   end # context "entry"
 end

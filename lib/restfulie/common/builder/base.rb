@@ -1,8 +1,10 @@
 class Restfulie::Builder::Base
   attr_accessor :rules
+  attr_accessor :object
 
-  def initialize(rules = [])
-    @rules = rules
+  def initialize(object, rules = [])
+    @object = object
+    @rules  = rules
   end
 
   # Remove to_json from ActiveSupport in the class
