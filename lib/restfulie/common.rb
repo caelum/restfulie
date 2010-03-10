@@ -7,7 +7,6 @@ require 'active_support'
 require 'action_controller'
 
 require 'vendor/atom'
-require 'vendor/jeokkarak/jeokkarak'
 
 #initialize namespace
 module Restfulie; end
@@ -16,8 +15,6 @@ module Restfulie::Common; end
 %w(
   errors
   logger
-  unmarshalling
-  restfulie
   builder
 ).each do |file| 
   require "restfulie/common/#{file}"

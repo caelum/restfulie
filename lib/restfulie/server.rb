@@ -25,11 +25,7 @@ end
 module Restfulie::Server; end
 
 %w(
-  base
   controller
-  instance
-  marshalling
-  transition
   restfulie_controller
   core_ext
   rails_ext

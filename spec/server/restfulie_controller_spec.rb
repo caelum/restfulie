@@ -49,42 +49,6 @@ describe Restfulie::Server::Controller do
       @controller.create.should == @result
     end
 
-    it "render the errors if something goes wrong" do
-      model = Object.new
-      def model.save
-        false
-      end
-      def model.errors
-        "error-list"
-      end
-      body = Hashi::CustomHash.new
-      def body.string
-        "content"
-      end
-      @req.should_receive(:body).and_return(body)
-      @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(true)
-      SchoolClient.should_receive(:from_xml).with(body.string).and_return(model)
-      @controller.should_receive(:render).with({:xml => model.errors, :status => :unprocessable_entity}).and_return(@result)
-      @controller.create.should == @result
-    end
-
-    it "should save models if everything goes fine" do
-      model = Object.new
-      def model.save
-        true
-      end
-      body = Hashi::CustomHash.new
-      def body.string
-        "content"
-      end
-      
-      @req.should_receive(:body).and_return(body)
-      @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(true)
-      SchoolClient.should_receive(:from_xml).with(body.string).and_return(model)
-      @controller.should_receive(:render_created).with(model).and_return(@result)
-      @controller.create.should == @result
-    end
-
   end
 
     context "when retrieving a resource" do
@@ -139,34 +103,6 @@ describe Restfulie::Server::Controller do
       @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(false)
       @controller.should_receive(:head).with(415).and_return(@result)
       @controller.update.should == @result
-    end
-    
-    context "will update" do
-      
-      before do
-        @loaded.should_receive(:can?).with(:update).and_return(true)
-        @controller.should_receive(:fits_content).with(SchoolClient, 'vnd/my_custom+xml').and_return(true)
-        body = Hashi::CustomHash.new({"string" => "my body"})
-        @req.should_receive(:body).and_return(body)
-        @client = SchoolClient.new
-        model = { "school_client" => @client}
-        Hash.should_receive(:from_xml).with(body.string).and_return(model)
-        @loaded.should_receive(:update_attributes).with(@client).and_return(true)
-        @controller.should_receive(:render_resource).with(@loaded).and_return(@result)
-      end
-
-      it "should render the resource if everything goes ok" do
-        @controller.update.should == @result
-      end
-      
-      it "should invoke pre_update if available" do
-        def @controller.pre_update(model)
-          :nothing
-        end
-        @controller.should_receive(:pre_update).with(@client)
-        @controller.update.should == @result
-      end
-    
     end
     
   end
