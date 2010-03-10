@@ -13,13 +13,13 @@ context Restfulie::Builder::Helpers do
 
   context "member" do
     it "should create a builder for a simple call" do
-      builder = describe(Object.new)
+      builder = describe_member(Object.new)
       builder.should be_kind_of(Restfulie::Builder::Base)
     end
     
     it "should create a entry rule and set in builder rules" do
       block   = lambda {}
-      builder = describe(Object.new, &block)
+      builder = describe_member(Object.new, &block)
       builder.rules.should_not be_blank()
       builder.rules.find { |r| r.block == block }.should be_kind_of(Restfulie::Builder::MemberRule)
     end
@@ -27,13 +27,13 @@ context Restfulie::Builder::Helpers do
   
   context "collection" do
     it "should create a builder for a simple call" do
-      builder = describe([])
+      builder = describe_collection([])
       builder.should be_kind_of(Restfulie::Builder::Base)
     end
     
     it "should create a entry rule and set in builder rules" do
       block   = lambda {}
-      builder = describe([], &block)
+      builder = describe_collection([], &block)
       builder.rules.should_not be_blank()
       builder.rules.find { |r| r.block == block }.should be_kind_of(Restfulie::Builder::CollectionRule)
     end
