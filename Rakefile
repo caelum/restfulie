@@ -44,6 +44,10 @@ namespace :test do
       t.spec_files = FileList['spec/**/*_spec.rb']
       t.spec_opts = spec_opts
     end
+    Spec::Rake::SpecTask.new(:common) do |t|
+      t.spec_files = FileList['spec/common/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
     Spec::Rake::SpecTask.new(:client) do |t|
       t.spec_files = FileList['spec/client/**/*_spec.rb']
       t.spec_opts = spec_opts
@@ -57,6 +61,9 @@ namespace :test do
     task :all do
       start_server_and_invoke_test('test:spec:all')
     end
+    task :common do
+      start_server_and_invoke_test('test:spec:common')
+    end
     task :client do
       start_server_and_invoke_test('test:spec:client')
     end
@@ -67,7 +74,8 @@ namespace :test do
 end
 
 Spec::Rake::SpecTask.new('rcov') do |t|
-  t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+  options_file = File.expand_path('spec/spec.opts')
+  t.spec_opts  = ['--options', options_file]
   t.spec_files = FileList['spec/**/*_spec.rb']
   t.rcov = true
   t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
