@@ -1,5 +1,5 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
+require File.join(File.dirname(__FILE__),'..','..','..','spec_helper')
+require File.join(File.dirname(__FILE__),'..','..','..','lib','models')
 
 ActionController::Routing::Routes.draw do |map|
   map.resources :albums do |album|
@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :songs
 end
 
-describe Restfulie::Server::Serializers::ActiveRecord::Atom do
+describe Restfulie::Server::ActiveRecord::Serializers::Atom do
   
   before(:all) do
     @song = Song.first
@@ -16,7 +16,7 @@ describe Restfulie::Server::Serializers::ActiveRecord::Atom do
   end
   
   it "accepts an ActiveRecord model and keeps it" do
-    atom_serializer = Restfulie::Server::Serializers::ActiveRecord::Atom.new(@song)
+    atom_serializer = Restfulie::Server::ActiveRecord::Serializers::Atom.new(@song)
     atom_serializer.record == @song
   end
   

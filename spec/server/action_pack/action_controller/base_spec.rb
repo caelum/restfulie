@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.join(File.dirname(__FILE__),'..','..','..','spec_helper')
 
-class AlbumsController < Restfulie::Controller::Base
+class AlbumsController < Restfulie::ActionController::Base
   def index
     render :atom => [AtomifiedModel.new, AtomifiedModel.new, AtomifiedModel.new]
   end
@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
 end
 
-describe Restfulie::Controller::Base, :type => :controller do
+describe Restfulie::ActionController::Base, :type => :controller do
   tests AlbumsController
   
   before(:each) do

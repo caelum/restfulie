@@ -1,1 +1,0 @@
-require 'restfulie/server/controller/base'
