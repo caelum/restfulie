@@ -12,7 +12,7 @@ require 'action_controller/test_process'
 require 'action_controller/test_case'
 ApplicationController = Class.new(ActionController::Base)
 
-require File.join(File.dirname(__FILE__), '..', 'lib', 'restfulie')
+require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'restfulie')
 require File.join(File.dirname(__FILE__), 'lib', 'schema')
 
 # Change output logger

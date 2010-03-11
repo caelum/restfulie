@@ -31,7 +31,7 @@ namespace :test do
   def start_server_and_invoke_test(task_name)
     pid = %x(ps -ef | grep fake_server | grep -v grep).split[1]
     unless pid
-      sh "ruby ./spec/client/fake_server.rb &"  
+      sh "ruby ./spec/units/client/fake_server.rb &"  
       pid = %x(ps -ef | grep fake_server).split[1]  
     end
     Rake::Task[task_name].invoke
@@ -39,17 +39,17 @@ namespace :test do
     sh "kill #{pid}"
   end
   namespace :spec do
-    spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'spec.opts')]
+    spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
     Spec::Rake::SpecTask.new(:all) do |t|
-      t.spec_files = FileList['spec/**/*_spec.rb']
+      t.spec_files = FileList['spec/units/**/*_spec.rb']
       t.spec_opts = spec_opts
     end
     Spec::Rake::SpecTask.new(:client) do |t|
-      t.spec_files = FileList['spec/client/**/*_spec.rb']
+      t.spec_files = FileList['spec/units/client/**/*_spec.rb']
       t.spec_opts = spec_opts
     end
     Spec::Rake::SpecTask.new(:server) do |t|
-      t.spec_files = FileList['spec/server/**/*_spec.rb']
+      t.spec_files = FileList['spec/units/server/**/*_spec.rb']
       t.spec_opts = spec_opts
     end
   end
@@ -68,7 +68,7 @@ end
 
 Spec::Rake::SpecTask.new('rcov') do |t|
   t.spec_opts = %w(-fs -fh:doc/specs.html --color)
-  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.spec_files = FileList['spec/units/**/*_spec.rb']
   t.rcov = true
   t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
 end
