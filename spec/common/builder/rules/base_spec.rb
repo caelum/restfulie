@@ -6,20 +6,29 @@ context Restfulie::Builder::Rules::Base do
     @rule.should respond_to(:links)
     (@rule.links << create_link(:self)).should_not be_nil
   end
-
-  it "should respond to apply" do
-    @rule = create_rule do |rule|
-      rule.links << create_link(:self)
-    end
-    @rule.links.should be_blank
-    @rule.apply
-    @rule.links.size.should eql(1)
+  
+  it "should respond to blocks and links is a collection" do
+    block_one = lambda {}
+    @rule = create_rule(&block_one)
+    
+    @rule.should respond_to(:blocks)
+    @rule.blocks.should be_include(block_one)
+    (@rule.blocks << lambda {}).should_not be_nil
   end
 
-  it "should respond to block" do
-    block = lambda {}
-    rule  = create_rule(&block)
-    rule.block.should eql(block)
+  it "should respond to apply" do
+    class Foo; attr_accessor :name; end
+    
+    @rule = create_rule do |rule, object|
+      rule.links << create_link(:self)
+      object.name = "Foo object"
+    end
+    
+    foo = Foo.new()
+    @rule.links.should be_blank
+    @rule.apply(foo)
+    @rule.links.size.should eql(1)
+    foo.name.should == "Foo object"
   end
 
   context "namespace helper" do
@@ -67,7 +76,7 @@ context Restfulie::Builder::Rules::Base do
     Restfulie::Builder::Rules::Link.new(*args)
   end
 
-  def create_rule(*args, &block)
-    Restfulie::Builder::Rules::Base.new(*args, &block)
+  def create_rule(&block)
+    Restfulie::Builder::Rules::Base.new(&block)
   end
 end

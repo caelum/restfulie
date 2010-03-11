@@ -1,11 +1,11 @@
 module Restfulie::Builder::Helpers
 
   def describe_member(member, &block)
-    create_builder(member, Restfulie::Builder::MemberRule, &block)
+    create_builder(member, &block)
   end
   
   def describe_collection(collection, &block)
-    create_builder(collection, Restfulie::Builder::CollectionRule, &block)
+    create_builder(collection, &block)
   end
   
   # Helper to create objects link
@@ -15,9 +15,8 @@ module Restfulie::Builder::Helpers
   
 private
 
-  def create_builder(object, rule_class, &block)
-    rule = block_given? ? [rule_class.new(&block)] : []
-    Restfulie::Builder::Base.new(object, rule)
+  def create_builder(object, &block)
+    Restfulie::Builder::Base.new(object, block_given? ? [block] : [])
   end
 
 end

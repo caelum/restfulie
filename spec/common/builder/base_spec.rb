@@ -5,17 +5,25 @@ context Restfulie::Builder::Base do
     Restfulie::Builder::Base.new(*args)
   end
   
-  it "accept object in new instance" do
-    object  = Object.new
-    builder = create_builder(object)
-    builder.object.should == object
-  end
+  context "create a builder" do
+    it "accept object in new instance" do
+      object  = Object.new
+      builder = create_builder(object)
+      builder.object.should == object
+    end
   
-  it "should respond by rules" do
-    rules   = [Restfulie::Builder::MemberRule.new, Restfulie::Builder::CollectionRule.new]
-    builder = create_builder(Object.new, rules)
-    builder.rules.should eql(rules)
-  end
+    it "should respond by rules blocks" do
+      rules   = [lambda {}, lambda {}]
+      builder = create_builder(Object.new, rules)
+      builder.rules_blocks.should eql(rules)
+    end
+    
+    it "returned not implemented marshalling call to_base" do
+      builder = create_builder(nil)
+      builder.to_base(:default_rule => false).should == "Base Marshalling not impemented"
+    end
+    
+  end # context "create a builder"
   
   context "load marshallings" do
     before do

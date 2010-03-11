@@ -2,16 +2,18 @@ module Restfulie::Builder::Rules; end
 
 class Restfulie::Builder::Rules::Base
   attr_accessor :links
-  attr_reader :block
+  attr_accessor :blocks
 
-  def initialize(*args, &block)
-    @links = Restfulie::Builder::Rules::Links.new
-    @block = block
+  def initialize(&block)
+    @links  = Restfulie::Builder::Rules::Links.new
+    @blocks = block_given? ? [block] : []
     @namespaces = []
   end
 
   def apply(*args)
-    @block.call(self, *args) unless @block.nil?
+    @blocks.each do |block|
+      block.call(self, *args)
+    end
   end
 
   def namespace(ns, uri = nil,  &block)
