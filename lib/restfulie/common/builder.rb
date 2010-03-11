@@ -3,9 +3,9 @@ module Restfulie::Builder; end
 
 %w(
   helpers
-  base
+  builder_base
   marshalling
-  rules/base
+  rules/rules_base
   rules/link
   rules/links
   rules/namespace
