@@ -2,8 +2,8 @@
 module Restfulie::Builder; end
 
 %w(
-  base
   helpers
+  base
   marshalling
   rules/base
   rules/link

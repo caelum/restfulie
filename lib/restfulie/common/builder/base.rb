@@ -17,12 +17,22 @@ class Restfulie::Builder::Base
 
   def method_missing(symbol, *args)
     unless (marshalling = marshalling_class(symbol)).nil?
-      return marshalling.new(*args)
+      return builder(marshalling, *args)
     end
     super
   end
 
 private
+
+  def builder(marshalling, options = {})
+    @object.class.ancestors.include?(Enumerable) ? builder_collection(marshalling, options) : builder_member(marshalling, options)
+  end
+
+  def builder_member(marshalling, options = {})
+    rule = Restfulie::Builder::MemberRule.new()
+    rule.blocks = rules_blocks 
+    marshalling.builder_member(@object, rule, options)
+  end
 
   def marshalling_class(method)
     if marshalling_name = method.to_s.match(/to_(.*)/)

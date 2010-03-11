@@ -6,6 +6,8 @@ module DataHelper
     IO.read(filename)
   end
   
-end
-include DataHelper
+  alias_method :load_data, :response_data
 
+end
+
+include DataHelper

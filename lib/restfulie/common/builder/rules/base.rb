@@ -1,8 +1,17 @@
 module Restfulie::Builder::Rules; end
 
 class Restfulie::Builder::Rules::Base
-  attr_accessor :links
   attr_accessor :blocks
+
+  # Required
+  attr_accessor :title, :id, :updated
+
+  # Recommended
+  attr_accessor :author, :links
+
+  # Optional
+  attr_accessor :published
+  # attr_accessor :category, :contributor, :rights # Not implemented
 
   def initialize(&block)
     @links  = Restfulie::Builder::Rules::Links.new
