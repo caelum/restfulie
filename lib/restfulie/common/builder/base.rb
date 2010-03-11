@@ -1,10 +1,17 @@
 class Restfulie::Builder::Base
   attr_accessor :rules_blocks
   attr_accessor :object
+  
+  # TODO: Configurable
+  OPTIONS_DEFAULT = {
+    :eagerload => true,
+    :default_rule => true
+  }
 
-  def initialize(object, rules = [])
-    @object = object
-    @rules_blocks = rules
+  def initialize(object, rules_blocks = [], options = {})
+    @options = OPTIONS_DEFAULT.merge(options)
+    @object  = object
+    @rules_blocks = rules_blocks
   end
 
   # Remove to_json from ActiveSupport in the class
@@ -30,8 +37,8 @@ private
 
   def builder_member(marshalling, options = {})
     rule = Restfulie::Builder::MemberRule.new()
-    rule.blocks = rules_blocks 
-    marshalling.builder_member(@object, rule, options)
+    rule.blocks = rules_blocks
+    marshalling.new(@object, rule).builder_member(@options.merge(options))
   end
 
   def marshalling_class(method)
@@ -41,7 +48,7 @@ private
         begin
           Restfulie::Builder::Marshalling.const_get(marshalling) 
         rescue NameError
-          raise Restfulie::Error::UndefinedMarshallingError.new("Marshalling #{marshalling} not fould.")
+          raise Restfulie::Error::UndefinedMarshallingError.new("Marshalling #{marshalling} not found.")
         end
       end
     end
