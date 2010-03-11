@@ -13,13 +13,14 @@ class Restfulie::Builder::Rules::Base
 
   def apply(*args)
     @blocks.each do |block|
-      block.call(self, *args)
+      params = ([self] + args)[0..block.arity-1]
+      block.call(*params)
     end
   end
 
   def namespace(ns, uri = nil,  &block)
     namespace = @namespaces.find { |n| n.namespace == ns } || (@namespaces << Restfulie::Builder::Rules::Namespace.new(ns)).first
-    namespace.uri = uri
+    namespace.uri = uri unless uri.nil?
     yield(namespace) if block_given?
     namespace
   end

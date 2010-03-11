@@ -63,7 +63,7 @@ class Restfulie::Builder::Marshalling::Atom < Restfulie::Builder::Marshalling::B
   end
 
   def default_member_rule
-    @default_member_rule ||= lambda do |member_rule, object, options|
+    @default_member_rule ||= Proc.new do |member_rule, object, options|
       # Default values
       member_rule.id        = polymorphic_url(object, :host => host)
       member_rule.title     = object.respond_to?(:title) && !object.title.nil? ? object.title : "Entry about #{object.class.to_s.demodulize}"

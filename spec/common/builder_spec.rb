@@ -21,16 +21,27 @@ context "builder representations" do
       end
       
       context "generate basic representation" do
-        it "without eagerload" do 
-          builder  = describe_member(@album, :eagerload => false)
-          original_entry = Atom::Entry.load_entry(builder.to_atom)
-          original_entry.should be_eql_xml(load_data("atoms", "basic_member.xml"))
-        end
+        # it "without eagerload" do 
+        #   builder  = describe_member(@album, :eagerload => false)
+        #   original_entry = Atom::Entry.load_entry(builder.to_atom)
+        #   original_entry.should be_eql_xml(load_data("atoms", "basic_member.xml"))
+        # end
+        # 
+        # it "with eagerload values" do
+        #   builder  = describe_member(@album, :eagerload => [:values])
+        #   original_entry = Atom::Entry.load_entry(builder.to_atom)
+        #   original_entry.should be_eql_xml(load_data("atoms", "basic_member_with_values.xml"))
+        # end
+        
+        it "with eagerload values and custom values" do
+          builder  = describe_member(@album, :eagerload => [:values]) do |member|
+            member.namespace(:album) do |ns|
+              ns.composer = "Composer Name"
+            end
+          end
 
-        it "with eagerload values" do
-          builder  = describe_member(@album, :eagerload => [:values])
           original_entry = Atom::Entry.load_entry(builder.to_atom)
-          original_entry.should be_eql_xml(load_data("atoms", "basic_member_with_values.xml"))
+          original_entry.should be_eql_xml(load_data("atoms", "basic_member_with_values_and_custom_values.xml"))
         end
         
       end # context "generate basic representation"
