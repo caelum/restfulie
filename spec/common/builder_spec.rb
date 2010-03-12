@@ -24,13 +24,13 @@ context "builder representations" do
         it "without eagerload" do 
           builder  = describe_member(@album, :eagerload => false)
           original_entry = Atom::Entry.load_entry(builder.to_atom)
-          original_entry.should be_eql_xml(load_data("atoms/basic_member", "basic_member.xml"))
+          original_entry.should be_eql_xml(load_data("atoms/member", "basic_member.xml"))
         end
         
         it "with eagerload values" do
           builder  = describe_member(@album, :eagerload => [:values])
           original_entry = Atom::Entry.load_entry(builder.to_atom)
-          original_entry.should be_eql_xml(load_data("atoms/basic_member", "with_values.xml"))
+          original_entry.should be_eql_xml(load_data("atoms/member", "with_values.xml"))
         end
         
         it "with eagerload values and custom values" do
@@ -41,7 +41,7 @@ context "builder representations" do
           end
 
           original_entry = Atom::Entry.load_entry(builder.to_atom)
-          original_entry.should be_eql_xml(load_data("atoms/basic_member", "with_values_and_custom_values.xml"))
+          original_entry.should be_eql_xml(load_data("atoms/member", "with_values_and_custom_values.xml"))
         end
         
         it "with eagerload transitions" do
@@ -50,7 +50,7 @@ context "builder representations" do
             member.links << link(:songs)
           end
           original_entry = Atom::Entry.load_entry(builder.to_atom)
-          original_entry.should be_eql_xml(load_data("atoms/basic_member", "eagerload_transitions.xml"))
+          original_entry.should be_eql_xml(load_data("atoms/member", "eagerload_transitions.xml"))
         end
         
         it "with eagerload transitions and custom transitions" do
@@ -62,7 +62,7 @@ context "builder representations" do
             member.links << link(:rel => :lyrics, :href => "http://localhost/albums/1/lyrics", :type => "application/atom+xml")
           end
           original_entry = Atom::Entry.load_entry(builder.to_atom)
-          original_entry.should be_eql_xml(load_data("atoms/basic_member", "eagerload_and_custom_transitions.xml"))
+          original_entry.should be_eql_xml(load_data("atoms/member", "eagerload_and_custom_transitions.xml"))
         end
         
       end # context "generate basic representation"
