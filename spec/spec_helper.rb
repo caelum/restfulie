@@ -46,7 +46,14 @@ end
 
 Spec::Example::ExampleGroupFactory.register(:controller, ActionController::TestCase)
 
-class AtomifiedModel 
+class AtomifiedModel
+  attr_writer   :new_record
+  attr_accessor :updated_at
+
+  def new_record?
+    @new_record || false
+  end
+
   def to_atom(options={})
     Atom::Entry.new do |entry|
       entry.title     = "entry"

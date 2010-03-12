@@ -21,6 +21,7 @@ spec = Gem::Specification.new do |s|
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
+  s.add_dependency("responders_backport", ["~> 0.1.0"])
 
   s.author = AUTHOR
   s.email = EMAIL

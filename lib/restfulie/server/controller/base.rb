@@ -4,11 +4,15 @@ module Restfulie
       class Base < ::ApplicationController
         unloadable
         
+        # Sets a default responder for this controller. 
+        # Needs to require responder_legacy.rb
+        self.responder = Restfulie::Server::Controller::RestfulResponder
+        
       protected
       
         # If your controller inherits from Restfulie::Server::Controller::Base,
         # it will have an :atom option, very similar to render :xml
-        def render(options = nil, extra_options = {}, &block)
+        def render(options = {}, extra_options = {}, &block)
           if atom = options[:atom]
             response.content_type ||= Mime::ATOM
             render_for_text(atom.respond_to?(:to_atom) ? atom.to_atom.to_xml : atom.to_xml, options[:status])
