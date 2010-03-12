@@ -3,10 +3,10 @@ class Restfulie::Builder::Marshalling::Base
   end
   
   def builder_member(options = {})
-    "#{self.class.to_s.demodulize} Marshalling not impemented"
+    "#{self.class.to_s.demodulize} Marshalling not implemented"
   end
   
   def builder_collection(options = {})
-    "#{self.class.to_s.demodulize} Marshalling not impemented"
+    "#{self.class.to_s.demodulize} Marshalling not implemented"
   end
 end

@@ -20,7 +20,7 @@ context Restfulie::Builder::Base do
     
     it "returned not implemented marshalling call to_base" do
       builder = create_builder(nil)
-      builder.to_base(:default_rule => false).should == "Base Marshalling not impemented"
+      builder.to_base(:default_rule => false).should == "Base Marshalling not implemented"
     end
     
   end # context "create a builder"
