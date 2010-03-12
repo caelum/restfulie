@@ -18,17 +18,23 @@ context Restfulie::Builder::Rules::Base do
 
   it "should respond to apply" do
     class Foo; attr_accessor :name; end
-    
+
     @rule = create_rule do |rule, object|
       rule.links << create_link(:self)
       object.name = "Foo object"
     end
-    
+
     foo = Foo.new()
     @rule.links.should be_blank
     @rule.apply(foo)
     @rule.links.size.should eql(1)
     foo.name.should == "Foo object"
+  end
+
+  it "should respond to apply with variable arity in block" do
+    @rule = create_rule {|rule, object|}
+    @rule.apply(Object.new).should == @rule.blocks
+    @rule.apply(Object.new, Object.new).should == @rule.blocks
   end
 
   context "namespace helper" do
