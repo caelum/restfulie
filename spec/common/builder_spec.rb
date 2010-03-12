@@ -53,6 +53,18 @@ context "builder representations" do
           original_entry.should be_eql_xml(load_data("atoms/basic_member", "eagerload_transitions.xml"))
         end
         
+        it "with eagerload transitions and custom transitions" do
+          builder  = describe_member(@album, :eagerload => [:transitions]) do |member|
+            member.links.delete(:songs)
+            member.links << link(:songs)
+            
+            member.links << link(:rel => :artist, :href => "http://localhost/albums/1/artist", :type => "application/atom+xml")
+            member.links << link(:rel => :lyrics, :href => "http://localhost/albums/1/lyrics", :type => "application/atom+xml")
+          end
+          original_entry = Atom::Entry.load_entry(builder.to_atom)
+          original_entry.should be_eql_xml(load_data("atoms/basic_member", "eagerload_and_custom_transitions.xml"))
+        end
+        
       end # context "generate basic representation"
       
     end # context "for member"
