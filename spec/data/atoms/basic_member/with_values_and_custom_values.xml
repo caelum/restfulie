@@ -8,6 +8,4 @@
   <album:description>Album description</album:description>
   <album:length>60</album:length>
   <album:composer>Composer Name</album:composer>
-
-  <link href="http://localhost/albums/1" rel="self" type='application/atom+xml'/>
 </entry>

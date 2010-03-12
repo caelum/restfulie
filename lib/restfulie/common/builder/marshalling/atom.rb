@@ -54,8 +54,23 @@ class Restfulie::Builder::Marshalling::Atom < Restfulie::Builder::Marshalling::B
 
       # Transitions
       @rule.links.each do |link|
-        href = link.href || polymorphic_url(@object, :host => host)
-        entry.links << ::Atom::Link.new(:rel => link.rel, :href => href, :type => link.type)
+        atom_link = {:rel => link.rel, :href => link.href, :type => link.type}
+
+        # Self
+        if link.href.nil?
+          if link.rel == "self"
+            path = @object
+          else
+            association = @object.class.reflect_on_all_associations.find { |a| a.name.to_s == link.rel }
+            path = (association.macro == :has_many) ? [@object, association.name] : @object.send(association.name) unless association.nil? 
+          end
+          atom_link[:href] = polymorphic_url(path, :host => host) rescue nil
+          atom_link[:type] = link.type || 'application/atom+xml'
+        elsif
+          atom_link[:href] = link.href
+        end
+        
+        entry.links << ::Atom::Link.new(atom_link) unless atom_link[:href].nil?
       end
     end
 
@@ -69,7 +84,7 @@ class Restfulie::Builder::Marshalling::Atom < Restfulie::Builder::Marshalling::B
       member_rule.title     = object.respond_to?(:title) && !object.title.nil? ? object.title : "Entry about #{object.class.to_s.demodulize}"
       member_rule.published = object.created_at
       member_rule.updated   = object.updated_at
-      
+
       # Namespace
       if options[:eagerload].include?(:values)
         klass = object.class.to_s.demodulize.downcase.to_sym
@@ -80,7 +95,14 @@ class Restfulie::Builder::Marshalling::Atom < Restfulie::Builder::Marshalling::B
         end
       end
 
-      member_rule.links << link(:rel => :self, :type => 'application/atom+xml')
+      # Transitions
+      if options[:eagerload].include?(:transitions)
+        member_rule.links << link(:self)
+
+        object.class.reflect_on_all_associations.map do |association|
+          member_rule.links << link(association.name)
+        end
+      end
     end
   end
 
