@@ -34,6 +34,7 @@ context Restfulie::Builder::Helpers do
     it "should create a entry rule and set in builder rules" do
       block   = lambda {}
       builder = describe_collection([], {}, &block)
+      
       builder.rules_blocks.should_not be_blank()
       builder.rules_blocks.should be_include(block)
     end

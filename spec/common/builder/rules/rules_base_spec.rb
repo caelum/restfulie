@@ -9,10 +9,12 @@ context Restfulie::Builder::Rules::Base do
   
   it "should respond to blocks and links is a collection" do
     block_one = lambda {}
-    @rule = create_rule(&block_one)
+    block_two = lambda {}
+    @rule = create_rule([block_two], &block_one)
     
     @rule.should respond_to(:blocks)
     @rule.blocks.should be_include(block_one)
+    @rule.blocks.should be_include(block_two)
     (@rule.blocks << lambda {}).should_not be_nil
   end
 
@@ -82,7 +84,7 @@ context Restfulie::Builder::Rules::Base do
     Restfulie::Builder::Rules::Link.new(*args)
   end
 
-  def create_rule(&block)
-    Restfulie::Builder::Rules::Base.new(&block)
+  def create_rule(*args, &block)
+    Restfulie::Builder::Rules::Base.new(*args, &block)
   end
 end

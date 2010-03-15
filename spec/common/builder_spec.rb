@@ -71,7 +71,21 @@ context "builder representations" do
 
     context "for collection" do
 
+      before do
+        dt      = DateTime.parse("2010-03-10T14:32:01-03:00")
+        @values = { :id => "http://localhost/albums" }
+        @albums = Album.find(:all, :limit => 3)
+        @albums.each do |album|
+          album.attributes = {:title => nil, :created_at => dt, :updated_at => dt, :length => 60, :description => "Album description"}
+        end
+      end
+
+      it "generate basic representation" do
+        builder = describe_collection(@albums, :values => @values, :eagerload => false)
+        original_entry = Atom::Feed.load_feed(builder.to_atom)
+        original_entry.should be_eql_xml(load_data("atoms/collection", "basic_collection.xml"))
+      end
     end # context "for member"
-    
+
   end # context "marshalling atom"
 end # context "marshalling representations"

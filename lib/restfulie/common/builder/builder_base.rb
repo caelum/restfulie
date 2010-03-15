@@ -36,9 +36,11 @@ private
   end
 
   def builder_member(marshalling, options = {})
-    rule = Restfulie::Builder::MemberRule.new()
-    rule.blocks = rules_blocks
-    marshalling.new(@object, rule).builder_member(@options.merge(options))
+    marshalling.new(@object, rules_blocks).builder_member(@options.merge(options))
+  end
+
+  def builder_collection(marshalling, options = {})
+    marshalling.new(@object, rules_blocks).builder_collection(@options.merge(options))
   end
 
   def marshalling_class(method)

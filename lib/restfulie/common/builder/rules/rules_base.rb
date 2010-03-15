@@ -5,9 +5,9 @@ class Restfulie::Builder::Rules::Base
   attr_accessor :links
   attr_reader :namespaces
 
-  def initialize(&block)
+  def initialize(blocks = [], &block)
     @links  = Restfulie::Builder::Rules::Links.new
-    @blocks = block_given? ? [block] : []
+    @blocks = (block_given? ? [block] : []) + blocks
     @namespaces = []
   end
 
