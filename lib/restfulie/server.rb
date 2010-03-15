@@ -1,4 +1,5 @@
 require 'restfulie/common'
+require 'responders_backport'
 
 module Restfulie::Server
   # Defines host to be passed to polymorphic_url.
