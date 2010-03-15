@@ -1,4 +1,0 @@
-script/generate scaffold Order location:string status:string
-script/generate scaffold Item milk:string size:string drink:string
-script/generate scaffold Payment amount:double cardholderName:string cardNumber:string expiryMonth:int expiryYear:int paymentDate:datetime
-script/generate migration payment_and_order_relation
