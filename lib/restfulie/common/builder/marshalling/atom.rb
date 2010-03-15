@@ -51,12 +51,12 @@ private
       end
 
       # Namespaces
-      builder_namespaces(rule.namespaces, atom)
+      builder_namespaces(rule.namespaces, feed)
 
       # Transitions
       rule.links.each do |link|
         atom_link = {:rel => link.rel, :href => link.href, :type => (link.type || 'application/atom+xml')}
-        entry.links << ::Atom::Link.new(atom_link) unless atom_link[:href].nil?
+        feed.links << ::Atom::Link.new(atom_link) unless atom_link[:href].nil?
       end
 
       # Entries
@@ -158,10 +158,11 @@ private
   end
 
   def builder_namespaces(namespaces, atom)
+    kclass = atom.class
     namespaces.each do |ns|
-      register_namespace(ns.namespace, ns.uri)
+      register_namespace(ns.namespace, ns.uri, kclass)
       ns.each do |key, value|
-        register_element(ns.namespace, key)
+        register_element(ns.namespace, key, kclass)
         atom.send("#{ns.namespace}_#{key}=".to_sym, value)
       end
     end
@@ -171,17 +172,17 @@ private
     "localhost"
   end
 
-  def register_namespace(namespace, uri)
-    ::Atom::Entry.add_extension_namespace(namespace, uri) unless ::Atom::Entry.known_namespaces.include? uri
+  def register_namespace(namespace, uri, klass)
+    klass.add_extension_namespace(namespace, uri) unless klass.known_namespaces.include? uri
   end
 
-  def register_element(namespace, attribute)
+  def register_element(namespace, attribute, klass)
     attribute = "#{namespace}:#{attribute}"
-    ::Atom::Entry.element(attribute) if element_unregistered?(attribute)
+    klass.element(attribute) if element_unregistered?(attribute, klass)
   end
 
-  def element_unregistered?(element)
-    ::Atom::Entry.element_specs.select { |k,v|  v.name == element }.empty?
+  def element_unregistered?(element, klass)
+    klass.element_specs.select { |k,v|  v.name == element }.empty?
   end
   
   def eagerload_enhance(options)

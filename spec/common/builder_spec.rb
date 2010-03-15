@@ -11,6 +11,7 @@ end
 
 context "builder representations" do
   include Restfulie::Builder::Helpers
+  include ActionController::UrlWriter
 
   context "marshalling atom" do
     context "for member" do
@@ -73,7 +74,6 @@ context "builder representations" do
 
       before do
         dt      = DateTime.parse("2010-03-10T14:32:01-03:00")
-        @values = { :id => "http://localhost/albums" }
         @albums = Album.find(:all, :limit => 3)
         @albums.each do |album|
           album.attributes = {:title => nil, :created_at => dt, :updated_at => dt, :length => 60, :description => "Album description"}
@@ -81,9 +81,30 @@ context "builder representations" do
       end
 
       it "generate basic representation" do
-        builder = describe_collection(@albums, :values => @values, :eagerload => false)
+        builder = describe_collection(@albums, :eagerload => false, :values => { :id => "http://localhost/albums" })
         original_entry = Atom::Feed.load_feed(builder.to_atom)
         original_entry.should be_eql_xml(load_data("atoms/collection", "basic_collection.xml"))
+      end
+      
+      it "generate full representation" do
+        options = {
+          :eagerload => true,
+          :self => "http://localhost/albums",
+          :values => { :id => "http://localhost/albums" }
+        }
+        builder = describe_collection(@albums, options) do |collection|
+          collection.links << link(:rel => :next, :href => "http://localhost/albums/next")
+          
+          collection.namespace(:albums, "http://localhost/albums") do |ns|
+            ns.count = 10
+          end
+
+          collection.describe_members do |member, album|
+            member.links << link(:rel => :artists, :href => "http://localhost/albums/#{album.id}/artists", :type => "application/atom+xml")
+          end
+        end
+        original_entry = Atom::Feed.load_feed(builder.to_atom)
+        original_entry.should be_eql_xml(load_data("atoms/collection", "full_collection.xml"))
       end
     end # context "for member"
 
