@@ -21,9 +21,6 @@ module Restfulie::Server
   end
 end
 
-#initialize server namespace
-module Restfulie::Server; end
-
 %w(
   controller
   restfulie_controller
