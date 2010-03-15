@@ -4,7 +4,6 @@ class RestfulController < ApplicationController
   self.responder = Restfulie::Server::Controller::RestfulResponder
 
   def single
-    response.last_modified = Time.utc(2008) if params[:last_modified]
     respond_with(AtomifiedModel.new(Time.utc(2009))
   end
 
@@ -35,19 +34,22 @@ describe RestfulController, :type => :controller do
   end
   
   context "single resource" do
-    it "sets Last-Modified with resource.updated_at"
+    it "does not set Etag"
+    
+    it "sets Last-Modified with resource.updated_at" do
+      controller.response.last_modified.should == Time.utc(2009)
+    end
+    
     it "returns 304 Not Modified if client's cache is still valid"
     it "refreshes Last-Modified if cache is expired"
     it "does not use cache in PUT requests"
     it "does not use cache in POST requests"
-    it "does not set Etag"
     it "does not set cache for new records"
     it "does not set cache if Last-Modified is already in response"
   end
   
   context "collection" do
-    it "sets Last-Modified using the latest updated_at"
+    it "sets Last-Modified using the most recent updated_at"
     it "works with empty array"
-  end
-      
+  end      
 end
