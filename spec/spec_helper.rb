@@ -25,7 +25,7 @@ ActionController::Base.view_paths = RAILS_ROOT + "/views"
 
 class AtomifiedModel
   attr_writer   :new_record
-  attr_accessor :updated_at
+  attr_reader   :updated_at
   
   def initialize(updated_at = Time.now)
     @updated_at = updated_at
