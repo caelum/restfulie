@@ -10,7 +10,7 @@ context Array do
   it "creates an Atom feed based on the array elements" do
     feed = @array.to_atom
     feed = feed.to_xml
-    feed.should include("<feed xmlns=\"http://www.w3.org/2005/Atom\">")
+    feed.should include("<feed xmlns=\"http://www.w3.org/2005/Atom\"")
     feed.should include("<published>123</published>")
     feed.should include("<title>Collection of AtomifiedModel")
     feed.should include("</feed>")
