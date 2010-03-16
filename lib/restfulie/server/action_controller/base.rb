@@ -1,4 +1,4 @@
-class Restfulie::ActionController::Base < ApplicationController
+class Restfulie::Server::ActionController::Base < ::ApplicationController
   unloadable
         
   protected

@@ -5,7 +5,8 @@ end
 
 %w(
   configuration
-  action_pack
+  action_controller
+  action_view
   active_record
   core_ext
   restfulie_controller

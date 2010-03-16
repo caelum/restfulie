@@ -1,4 +1,4 @@
-if defined?(ActiveRecord) && defined?(ActionController)
+if defined?(::ActiveRecord) && defined?(::ActionController)
   module Restfulie::Server::ActiveRecord #:nodoc:
   end
   %w(

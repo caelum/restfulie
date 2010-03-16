@@ -1,4 +1,4 @@
-module Restfulie::ActionController::Routing::Route
+module Restfulie::Server::ActionController::Routing::Route
 
   def self.included(base)
     #base.alias_method_chain :extract_request_environment, :host

@@ -1,4 +1,4 @@
-class Restfulie::TemplateHandlers::Tokamak < ::ActionView::TemplateHandler
+class Restfulie::Server::ActionView::TemplateHandlers::Tokamak < ::ActionView::TemplateHandler
   include ::ActionView::TemplateHandlers::Compilable
     
   def compile(template)

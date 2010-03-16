@@ -1,4 +1,4 @@
- module Restfulie::Server::Configuration
+module Restfulie::Server::Configuration
   #Defines host to be passed to polymorphic_url.
   # You need to setup this to your own domain in order to generate meaningful links.
   mattr_accessor :host
