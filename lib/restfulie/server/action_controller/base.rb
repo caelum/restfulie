@@ -1,12 +1,12 @@
 module Restfulie
   module Server
-    module Controller
+    module ActionController
       class Base < ::ApplicationController
         unloadable
         
         # Sets a default responder for this controller. 
         # Needs to require responder_legacy.rb
-        self.responder = Restfulie::Server::Controller::RestfulResponder
+        self.responder = Restfulie::Server::ActionController::RestfulResponder
         
       protected
       
@@ -23,9 +23,5 @@ module Restfulie
         
       end
     end
-  end
-  
-  module Controller
-    Base = Restfulie::Server::Controller::Base
   end
 end

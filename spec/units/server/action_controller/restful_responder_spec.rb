@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 class RestfulController < ApplicationController
-  self.responder = Restfulie::Server::Controller::RestfulResponder
+  self.responder = Restfulie::Server::ActionController::RestfulResponder
   respond_to :atom
 
   def single

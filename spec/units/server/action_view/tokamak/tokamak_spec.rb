@@ -1,7 +1,7 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 class ProjectsController < ApplicationController
-  self.responder = Restfulie::Server::Controller::RestfulResponder
+  self.responder = Restfulie::Server::ActionController::RestfulResponder
 
   def index; end
   def show; end

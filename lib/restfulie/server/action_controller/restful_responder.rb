@@ -1,4 +1,4 @@
-module Restfulie::Server::Controller
+module Restfulie::Server::ActionController
   class RestfulResponder < ActionController::Responder
     
     def to_format

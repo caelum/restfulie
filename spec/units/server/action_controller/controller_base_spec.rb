@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-class BaseController < Restfulie::Controller::Base
-  
+class BaseController < Restfulie::Server::ActionController::Base
   def index
     render :atom => [AtomifiedModel.new, AtomifiedModel.new, AtomifiedModel.new]
   end
@@ -19,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
 end
 
-describe Restfulie::Controller::Base, :type => :controller do
+describe Restfulie::Server::ActionController::Base, :type => :controller do
   tests BaseController
   
   before(:each) do

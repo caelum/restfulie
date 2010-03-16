@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/routes')
+require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../../lib/models')
+require File.expand_path(File.dirname(__FILE__) + '/../../../lib/routes')
 
 class AlbumsController < ApplicationController
   def index

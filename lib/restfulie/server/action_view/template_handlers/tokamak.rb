@@ -1,4 +1,4 @@
-module Restfulie::Server::TemplateHandlers
+module Restfulie::Server::ActionView::TemplateHandlers
   
   class Tokamak < ActionView::TemplateHandler
     include ActionView::TemplateHandlers::Compilable

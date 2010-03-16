@@ -15,7 +15,7 @@ require 'spec/rails'
 require 'rexml/document'
 require 'rcov'
 
-require File.join(File.dirname(__FILE__), '..', 'lib', 'restfulie')
+require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'restfulie')
 require File.join(File.dirname(__FILE__), 'lib', 'schema')
 
 # Change output logger
