@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-context Restfulie::Builder::CollectionRule do
+context Restfulie::Common::Builder::CollectionRule do
 
   it "should allow create a rule for resources" do
-    collection_rule = Restfulie::Builder::CollectionRule.new
+    collection_rule = Restfulie::Common::Builder::CollectionRule.new
     block = lambda {}
 
     collection_rule.describe_members(:eagerload => [:values], &block)

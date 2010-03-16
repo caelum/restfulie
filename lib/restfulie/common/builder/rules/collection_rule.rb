@@ -1,4 +1,4 @@
-class Restfulie::Builder::CollectionRule < Restfulie::Builder::Rules::Base
+class Restfulie::Common::Builder::CollectionRule < Restfulie::Common::Builder::Rules::Base
   attr_reader :members_blocks
   attr_reader :members_options
   

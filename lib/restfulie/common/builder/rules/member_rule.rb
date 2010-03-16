@@ -1,4 +1,4 @@
-class Restfulie::Builder::MemberRule < Restfulie::Builder::Rules::Base
+class Restfulie::Common::Builder::MemberRule < Restfulie::Common::Builder::Rules::Base
   
   # Recommended
   # attr_accessor :content, :summary # Not implemented

@@ -1,6 +1,6 @@
-class Restfulie::Builder::Marshalling::Atom < Restfulie::Builder::Marshalling::Base
+class Restfulie::Common::Builder::Marshalling::Atom < Restfulie::Common::Builder::Marshalling::Base
   include ActionController::UrlWriter
-  include Restfulie::Builder::Helpers
+  include Restfulie::Common::Builder::Helpers
   
   ATOM_ATTRIBUTES = [
     :title, :id, :updated, # Required
@@ -37,7 +37,7 @@ class Restfulie::Builder::Marshalling::Atom < Restfulie::Builder::Marshalling::B
 private
 
   def builder_feed(objects, rules_blocks, options = {})
-    rule = Restfulie::Builder::CollectionRule.new(rules_blocks)
+    rule = Restfulie::Common::Builder::CollectionRule.new(rules_blocks)
     options = eagerload_enhance(options)
     
     rule.blocks.unshift(default_collection_rule) if options[:default_rule]
@@ -69,7 +69,7 @@ private
   end
 
   def builder_entry(object, rules_blocks, options = {})
-    rule = Restfulie::Builder::MemberRule.new(rules_blocks)
+    rule = Restfulie::Common::Builder::MemberRule.new(rules_blocks)
     options = eagerload_enhance(options)
     
     rule.blocks.unshift(default_member_rule) if options[:default_rule]

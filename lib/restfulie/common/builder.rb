@@ -1,5 +1,5 @@
 #initialize namespace
-module Restfulie::Builder; end
+module Restfulie::Common::Builder; end
 
 %w(
   helpers

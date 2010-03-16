@@ -1,20 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 
-context Restfulie::Builder::Helpers do
-  include Restfulie::Builder::Helpers
+context Restfulie::Common::Builder::Helpers do
+  include Restfulie::Common::Builder::Helpers
   
   context "link" do
     it "create a Link" do
       lk = link(:self)
-      lk.should be_kind_of(Restfulie::Builder::Rules::Link)
+      lk.should be_kind_of(Restfulie::Common::Builder::Rules::Link)
     end
   end
 
   context "member" do
     it "should create a builder for a simple call" do
       builder = describe_member(Object.new)
-      builder.should be_kind_of(Restfulie::Builder::Base)
+      builder.should be_kind_of(Restfulie::Common::Builder::Base)
     end
     
     it "should create a entry rule and set in builder rules" do
@@ -28,7 +28,7 @@ context Restfulie::Builder::Helpers do
   context "collection" do
     it "should create a builder for a simple call" do
       builder = describe_collection([])
-      builder.should be_kind_of(Restfulie::Builder::Base)
+      builder.should be_kind_of(Restfulie::Common::Builder::Base)
     end
     
     it "should create a entry rule and set in builder rules" do

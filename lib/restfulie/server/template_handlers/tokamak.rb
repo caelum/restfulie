@@ -5,7 +5,7 @@ module Restfulie::Server::TemplateHandlers
       
     # TODO: Implement error for code not return builder
     def compile(template)
-      "extend Restfulie::Builder::Helpers; " +
+      "extend Restfulie::Common::Builder::Helpers; " +
       "code_block = lambda { #{template.source} };" + 
       "builder = code_block.call; " +
       "builder.to_atom "

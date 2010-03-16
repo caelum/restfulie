@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-context Restfulie::Builder::Rules::Link do
+context Restfulie::Common::Builder::Rules::Link do
   it "should create link with rel" do
     @link = create_link('self')
     @link.rel.should == 'self'
@@ -18,8 +18,8 @@ context Restfulie::Builder::Rules::Link do
     @link.rel.should  == 'self'
     @link.href.should == url
   end
-end # context Restfulie::Builder::Rules::Link
+end # context Restfulie::Common::Builder::Rules::Link
 
 def create_link(*args)
-  Restfulie::Builder::Rules::Link.new(*args)
+  Restfulie::Common::Builder::Rules::Link.new(*args)
 end

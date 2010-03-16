@@ -209,7 +209,7 @@ module Restfulie::Client::HTTP #:nodoc:
         headers['cookie'] = @cookies if @cookies
         args << headers
 
-        ::Restfulie::Logger.logger.info(request_to_s(method, path, *args)) unless ::Restfulie::Logger.logger
+        ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) unless ::Restfulie::Common::Logger.logger
         begin
           response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
         rescue Exception => e

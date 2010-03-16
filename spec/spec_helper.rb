@@ -19,7 +19,7 @@ require File.join(File.dirname(__FILE__), '..', 'lib', 'restfulie')
 require File.join(File.dirname(__FILE__), 'lib', 'schema')
 
 # Change output logger
-Restfulie::Logger.logger = ActiveSupport::BufferedLogger.new(File.join(File.dirname(__FILE__), "logs", "spec.log"))
+Restfulie::Common::Logger.logger = ActiveSupport::BufferedLogger.new(File.join(File.dirname(__FILE__), "logs", "spec.log"))
 
 ActionController::Base.view_paths = RAILS_ROOT + "/views" 
 

@@ -1,4 +1,4 @@
-class Restfulie::Builder::Rules::Namespace < Hash
+class Restfulie::Common::Builder::Rules::Namespace < Hash
   attr_reader :namespace
   attr_accessor :uri
 

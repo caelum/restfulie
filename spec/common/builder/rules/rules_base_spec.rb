@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-context Restfulie::Builder::Rules::Base do
+context Restfulie::Common::Builder::Rules::Base do
   it "should respond to links and links is a collection" do
     @rule = create_rule
     @rule.should respond_to(:links)
@@ -81,10 +81,10 @@ context Restfulie::Builder::Rules::Base do
   end # context "namespace helper"
 
   def create_link(*args)
-    Restfulie::Builder::Rules::Link.new(*args)
+    Restfulie::Common::Builder::Rules::Link.new(*args)
   end
 
   def create_rule(*args, &block)
-    Restfulie::Builder::Rules::Base.new(*args, &block)
+    Restfulie::Common::Builder::Rules::Base.new(*args, &block)
   end
 end

@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Builder::Base do
+context Restfulie::Common::Builder::Base do
   def create_builder(*args)
-    Restfulie::Builder::Base.new(*args)
+    Restfulie::Common::Builder::Base.new(*args)
   end
   
   context "create a builder" do
@@ -43,10 +43,10 @@ context Restfulie::Builder::Base do
     end
 
     it "should raiser error for a marshalling not found" do
-      ::Restfulie::Builder::Marshalling.add_autoload_path(File.expand_path(File.dirname(__FILE__) + '/../../lib/marshalling'))
+      ::Restfulie::Common::Builder::Marshalling.add_autoload_path(File.expand_path(File.dirname(__FILE__) + '/../../lib/marshalling'))
       lambda {
         @builder.to_bar()
-      }.should raise_error(Restfulie::Error::UndefinedMarshallingError, "Marshalling Bar not found.")
+      }.should raise_error(Restfulie::Common::Error::UndefinedMarshallingError, "Marshalling Bar not found.")
     end
   end # context "load marshallings"
 end

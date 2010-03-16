@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../lib/compare_atoms')
 require File.expand_path(File.dirname(__FILE__) + '/../lib/routes')
 
 context "builder representations" do
-  include Restfulie::Builder::Helpers
+  include Restfulie::Common::Builder::Helpers
   include ActionController::UrlWriter
 
   context "marshalling atom" do

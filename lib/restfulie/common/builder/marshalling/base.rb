@@ -1,4 +1,4 @@
-class Restfulie::Builder::Marshalling::Base
+class Restfulie::Common::Builder::Marshalling::Base
   def initialize(*args)
   end
   

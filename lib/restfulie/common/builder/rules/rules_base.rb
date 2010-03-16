@@ -1,12 +1,12 @@
-module Restfulie::Builder::Rules; end
+module Restfulie::Common::Builder::Rules; end
 
-class Restfulie::Builder::Rules::Base
+class Restfulie::Common::Builder::Rules::Base
   attr_accessor :blocks
   attr_accessor :links
   attr_reader :namespaces
 
   def initialize(blocks = [], &block)
-    @links  = Restfulie::Builder::Rules::Links.new
+    @links  = Restfulie::Common::Builder::Rules::Links.new
     @blocks = (block_given? ? [block] : []) + blocks
     @namespaces = []
   end
@@ -19,7 +19,7 @@ class Restfulie::Builder::Rules::Base
   end
 
   def namespace(ns, uri = nil,  &block)
-    namespace = @namespaces.find { |n| n.namespace == ns } || (@namespaces << Restfulie::Builder::Rules::Namespace.new(ns)).first
+    namespace = @namespaces.find { |n| n.namespace == ns } || (@namespaces << Restfulie::Common::Builder::Rules::Namespace.new(ns)).first
     namespace.uri = uri unless uri.nil?
     yield(namespace) if block_given?
     namespace
