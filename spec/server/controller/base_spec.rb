@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 class BaseController < Restfulie::Controller::Base
+  
   def index
     render :atom => [AtomifiedModel.new, AtomifiedModel.new, AtomifiedModel.new]
   end

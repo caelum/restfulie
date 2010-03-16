@@ -25,10 +25,8 @@ end
 %w(
   controller
   restfulie_controller
-  core_ext
-  rails_ext
-  serializers
   template_handlers
+  core_ext
 ).each do |file|
   require "restfulie/server/#{file}"
 end
