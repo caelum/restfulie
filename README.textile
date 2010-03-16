@@ -16,6 +16,26 @@ h2. Why would I use restfulie?
 4. HATEOAS --> clients you are unaware of will not bother if you change your URIs
 5. HATEOAS --> services that you consume will not affect your software whenever they change part of their flow or URIs
 
+h2. Installing
+
+For client side usage, execute:
+
+<pre>
+gem install activesupport
+gem install restfulie
+</pre>
+
+For server side usage, execute:
+
+<pre>
+gem install restfulie
+</pre>
+
+If you want to build the project and run its tests, remember to install all (client and server) required gems and:
+
+<pre>
+gem install rack-conneg
+</pre>
 
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
