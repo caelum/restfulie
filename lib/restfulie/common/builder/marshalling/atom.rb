@@ -136,9 +136,9 @@ private
       member_rule.updated   ||= object.updated_at if object.respond_to?(:updated_at)
 
       # Namespace
-      if options[:eagerload].include?(:values)
+      if options[:eagerload].include?(:values) && object.class.respond_to?(:column_names)
         klass = object.class.to_s.demodulize.downcase.to_sym
-        uri   = polymorphic_url(klass.to_s.pluralize, :host => host)
+        uri   = polymorphic_url(klass.to_s.pluralize, :host => host) rescue nil
         member_rule.namespace(klass, uri) do |namespace|
           attributes = object.class.column_names - ATTRIBUTES_ALREADY_IN_ATOM_SPEC
           attributes.each { |attr| namespace.send("#{attr}=", object[attr]) }
@@ -148,9 +148,11 @@ private
       # Transitions
       if options[:eagerload].include?(:transitions)
         member_rule.links << link(:self)
-
-        object.class.reflect_on_all_associations.map do |association|
-          member_rule.links << link(association.name)
+        
+        if object.class.respond_to?(:reflect_on_all_associations)
+          object.class.reflect_on_all_associations.map do |association|
+            member_rule.links << link(association.name)
+          end
         end
       end
     end
