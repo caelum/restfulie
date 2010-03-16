@@ -126,11 +126,14 @@ private
   
   def default_member_rule
     Proc.new do |member_rule, object, options|
+      # Passed values
+      (options[:values] || {}).each { |key, value| member_rule.send("#{key}=".to_sym, value)}
+      
       # Default values
-      member_rule.id        = polymorphic_url(object, :host => host)
-      member_rule.title     = object.respond_to?(:title) && !object.title.nil? ? object.title : "Entry about #{object.class.to_s.demodulize}"
-      member_rule.published = object.created_at
-      member_rule.updated   = object.updated_at
+      member_rule.id        ||= polymorphic_url(object, :host => host) rescue nil
+      member_rule.title     ||= object.respond_to?(:title) && !object.title.nil? ? object.title : "Entry about #{object.class.to_s.demodulize}"
+      member_rule.published ||= object.created_at if object.respond_to?(:created_at)
+      member_rule.updated   ||= object.updated_at if object.respond_to?(:updated_at)
 
       # Namespace
       if options[:eagerload].include?(:values)
