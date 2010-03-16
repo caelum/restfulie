@@ -1,4 +1,4 @@
-require 'restfulie/server/template_handlers/tokamak'
+require File.dirname(__FILE__) + '/template_handlers/tokamak'
 
 if defined? ActionView::Template and ActionView::Template.respond_to? :register_template_handler
   ActionView::Template

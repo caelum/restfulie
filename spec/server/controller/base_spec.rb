@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-class AlbumsController < Restfulie::Controller::Base
+class BaseController < Restfulie::Controller::Base
   def index
     render :atom => [AtomifiedModel.new, AtomifiedModel.new, AtomifiedModel.new]
   end
@@ -19,7 +19,7 @@ ActionController::Routing::Routes.draw do |map|
 end
 
 describe Restfulie::Controller::Base, :type => :controller do
-  tests AlbumsController
+  tests BaseController
   
   before(:each) do
     @object = mock("ModelWithToAtom")

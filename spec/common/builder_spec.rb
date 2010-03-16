@@ -1,13 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require File.expand_path(File.dirname(__FILE__) + '/../data/data_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../lib/compare_atoms.rb')
-
-ActionController::Routing::Routes.draw do |map|
-  map.resources :albums do |album|
-    album.resources :songs, :controller => 'albums/songs', :format => :xml
-  end
-  map.resources :songs
-end
+require File.expand_path(File.dirname(__FILE__) + '/../lib/compare_atoms')
+require File.expand_path(File.dirname(__FILE__) + '/../lib/routes')
 
 context "builder representations" do
   include Restfulie::Builder::Helpers
