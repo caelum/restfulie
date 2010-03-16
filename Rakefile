@@ -36,7 +36,7 @@ namespace :test do
     end
     Rake::Task[task_name].invoke
     puts "pid >>>> #{pid}"
-    sh "kill #{pid}"
+    sh "kill -9 #{pid}"
   end
   namespace :spec do
     spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'spec.opts')]
