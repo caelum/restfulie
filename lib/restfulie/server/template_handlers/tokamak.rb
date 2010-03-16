@@ -3,9 +3,12 @@ module Restfulie::Server::TemplateHandlers
   class Tokamak < ActionView::TemplateHandler
     include ActionView::TemplateHandlers::Compilable
       
+    # TODO: Implement error for code not return builder
     def compile(template)
-      # "_set_controller_content_type(Mime::ATOM); " +
-      template.source
+      "extend Restfulie::Builder::Helpers; " +
+      "code_block = lambda { #{template.source} };" + 
+      "builder = code_block.call; " +
+      "builder.to_atom "
     end
   end
 end

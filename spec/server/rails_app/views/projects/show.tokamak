@@ -1,1 +1,1 @@
-"show.tokamak"
+describe_member(Object.new, :values => { :title => "show.tokamak" })

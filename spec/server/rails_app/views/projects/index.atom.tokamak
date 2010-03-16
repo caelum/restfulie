@@ -1,1 +1,1 @@
-"index.atom.tokamak"
+describe_collection([], :values => { :title => "index.atom.tokamak" })
