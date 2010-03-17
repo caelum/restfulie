@@ -1,2 +1,2 @@
-class Restfulie::Builder::Marshalling::Json < Restfulie::Builder::Marshalling::Base
+class Restfulie::Common::Builder::Marshalling::Json < Restfulie::Common::Builder::Marshalling::Base
 end

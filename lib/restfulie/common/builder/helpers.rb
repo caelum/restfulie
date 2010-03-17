@@ -1,17 +1,22 @@
-module Restfulie::Builder::Helpers
+module Restfulie::Common::Builder::Helpers
 
-  def member(&block)
-    create_rule(Restfulie::Builder::MemberRule, &block)
+  def describe_member(member, options = {}, &block)
+    create_builder(member, options, &block)
   end
-
-  def collection(&block)
-    create_rule(Restfulie::Builder::CollectionRule, &block)
+  
+  def describe_collection(collection, options = {}, &block)
+    create_builder(collection, options, &block)
   end
-
+  
+  # Helper to create objects link
+  def link(*args)
+    Restfulie::Common::Builder::Rules::Link.new(*args)
+  end
+  
 private
 
-  def create_rule(rule, *args, &block)
-    rules = block_given? ? [rule.new(&block)] : []
-    Restfulie::Builder::Base.new(rules)
+  def create_builder(object, options, &block)
+    Restfulie::Common::Builder::Base.new(object, block_given? ? [block] : [], options)
   end
+
 end

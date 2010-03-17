@@ -1,8 +1,10 @@
-class Restfulie::Builder::CollectionRule < Restfulie::Builder::Rules::Base
-  attr_reader :describe_members_rule
+class Restfulie::Common::Builder::CollectionRule < Restfulie::Common::Builder::Rules::Base
+  attr_reader :members_blocks
+  attr_reader :members_options
   
-  def describe_members(&block)
-    @describe_members_rule = Restfulie::Builder::MemberRule.new(&block)
+  def describe_members(options = {}, &block)
+    @members_blocks  = block_given? ? [block] : []
+    @members_options = options
   end
   
 end

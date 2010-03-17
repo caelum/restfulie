@@ -1,11 +1,11 @@
 #initialize namespace
-module Restfulie::Builder; end
+module Restfulie::Common::Builder; end
 
 %w(
-  base
   helpers
+  builder_base
   marshalling
-  rules/base
+  rules/rules_base
   rules/link
   rules/links
   rules/namespace

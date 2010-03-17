@@ -1,4 +1,4 @@
-module Restfulie::Builder::Marshalling
+module Restfulie::Common::Builder::Marshalling
   class << self
     def add_autoload_path(path)
       if File.directory?(path)
@@ -7,7 +7,7 @@ module Restfulie::Builder::Marshalling
           self.autoload(marshalling_class, file) if !self.const_defined?(marshalling_class) && self.autoload?(marshalling_class).nil?
         end
       else
-        raise Restfulie::Error::MarshallingError.new("#{path} is not a path.")
+        raise Restfulie::Common::Error::MarshallingError.new("#{path} is not a path.")
       end
     end
   end

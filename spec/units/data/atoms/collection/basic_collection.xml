@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Albums feed</title>
+  <updated>2010-03-10T14:32:01-03:00</updated>
+  <id>http://localhost/albums</id>
+  
+  <entry>
+    <title>Entry about Album</title>
+    <id>http://localhost/albums/1</id>
+    <updated>2010-03-10T14:32:01-03:00</updated>
+    <published>2010-03-10T14:32:01-03:00</published>
+  </entry>
+  
+  <entry>
+    <title>Entry about Album</title>
+    <id>http://localhost/albums/2</id>
+    <updated>2010-03-10T14:32:01-03:00</updated>
+    <published>2010-03-10T14:32:01-03:00</published>
+  </entry>
+  
+  <entry>
+    <title>Entry about Album</title>
+    <id>http://localhost/albums/3</id>
+    <updated>2010-03-10T14:32:01-03:00</updated>
+    <published>2010-03-10T14:32:01-03:00</published>
+  </entry>
+</feed>

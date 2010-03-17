@@ -1,4 +1,4 @@
-class Restfulie::Builder::Rules::Links < Array
+class Restfulie::Common::Builder::Rules::Links < Array
   alias_method :old_delete, :delete
 
   def delete(item)

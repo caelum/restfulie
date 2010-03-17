@@ -21,6 +21,7 @@ spec = Gem::Specification.new do |s|
   s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
+  s.add_dependency("responders_backport", ["~> 0.1.0"])
 
   s.author = AUTHOR
   s.email = EMAIL
@@ -29,7 +30,7 @@ end
 
 namespace :test do
   def execute_process(name)
-    sh "ruby ./spec/client/#{name}.rb &"  
+    sh "ruby ./spec/units/client/#{name}.rb &"  
     %x(ps -ef | grep #{name}).split[1]  
   end
   def process(name)
@@ -42,23 +43,30 @@ namespace :test do
     sh "kill -9 #{pid}"
   end
   namespace :spec do
-    spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'spec.opts')]
+    spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
     Spec::Rake::SpecTask.new(:all) do |t|
-      t.spec_files = FileList['spec/**/*_spec.rb']
+      t.spec_files = FileList['spec/units/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
+    Spec::Rake::SpecTask.new(:common) do |t|
+      t.spec_files = FileList['spec/common/**/*_spec.rb']
       t.spec_opts = spec_opts
     end
     Spec::Rake::SpecTask.new(:client) do |t|
-      t.spec_files = FileList['spec/client/**/*_spec.rb']
+      t.spec_files = FileList['spec/units/client/**/*_spec.rb']
       t.spec_opts = spec_opts
     end
     Spec::Rake::SpecTask.new(:server) do |t|
-      t.spec_files = FileList['spec/server/**/*_spec.rb']
+      t.spec_files = FileList['spec/units/server/**/*_spec.rb']
       t.spec_opts = spec_opts
     end
   end
   namespace :run do
     task :all do
       start_server_and_invoke_test('test:spec:all')
+    end
+    task :common do
+      start_server_and_invoke_test('test:spec:common')
     end
     task :client do
       start_server_and_invoke_test('test:spec:client')
@@ -70,8 +78,9 @@ namespace :test do
 end
 
 Spec::Rake::SpecTask.new('rcov') do |t|
+  options_file = File.expand_path('spec/units/spec.opts')
   t.spec_opts = %w(-fs -fh:doc/specs.html --color)
-  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.spec_files = FileList['spec/units/**/*_spec.rb']
   t.rcov = true
   t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
 end

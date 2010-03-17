@@ -1,4 +1,4 @@
-class Restfulie::Builder::Rules::Link
+class Restfulie::Common::Builder::Rules::Link
   # Requered
   attr_accessor :href
 

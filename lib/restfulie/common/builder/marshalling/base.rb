@@ -1,12 +1,12 @@
-class Restfulie::Builder::Marshalling::Base
-  attr_accessor :title
-
-  def initialize(*args, &block)
-    # yield(self) if block_given?
-    self.instance_eval(&block) if block_given?
+class Restfulie::Common::Builder::Marshalling::Base
+  def initialize(*args)
   end
   
-  def feed
-    self
+  def builder_member(options = {})
+    "#{self.class.to_s.demodulize} Marshalling not implemented"
+  end
+  
+  def builder_collection(options = {})
+    "#{self.class.to_s.demodulize} Marshalling not implemented"
   end
 end

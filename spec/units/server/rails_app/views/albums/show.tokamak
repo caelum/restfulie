@@ -1,0 +1,5 @@
+describe_member(@album) do |member|
+  member.namespace(:album) do |ns|
+    ns.length_in_minutes = "#{@album.length}m"
+  end
+end

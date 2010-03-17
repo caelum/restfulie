@@ -1,0 +1,3 @@
+describe_member(Object.new) do |member|
+  member.title = "new.atom.tokamak"
+end
