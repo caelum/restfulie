@@ -1,34 +1,36 @@
 class OrdersController < ApplicationController
-  
-  include Restfulie::Server::Controller
 
+  #GET http://localhost:4567/orders
+  #ALL ORDERS
   def index
     @orders = Order.all
-  end
-  
-  def configure_cache(model)
-    cache.allow(2.hours) if model.status=="delivered"
-  end
-  
-  def destroy
-    @model = model_type.find(params[:id])
-    if @model.can? :cancel
-      @model.delete
-      head :ok
-    elsif @model.can? :retrieve
-      @model.status = "delivered"
-      @model.save!
-      head :ok
-    else
-      head :status => 405
+    respond_to do |wants|
+      wants.html
+      wants.atom
     end
   end
-  
-  def pre_update(model)
-    model[:status] = "unpaid"
-    model["items"] = model["items"].map do |item|
-      Item.new(item)
+
+  #POST http://localhost:4567/orders
+  #CREATE
+  def create
+    @order = Order.create!
+    respond_to do |wants|
+      wants.html
+      wants.atom
+    end
+  end
+
+  #POST http://localhost:4567/orders/:id
+  #ADD ITEM
+  def update
+    @order = Order.find(params[:id])
+    item = @request.payload.unmarshal
+    @order << item
+    respond_to do |wants|
+      wants.html
+      wants.atom
     end
   end
 
 end
+

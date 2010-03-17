@@ -1,9 +1,9 @@
 class CreateOrders < ActiveRecord::Migration
   def self.up
     create_table :orders do |t|
-      t.string :location
-      t.string :status
-
+      t.string :state
+      t.decimal :amount, :default => 0.0
+      t.boolean :payed
       t.timestamps
     end
   end
