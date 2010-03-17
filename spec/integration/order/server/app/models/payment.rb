@@ -1,19 +1,32 @@
 class Payment < ActiveRecord::Base
-  
-  acts_as_restfulie
-  
-  media_type 'application/vnd.restbucks+xml'
-  
+
   belongs_to :order
-  
-  def initialize(hash = {})
-    super(hash)
+  after_create do |payment|
+    payment.order.start_paying!
   end
 
-  def to_xml(options = {})
-    options[:except] ||= []
-    options[:except] << :order_id
-    super(options)
+  state_machine :initial => :waiting_for_approval do
+
+    state :waiting_for_approval
+    state :approved
+    state :refused
+
+    event :approve do
+      transition :waiting_for_approval => :approved
+    end
+
+    event :refuse do
+      transition :waiting_for_approval => :refused
+    end
+
+    before_transition :on => :approve do |payment,transition|
+      payment.order.delivery!
+    end
+
+    before_transition :on => :refuse do |payment,transition|
+      payment.order.cancel!
+    end
+
   end
-  
+
 end

@@ -1,13 +1,8 @@
 class CreatePayments < ActiveRecord::Migration
   def self.up
     create_table :payments do |t|
-      t.double :amount
-      t.string :cardholderName
-      t.string :cardNumber
-      t.int :expiryMonth
-      t.int :expiryYear
-      t.datetime :paymentDate
-
+      t.string :state
+      t.decimal :amount
       t.timestamps
     end
   end

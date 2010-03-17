@@ -9,33 +9,32 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100209161930) do
+ActiveRecord::Schema.define(:version => 20100116230612) do
 
   create_table "items", :force => true do |t|
-    t.string   "milk"
-    t.string   "size"
-    t.string   "drink"
+    t.string   "name"
+    t.string   "kind"
+    t.integer  "qt"
+    t.decimal  "price"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "order_id"
   end
 
   create_table "orders", :force => true do |t|
-    t.string   "location"
-    t.string   "status"
+    t.string   "state"
+    t.decimal  "amount",     :default => 0.0
+    t.boolean  "payed"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "payments", :force => true do |t|
-    t.string   "cardholder_name"
-    t.string   "card_number"
+    t.string   "state"
+    t.decimal  "amount"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "order_id"
-    t.integer  "expiry_month"
-    t.integer  "expiry_year"
-    t.float    "amount"
   end
 
 end

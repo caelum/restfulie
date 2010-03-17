@@ -1,8 +1,2 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  amount: 
-  cardholder_name: MyString
-  card_number: MyString
-  expiry_month: 
-  expiry_year: 

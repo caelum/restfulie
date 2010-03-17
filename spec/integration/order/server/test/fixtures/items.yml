@@ -1,11 +1,14 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  milk: MyString
-  size: MyString
-  drink: MyString
+towel:
+  kind: Towel
+  name: Galaxy Towel
+  qt: 1
+  price: 1.0
 
-two:
-  milk: MyString
-  size: MyString
-  drink: MyString
+travelguide:
+  kind: TravelGuide 
+  name: The Hitchhikers Guide to the Galaxy
+  qt: 1
+  price: 10.0
+
