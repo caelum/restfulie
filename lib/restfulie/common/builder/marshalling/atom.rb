@@ -174,7 +174,9 @@ private
   end
 
   def host
-    "localhost"
+    # TODO: If we split restfulie into 2 separate gems, we may need not to use Restfulie::Server
+    #       inside Restfulie::Common
+    Restfulie::Server::Configuration.host
   end
 
   def register_namespace(namespace, uri, klass)

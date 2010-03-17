@@ -2,7 +2,7 @@ module Restfulie::Server::Configuration
   #Defines host to be passed to polymorphic_url.
   # You need to setup this to your own domain in order to generate meaningful links.
   mattr_accessor :host
-  @@host = 'localhost:3000'
+  @@host = 'localhost'
   
   # Passes a symbol to polymorphic_url in order to use a namespaced named_route.
   # So, if config.named_route_prefix = :rest, it will search for rest_album_url,
