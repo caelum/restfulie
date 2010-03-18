@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:albums="http://localhost/albums">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:albums="http://localhost/albums" xmlns:music="http://localhost/musics">
   <title>Albums feed</title>
   <updated>2010-03-10T14:32:01-03:00</updated>
   <id>http://localhost/albums</id>
@@ -17,6 +17,7 @@
     
     <album:length>60</album:length>
     <album:description>Album description</album:description>
+	<music:count>3</music:count>
 
     <link href="http://localhost/albums/1" rel="self" type="application/atom+xml"/>
     <link href="http://localhost/albums/1/songs" rel="songs" type="application/atom+xml"/>
@@ -31,6 +32,7 @@
     
     <album:length>60</album:length>
     <album:description>Album description</album:description>
+	<music:count>3</music:count>
 
     <link href="http://localhost/albums/2" rel="self" type="application/atom+xml"/>
     <link href="http://localhost/albums/2/songs" rel="songs" type="application/atom+xml"/>
@@ -45,6 +47,7 @@
     
     <album:length>60</album:length>
     <album:description>Album description</album:description>
+	<music:count>3</music:count>
 
     <link href="http://localhost/albums/3" rel="self" type="application/atom+xml"/>
     <link href="http://localhost/albums/3/songs" rel="songs" type="application/atom+xml"/>

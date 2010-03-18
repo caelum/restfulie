@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../lib/models')
 require File.expand_path(File.dirname(__FILE__) + '/../data/data_helper')
 require File.expand_path(File.dirname(__FILE__) + '/../lib/compare_atoms')
 require File.expand_path(File.dirname(__FILE__) + '/../lib/routes')
@@ -95,6 +96,10 @@ context "builder representations" do
 
           collection.describe_members do |member, album|
             member.links << link(:rel => :artists, :href => "http://localhost/albums/#{album.id}/artists", :type => "application/atom+xml")
+
+            member.namespace(:music, "http://localhost/musics") do |ns|
+              ns.count = 3
+            end
           end
         end
         original_entry = Atom::Feed.load_feed(builder.to_atom)

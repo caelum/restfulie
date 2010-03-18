@@ -19,7 +19,7 @@ class Restfulie::Common::Builder::Rules::Base
   end
 
   def namespace(ns, uri = nil,  &block)
-    namespace = @namespaces.find { |n| n.namespace == ns } || (@namespaces << Restfulie::Common::Builder::Rules::Namespace.new(ns)).first
+    namespace = @namespaces.find { |n| n.namespace == ns } || new_namespace(ns)
     namespace.uri = uri unless uri.nil?
     yield(namespace) if block_given?
     namespace
@@ -27,5 +27,10 @@ class Restfulie::Common::Builder::Rules::Base
   
   def metaclass
     (class << self; self; end)
+  end
+
+private
+  def new_namespace(name)
+    (@namespaces << Restfulie::Common::Builder::Rules::Namespace.new(name)).last
   end
 end

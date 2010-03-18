@@ -1,5 +1,5 @@
 class Restfulie::Common::Builder::Rules::Link
-  # Requered
+  # Required
   attr_accessor :href
 
   # Optional
