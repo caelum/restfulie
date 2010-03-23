@@ -1,32 +1,27 @@
-class PaymentsController < ApplicationController
+class PaymentsController < Restfulie::Server::ActionController::Base
 
-  #POST http://localhost:4567/payments/
-  def create
-    @payment = Payment.create!(:order_id => params[:order_id])
-    respond_to do |wants|
-      wants.html
-      wants.atom
-    end
+  respond_to :atom,:html
+
+  def index 
+    respond_with @payments = Payment.all
   end
 
-  #POST http://localhost:4567/payments/:id
+  def pay
+    @order = Order.find(params[:id])
+    @payment = Payment.create!(:order => @order)
+    respond_with @payment
+  end
+
   def approve
     @payment = Payment.find(params[:id])
     @payment.approve!
-    respond_to do |wants|
-      wants.html
-      wants.atom
-    end
+    respond_with @payment
   end
 
-  #DELETE http://localhost:4567/payments/:id
   def refuse
     @payment = Payment.find(params[:id])
     @payment.refuse!
-    respond_to do |wants|
-      wants.html
-      wants.atom
-    end
+    respond_with @payment
   end
 
 end

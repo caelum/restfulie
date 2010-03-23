@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(:version => 20100116230612) do
   create_table "items", :force => true do |t|
     t.string   "name"
     t.string   "kind"
-    t.integer  "qt"
-    t.decimal  "price"
+    t.integer  "qt",         :default => 0
+    t.decimal  "price",      :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "order_id"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20100116230612) do
 
   create_table "payments", :force => true do |t|
     t.string   "state"
-    t.decimal  "amount"
+    t.decimal  "amount",     :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "order_id"

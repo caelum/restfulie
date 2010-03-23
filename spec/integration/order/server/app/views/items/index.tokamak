@@ -1,0 +1,7 @@
+describe_collection(@items) do |collection|
+  collection.id = items_url
+  collection.describe_members do |member,item|
+    member.links << link( :rel => :new_item, :href => new_item_url(item), :type => :html )
+  end
+end
+
