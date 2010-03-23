@@ -1,11 +1,3 @@
-module Restfulie
-  
-  # Shortcut to Restfulie::Client::EntryPoint.at
-  def self.at(*args)
-    Restfulie::Client::EntryPoint.at(*args)
-  end
-end
-
 module Restfulie::Client#:nodoc
 
   module EntryPoint#:nodoc:
@@ -46,5 +38,11 @@ module Restfulie::Client#:nodoc
 
   end
 
+end
+
+# Shortcut to Restfulie::Client::EntryPoint
+module Restfulie
+  include Client::EntryPoint
+  extend self
 end
 

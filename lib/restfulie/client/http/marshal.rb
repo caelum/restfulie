@@ -3,11 +3,19 @@ module Restfulie::Client::HTTP::Marshal#:nodoc:
   #Custom request builder for marshalled data that unmarshalls content after receiving it.
   module RequestBuilder
     include ::Restfulie::Client::HTTP::RequestBuilder
+
+    @raw = false
+
+    #Tells Restfulie to return the raw content, instead of unmarshalling it.
+    def raw
+      @raw = true
+      self
+    end
     
     # executes super and unmarshalls it
     def request!(method, path, *args)
       response = super(method, path, *args)
-      response.unmarshal(@raw)
+      @raw ? Response::Raw.new(response) : response.unmarshal
     end
   end
 
@@ -39,10 +47,10 @@ module Restfulie::Client::HTTP::Marshal#:nodoc:
 
     #Unmarshal resonse's body according content-type header.
     #If no marshal registered will return Raw instance
-    def unmarshal(force_raw)
+    def unmarshal
       content_type = headers['Content-Type'] || headers['content-type']
-      marshaller = @@marshals[content_type] || Raw
-      marshaller = Raw if force_raw
+      marshaller = @@marshals[content_type]
+      return Raw.new(self) unless marshaller 
       unmarshaled = marshaller.unmarshal(self)
       unmarshaled.extend(ResponseHolder)
       unmarshaled.response = self
@@ -54,13 +62,11 @@ module Restfulie::Client::HTTP::Marshal#:nodoc:
       attr_accessor :response
     end
 
-
     #If no marshaller is registered, Restfulie returns an instance of Raw
     class Raw
-      
-      #Creates a new Raw instance.
-      def self.unmarshal(response)
-        Raw.new
+      attr_reader :response
+      def initialize(response)
+        @response = response
       end
     end
 

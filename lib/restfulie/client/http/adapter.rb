@@ -101,8 +101,6 @@ module Restfulie::Client::HTTP #:nodoc:
       attr_accessor :cookies
       attr_writer   :default_headers
 
-      @raw = false
-
       def host=(host)
         if host.is_a?(URI)
           @host = host
@@ -321,12 +319,6 @@ module Restfulie::Client::HTTP #:nodoc:
         self
       end
       
-      #Tells Restfulie to return the raw content, instead of unmarshalling it.
-      def raw
-        @raw = true
-        self
-      end
-
       #Path (e.g. http://restfulie.com/posts => /post)
       def path
         host.path
