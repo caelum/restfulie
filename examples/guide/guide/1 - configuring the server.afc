@@ -17,7 +17,7 @@ cd hotel-system
 
 But Rails standard projects still do not support hypermedia resources, therefore its required to add restfulie gem at **hotel-system/config/enviroment.rb**:
 
-[ruby]config.gem "restfulie", :version => "0.6.0", :source => "http://gemcutter.org"
+[ruby]config.gem "restfulie", :version => "0.7.0", :source => "http://gemcutter.org"
 [/ruby]
 
 Because gems handles gem dependencies, one single command shall download all required gems: restfulie and its dependencies.
@@ -45,7 +45,6 @@ Now we can access the hotel system by pointing our browser to **http://localhost
 
 [/tag ruby]
 [tag java]
-chocolat
 [chapter  Configuring the server]
 
 You can skip this chapter if you have already installed a servlet API compatible servlet container, including any of the Java EE Aplication Servers.
