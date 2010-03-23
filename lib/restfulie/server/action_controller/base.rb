@@ -2,7 +2,7 @@ module Restfulie
   module Server
     module ActionController
       class Base < ::ApplicationController
-        unloadable
+        #unloadable
         
         # Sets a default responder for this controller. 
         # Needs to require responder_legacy.rb
