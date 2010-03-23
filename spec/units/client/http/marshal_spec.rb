@@ -30,10 +30,10 @@ context Restfulie::Client::HTTP::Marshal::Response do
   it 'should unmarshal with custom unmarshaller' do
     Restfulie::Client::HTTP::Marshal::Response.register("custom_type", Restfulie::Client::HTTP::Marshal::Response::Test::CustomUnmarshal)
     response = Restfulie::Client::HTTP::Marshal::Response.new(:get, '\foo', 200, 'body', {'content-type'=> 'custom_type'})
-    raw = response.unmarshal
-    raw.class.should == Restfulie::Client::HTTP::Marshal::Response::Test::CustomUnmarshal
-    raw.response.should == response
-    raw.response.body.should == 'body'
+    custom_unmarshalled = response.unmarshal
+    custom_unmarshalled.class.should == Restfulie::Client::HTTP::Marshal::Response::Test::CustomUnmarshal
+    custom_unmarshalled.response.should == response
+    custom_unmarshalled.response.body.should == 'body'
   end
 
 end
