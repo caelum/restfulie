@@ -10,4 +10,5 @@ tmtags
 *.sqlite3
 log
 *.log
+.DS_Store
 
