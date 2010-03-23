@@ -3,8 +3,8 @@ class CreateItems < ActiveRecord::Migration
     create_table :items do |t|
       t.string  :name
       t.string  :kind
-      t.integer :qt
-      t.decimal :price
+      t.integer :qt, :default => 0
+      t.decimal :price, :default => 0.0
       t.timestamps
     end
   end

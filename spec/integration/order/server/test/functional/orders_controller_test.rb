@@ -1,30 +1,40 @@
-require 'test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class OrdersControllerTest < ActionController::TestCase
 
   test "should create order" do
+    assert_routing(
+      { :method => :post, :path => '/orders' },
+      { :controller => 'orders', :action => 'create' }
+    )
     assert_difference('Order.count') do
-      as('application/xml').raw_post(:create, {}, "<order></order>")
+      post :create, { :order => {} }, :format => 'atom' 
     end
-
-    assert_created order_url(assigns(:model))
+    assert_response :success
+    assert_template :create
+    assert @response.content_type, 'application/atom+xml'
   end
 
-  # test "should show order" do
-  #   get :show, :id => orders(:one).to_param
-  #   assert_response :success
-  # end
-  # 
-  # test "should update order" do
-  #   put :update, :id => orders(:one).to_param, :order => { }
-  #   assert_redirected_to order_path(assigns(:order))
-  # end
-  # 
-  # test "should destroy order" do
-  #   assert_difference('Order.count', -1) do
-  #     delete :destroy, :id => orders(:one).to_param
-  #   end
-  # 
-  #   assert_redirected_to orders_path
-  # end
+  test "should index order" do
+
+    orders = []
+    2.times { orders << Order.create! }
+
+    assert_routing(
+      { :method => :get, :path => '/orders' },
+      { :controller => 'orders', :action => 'index' }
+    )
+
+    get :index, :format => 'atom'
+
+    assert_response :success
+    assert_template :index
+    assert @response.content_type, 'application/atom+xml'
+    
+    listed_orders = assigns(:orders)
+    assert 2, listed_orders.size
+    assert orders.first.id, listed_orders.first.id
+    assert orders.last.id, listed_orders.last.id
+  end
+
 end

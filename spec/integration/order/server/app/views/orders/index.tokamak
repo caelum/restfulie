@@ -1,0 +1,11 @@
+describe_collection(@orders) do |collection|
+  collection.id = orders_url
+  collection.links << link( :rel => :create,  :href => orders_url )
+  collection.describe_members do |member,order|
+    member.links << link( :rel => :list_items_to_add, :href => order_items_url(order.id), :type => :html)
+#member.links << link( :rel => :items    , :href => order_item_url(order.id), :type => :html)
+    member.links << link( :rel => :add_items, :href => order_items_url(order.id), :type => :html)
+    member.links << link( :rel => :pay      , :href => payments_create_url(order.id) )
+  end
+end
+
