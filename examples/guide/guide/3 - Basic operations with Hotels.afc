@@ -14,8 +14,14 @@ We start creating our hotel model with three fields describing it, its name, cit
 Using Rail's scaffold feature that also generates some basic controllers:
 
 [ruby]script/generate scaffold hotel name:string city:string room_count:integer
-rake db:create:all
-rake db:migrate
+rake db:create:all db:migrate
+[/ruby]
+
+Let's see how to output a hotel representation:
+[ruby]
+script/console
+
+Hotel.new(:name => "Caelum Objects Hotel", :roow_count => 220, :city => "Sao Paulo").to_xml
 [/ruby]
 [/tag ruby]
 
@@ -38,7 +44,7 @@ public class Hotel {
 [/java]
 [/tag java]
 
-As it is currently configured, our hotel representation as application/xml would be as following:
+As it is currently configured, our hotel representation as application/xml would be something as following:
 
 [xml]<hotel>
 	<name>Caelum Objects Hotel</name>
