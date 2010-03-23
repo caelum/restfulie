@@ -16,6 +16,15 @@ module Restfulie::Client::Test
   end
 end
 
+context Restfulie do
+
+  it 'should delegate to entrypoint' do
+    Restfulie::Client::EntryPoint.should_receive(:at).with(1, 2, 3)
+    Restfulie.at(1, 2, 3)
+  end
+
+end
+
 context Restfulie::Client::Base do
 
   before(:all) do
