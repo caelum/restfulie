@@ -69,7 +69,7 @@ module Restfulie::Client::HTTP #:nodoc:
 
       ## 
       # :singleton-method:
-      # Request Adapater uses this method to chose response instance
+      # Request Adapter uses this method to chose response instance
       #
       # *<tt>method: :get,:post,:delete,:head,:put</tt>
       # *<tt>path: '/posts'</tt>
@@ -79,13 +79,13 @@ module Restfulie::Client::HTTP #:nodoc:
         response_class = @@response_handlers[http_response.code.to_i] || Response
         headers = {}
         http_response.header.each { |k, v| headers[k] = v }
-        response = response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
+        response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
       end
 
     end
 
     #
-    # Request Adapater provides a minimal interface to exchange information between server over HTTP protocol through simple adapters.
+    # Request Adapter provides a minimal interface to exchange information between server over HTTP protocol through simple adapters.
     # 
     # All the concrete adapters follow the interface laid down in this module.
     # Default connection provider is net/http
@@ -100,6 +100,8 @@ module Restfulie::Client::HTTP #:nodoc:
       attr_reader   :host
       attr_accessor :cookies
       attr_writer   :default_headers
+
+      @raw = false
 
       def host=(host)
         if host.is_a?(URI)
@@ -316,6 +318,12 @@ module Restfulie::Client::HTTP #:nodoc:
       #
       def with(headers)
         default_headers.merge!(headers)
+        self
+      end
+      
+      #Tells Restfulie to return the raw content, instead of unmarshalling it.
+      def raw
+        @raw = true
         self
       end
 
