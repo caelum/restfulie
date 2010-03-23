@@ -61,7 +61,7 @@ Moving further in our representation, a collection of resources could link to th
 </hotels>
 [/xml]
 
-If the entry point collection is addressable by its URI 'http://localhost/hotels' and there is a well known standard that defines that adding resources to such collection should be done via POSTing to this URI, there is no need for the first link, and all clients that understand such media type can either list, show and add resources to this collection without any further knowledge of your system:
+Supposing that our media type defines how to add resources to a collection by POSTing to the collection URI, we can remove the add link reference.
 
 [xml]
 <hotels>
@@ -86,11 +86,17 @@ On the client side, after requesting the representation for all hotels, one can 
 
 [note]Diagrams from http://www.websequencediagrams.com/[/note]
 
+The first two lines of code are to start irb, ruby's shell, and to load restfulie's client API.[ref irb]
+
 [ruby]
 irb
 require 'restfulie/client'
+[/ruby]
 
-hotels = Restfulie.at(HOTELS_ENTRY).get
+Due to the use of hypermedia within the resource representation, the POST request sent when invoking ::hotels.add:: is enough to create the new resource in the URI provided by the server.
+
+[ruby]
+hotels = Restfulie.at('http://localhost:3000/hotels').get
 puts "There are currently #{hotels.length} hotels"
 hotels.add new_hotel
 [/ruby]
@@ -130,10 +136,6 @@ note right of /hotels: retrieves the new hotel representation
 restfulie->client: hotel
 [/note]
 
-The first two lines of code are to start irb, ruby's shell, and to load restfulie's client API.[ref irb]
-
-Due to the use of hypermedia within the resource representation, the POST request sent when invoking ::hotels.add:: is enough to create the new resource in the URI provided by the server.
-
 [section XML? Why? Why?]
 
 One of the commons questions is whether one is forced to use XML for formatting a resource representation. REST defines that content negotiation (conneg) is a important feature that clients and server should know how to handle.[ref content_negotiation][ref conneg]
@@ -155,8 +157,7 @@ Another approach is to access generic searches as those which implement the Open
 
 [xml]
 <hotels>
-	<link rel="http://caelumobjects.com/hotels/search" href="http://localhost:3000/hotels/open_search" />
-	<link rel="http://caelumobjects.com/hotels/add" href="http://localhost:3000/hotels" />
+	<link rel="search" href="http://localhost:3000/hotels/open_search" />
 	<hotel>
 		<name>Caelum Sao Paulo</name>
 	</hotel>
@@ -169,12 +170,12 @@ Another approach is to access generic searches as those which implement the Open
 </hotels>
 [/xml]
 
+[note]
 Restfulie allows access to such document and open search through method invocations on the client side:
 
-[ruby]
 hotels = Restfulie.at(HOTELS_ENTRY).get
 hotel = hotels.search.at('Sao Paulo').rated(4).sort_by(:price).first
-[/ruby]
+[/note]
 
 [section The advanced client]
 
