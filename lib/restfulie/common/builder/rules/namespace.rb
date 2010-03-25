@@ -1,11 +1,16 @@
 class Restfulie::Common::Builder::Rules::Namespace < Hash
   attr_reader :namespace
-  attr_accessor :uri
+  attr_reader :uri
 
-  def initialize(ns, uri = nil, *args)
+  def initialize(ns, uri, *args)
     @namespace = ns.to_sym
-    @uri = uri
+    self.uri = uri
     super(*args)
+  end
+  
+  def uri=(value)
+    raise Restfulie::Common::Error::NameSpaceError.new('Namespace can not be blank uri.') if value.blank?
+    @uri = value
   end
 
   def method_missing(symbol, *args)
