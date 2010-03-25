@@ -21,6 +21,8 @@ context Restfulie::Common::Builder::Base do
     it "returned not implemented marshalling call to_base" do
       builder = create_builder(nil)
       builder.to_base(:default_rule => false).should == "Base Marshalling not implemented"
+      builder = create_builder([])
+      builder.to_base(:default_rule => false).should == "Base Marshalling not implemented"
     end
     
   end # context "create a builder"
@@ -40,6 +42,12 @@ context Restfulie::Common::Builder::Base do
     
     it "should not replace native to methods" do
       @builder.should respond_to(:to_s)
+    end
+    
+    it "should raise error method is not implemented" do
+      lambda {
+        @builder.foobar
+      }.should raise_error(NoMethodError,  "undefined method `foobar' for #{@builder}")
     end
 
     it "should raiser error for a marshalling not found" do

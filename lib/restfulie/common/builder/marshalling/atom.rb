@@ -115,8 +115,6 @@ private
           end
           atom_link[:href] = polymorphic_url(path, :host => host) rescue nil
           atom_link[:type] = link.type || 'application/atom+xml'
-        elsif
-          atom_link[:href] = link.href
         end
 
         entry.links << ::Atom::Link.new(atom_link) unless atom_link[:href].nil?

@@ -22,6 +22,12 @@ context Restfulie::Common::Builder::Rules::Namespace do
       @ns.title.should == title
     end
     
+    it "should raise error method is not implemented" do
+      lambda {
+        @ns.foobar
+      }.should raise_error(NoMethodError,  "undefined method `foobar' for {}:#{@ns.class.to_s}")
+    end
+    
     it "should not allow blank uri" do
       lambda {
         @ns.uri = nil
