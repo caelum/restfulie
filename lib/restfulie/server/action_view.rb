@@ -4,4 +4,5 @@ if defined? ::ActionView and ::ActionController
   end
   
   require 'restfulie/server/action_view/template_handlers'
+  require 'restfulie/server/action_view/helpers'
 end
