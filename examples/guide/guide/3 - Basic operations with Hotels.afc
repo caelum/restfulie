@@ -117,6 +117,12 @@ Restfulie already provides a method that parses the request content type:
 hotel = parse_request_content
 [/ruby]
 
+If the current media type is not supported, Restfulie answers with a 415:
+
+[code]
+curl -d "<hotel></hotel>" -H "Content-type:application/vnd+unknown" http://localhost:3000/hotels
+[/code]
+
 [/tag ruby]
 [tag java]
 

@@ -31,7 +31,7 @@ module Restfulie::Server::HTTP
     def unmarshal(request)
       content_type = request.headers['CONTENT_TYPE']
       unmarshaller = @@unmarshals[content_type]
-      raise "405" unless unmarshaller
+      raise "415" unless unmarshaller
       unmarshaller.unmarshal(request.body.read)
     end
 
