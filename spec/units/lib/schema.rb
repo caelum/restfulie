@@ -8,7 +8,7 @@ ActiveRecord::Schema.define(:version => 1) do
     end
   end
   
-  [:orders, :client_orders, :people, :teams].each do |table|
+  [:orders, :client_orders, :people, :teams, :shipments].each do |table|
     create_table table, :force => true do 
     end
   end

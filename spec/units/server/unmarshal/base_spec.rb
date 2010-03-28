@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 context Restfulie::Server::HTTP::Unmarshal do
   
@@ -10,7 +10,7 @@ context Restfulie::Server::HTTP::Unmarshal do
     @request.should_receive(:headers).and_return(@headers)
   end
   
-  it "returns 405 if there is no unmarshaller registered" do
+  it "returns 415 if there is no unmarshaller registered" do
     Restfulie::Server::HTTP::Unmarshal.new.unmarshal(@request)
   end
   
