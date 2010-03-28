@@ -107,9 +107,16 @@ curl -d "<hotel></hotel>" -H "Content-type:application/xml" http://localhost:300
 [/code]
 
 [tag ruby]
-[ruby]location = url_for resource
-render_resource resource, options, {:status => :created, :location => location}
+[ruby]hotel = Restfulie::Server::HTTP::Unmarshal.new.unmarshal(request)
+location = url_for hotel
+render_resource hotel, options, {:status => :created, :location => location}
 [/ruby]
+
+Restfulie already provides a method that parses the request content type:
+[ruby]
+hotel = parse_request_content
+[/ruby]
+
 [/tag ruby]
 [tag java]
 

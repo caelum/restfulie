@@ -4,12 +4,8 @@ class HotelsController < Restfulie::Server::ActionController::Base
 
   def create
     debugger
-    respond_with @hotel = Hotel.create!
-  end
-  
-  def read_model_from_request_body
-    content = request.body.read
-    media_type = request["CONTENT_TYPE"]
+    hotel = parse_request_content
+    respond_with @hotel = hotel.save!
   end
 
 

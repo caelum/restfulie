@@ -21,6 +21,11 @@ module Restfulie
           end
         end
         
+        # Parses the request content and content type through object unmarshalling.
+        def parse_request_content
+          Restfulie::Server::HTTP::Unmarshal.new.unmarshal(request)
+        end
+
       end
     end
   end
