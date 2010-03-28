@@ -15,9 +15,9 @@ ActiveRecord::Schema.define(:version => 20100105191105) do
     t.string   "from"
     t.string   "to"
     t.time     "departure"
+    t.time     "arrival_after"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "arrival_after"
   end
 
   create_table "hotels", :force => true do |t|
