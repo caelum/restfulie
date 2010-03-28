@@ -21,7 +21,7 @@ Let's see how to output a hotel representation:
 [ruby]
 script/console
 
-Hotel.new(:name => "Caelum Objects Hotel", :roow_count => 220, :city => "Sao Paulo").to_xml
+Hotel.new(:name => "Caelum Objects Hotel", :room_count => 220, :city => "Sao Paulo").to_xml
 [/ruby]
 [/tag ruby]
 
@@ -62,15 +62,13 @@ In fact, transitions can be considered a subset of all relations a resource cont
 We will adopt a custom media-type that provides information for our hotel's relations, supporting links: **vnd/hotel+xml**.
 
 [tag ruby]
-In order to configure Restfulie to use this media type for our Hotel, one invokes the **media_type** method, passing any number of custom media types that your model can be mapped to:
+In order to use Restfulie with our Hotel, there is no need to configure anything within the type itself:
 
 [ruby]class Hotel < ActiveRecord
-	acts_as_restfulie
-	media_type "vnd/hotel+xml"
 end
 [/ruby]
 
-Note that Restfulie still provides representations as application/xml and application/json if content negotiation requires so.
+Note that this way, Restfulie will provide as many representations as possible, i.e. application/xml and application/json if content negotiation requires so.
 [/tag ruby]
 
 Once our media types have been chosen, its time to understand what would be a valid representation of our hotel showing a relation to a similar one.
@@ -90,6 +88,10 @@ The relation type is a well known or custom relation that is understood by clien
 
 Throughout the guide, standard relations will be emphasized over custom ones, as with media types.
 
+[box Link header]
+We can also use the link header instead of atom links. Restfulie will support the link header soon in both Ruby and Java versions.
+[/box]
+
 [section  Creating hotels]
 
 Once the client defined the mime-type and the server configured which classes represents each media types, we can focus on dealing with our resources.
@@ -99,6 +101,10 @@ There are two HTTP verbs that allows us to create resources on the server side. 
 First we need to receive the **post** data (the resource representation) and transform it into our domain data.
 
 If the result was a success, the **post** method should return the resource location and a **201 Created** response, allowing the client to retrieve the resource data if required.
+
+[code]
+curl -d "<hotel></hotel>" -H "Content-type:application/xml" http://localhost:3000/hotels
+[/code]
 
 [tag ruby]
 [ruby]location = url_for resource

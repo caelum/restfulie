@@ -9,6 +9,7 @@ end
   action_controller
   action_view
   core_ext
+  unmarshal
   restfulie_controller
 ).each do |file|
   require "restfulie/server/#{file}"

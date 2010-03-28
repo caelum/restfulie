@@ -1,11 +1,18 @@
+class HotelsController < Restfulie::Server::ActionController::Base
 
-class HotelsController < ApplicationController
-  include Restfulie::Server::Controller
+  respond_to :atom, :html
 
-  #   as_restfulie_controller do |config|
-  #   config.update.invoke_before(:pre_update)
-  # end
+  def create
+    debugger
+    respond_with @hotel = Hotel.create!
+  end
   
+  def read_model_from_request_body
+    content = request.body.read
+    media_type = request["CONTENT_TYPE"]
+  end
+
+
   def index
     @hotels = Hotel.all
     respond_to do |format|
