@@ -3,7 +3,6 @@ class HotelsController < Restfulie::Server::ActionController::Base
   respond_to :atom, :html
 
   def create
-    debugger
     @hotel = parse_request_content
     @hotel.save!
     respond_with @hotel

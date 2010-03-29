@@ -1,1 +1,18 @@
-ActionController::Rescue::DEFAULT_RESCUE_RESPONSES['Restfulie::Server::HTTP::UnsupportedMediaType'] = :unsupported_media_type
+module Restfulie::Server::Rescue
+  def self.custom_responses
+    @customs ||= {}
+  end
+
+  custom_responses['Restfulie::Server::HTTP::UnsupportedMediaTypeError'] = :unsupported_media_type
+
+end  
+
+module ActionController::Rescue
+
+  def response_code_for_rescue(exception)
+    key = exception.class.name
+    return Restfulie::Server::Rescue.custom_responses[key] if Restfulie::Server::Rescue.custom_responses[key]
+    rescue_responses[key]
+  end
+  
+end
