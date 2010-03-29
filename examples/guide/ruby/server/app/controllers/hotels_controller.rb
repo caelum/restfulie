@@ -4,8 +4,9 @@ class HotelsController < Restfulie::Server::ActionController::Base
 
   def create
     debugger
-    hotel = parse_request_content
-    respond_with @hotel = hotel.save!
+    @hotel = parse_request_content
+    @hotel.save!
+    respond_with @hotel
   end
 
 

@@ -11,7 +11,7 @@ context Restfulie::Server::HTTP::Unmarshal do
   end
   
   it "returns 415 if there is no unmarshaller registered" do
-    Restfulie::Server::HTTP::Unmarshal.new.unmarshal(@request)
+    lambda { Restfulie::Server::HTTP::Unmarshal.new.unmarshal(@request) }.should raise_error(Restfulie::Server::HTTP::UnsupportedMediaTypeError)
   end
   
   class CustomUnmarshaller

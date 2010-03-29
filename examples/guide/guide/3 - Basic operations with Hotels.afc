@@ -103,7 +103,7 @@ First we need to receive the **post** data (the resource representation) and tra
 If the result was a success, the **post** method should return the resource location and a **201 Created** response, allowing the client to retrieve the resource data if required.
 
 [code]
-curl -d "<hotel></hotel>" -H "Content-type:application/xml" http://localhost:3000/hotels
+curl -d "<hotel><name>Caelum Objects Hotel</name><room_count>220></room_count><city>Sao Paulo</city></hotel>" -H "Content-type:application/xml" http://localhost:3000/hotels
 [/code]
 
 [tag ruby]

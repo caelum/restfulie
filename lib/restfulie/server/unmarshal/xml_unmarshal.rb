@@ -11,3 +11,5 @@ class Restfulie::Server::HTTP::XmlUnmarshaller
 end
 
 Restfulie::Server::HTTP::Unmarshal.register("application/xml", Restfulie::Server::HTTP::XmlUnmarshaller)
+Restfulie::Server::HTTP::Unmarshal.register("text/xml", Restfulie::Server::HTTP::XmlUnmarshaller)
+Restfulie::Server::HTTP::Unmarshal.register("xml", Restfulie::Server::HTTP::XmlUnmarshaller)

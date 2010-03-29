@@ -30,8 +30,15 @@ class Restfulie::Server::HTTP::Unmarshal
   def unmarshal(request)
     content_type = request.headers['CONTENT_TYPE']
     unmarshaller = @@unmarshals[content_type]
-    raise "415" unless unmarshaller
+    raise Restfulie::Server::HTTP::UnsupportedMediaTypeError unless unmarshaller
     unmarshaller.unmarshal(request.body.read)
   end
 
+end
+
+class Restfulie::Server::HTTP::UnsupportedMediaTypeError < Exception
+end
+
+if defined? ::ActionController 
+  ActionController::Rescue::DEFAULT_RESCUE_RESPONSES['Restfulie::Server::HTTP::UnsupportedMediaType'] = :unsupported_media_type
 end
