@@ -4,6 +4,7 @@ module Restfulie::Server::Rescue
   end
 
   custom_responses['Restfulie::Server::HTTP::UnsupportedMediaTypeError'] = :unsupported_media_type
+  custom_responses['Restfulie::Server::HTTP::BadRequest'] = :bad_request
 
 end  
 
