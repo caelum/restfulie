@@ -1,0 +1,5 @@
+member.namespace(:albums) do |ns|
+  ns.length_in_minutes = "#{album.length}m"
+end
+
+member.links << link(:rel => :artistis, :href => album_artists_url(album))

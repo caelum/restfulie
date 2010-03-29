@@ -41,15 +41,15 @@ describe AlbumsController, :type => :controller do
       get :show, :id => @album.id, :format => :atom
       @entry = ::Atom::Entry.load_entry(response.body)      
     end
-
+  
     it "generation atom entry" do
       @entry.title.should == @album.title
     end
-
+  
     it "return eagerload values" do
-      @entry.album_length.to_i.should == @album.length
-      @entry.album_description.should == @album.description
-      @entry.album_length_in_minutes.should ==  "#{@album.length}m"
+      @entry.albums_length.to_i.should == @album.length
+      @entry.albums_description.should == @album.description
+      @entry.albums_length_in_minutes.should ==  "#{@album.length}m"
     end
   end # describe "get show"
 end

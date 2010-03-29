@@ -1,6 +1,7 @@
 class Restfulie::Common::Builder::Marshalling::Atom < Restfulie::Common::Builder::Marshalling::Base
   include ActionController::UrlWriter
   include Restfulie::Common::Builder::Helpers
+  include Restfulie::Common::Error
   
   ATOM_ATTRIBUTES = [
     :title, :id, :updated, # Required
@@ -38,12 +39,11 @@ private
 
   def builder_feed(objects, rules_blocks, options = {})
     rule = Restfulie::Common::Builder::CollectionRule.new(rules_blocks)
-    options = eagerload_enhance(options)
-    
+
     rule.blocks.unshift(default_collection_rule) if options[:default_rule]
     rule.metaclass.send(:attr_accessor, *ATOM_ATTRIBUTES_FEED)
     rule.apply(objects, options)
-    
+
     atom = ::Atom::Feed.new do |feed|
       # Set values
       (ATOM_ATTRIBUTES_FEED - [:links]).each do |field|
@@ -67,47 +67,7 @@ private
       end
     end
   end
-
-  def builder_entry(object, rules_blocks, options = {})
-    rule = Restfulie::Common::Builder::MemberRule.new(rules_blocks)
-    options = eagerload_enhance(options)
-    
-    rule.blocks.unshift(default_member_rule) if options[:default_rule]
-    rule.metaclass.send(:attr_accessor, *ATOM_ATTRIBUTES_ENTRY)
-    rule.apply(object, options)
-
-    atom = ::Atom::Entry.new do |entry|
-      # Set values
-      (ATOM_ATTRIBUTES_ENTRY - [:links]).each do
-        |field| entry.send("#{field}=".to_sym, rule.send(field)) unless rule.send(field).nil?
-      end
-
-      # Namespaces
-      builder_namespaces(rule.namespaces, entry)
-
-      # Transitions
-      rule.links.each do |link|
-        atom_link = {:rel => link.rel, :href => link.href, :type => link.type}
-
-        # Self
-        if link.href.nil?
-          if link.rel == "self"
-            path = object
-          else
-            association = object.class.reflect_on_all_associations.find { |a| a.name.to_s == link.rel }
-            path = (association.macro == :has_many) ? [object, association.name] : object.send(association.name) unless association.nil? 
-          end
-          atom_link[:href] = polymorphic_url(path, :host => host) rescue nil
-          atom_link[:type] = link.type || 'application/atom+xml'
-        elsif
-          atom_link[:href] = link.href
-        end
-        
-        entry.links << ::Atom::Link.new(atom_link) unless atom_link[:href].nil?
-      end
-    end
-  end
-
+  
   # TODO: Validate of the required fields
   def default_collection_rule
     Proc.new do |collection_rule, objects, options|
@@ -123,41 +83,62 @@ private
       collection_rule.links << link(:rel => :self, :href => options[:self]) unless options[:self].nil?
     end
   end
-  
-  def default_member_rule
-    Proc.new do |member_rule, object, options|
-      # Passed values
-      (options[:values] || {}).each { |key, value| member_rule.send("#{key}=".to_sym, value)}
-      
-      # Default values
-      member_rule.id        ||= polymorphic_url(object, :host => host) rescue nil
-      member_rule.title     ||= object.respond_to?(:title) && !object.title.nil? ? object.title : "Entry about #{object.class.to_s.demodulize}"
-      member_rule.published ||= object.created_at if object.respond_to?(:created_at)
-      member_rule.updated   ||= object.updated_at if object.respond_to?(:updated_at)
 
-      # Namespace
-      if options[:eagerload].include?(:values) && object.class.respond_to?(:column_names)
-        klass = object.class.to_s.demodulize.downcase.to_sym
-        uri   = polymorphic_url(klass.to_s.pluralize, :host => host) rescue nil
-        member_rule.namespace(klass, uri) do |namespace|
-          attributes = object.class.column_names - ATTRIBUTES_ALREADY_IN_ATOM_SPEC
-          attributes.each { |attr| namespace.send("#{attr}=", object[attr]) }
-        end
+  def builder_entry(object, rules_blocks, options = {})
+    rule    = Restfulie::Common::Builder::MemberRule.new(rules_blocks)
+    options = namespace_enhance(options)
+    
+    rule.blocks.unshift(default_member_rule) if options[:default_rule]
+    rule.metaclass.send(:attr_accessor, *ATOM_ATTRIBUTES_ENTRY)
+    rule.apply(object, options)
+
+    atom = ::Atom::Entry.new do |entry|
+      # Set values
+      (ATOM_ATTRIBUTES_ENTRY - [:links]).each do |field|
+        entry.send("#{field}=".to_sym, rule.send(field)) unless rule.send(field).nil?
       end
 
+      # Namespaces
+      builder_namespaces(rule.namespaces, entry)
+      
       # Transitions
-      if options[:eagerload].include?(:transitions)
-        member_rule.links << link(:self)
-        
-        if object.class.respond_to?(:reflect_on_all_associations)
-          object.class.reflect_on_all_associations.map do |association|
-            member_rule.links << link(association.name)
+      rule.links.each do |link|
+        atom_link = {:rel => link.rel, :href => link.href, :type => link.type}
+
+        # Self
+        if link.href.nil?
+          if link.rel == "self"
+            path = object
+          else
+            association = object.class.reflect_on_all_associations.find { |a| a.name.to_s == link.rel }
+            path = (association.macro == :has_many) ? [object, association.name] : object.send(association.name) unless association.nil? 
           end
+          atom_link[:href] = polymorphic_url(path, :host => host) rescue nil
+          atom_link[:type] = link.type || 'application/atom+xml'
         end
+
+        entry.links << ::Atom::Link.new(atom_link) unless atom_link[:href].nil?
       end
     end
   end
-  
+
+  def default_member_rule
+    Proc.new do |member_rule, object, options|
+      # Passed values
+      (options[:values] || {}).each { |key, value| set_attribute(member_rule, key, value) }
+
+      # Default values
+      member_rule.id      ||= polymorphic_url(object, :host => host) rescue nil
+      member_rule.title   ||= object.respond_to?(:title) && !object.title.nil? ? object.title : "Entry about #{object.class.to_s.demodulize}"
+      member_rule.updated ||= object.updated_at if object.respond_to?(:updated_at)
+
+      # Namespace
+      unless options[:namespace].nil?
+        member_rule.namespace(object, options[:namespace][:uri], options[:namespace])
+      end
+    end
+  end
+
   def updated_collection(objects)
     objects.map { |item| item.updated_at if item.respond_to?(:updated_at) }.compact.max || Time.now
   end
@@ -167,8 +148,10 @@ private
     namespaces.each do |ns|
       register_namespace(ns.namespace, ns.uri, kclass)
       ns.each do |key, value|
-        register_element(ns.namespace, key, kclass)
-        atom.send("#{ns.namespace}_#{key}=".to_sym, value)
+        unless ATTRIBUTES_ALREADY_IN_ATOM_SPEC.include?(key.to_s)
+          register_element(ns.namespace, key, kclass)
+          atom.send("#{ns.namespace}_#{key}=".to_sym, value)
+        end
       end
     end
   end
@@ -192,12 +175,23 @@ private
     klass.element_specs.select { |k,v|  v.name == element }.empty?
   end
   
-  def eagerload_enhance(options)
-    if options[:eagerload] == true
-      options[:eagerload] = [:values, :transitions]
-    elsif options[:eagerload] == false
-      options[:eagerload] = []
+  # TODO : Move error handling to class rule, maybe?
+  def set_attribute(rule, attribute, value)
+    begin
+      rule.send("#{attribute}=".to_sym, value)
+    rescue NoMethodError
+      raise AtomMarshallingError.new("Attribute #{attribute} unsupported in Atom #{rule_type_name(rule)}.")
     end
-    return options
+  end
+  
+  def rule_type_name(rule)
+    rule.kind_of?(Restfulie::Common::Builder::MemberRule) ? 'Entry' : 'Feed'
+  end
+  
+  def namespace_enhance(options)
+    if !options[:namespace].nil? && options[:namespace].kind_of?(String)
+      options[:namespace] = { :uri => options[:namespace], :eager_load => true }
+    end
+    options
   end
 end

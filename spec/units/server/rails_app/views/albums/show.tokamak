@@ -1,5 +1,3 @@
-describe_member(@album) do |member|
-  member.namespace(:album) do |ns|
-    ns.length_in_minutes = "#{@album.length}m"
-  end
+describe_member(@album, :namespace => "http://localhost/albums") do |member|
+  partial("member", :locals => { :member => member, :album => @album })
 end

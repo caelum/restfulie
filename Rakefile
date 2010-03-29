@@ -61,6 +61,17 @@ namespace :test do
       t.spec_opts = spec_opts
     end
   end
+  
+  namespace :rcov do
+    Spec::Rake::SpecTask.new('rcov') do |t|
+      options_file = File.expand_path('spec/units/spec.opts')
+      t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+      t.spec_files = FileList['spec/units/**/*_spec.rb']
+      t.rcov = true
+      t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
+    end
+  end
+  
   namespace :run do
     task :all do
       start_server_and_invoke_test('test:spec:all')
@@ -74,15 +85,10 @@ namespace :test do
     task :server do
       start_server_and_invoke_test('test:spec:server')
     end
+    task :rcov do
+      start_server_and_invoke_test('test:rcov:rcov')
+    end
   end
-end
-
-Spec::Rake::SpecTask.new('rcov') do |t|
-  options_file = File.expand_path('spec/units/spec.opts')
-  t.spec_opts = %w(-fs -fh:doc/specs.html --color)
-  t.spec_files = FileList['spec/units/**/*_spec.rb']
-  t.rcov = true
-  t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

@@ -711,7 +711,7 @@ module Atom # :nodoc:
     end
     
     def ==(o)
-      o.respond_to?(:href) && o.href == self.href
+      [:href, :rel, :type].all? { |k| o.respond_to?(k) && o.send(k) == self.send(k) }
     end
     
     # This will fetch the URL referenced by the link.
@@ -730,7 +730,7 @@ module Atom # :nodoc:
     end
     
     def inspect
-      "<Atom::Link href:'#{href}' type:'#{type}'>"
+      "<Atom::Link rel:'#{rel}' href:'#{href}' type:'#{type}'>"
     end
   end
 end

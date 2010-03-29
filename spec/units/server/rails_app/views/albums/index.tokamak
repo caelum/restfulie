@@ -1,7 +1,7 @@
 describe_collection(@albums) do |collection|
   collection.title = "Index Album feed spec"
-  
-  collection.describe_members do |member, album|
-    member.links << link(:rel => :artistis, :href => album_artists_url(album))
+
+  collection.describe_members(:namespace => "http://localhost/albums") do |member, album|
+    partial("member", binding)
   end
 end
