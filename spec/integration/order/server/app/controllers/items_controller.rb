@@ -16,7 +16,7 @@ class ItemsController < Restfulie::Server::ActionController::Base
   end
 
   def destroy
-    Item.delete!(params[:items])
+    Item.delete(params[:id])
     redirect_to items_url
   end
 

@@ -10,5 +10,10 @@ class OrdersController < Restfulie::Server::ActionController::Base
     respond_with @order = Order.create!
   end
 
+  def destroy
+    Order.delete(params[:id])
+    redirect_to orders_url
+  end
+
 end
 
