@@ -4,8 +4,6 @@ module Restfulie::Client::HTTP::Marshal#:nodoc:
   module RequestBuilder
     include ::Restfulie::Client::HTTP::RequestBuilder
 
-    @raw = false
-
     #Tells Restfulie to return the raw content, instead of unmarshalling it.
     def raw
       @raw = true
