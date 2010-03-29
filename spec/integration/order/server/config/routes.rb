@@ -7,9 +7,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :items, :only => [:new,:destroy,:index,:create]
 
   map.resources :payments, :only => [:index]
-  map.payments_create  '/payments/order/:id', :action => 'pay'    , :controller => 'payments', :conditions => { :method => :post }
-  map.payments_approve '/payments/:id'      , :action => 'approve', :controller => 'payments', :conditions => { :method => :post }
-  map.payments_refuse  '/payments/:id'      , :action => 'refuse' , :controller => 'payments', :conditions => { :method => :delete }
+  map.create_payment  '/payments/order/:id', :action => 'pay'    , :controller => 'payments', :conditions => { :method => :post }
+  map.new_payment     '/payments/order/:id', :action => 'pay'    , :controller => 'payments', :conditions => { :method => :post }
+  map.approve_payment '/payments/:id'      , :action => 'approve', :controller => 'payments', :conditions => { :method => :post }
+  map.refuse_payment  '/payments/:id'      , :action => 'refuse' , :controller => 'payments', :conditions => { :method => :delete }
 
   #map.resources :order do |order|
     #order.post '/:id',:state => :opened, :action => :add_item
