@@ -38,7 +38,3 @@ end
 
 class Restfulie::Server::HTTP::UnsupportedMediaTypeError < Exception
 end
-
-if defined? ::ActionController 
-  ActionController::Rescue::DEFAULT_RESCUE_RESPONSES['Restfulie::Server::HTTP::UnsupportedMediaType'] = :unsupported_media_type
-end
