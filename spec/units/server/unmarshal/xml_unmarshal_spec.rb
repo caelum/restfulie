@@ -7,17 +7,12 @@ context Restfulie::Server::HTTP::XmlUnmarshaller do
   
   it "complains if there is more than one root element" do
     content = "<shipment></shipment><shipment></shipment>"
-    assert_raise Restfulie::Server::HTTP::XmlUnmarshaller.unmarshal(content)
-  end
-  
-  it "complains if there is no root element" do
-    content = ""
-    assert_raise Restfulie::Server::HTTP::XmlUnmarshaller.unmarshal(content)
+    lambda { Restfulie::Server::HTTP::XmlUnmarshaller.unmarshal(content) }.should raise_error(Restfulie::Server::HTTP::BadRequest)
   end
   
   it "complains if there is no such type" do
     content = "<weird></weird>"
-    assert_raise Restfulie::Server::HTTP::XmlUnmarshaller.unmarshal(content)
+    lambda { Restfulie::Server::HTTP::XmlUnmarshaller.unmarshal(content) }.should raise_error(Restfulie::Server::HTTP::BadRequest)
   end
   
   it "uses ActiveRecord's hash constructor if its an ActiveRecord" do

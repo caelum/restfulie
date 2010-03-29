@@ -38,3 +38,6 @@ end
 
 class Restfulie::Server::HTTP::UnsupportedMediaTypeError < Exception
 end
+
+class Restfulie::Server::HTTP::BadRequest < Exception
+end
