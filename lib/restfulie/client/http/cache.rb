@@ -1,10 +1,10 @@
-module Restfulie::Client::HTTP::Cache
+module Restfulie::Client::HTTP
 
-  module RequestBuilder
-    include ::Restfulie::Client::HTTP::RequestBuilder
+  module Cache
 
-    mattr_accessor :store
-    @@store = ::ActiveSupport::Cache::MemoryStore.new
+    def store
+      @store || @store = ::ActiveSupport::Cache::MemoryStore.new
+    end
 
     def get
       store.fetch(@uri) do
@@ -20,19 +20,8 @@ module Restfulie::Client::HTTP::Cache
 
   end
 
-  class RequestBuilderExecutor 
-    include RequestBuilder
-    def initialize(host, default_headers = {})
-      self.host=host
-      self.default_headers=default_headers
-    end
-    def at(path)
-      @path = path
-      self
-    end
-    def path
-      @path
-    end
+  class RequestBuilderExecutorWithCache < RequestBuilderExecutor
+    include Cache
   end
 
 end

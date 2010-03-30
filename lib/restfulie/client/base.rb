@@ -1,39 +1,51 @@
 module Restfulie::Client#:nodoc
 
-  module EntryPoint#:nodoc:
-    include HTTP::Marshal::RequestBuilder
+  module EntryPoint
+    include HTTP::RequestMarshaller
     extend self
-  end
 
-  module Base#:nodoc:
-
-    def self.included(base)#:nodoc
-      base.extend(ClassMethods)
+    @resources_configurations = {}
+    def configuration_of(resource_name)
+      @resources_configurations[resource_name]
     end
 
-    module ClassMethods
-      include HTTP::Marshal::RequestBuilder
+    def configuration_for(resource_name,configuration = Configuration.new)
+      yield configuration if block_given?
+      @resources_configurations[resource_name] = configuration
+    end
 
-      attr_accessor :config
-      
-      #Class method to create a Configuration 
-      def uses_restfulie(cnf = Configuration.new)
-        @config = cnf
-        yield cnf
-        at(config.entry_point)
+    def retrieve(resource_name)
+      returning Object.new do |resource| 
+        restore.extend(Base)
+        resource.configure
       end
+    end
 
-      def request!(method, path, *args)#:nodoc
-        if config.default_headers and config.default_headers[method]
-          if self.default_headers
-            self.default_headers = config.default_headers[method].dup.merge!( self.default_headers ) 
-          else 
-            self.default_headers = config.default_headers[method]
-          end
-        end
-        super
+  end
+
+  module Base
+    include HTTP::RequestMarshaller
+   
+    def self.included(base)#:nodoc
+      base.extend(self)
+    end
+
+    def uses_restfulie(configuration = Configuration.new,&block)
+      EntryPoint.configuration_for(resource_name,configuration,&block)
+      configure
+    end
+
+    def configure
+      configuration = EntryPoint.configuration_of(resource_name)
+      raise "Undefined configuration for #{resource_name}" unless configuration
+      at(configuration.entry_point)
+      configuration.representations.each do |representation_name,representation|
+        register_representation(representation_name,representation)
       end
+    end
 
+    def resource_name
+      @resource_name || @resource_name = self.class.to_s.to_sym 
     end
 
   end

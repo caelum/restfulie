@@ -6,7 +6,7 @@ end
   adapter
   cache
   marshal
-  marshals/atom
+  atom_ext
 ).each do |file|
   require "restfulie/client/http/#{file}"
 end

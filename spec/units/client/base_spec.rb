@@ -3,16 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 module Restfulie::Client::Test
   class Song
     include ::Restfulie::Client::Base
-
-    uses_restfulie do |config|
-      config.entry_point     = 'http://localhost:4567/songs'
-      config.default_headers = { 
-        :get  => { 'Accept'       => 'application/atom+xml' },
-        :post => { 'Content-Type' => 'application/atom+xml' } 
-      }
-      config.auto_follows = { 301 => [:post,:put,:delete] }
-    end
-
+    uses_restfulie { |config| config.entry_point = 'http://localhost:4567/songs' }
   end
 end
 
