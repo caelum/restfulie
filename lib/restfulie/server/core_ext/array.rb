@@ -1,3 +1,4 @@
+# Introspective methods to assist in the conversion of collections in other formats.
 class Array
   def to_atom(options={}, &block)
     raise "Not all elements respond to to_atom" unless all? { |e| e.respond_to? :to_atom }
@@ -23,8 +24,22 @@ class Array
       yield feed if block_given?
     end
   end
-    
-  def updated_at
-    map { |item| item.updated_at if item.respond_to?(:updated_at) }.compact.max || Time.now
+  
+  # Return max update date for items in collection, for it uses the updated_at of items.
+  # 
+  #==Example:
+  #
+  # Find max updated at in ActiveRecord objects 
+  #
+  #   albums = Albums.find(:all)
+  #   albums.updated_at
+  # 
+  # Using a custom field to check the max date
+  #
+  #   albums = Albums.find(:all)
+  #   albums.updated_at(:created_at)
+  #
+  def updated_at(field = :updated_at)
+    map { |item| item.send(field) if item.respond_to?(field) }.compact.max || Time.now
   end
 end

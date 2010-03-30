@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 
 context Array do
 
@@ -25,5 +26,17 @@ context Array do
     feed.should include("<title>customized title</title")
     feed.should include("<author>")
     feed.should include("<name>John Doe</name")
+  end
+  
+  it "get the max time to update the items" do
+    Album.create(:title => 'Array test')
+    Album.update_all(:updated_at => Time.now - 1.day)
+    Album.first.update_attributes(:updated_at => Time.now)
+    Album.all.updated_at.should == Album.first.updated_at
+  end
+  
+  it "custom field usinged to find max updated" do
+    album = Album.create(:title => 'Array test')
+    Album.all.updated_at(:created_at).to_i.should == album.created_at.to_i
   end
 end
