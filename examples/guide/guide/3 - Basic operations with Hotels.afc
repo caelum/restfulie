@@ -103,7 +103,7 @@ First we need to receive the **post** data (the resource representation) and tra
 If the result was a success, the **post** method should return the resource location and a **201 Created** response, allowing the client to retrieve the resource data if required.
 
 [code]
-curl -d "<hotel><name>Caelum Objects Hotel</name><room_count>220></room_count><city>Sao Paulo</city></hotel>" -H "Content-type:application/xml" http://localhost:3000/hotels
+curl -d "<hotel><name>Caelum Objects Hotel</name><room_count>220></room_count><city>Sao Paulo</city></hotel>" -H "Content-type:application/xml" -H "Accept:application/xml" http://localhost:3000/hotels
 [/code]
 
 [tag ruby]
@@ -132,15 +132,16 @@ This code will generate a response 201 with the resource location in the **Locat
 
 The controller still needs to check if the process was successfully completed or not and, if something goes wrong, render the related error messages.
 
-[ruby]class HotelsController < ApplicationController::Base
-	def create
-	    @hotel = Restfulie.from request
-	    if @hotel.save
-	      render_created @city
-	    else
-	      render :xml => @city.errors, :status => :unprocessable_entity
-	    end
-	end
+[ruby]class HotelsController < Restfulie::Server::ActionController::Base
+
+  respond_to :xml, :atom, :html
+
+  def create
+    @hotel = parse_request_content
+    @hotel.save!
+    respond_with @hotel
+  end
+
 end
 [/ruby]
 
@@ -154,15 +155,13 @@ In a REST over HTTP application, resources are **only** exchanged through its re
 
 If the server wants to avoid one extra request-response trip, it can return the resource content with the 201 return code and the client will not need another request to retrieve this information:
 
-<TOLINK imagem com sequencia de 200, 201 e unprocessable>
-
-Note that render_created will already do it for us, returning a response as:
+[note]TOLINK imagem com sequencia de 200, 201 e unprocessable[/note]
 
 [box]
-There is one major validation step missing in the code above: the object created invoking *Restfulie.from* might not be a hotel and we are not checking its content-type. In order to check if the media-type sent matches the expected one:
+There is one step missing, we need to validate the request body is an entity that we expect, in our case, a Hotel:
 
-[ruby]valid = Restfulie::MediaType.supports?(request.headers['CONTENT_TYPE']) &&
-       	Restfulie::MediaType.media_type(request.headers['CONTENT_TYPE']) == Hotel
+[ruby]
+raise Restfulie::Server::HTTP::BadRequest unless @hotel.kind_of? Hotel
 [/ruby]
 [box]
 
