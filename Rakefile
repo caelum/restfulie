@@ -100,6 +100,14 @@ Rake::RDocTask.new("rdoc") do |rdoc|
 #   rdoc.rdoc_files.include('lib/**/**/*.rb')
 end
 
+begin
+  require 'yard'
+  YARD::Rake::YardocTask.new do |t|
+    t.files   = ['lib/restfulie/**/*.rb', 'README.textile']   # optional
+    # t.options = ['--any', '--extra', '--opts'] # optional
+  end
+rescue; end
+
 desc "Install the gem locally"
 task :install => [:package] do
   sh %{gem install pkg/#{GEM}-#{GEM_VERSION} -l}

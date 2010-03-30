@@ -22,10 +22,10 @@ class Restfulie::Common::Builder::Rules::Base
   #
   #==Example:
   #
-  # namespace(@album , "http://example.com")
-  # namespace(:albums, "http://example.com")
-  # namespace(:albums, "http://example.com", :eager_load => false)
-  # namespace(:albums, "http://example.com", :eager_load => { :title => 'A title' })
+  #  namespace(@album , "http://example.com")
+  #  namespace(:albums, "http://example.com")
+  #  namespace(:albums, "http://example.com", :eager_load => false)
+  #  namespace(:albums, "http://example.com", :eager_load => { :title => 'A title' })
   #
   def namespace(ns, uri = nil, options = {}, &block)
     object = nil

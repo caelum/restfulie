@@ -1,8 +1,6 @@
 require 'restfulie/common'
 
-#initialize namespace
-module Restfulie::Client#:nodoc:
-end
+module Restfulie::Client; end
 
 %w(
   http

@@ -1,8 +1,7 @@
 require 'restfulie/common'
 require 'responders_backport'
 
-module Restfulie::Server#:nodoc:
-end
+module Restfulie::Server; end
 
 %w(
   configuration

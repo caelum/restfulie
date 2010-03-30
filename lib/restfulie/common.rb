@@ -1,16 +1,15 @@
 require 'net/http'
 require 'uri'
 
-# TODO Remove this after remove Media Types (if need?)
 require 'rubygems'
 require 'active_support'
 require 'action_controller'
 
 require 'vendor/atom'
 
-#initialize namespace
-module Restfulie; end
-module Restfulie::Common; end
+module Restfulie
+  module Common; end
+end
 
 %w(
   errors
