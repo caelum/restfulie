@@ -10,10 +10,10 @@ class Orders::ItemsControllerTest < ActionController::TestCase
 
     assert_routing(
       { :method     => :post, :path => "/orders/#{order.id}/items" },
-      { :controller => 'orders/items', :action => 'create', :order_id => order.id.to_s }
+      { :controller => 'orders/items', :action => 'add', :order_id => order.id.to_s }
     )
 
-    post :create, 
+    post :add, 
       { :order_id => order.id.to_s, 
         :items => { 
           '0' => { :id => items.first.id }, 

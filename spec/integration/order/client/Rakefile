@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'rubygems/specification'
 require 'rake'
 require 'spec/rake/spectask'
 
