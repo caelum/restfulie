@@ -23,5 +23,15 @@ context Restfulie::Server::HTTP::XmlUnmarshaller do
     Restfulie::Server::HTTP::XmlUnmarshaller.unmarshal(content).should == something
   end
   
+  class Stock
+    attr_accessor :code
+  end
+  
+  it "invokes attr writers if a common type" do
+    content = "<stock><code>petr4</code></stock>"
+    stock = Restfulie::Server::HTTP::XmlUnmarshaller.unmarshal(content)
+    stock.code.should == "petr4"
+  end
+  
 end
 

@@ -6,10 +6,30 @@ class Restfulie::Server::HTTP::XmlUnmarshaller
       h = Hash.from_xml(content)
       name = h.keys[0]
       type = name.camelize.constantize
-      type.new(h.values[0])
+      self.new_instance_from(type, h.values[0])
     rescue NameError, REXML::ParseException
       raise Restfulie::Server::HTTP::BadRequest
     end
+  end
+  
+  private
+  
+  # instantiates either an active record or common type
+  def self.new_instance_from(type, hash)
+    if defined?(::ActiveRecord::Reflection) && type.included_modules.include?(::ActiveRecord::Reflection)
+      type.new(hash)
+    else
+      self.new_from_hash(type, hash)
+    end
+  end
+  
+  # instantiates a common type and fills it with values from a hash
+  def self.new_from_hash(type, hash)
+    result = type.new
+    hash.each do |key, value|
+      result.send("#{key}=".to_s, value)
+    end
+    result
   end
   
 end
