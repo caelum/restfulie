@@ -1,4 +1,4 @@
-if defined?(::ActionController) && defined?(::ApplicationController)
+if defined?(::ActionController) || defined?(::ApplicationController)
 
   module Restfulie::Server::ActionController#:nodoc:
   end

@@ -14,14 +14,12 @@ class ApplicationController < ActionController::Base
   #
   #
   # def respond_to(*types, &block)
-  #   puts "tentando aqui... #{request.headers['ACCEPT']}"
   #   raise ArgumentError, "respond_to takes either types or a block, never both" unless types.any? ^ block
   #   block ||= lambda { |responder| types.each { |type| responder.send(type) } }
   #   responder = Responder.new(self)
   #   def responder.respond
   #     # debugger
   #       for priority in @mime_type_priority
-  #         puts "estou verificando esse tal de #{priority} sendo que posso #{@responses.keys}"
   #         if priority == Mime::ALL
   #           @responses[@order.first].call
   #           return
@@ -33,12 +31,9 @@ class ApplicationController < ActionController::Base
   #         end
   #       end
   #       
-  #       puts "ate agora nenhum..."
-  # 
   #       if @order.include?(Mime::ALL)
   #         @responses[Mime::ALL].call
   #       else
-  #         puts "nada mesmo!"
   #         @controller.send :head, :not_acceptable
   #       end
   #   end
