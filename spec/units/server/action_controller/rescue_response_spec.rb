@@ -6,7 +6,7 @@ describe Restfulie::Server::Rescue do
     Restfulie::Server::Rescue.custom_responses['Restfulie::Server::HTTP::UnsupportedMediaTypeError'].should == :unsupported_media_type
   end
   
-  it "registers unsupported media type" do
+  it "registers bad request" do
     Restfulie::Server::Rescue.custom_responses['Restfulie::Server::HTTP::BadRequest'].should == :bad_request
   end
   
