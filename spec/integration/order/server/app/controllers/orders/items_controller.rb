@@ -10,7 +10,7 @@ class Orders::ItemsController < Restfulie::Server::ActionController::Base
     respond_with @order = Order.find(params[:order_id])
   end
 
-  def create
+  def add
     @order = Order.find(params[:order_id])
     @errors = []
     ActiveRecord::Base.transaction do
@@ -23,7 +23,6 @@ class Orders::ItemsController < Restfulie::Server::ActionController::Base
       end
     end
     if @errors.empty?
-      #TODO respond_with's format does not working
       redirect_to order_items_url(@order)
     else
       respond_with @errors, :status => :unprocessable_entity

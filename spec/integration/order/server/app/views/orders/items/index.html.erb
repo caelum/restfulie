@@ -1,0 +1,30 @@
+<h1>Add Items to Order(<%=params[:order_id]%>)</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Item</th>
+    <th>Kind</th>
+    <th>Qt</th>
+    <th>Price</th>
+  </tr>
+
+<% @items.each do |item| %>
+  <tr>
+    <td><%=h item.id %></td>
+    <td><%=h item.name %></td>
+    <td><%=h item.kind %></td>
+    <td><%=h item.qt %></td>
+    <td><%=h item.price %></td>
+    <td>
+
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New item', new_item_url %>
+
+

@@ -1,8 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :orders, :only => [:create,:index] do |orders|
-    orders.resources :items, :controller => 'orders/items', :only => [:create,:index,:show]
+  map.resources :orders, :only => [:new,:destroy,:index,:create] do |orders|
+    orders.resources :items, :controller => 'orders/items', :only => [:index,:show,:new]
   end
+  map.add_item_order '/orders/:order_id/items/:index/:id', :action => 'add', :controller => 'order/items', :conditions => { :method => :post }
 
   map.resources :items, :only => [:new,:destroy,:index,:create]
 
