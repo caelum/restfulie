@@ -16,6 +16,7 @@ module Restfulie::Common; end
   errors
   logger
   builder
+  representation
 ).each do |file| 
   require "restfulie/common/#{file}"
 end

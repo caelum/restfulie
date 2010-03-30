@@ -5,15 +5,8 @@ module Restfulie::Client #:nodoc:
   # The available options are:
   # 
   # * <tt>:entry_point</tt> - The URI for an entry point, such as http://resource.entrypoint.com/post
-  # * <tt>:default_headers</tt> - A Hash containing methods as keys and hashes with headers as values. For example:
+  # * <tt>:representations</tt> - Representations.
   # 
-  #     :default_headers => { 
-  #       :get  => { 'Accept'       => 'application/atom+xml' },
-  #       :post => { 'Content-Type' => 'application/atom+xml' } 
-  #     }
-  # 
-  # * <tt>:auto_follows</tt> - (to be implemented) automatic redirect following for specific types of returned combination of codes and methods.
-  #
   # You can also store any other custom configuration.
   # 
   # ==== Example
@@ -33,36 +26,32 @@ module Restfulie::Client #:nodoc:
 
     @@default_configuration = {
       :entry_point     => '',
-      :default_headers => { 
-        :get  => { 'Accept'       => 'application/atom+xml' },
-        :post => { 'Content-Type' => 'application/atom+xml' } 
-      },
-      :auto_follows => {} #:auto_follows => { 301 => [:post,:put,:delete] }
+      :representations => {}
     }
 
     def initialize
       super
-      @environment = :development
-      store(@environment , @@default_configuration.dup)
+      self.environment = :development
     end
 
     # this will store a new configuration (based on the default) for the environment passed by value.
     def environment=(value)
       @environment = value
       unless has_key?(@environment) 
-        store(@environment,@@default_configuration.dup)
+        dee_clone = Marshal::load(Marshal::dump(@@default_configuration))
+        store(@environment,dee_clone)
       end
       @environment
     end
 
     # access (key) configuration value
     def [](key)
-      fetch(environment)[key]
+      fetch(@environment)[key]
     end
 
     # store on (key) configuration the value
     def []=(key,value)
-      fetch(environment)[key] = value
+      fetch(@environment)[key] = value
     end 
 
     def method_missing(name, *args, &block)
@@ -71,8 +60,7 @@ module Restfulie::Client #:nodoc:
         fetch(environment)[method_name.chop.to_sym] = args[0]
       else
         value = fetch(environment)[name]
-        super unless value
-        value
+        value ? value : super
       end
     end
 

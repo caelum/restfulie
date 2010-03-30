@@ -299,13 +299,13 @@ module Restfulie::Client::HTTP #:nodoc:
      
       #Set Content-Type and Accept headers
       def as(content_type)
-        default_headers['Content-Type'] = content_type
+        headers['Content-Type'] = content_type
         accepts(content_type)
       end
      
       #Set Accept headers
       def accepts(content_type)
-        default_headers['Accept'] = content_type
+        headers['Accept'] = content_type
         self
       end
      
@@ -315,53 +315,57 @@ module Restfulie::Client::HTTP #:nodoc:
       # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
       #
       def with(headers)
-        default_headers.merge!(headers)
+        headers.merge!(headers)
         self
       end
+
+      def headers
+        @headers || @headers = {}
+      end
       
-      #Path (e.g. http://restfulie.com/posts => /post)
+      #Path (e.g. http://restfulie.com/posts => /posts)
       def path
         host.path
       end
-      
+
       def get
-        request(:get, path, {})
+        request(:get, path, headers)
       end
 
       def head
-        request(:head, path, {})
+        request(:head, path, headers)
       end
 
       def post(payload)
-        request(:post, path, payload, {})
+        request(:post, path, payload, headers)
       end
 
       def put(payload)
-        request(:put, path, payload, {})
+        request(:put, path, payload, headers)
       end
 
       def delete
-        request(:delete, path, {})
+        request(:delete, path, headers)
       end
 
       def get!
-        request!(:get, path, {})
+        request!(:get, path, headers)
       end
 
       def head!
-        request!(:head, path, {})
+        request!(:head, path, headers)
       end
 
       def post!(payload)
-        request!(:post, path, payload, {})
+        request!(:post, path, payload, headers)
       end
 
       def put!(payload)
-        request!(:put, path, payload, {})
+        request!(:put, path, payload, headers)
       end
 
       def delete!
-        request!(:delete, path, {})
+        request!(:delete, path, headers)
       end
 
     end
