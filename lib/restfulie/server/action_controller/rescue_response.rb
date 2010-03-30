@@ -10,10 +10,11 @@ end
 
 module ActionController::Rescue
 
+  # uses Restfulie::Server::Rescue registered exceptions to find an error code, otherwise
+  # uses Rails default algorithm
   def response_code_for_rescue(exception)
     key = exception.class.name
-    return Restfulie::Server::Rescue.custom_responses[key] if Restfulie::Server::Rescue.custom_responses[key]
-    rescue_responses[key]
+    Restfulie::Server::Rescue.custom_responses[key] || rescue_responses[key]
   end
   
 end
