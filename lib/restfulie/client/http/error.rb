@@ -22,6 +22,8 @@ module Restfulie::Client::HTTP#:nodoc:
         def to_s
           "HTTP error #{@response.code} when invoking #{@request.host}#{::URI.decode(@response.path)} via #{@response.method}. " +
             ((@response.body.blank?) ? "No additional data was sent." : "The complete response was:\n" + @response.body)
+        rescue
+          super
         end
 
       end
