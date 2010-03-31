@@ -1,8 +1,15 @@
 module Restfulie
   module Server
     module ActionController
+
+      class UnsupportedMediaType < ActionControllerError; end #:nodoc:
+      class BadRequest < ActionControllerError; end #:nodoc:
+
       class Base < ::ApplicationController
         #unloadable
+
+        self.rescue_responses['Restfulie::Server::ActionController::UnsupportedMediaType'] = :unsupported_media_type
+        self.rescue_responses['Restfulie::Server::ActionController::BadRequest'] = :bad_request
         
         # Sets a default responder for this controller. 
         # Needs to require responder_legacy.rb
@@ -21,7 +28,7 @@ module Restfulie
           end
         end
         
-        # Parses the request content and content type through object unmarshalling.
+        # TODO remove this! Parses the request content and content type through object unmarshalling.
         def parse_request_content
           Restfulie::Server::HTTP::Unmarshal.new.unmarshal(request)
         end
