@@ -4,7 +4,7 @@ if defined?(::ActionController) || defined?(::ApplicationController)
   end
 
   %w(
-    rescue_response
+    params_parser
     restful_responder
     base
     routing

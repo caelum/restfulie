@@ -13,9 +13,6 @@ class BaseController < Restfulie::Server::ActionController::Base
     render :atom => object
   end
   
-  def direct_parse
-    parse_request_content
-  end
 end
 
 ActionController::Routing::Routes.draw do |map|
@@ -51,15 +48,6 @@ describe Restfulie::Server::ActionController::Base, :type => :controller do
     @object.should_receive(:to_xml).once
     get :show_with_mock, :id => 1
     @response.content_type.should == "application/atom+xml"    
-  end
-  
-  it "parses the request body through unmarshaling" do
-    parsed = Object.new
-    registrar = mock Restfulie::Server::HTTP::Unmarshal
-    
-    Restfulie::Server::HTTP::Unmarshal.should_receive(:new).and_return(registrar)
-    registrar.should_receive(:unmarshal).with(request).and_return(parsed)
-    @controller.direct_parse
   end
   
 end
