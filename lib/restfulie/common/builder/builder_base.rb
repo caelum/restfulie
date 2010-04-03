@@ -19,7 +19,6 @@ class Restfulie::Common::Builder::Base
   undef_method :to_json if respond_to?(:to_json)
 
   def respond_to?(symbol, include_private = false)
-    debugger
     !marshalling_class(symbol).nil? || super
   end
 
@@ -45,7 +44,6 @@ private
   end
 
   def marshalling_class(method)
-    debugger
     if marshalling_name = method.to_s.match(/to_(.*)/)
       marshalling = marshalling_name[1].downcase.capitalize.to_sym
       if Restfulie::Common::Builder::Marshalling.const_defined?(marshalling)
