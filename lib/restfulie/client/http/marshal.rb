@@ -7,6 +7,11 @@ module Restfulie::Client::HTTP
 
   module RequestMarshaller
     include ::Restfulie::Client::HTTP::RequestBuilder
+    
+    # accepts a series of media types by default
+    def intialize
+      @acceptable_mediatypes = "application/atom+xml"
+    end
 
     @@representations = {
       'application/atom+xml' => ::Restfulie::Common::Representation::Atom
@@ -30,25 +35,39 @@ module Restfulie::Client::HTTP
     #Executes super and unmarshalls it
     def request!(method, path, *args)
       representation = do_conneg_and_choose_representation(method, path, *args)
-      return super(method, path, *args) unless representation
-      if has_payload?(method, path, *args)
-        payload = get_payload(method, path, *args)
-        payload = representation.marshal(payload)
-        args = set_marshalled_payload(method, path, payload, *args)
+      if representation
+        if has_payload?(method, path, *args)
+          payload = get_payload(method, path, *args)
+          payload = representation.marshal(payload)
+          args = set_marshalled_payload(method, path, payload, *args)
+        end
+        args = add_representation_headers(method, path, representation, *args)
       end
-      args = add_representation_headers(method, path, representation, *args)
-      response = super(method, path, *args)
-      if @raw 
-        response 
-      else
+      response = super(method, path, *args) 
+      parse_response(response, representation)
+    end
+
+    private
+    
+    # parses the http response.
+    # first checks if its a 201, redirecting to the resource location.
+    # otherwise check if its a raw request, returning the content itself.
+    # finally, tries to parse the content with a mediatype handler or returns the response itself.
+    def parse_response(response, representation)
+      if response.code == 201
+        location = response.headers['location']
+        Restfulie.at(location).accepts(@acceptable_mediatypes).get!
+      elsif @raw
+        response
+      elsif representation
         unmarshalled = representation.unmarshal(response.body)
         unmarshalled.extend(ResponseHolder)
         unmarshalled.response = response
         unmarshalled
+      else
+        response
       end
     end
-
-    private
 
     def do_conneg_and_choose_representation(method, path, *args)
       #TODO make a request to server (conneg)
