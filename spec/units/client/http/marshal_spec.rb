@@ -11,4 +11,11 @@ context Restfulie::Client::HTTP::RequestMarshaller do
     raw_response.body.should == response_data( 'atoms', 'songs' )
   end 
 
+  it 'should follow 201 responses' do
+    marshaller = Restfulie::Client::HTTP::RequestMarshallerExecutor.new('http://localhost:4567')
+    raw_response = marshaller.at('/custom/songs').accepts('application/atom+xml').post!("custom")
+    raw_response.response.code.should == 200
+    raw_response.response.body.should == response_data( 'atoms', 'songs' )
+  end 
+
 end
