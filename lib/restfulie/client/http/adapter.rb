@@ -9,13 +9,19 @@ module Restfulie::Client::HTTP #:nodoc:
       attr_reader :code
       attr_reader :body
       attr_reader :headers
+      attr_reader :request
 
-      def initialize(method, path, code, body, headers)
+      def initialize(method, path, code, body, headers, request)
         @method = method
         @path = path
         @code = code
         @body = body 
         @headers = headers
+        @request = request
+      end
+      
+      def parse
+        self
       end
 
     end
@@ -75,11 +81,11 @@ module Restfulie::Client::HTTP #:nodoc:
       # *<tt>path: '/posts'</tt>
       # *<tt>http_response</tt>
       #
-      def self.handle(method, path, http_response)
+      def self.handle(method, path, http_response, request)
         response_class = @@response_handlers[http_response.code.to_i] || Response
         headers = {}
         http_response.header.each { |k, v| headers[k] = v }
-        response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
+        response_class.new( method, path, http_response.code.to_i, http_response.body, headers, request)
       end
 
     end
@@ -211,7 +217,7 @@ module Restfulie::Client::HTTP #:nodoc:
 
         ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
         begin
-          response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
+          response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args), self).parse
         rescue Exception => e
           raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
         end 
@@ -478,4 +484,3 @@ module Restfulie::Client::HTTP #:nodoc:
     end
 
 end
-

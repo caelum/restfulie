@@ -13,10 +13,6 @@ context Restfulie::Client::HTTP do
       @client.get("/test").code.to_i.should == 200
     end
 
-    it "should post and respond 201 code" do
-      @client.post("/test", "test").code.to_i.should == 201
-    end
-
     it "should put and respond 200 code" do
       @client.put("/test", "test").code.to_i.should == 200
     end
@@ -63,15 +59,6 @@ context Restfulie::Client::HTTP do
       @builder.at('/test/200').as('application/xml').get.code.to_i.should == 200
       @builder.at('/test/200').with('Accept-Language' => 'en').get.code.to_i.should == 200
       @builder.at('/test/200').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code.to_i.should == 200
-    end
-
-    it "should post and respond 201 code" do
-      @builder.at("/test").post("test").code.to_i.should == 201
-      @builder.at('/test').accepts('application/xml').post("test").code.to_i.should == 201
-      @builder.at('/test').as('application/xml').post("test").code.to_i.should == 201
-      @builder.at('/test').with('Accept-Language' => 'en').post("test").code.to_i.should == 201
-      @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').post("test").code.to_i.should == 201
-      @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').post!("test").code.to_i.should == 201
     end
 
     it "should put and respond 200 code" do
@@ -150,7 +137,7 @@ context Restfulie::Client::HTTP do
 
     class FakeResponse < ::Restfulie::Client::HTTP::Response
     end
-    ::Restfulie::Client::HTTP::ResponseHandler.register(201,FakeResponse)
+    ::Restfulie::Client::HTTP::ResponseHandler.register(701,FakeResponse)
 
     before(:all) do
       @client = ::Restfulie::Client::HTTP::RequestExecutor.new(::URI.parse("http://localhost:4567"))
@@ -161,7 +148,7 @@ context Restfulie::Client::HTTP do
     end
 
     it 'should respond FakeResponse' do
-      @client.get('/test/201').class.should == FakeResponse
+      @client.get('/test/701').class.should == FakeResponse
     end
 
     it 'should respond default Response' do
