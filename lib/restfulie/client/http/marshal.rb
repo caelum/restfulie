@@ -65,7 +65,7 @@ module Restfulie::Client::HTTP
     # otherwise check if its a raw request, returning the content itself.
     # finally, tries to parse the content with a mediatype handler or returns the response itself.
     def parse_response(response, representation)
-      if response.code != 200
+      if response.code == 201
         location = response.headers['location']
         Restfulie.at(location).accepts(@acceptable_mediatypes).get!
       elsif @raw
