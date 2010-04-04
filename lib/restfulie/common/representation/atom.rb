@@ -19,7 +19,7 @@ module Restfulie::Common::Representation
     end
 
     def marshal(string)
-      raise "Unsupported operation"
+      string
     end
 
   end

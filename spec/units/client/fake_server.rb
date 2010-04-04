@@ -35,6 +35,12 @@ get "/test/:error" do
   Rack::Response.new('OK', params[:error].to_i).finish
 end
 
+post '/custom/songs' do
+  r = Rack::Response.new('', 201)
+  r.header["Location"] = "http://localhost:4567/songs"
+  r.finish
+end
+
 get '/:file_name' do
   respond_to do |wants|
     wants.atom { response_data( 'atoms', params[:file_name] ) } 
