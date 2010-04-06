@@ -25,13 +25,15 @@ module Restfulie::Client::HTTP
     end
 
     @@representations = {
-      'application/atom+xml' => ::Restfulie::Common::Representation::Atom
+      'application/atom+xml' => ::Restfulie::Common::Representation::Atom,
+      'application/xml' => ::Restfulie::Common::Representation::XmlD
     }
     def self.register_representation(media_type,representation)
       @@representations[media_type] = representation
     end
 
     def accepts(media_types)
+      debugger
       @acceptable_mediatypes = media_types
       @default_representation = @@representations[media_types]
       raise "Undefined representation for #{media_types}" unless @default_representation
@@ -82,7 +84,7 @@ module Restfulie::Client::HTTP
 
     def do_conneg_and_choose_representation(method, path, *args)
       #TODO make a request to server (conneg)
-      representation = @default_representation || @default_representation = @@representations.values.first
+      representation = @default_representation || @default_representation = @@representations['application/atom+xml']
       representation.new
     end
 
