@@ -208,7 +208,6 @@ module Restfulie::Client::HTTP #:nodoc:
       # * <tt>path: '/posts'</tt>
       # * <tt>args: payload: 'some text' and/or headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def request!(method, path, *args)
-        debugger
         headers = default_headers.merge(args.extract_options!)
         unless @host.user.blank? && @host.password.blank?
           headers["Authorization"] = "Basic " + ["#{@host.user}:#{@host.password}"].pack("m").delete("\r\n")
