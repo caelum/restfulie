@@ -75,7 +75,7 @@ module Restfulie::Client::HTTP #:nodoc:
 
       ## 
       # :singleton-method:
-      # Request Adapter uses this method to chose response instance
+      # Request Adapter uses this method to choose response instance
       #
       # *<tt>method: :get,:post,:delete,:head,:put</tt>
       # *<tt>path: '/posts'</tt>
