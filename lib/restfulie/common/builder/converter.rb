@@ -12,5 +12,5 @@ module Restfulie::Common::Builder::Marshalling
     end
   end
 
-  self.add_autoload_path(File.join(File.dirname(__FILE__), 'marshalling'))
+  self.add_autoload_path(File.join(File.dirname(__FILE__), 'converter'))
 end

@@ -3,14 +3,14 @@ module Restfulie::Common::Builder; end
 
 %w(
   helpers
-  builder_base
-  marshalling
-  rules/rules_base
-  rules/link
-  rules/links
-  rules/namespace
-  rules/member_rule
-  rules/collection_rule
+  base
+  converter
+  part/base
+  part/link
+  part/links
+  part/namespace
+  part/member
+  part/collection
 ).each do |file|
   require File.join(File.dirname(__FILE__), 'builder', file)
 end
