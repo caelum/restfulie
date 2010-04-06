@@ -31,19 +31,34 @@ module Atom # :nodoc:
   #
   module SimpleExtensions
     attr_reader :simple_extensions
-    
+
     # Gets a simple extension value for a given namespace and local name.
     #
     # +ns+:: The namespace.
     # +localname+:: The local name of the extension element.
     #
-    def [](ns, localname)
-      if !defined?(@simple_extensions) || @simple_extensions.nil?
-        @simple_extensions = {}
+    def [](namespace, localname=nil)
+      @simple_extensions ||= {}
+
+      localname.nil? ? namespace_hash(namespace) : element_values(namespace, localname)
+    end
+
+  protected
+
+    def namespace_hash(namespace)
+      namespace_keys = @simple_extensions.keys.select { |key| key =~ /^\{#{namespace},/ }
+
+      elements = {}
+      namespace_keys.each do |key|
+        attribute_name = key.match(/\{.*,(.*)\}/)[1]
+        elements[attribute_name] = @simple_extensions[key]
       end
-      
-      key = "{#{ns},#{localname}}"
-      (@simple_extensions[key] or @simple_extensions[key] = ValueProxy.new)
+      elements
+    end
+
+    def element_values(namespace, localname)
+      key = "{#{namespace},#{localname}}"
+      @simple_extensions[key] ||= ValueProxy.new
     end
     
     class ValueProxy < DelegateClass(Array)
@@ -70,7 +85,7 @@ module Atom # :nodoc:
     #
     # +xml+:: An XML::Reader object.
     #
-    def initialize(o = nil)
+    def initialize(o = {})
       case o
       when XML::Reader
         @name = o.read_string.strip
@@ -79,6 +94,8 @@ module Atom # :nodoc:
         o.each do |k, v|
           self.send("#{k.to_s}=", v)
         end
+      else
+        raise ArgumentError, "Got #{o.class} but expected a Hash or XML::Reader"
       end
       
       yield(self) if block_given?
@@ -101,7 +118,7 @@ module Atom # :nodoc:
     include SimpleExtensions
     attribute :label, :scheme, :term
     
-    def initialize(o = nil)
+    def initialize(o = {})
       case o
       when XML::Reader
         parse(o, :once => true)
@@ -109,6 +126,8 @@ module Atom # :nodoc:
         o.each do |k, v|
           self.send("#{k.to_s}=", v)
         end
+      else
+        raise ArgumentError, "Got #{o.class} but expected a Hash or XML::Reader"
       end
       
       yield(self) if block_given?
@@ -137,7 +156,11 @@ module Atom # :nodoc:
         o.each do |k, v|
           self.send("#{k.to_s}=", v)
         end
+      else
+        raise ArgumentError, "Got #{o.class} but expected a Hash or XML::Reader"
       end
+      
+      yield(self) if block_given?
     end
     
     def inspect
@@ -199,7 +222,9 @@ module Atom # :nodoc:
           @type = "text"
         when XML::Reader
           super(o.read_string)
-          parse(o, :once => true)  
+          parse(o, :once => true)
+        else
+          raise ArgumentError, "Got #{o} which isn't a String or XML::Reader"
         end        
       end
       
@@ -225,6 +250,8 @@ module Atom # :nodoc:
         when String
           super(o)
           @type = 'html'
+        else
+          raise ArgumentError, "Got #{o} which isn't a String or XML::Reader"
         end        
       end
       
@@ -275,7 +302,9 @@ module Atom # :nodoc:
           end
 
           # get back to the end of the element we were created with
-          while xml.read == 1 && xml.depth > starting_depth; end          
+          while xml.read == 1 && xml.depth > starting_depth; end
+        else
+          raise ArgumentError, "Got #{o} which isn't a String or XML::Reader" 
         end
       end
       
@@ -311,7 +340,7 @@ module Atom # :nodoc:
     elements :authors, :contributors, :class => Person
     elements :links
     
-    def initialize(o = nil)
+    def initialize(o = {})
       @authors, @contributors, @links = [], [], Links.new
 
       case o
@@ -326,6 +355,8 @@ module Atom # :nodoc:
         o.each do |k, v|
           self.send("#{k.to_s}=", v)
         end
+      else
+        raise ArgumentError, "Got #{o.class} but expected a Hash or XML::Reader"
       end
       
       yield(self) if block_given?   
@@ -416,6 +447,8 @@ module Atom # :nodoc:
         o.each do |k, v|
           self.send("#{k.to_s}=", v)
         end
+      else
+        raise ArgumentError, "Got #{o.class} but expected a Hash or XML::Reader"
       end
       
       yield(self) if block_given?
@@ -559,6 +592,8 @@ module Atom # :nodoc:
         o.each do |k,v|
           send("#{k.to_s}=", v)
         end
+      else
+        raise ArgumentError, "Got #{o.class} but expected a Hash or XML::Reader"
       end
 
       yield(self) if block_given?
@@ -678,7 +713,7 @@ module Atom # :nodoc:
     end    
     
     include Xml::Parseable
-    attribute :href, :rel, :type, :length, :hreflang
+    attribute :href, :rel, :type, :length, :hreflang, :title
         
     # Create a link.
     #
@@ -693,7 +728,7 @@ module Atom # :nodoc:
           raise ArgumentError, "Link created with node other than atom:link: #{o.name}"
         end
       when Hash
-        [:href, :rel, :type, :length, :hreflang].each do |attr|
+        [:href, :rel, :type, :length, :hreflang, :title].each do |attr|
           self.send("#{attr}=", o[attr])
         end
       else
