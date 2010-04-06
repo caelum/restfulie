@@ -7,7 +7,6 @@ module Restfulie::Common::Representation
 
     cattr_reader :headers
     @@headers = { 
-      :get  => { 'Accept'       => media_type_name },
       :post => { 'Content-Type' => media_type_name }
     }
 
