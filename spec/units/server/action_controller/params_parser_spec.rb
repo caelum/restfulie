@@ -6,6 +6,7 @@ class TestController < Restfulie::Server::ActionController::Base
   end
 end
 
+# This test uses ActionController::IntegrationTest because we needed a specific implementation of the post test method, which accepts a payload passed as string, and not only a hash.
 class ParamsParserTest < ActionController::IntegrationTest
 
   def setup
@@ -21,6 +22,18 @@ class ParamsParserTest < ActionController::IntegrationTest
       post '/create', 
         '<feed xmlns="http://www.w3.org/2005/Atom"><title>Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
         :content_type => 'application/atom+xml'
+
+      assert_equal 'feed', @controller.response.body
+      assert @controller.params.has_key?(:feed)
+      assert_equal 'Top Ten Songs feed', @controller.params["feed"]['title']
+    end
+  end
+
+  def test_offer_proper_params_hash_when_doing_post_with_xml 
+    with_test_route_set do
+      post '/create', 
+        '<feed xmlns="http://www.w3.org/2005/Atom"><title>Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
+        :content_type => 'application/xml'
 
       assert_equal 'feed', @controller.response.body
       assert @controller.params.has_key?(:feed)
