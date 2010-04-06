@@ -219,7 +219,7 @@ module Restfulie::Client::HTTP #:nodoc:
         begin
           response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args), self).parse
         rescue Exception => e
-          raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
+          raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}, self), e )
         end 
 
         case response.code
