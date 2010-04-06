@@ -103,6 +103,49 @@ context Restfulie::Client::HTTP do
 
   end
 
+  context 'RequestHistory' do
+
+    before(:all) do
+      @host = "http://localhost:4567"
+      @builder = ::Restfulie::Client::HTTP::RequestHistoryExecutor.new(@host)
+    end
+
+    it "should remember last requests" do
+      @builder.at('/test').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code.to_i.should == 200
+      @builder.at('/test').accepts('text/html').with('Accept-Language' => 'pt-BR').head.code.to_i.should == 200
+      @builder.at('/test').as('application/xml').with('Accept-Language' => 'en').post('test').code.to_i.should == 201
+      @builder.at('/test/500').accepts('application/xml').with('Accept-Language' => 'en').get.code.should == 500
+
+      @builder.history(0).request.code.should == 200
+      @builder.path.should == '/test'
+      @builder.host.to_s.should == @host
+      @builder.headers['Accept'].should == 'application/atom+xml'
+      @builder.headers['Accept-Language'].should == 'en'
+
+      @builder.history(1).request.code.should == 200
+      @builder.path.should == '/test'
+      @builder.host.to_s.should == @host
+      @builder.headers['Accept'].should == 'text/html'
+      @builder.headers['Accept-Language'].should == 'pt-BR'
+
+      @builder.history(2).request.code.should == 201
+      @builder.path.should == '/test'
+      @builder.host.to_s.should == @host
+      @builder.headers['Accept'].should == 'application/xml'
+      @builder.headers['Accept-Language'].should == 'en'
+      @builder.headers['Content-Type'].should == 'application/xml'
+
+      @builder.history(3).request.code.should == 500
+      @builder.path.should == '/test/500'
+      @builder.host.to_s.should == @host
+      @builder.headers['Accept'].should == 'application/xml'
+      @builder.headers['Accept-Language'].should == 'en'
+
+      lambda { @builder.history(10).request }.should raise_error RuntimeError
+    end 
+
+  end
+
   context 'Response Handler' do
 
     class FakeResponse < ::Restfulie::Client::HTTP::Response
