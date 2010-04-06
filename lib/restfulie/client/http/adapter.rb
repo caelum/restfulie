@@ -102,7 +102,7 @@ module Restfulie::Client::HTTP #:nodoc:
       attr_writer   :default_headers
 
       def host=(host)
-        if host.is_a?(URI)
+        if host.is_a?(::URI)
           @host = host
         else
           @host = ::URI.parse(host)
@@ -209,7 +209,7 @@ module Restfulie::Client::HTTP #:nodoc:
         headers['cookie'] = @cookies if @cookies
         args << headers
 
-        ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) unless ::Restfulie::Common::Logger.logger
+        ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
         begin
           response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
         rescue Exception => e
@@ -268,14 +268,9 @@ module Restfulie::Client::HTTP #:nodoc:
           body = arguments.shift
         end
 
-        if body.is_a?(Hash)
-          body = (body.map { |k,v| "#{k}=#{v}"}.join("&"))
-        end
-
-        headers["Content-Length"] = body.length unless body.nil?
         result << headers.collect { |key, value| "#{key}: #{value}" }.join("\n")
 
-        (result + [body ? (body + "\n") : nil]).compact.join("\n") << "\n"
+        (result + [body ? (body.inspect + "\n") : nil]).compact.join("\n") << "\n"
       end
 
     end
@@ -315,7 +310,7 @@ module Restfulie::Client::HTTP #:nodoc:
       # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
       #
       def with(headers)
-        headers.merge!(headers)
+        self.headers.merge!(headers)
         self
       end
 
@@ -393,7 +388,10 @@ module Restfulie::Client::HTTP #:nodoc:
         self.host=host
         self.default_headers=default_headers
       end
-
+      def host=(host)
+        super
+        at(self.host.path)
+      end
       def at(path)
         @path = path
         self
