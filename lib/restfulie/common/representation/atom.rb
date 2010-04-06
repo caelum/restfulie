@@ -14,7 +14,7 @@ module Restfulie::Common::Representation
     }
 
     #Convert raw string to rAtom instances
-    def unmarshal(string)
+    def unmarshal(content)
       ::Atom::Feed.load_feed(string)
     end
 
