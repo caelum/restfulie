@@ -3,6 +3,17 @@ module Restfulie::Client::HTTP
 
   module ResponseHolder
     attr_accessor :response
+    
+    def respond_to?(symbol)
+      respond_to_rel?(symbol.to_s) || super(symbol)
+    end
+    
+    private
+    # whether this response contains specific relations
+    def respond_to_rel?(rel)
+      links.any? { |link| link.rel==rel }
+    end
+    
   end
 
   module RequestMarshaller
