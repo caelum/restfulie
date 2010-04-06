@@ -1,8 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
+module Rails
+  def self.env
+    Class.new() { def test?; true; end }.new
+  end
+end
+
 class TestController < Restfulie::Server::ActionController::Base
   def create
-    render :text => (params.keys - ['controller', 'action']).sort.join(", ") 
+    render :text => (params.keys - ['controller', 'action']).sort.join(", ")
   end
 end
 
@@ -26,6 +32,22 @@ class ParamsParserTest < ActionController::IntegrationTest
       assert_equal 'feed', @controller.response.body
       assert @controller.params.has_key?(:feed)
       assert_equal 'Top Ten Songs feed', @controller.params["feed"]['title']
+    end
+  end
+
+  def test_raise_bad_request_when_doing_post_with_invalid_atom 
+    with_test_route_set do
+      begin
+        $stderr = StringIO.new
+        post '/create', 
+          '<feed xmlns="http://www.w3.org/2005/Atom">Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
+          :content_type => 'application/atom+xml'
+
+        assert_response :bad_request
+        $stderr.rewind 
+      ensure
+        $stderr = STDERR
+      end
     end
   end
 
