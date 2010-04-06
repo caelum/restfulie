@@ -20,7 +20,7 @@ module Restfulie::Client::HTTP
     include ::Restfulie::Client::HTTP::RequestBuilder
     
     # accepts a series of media types by default
-    def intialize
+    def initialize
       @acceptable_mediatypes = "application/atom+xml"
     end
 
@@ -33,7 +33,6 @@ module Restfulie::Client::HTTP
     end
 
     def accepts(media_types)
-      debugger
       @acceptable_mediatypes = media_types
       @default_representation = @@representations[media_types]
       raise "Undefined representation for #{media_types}" unless @default_representation
