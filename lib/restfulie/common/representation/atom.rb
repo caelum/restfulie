@@ -22,7 +22,7 @@ module Restfulie::Common::Representation
       string
     end
 
-    def to_hash(string)
+    def self.to_hash(string)
       Hash.from_xml(string).with_indifferent_access
     end
   end

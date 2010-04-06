@@ -3,7 +3,7 @@ module Restfulie
     module ActionController
       class ParamsParser
         # This class is just a proxy for the extension point offered by ActionController::Base
-        @@param_parsers = ActionController::Base.param_parsers
+        @@param_parsers = ::ActionController::Base.param_parsers
 
         ## 
         # :singleton-method:
@@ -15,7 +15,7 @@ module Restfulie
         #   Restfulie::Server::ActionController::ParamsParser.register('application/atom+xml', Atom)
         #
         def self.register(content_type, representation)
-          @@param_parsers[content_type] = representation.method(:to_hash).to_proc
+          @@param_parsers[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
         end
       end
     end
