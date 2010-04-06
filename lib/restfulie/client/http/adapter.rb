@@ -102,7 +102,7 @@ module Restfulie::Client::HTTP #:nodoc:
       attr_writer   :default_headers
 
       def host=(host)
-        if host.is_a?(URI)
+        if host.is_a?(::URI)
           @host = host
         else
           @host = ::URI.parse(host)
@@ -209,7 +209,7 @@ module Restfulie::Client::HTTP #:nodoc:
         headers['cookie'] = @cookies if @cookies
         args << headers
 
-        ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) unless ::Restfulie::Common::Logger.logger
+        ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
         begin
           response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
         rescue Exception => e
@@ -268,14 +268,9 @@ module Restfulie::Client::HTTP #:nodoc:
           body = arguments.shift
         end
 
-        if body.is_a?(Hash)
-          body = (body.map { |k,v| "#{k}=#{v}"}.join("&"))
-        end
-
-        headers["Content-Length"] = body.length unless body.nil?
         result << headers.collect { |key, value| "#{key}: #{value}" }.join("\n")
 
-        (result + [body ? (body + "\n") : nil]).compact.join("\n") << "\n"
+        (result + [body ? (body.inspect + "\n") : nil]).compact.join("\n") << "\n"
       end
 
     end
@@ -315,7 +310,7 @@ module Restfulie::Client::HTTP #:nodoc:
       # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
       #
       def with(headers)
-        headers.merge!(headers)
+        self.headers.merge!(headers)
         self
       end
 
@@ -368,6 +363,77 @@ module Restfulie::Client::HTTP #:nodoc:
         request!(:delete, path, headers)
       end
 
+      protected
+
+      def headers=(h)
+        @headers = h
+      end
+
+    end
+
+    #=RequestHistory
+    # Uses RequestBuilder and remind previous requests
+    #
+    #==Example:
+    #
+    #   @executor = ::Restfulie::Client::HTTP::RequestHistoryExecutor.new("http://restfulie.com") #this class includes RequestHistory module.
+    #   @executor.at('/posts').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #first request
+    #   @executor.at('/blogs').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #second request
+    #   @executor.request_history!(0) #doing first request again
+    #
+    module RequestHistory
+      include RequestBuilder
+
+      attr_accessor_with_default :max_to_remind, 10
+
+      def snapshots
+        @snapshots || @snapshots = []
+      end
+
+      def request!(method=nil, path=nil, *args)#:nodoc:
+        if method == nil || path == nil 
+          raise 'History not selected' unless @snapshot
+          super( @snapshot[:method], @snapshot[:path], *@snapshot[:args] )
+        else
+          @snapshot = make_snapshot(method, path, *args)
+          unless snapshots.include?(@snapshot)
+            snapshots.shift if snapshots.size >= max_to_remind
+            snapshots << @snapshot
+          end
+          super
+        end
+      end
+
+      def request(method=nil, path=nil, *args)#:nodoc:
+        request!(method, path, *args) 
+      rescue Error::RESTError => se
+        se.response
+      end
+
+      def history(number)
+        @snapshot = snapshots[number]
+        raise "Undefined snapshot for #{number}" unless @snapshot
+        self.host    = @snapshot[:host]
+        self.cookies = @snapshot[:cookies]
+        self.headers = @snapshot[:headers]
+        self.default_headers = @snapshot[:default_headers]
+        at(@snapshot[:path])
+      end
+
+      private
+
+      def make_snapshot(method, path, *args)
+        arguments = args.dup
+        cutom_headers = arguments.extract_options!
+        { :host            => self.host.dup,
+          :default_headers => self.default_headers.dup,
+          :headers         => self.headers.dup,
+          :cookies         => self.cookies,
+          :method          => method, 
+          :path            => path,
+          :args            => arguments << self.headers.merge(cutom_headers)   }
+      end
+
     end
 
     #=This class includes RequestAdapter module.
@@ -393,7 +459,10 @@ module Restfulie::Client::HTTP #:nodoc:
         self.host=host
         self.default_headers=default_headers
       end
-
+      def host=(host)
+        super
+        at(self.host.path)
+      end
       def at(path)
         @path = path
         self
@@ -401,6 +470,11 @@ module Restfulie::Client::HTTP #:nodoc:
       def path
         @path
       end
+    end
+
+    #=This class inherits RequestBuilderExecutor and include RequestHistory module.
+    class RequestHistoryExecutor < RequestBuilderExecutor
+      include RequestHistory
     end
 
 end
