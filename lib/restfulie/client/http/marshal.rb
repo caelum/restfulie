@@ -23,7 +23,7 @@ module Restfulie::Client::HTTP
     def accepts(media_types)
       @acceptable_mediatypes = media_types
       @default_representation = @@representations[media_types]
-      raise "Undefined representation for #{content_type}" unless @default_representation
+      raise "Undefined representation for #{media_types}" unless @default_representation
       super
     end
 
