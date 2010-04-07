@@ -144,7 +144,7 @@ context Restfulie::Client::HTTP do
     end
 
     it 'should have FakeResponder as Response Handler to 201' do
-      ::Restfulie::Client::HTTP::ResponseHandler.handlers(201).should == FakeResponse
+      ::Restfulie::Client::HTTP::ResponseHandler.handlers(701).should == FakeResponse
     end
 
     it 'should respond FakeResponse' do
