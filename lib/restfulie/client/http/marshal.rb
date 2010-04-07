@@ -83,7 +83,7 @@ module Restfulie::Client::HTTP
     end
     
     def content_type_for(media_type)
-      @@representations[media_type.split(';')[0]].new
+      @@representations[media_type.split(';')[0]].new # [/(.*?);/, 1]
     end
 
     def do_conneg_and_choose_representation(method, path, *args)
