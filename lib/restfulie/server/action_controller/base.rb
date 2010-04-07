@@ -2,13 +2,9 @@ module Restfulie
   module Server
     module ActionController
 
-      class UnsupportedMediaType < ::ActionController::ActionControllerError; end #:nodoc:
-
       class Base < ::ApplicationController
         #unloadable
 
-        self.rescue_responses['Restfulie::Server::ActionController::UnsupportedMediaType'] = :unsupported_media_type
-        
         # Sets a default responder for this controller. 
         # Needs to require responder_legacy.rb
         self.responder = Restfulie::Server::ActionController::RestfulResponder

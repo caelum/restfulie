@@ -1,14 +1,23 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-module Rails
-  def self.env
-    Class.new() { def test?; true; end }.new
-  end
-end
-
 class TestController < Restfulie::Server::ActionController::Base
   def create
     render :text => (params.keys - ['controller', 'action']).sort.join(", ")
+  end
+end
+
+class CSVRepresentation
+  cattr_reader :media_type_name
+  @@media_type_name = 'text/csv'
+
+  cattr_reader :headers
+  @@headers = { 
+    :get  => { 'Accept'       => media_type_name },
+    :post => { 'Content-Type' => media_type_name }
+  }
+
+  def self.to_hash(string)
+    { :data => string }.with_indifferent_access
   end
 end
 
@@ -62,6 +71,29 @@ class ParamsParserTest < ActionController::IntegrationTest
       assert_equal 'Top Ten Songs feed', @controller.params["feed"]['title']
     end
   end
+
+  def test_unsupported_media_type_when_doing_post_with_csv
+    with_test_route_set do
+      post '/create', 'name,age\njohndoe,42', 
+        :content_type => 'text/csv'
+
+      assert_response :unsupported_media_type
+    end
+  end
+
+  def test_posting_with_csv_after_registering_it_as_supported_type
+    Restfulie::Server::ActionController::ParamsParser.register('text/csv',CSVRepresentation)
+    with_test_route_set do
+      post '/create', 'name,age\njohndoe,42', 
+        :content_type => 'text/csv'
+
+      assert_equal 'data', @controller.response.body
+      assert @controller.params.has_key?(:data)
+      assert_equal 'name,age\njohndoe,42', @controller.params["data"]
+    end
+    Restfulie::Server::ActionController::ParamsParser.unregister('text/csv')
+  end
+
 
   private
     def with_test_route_set
