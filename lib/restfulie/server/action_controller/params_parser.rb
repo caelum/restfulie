@@ -48,7 +48,9 @@ end
       if params = parse_formatted_parameters(env)
         env["action_controller.request.request_parameters"] = params
       else
-       return [415, {'Content-Type' => 'text/html'}, "<html><body><h1>415 Unsupported Media Type</h1></body></html>"]
+        if env["CONTENT_LENGTH"] != "0" 
+          return [415, {'Content-Type' => 'text/html'}, "<html><body><h1>415 Unsupported Media Type</h1></body></html>"]
+        end
       end
     rescue
       return [400, {'Content-Type' => 'text/html'}, "<html><body><h1>400 Bad Request</h1></body></html>"]

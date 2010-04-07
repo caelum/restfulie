@@ -94,6 +94,15 @@ class ParamsParserTest < ActionController::IntegrationTest
     Restfulie::Server::ActionController::ParamsParser.unregister('text/csv')
   end
 
+  def test_simple_getting
+    with_test_route_set do
+      get '/create', :sort => true
+
+      assert_equal 'sort', @controller.response.body
+      assert @controller.params.has_key?(:sort)
+      assert_equal "true", @controller.params["sort"]
+    end
+  end
 
   private
     def with_test_route_set
