@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.join(File.dirname(__FILE__),'..', '..', 'data','data_helper')
+require File.join(File.dirname(__FILE__),'..', '..', 'lib','data_helper')
 
 context Restfulie::Client::HTTP::RequestMarshaller do
 

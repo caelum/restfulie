@@ -2,7 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'rack/conneg'
 
-require File.join(File.dirname(__FILE__),'..','data','data_helper')
+require File.join(File.dirname(__FILE__),'..','lib','data_helper')
 
 use(Rack::Conneg) do |conneg|
   conneg.set :accept_all_extensions, false
