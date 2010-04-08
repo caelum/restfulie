@@ -25,6 +25,10 @@ module Restfulie::Common::Representation
     def self.to_hash(string)
       Hash.from_xml(string).with_indifferent_access
     end
+    
+    def prepare_link_for(link)
+      link
+    end
   end
 
 end

@@ -32,6 +32,10 @@ module Restfulie::Client::HTTP
       @@representations[media_type] = representation
     end
 
+    def self.content_type_for(media_type)
+      @@representations[media_type.split(';')[0]].new # [/(.*?);/, 1]
+    end
+
     def accepts(media_types)
       @acceptable_mediatypes = media_types
       @default_representation = @@representations[media_types]
@@ -72,7 +76,7 @@ module Restfulie::Client::HTTP
       elsif @raw
         response
       elsif !response.body.empty?
-        representation = content_type_for(response.headers['content-type'])
+        representation = RequestMarshaller.content_type_for(response.headers['content-type'])
         unmarshalled = representation.unmarshal(response.body)
         unmarshalled.extend(ResponseHolder)
         unmarshalled.response = response
@@ -80,10 +84,6 @@ module Restfulie::Client::HTTP
       else
         response
       end
-    end
-    
-    def content_type_for(media_type)
-      @@representations[media_type.split(';')[0]].new # [/(.*?);/, 1]
     end
 
     def do_conneg_and_choose_representation(method, path, *args)
