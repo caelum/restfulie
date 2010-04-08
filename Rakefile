@@ -106,7 +106,7 @@ begin
     t.files   = ['lib/restfulie/**/*.rb', 'README.textile']   # optional
     # t.options = ['--any', '--extra', '--opts'] # optional
   end
-rescue; end
+rescue LoadError; end
 
 desc "Install the gem locally"
 task :install => [:package] do
