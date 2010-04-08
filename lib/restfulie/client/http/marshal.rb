@@ -33,7 +33,8 @@ module Restfulie::Client::HTTP
     end
 
     def self.content_type_for(media_type)
-      @@representations[media_type.split(';')[0]].new # [/(.*?);/, 1]
+      type = @@representations[media_type.split(';')[0]] # [/(.*?);/, 1]
+      type ? type.new : nil
     end
 
     def accepts(media_types)
@@ -76,7 +77,9 @@ module Restfulie::Client::HTTP
       elsif @raw
         response
       elsif !response.body.empty?
-        representation = RequestMarshaller.content_type_for(response.headers['content-type'])
+        representation = RequestMarshaller.content_type_for(response.headers['content-type']) || 
+        
+        
         unmarshalled = representation.unmarshal(response.body)
         unmarshalled.extend(ResponseHolder)
         unmarshalled.response = response
