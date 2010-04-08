@@ -30,6 +30,10 @@ module Restfulie::Common::Representation
     def prepare_link_for(link)
       link
     end
+    
+    def prepare_link_for(link)
+      link
+    end
   end
 
 end
