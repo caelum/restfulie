@@ -37,14 +37,10 @@ end
 context Restfulie::Client::HTTP::AtomLinkShortcut do
   
   class MyLink
-    attr_accessor :rel
+    attr_accessor :rel, :type
     def initialize(rel, type)
       @rel = rel
-      @my_type = type
-    end
-    def method_missing(method_sym,*args)#:nodoc:
-      return @my_type if method_sym == :type && @my_type.nil?
-      super(method_sym, args)
+      @type = type if type
     end
   end
   
@@ -52,7 +48,7 @@ context Restfulie::Client::HTTP::AtomLinkShortcut do
     include Restfulie::Client::HTTP::AtomLinkShortcut
     
     @@first = MyLink.new("search", nil)
-    @@second = MyLink.new("first", "application/atom+xml")
+    @@second = MyLink.new("last", "application/atom+xml")
     
     def links
       [@@first, @@second]
@@ -64,7 +60,14 @@ context Restfulie::Client::HTTP::AtomLinkShortcut do
     linked_data.search.should == linked_data.links[0]
   end
   
-  
+  it "should return a prepared link if there is a type" do
+    custom = Object.new
+    linked_data = LinkedType.new
+    rep = Object.new
+    Restfulie::Client::HTTP::RequestMarshaller.should_receive(:content_type_for).with("application/atom+xml").and_return(rep)
+    rep.should_receive(:prepare_link_for).with(linked_data.links[1]).and_return(custom)
+    linked_data.last.should == custom
+  end
 
 end
 
