@@ -88,6 +88,10 @@ module Restfulie::Client::HTTP
         response
       end
     end
+    
+    def content_type_for(media_type)
+      @@representations[media_type.split(';')[0]].new # [/(.*?);/, 1]
+    end
 
     def do_conneg_and_choose_representation(method, path, *args)
       #TODO make a request to server (conneg)
