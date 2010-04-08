@@ -1,4 +1,5 @@
-class PaymentsController < Restfulie::Server::ActionController::Base
+class PaymentsController < ApplicationController
+  include Restfulie::Server::ActionController::Base
 
   respond_to :atom,:html
 
