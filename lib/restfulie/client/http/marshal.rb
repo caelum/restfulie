@@ -77,9 +77,7 @@ module Restfulie::Client::HTTP
       elsif @raw
         response
       elsif !response.body.empty?
-        representation = RequestMarshaller.content_type_for(response.headers['content-type']) || 
-        
-        
+        representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
         unmarshalled = representation.unmarshal(response.body)
         unmarshalled.extend(ResponseHolder)
         unmarshalled.response = response
