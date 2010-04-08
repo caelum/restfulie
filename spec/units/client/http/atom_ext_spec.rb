@@ -65,6 +65,7 @@ context Restfulie::Client::HTTP::AtomLinkShortcut do
     linked_data = LinkedType.new
     rep = Object.new
     Restfulie::Client::HTTP::RequestMarshaller.should_receive(:content_type_for).with("application/atom+xml").and_return(rep)
+    linked_data.links[1].should_receive(:accepts).with('application/atom+xml')
     rep.should_receive(:prepare_link_for).with(linked_data.links[1]).and_return(custom)
     linked_data.last.should == custom
   end
