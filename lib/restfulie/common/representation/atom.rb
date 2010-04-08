@@ -15,7 +15,11 @@ module Restfulie::Common::Representation
 
     #Convert raw string to rAtom instances (client side)
     def unmarshal(content)
-      ::Atom::Feed.load_feed(content)
+      begin
+        ::Atom::Feed.load_feed(content)
+      rescue ::ArgumentError
+        ::Atom::Entry.load_entry(content)
+      end
     end
 
     def marshal(string, rel)
