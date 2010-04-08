@@ -45,7 +45,10 @@ module Restfulie::Client::HTTP#:nodoc:
   end
 
   # inject new behavior in rAtom instances to enable easily access to link relationships.
-  ::Atom::Feed.instance_eval { include AtomLinkShortcut }
+  ::Atom::Feed.instance_eval {
+    include AtomLinkShortcut
+    include AtomElementShortcut
+  }
   ::Atom::Entry.instance_eval {
     include AtomLinkShortcut
     include AtomElementShortcut
