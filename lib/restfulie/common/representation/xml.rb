@@ -15,7 +15,7 @@ module Restfulie::Common::Representation
       raise "should never be invoked, xml to ruby objects should be handled by rails itself"
     end
 
-    def marshal(string)
+    def marshal(string, rel)
       string
     end
 

@@ -217,7 +217,8 @@ module Restfulie::Client::HTTP #:nodoc:
 
         ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
         begin
-          response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args), self).parse
+          connection = get_connection_provider.send(method, path, *args)
+          response = ResponseHandler.handle(method, path, connection, self).parse
         rescue Exception => e
           raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}, self), e )
         end 

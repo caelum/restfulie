@@ -39,5 +39,10 @@ context Restfulie::Client::HTTP::RequestMarshaller do
     result.respond_to?("search").should be_false
     result.respond_to?("payment").should be_true
   end
+  
+  it 'should understand a different response content type from its request' do
+    result = Restfulie.at('http://localhost:4567/with_content').as("application/xml").post!('<order></order>')
+    result.response.headers['content-type'].should == "application/atom+xml"
+  end
 
 end

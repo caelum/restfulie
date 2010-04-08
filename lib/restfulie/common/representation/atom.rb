@@ -13,17 +13,30 @@ module Restfulie::Common::Representation
       :post => { 'Content-Type' => media_type_name }
     }
 
-    #Convert raw string to rAtom instances
-    def unmarshal(string)
-      ::Atom::Feed.load_feed(string)
+    #Convert raw string to rAtom instances (client side)
+    def unmarshal(content)
+      ::Atom::Feed.load_feed(content)
     end
 
-    def marshal(string)
+    def marshal(string, rel)
       string
     end
 
-    def self.to_hash(string)
-      Hash.from_xml(string).with_indifferent_access
+    # transforms this content into a parameter hash for rails (server-side usage)
+    def self.to_hash(content)
+      Hash.from_xml(content).with_indifferent_access
+    end
+    
+    def prepare_link_for(link)
+      link
+    end
+    
+    def prepare_link_for(link)
+      link
+    end
+    
+    def prepare_link_for(link)
+      link
     end
   end
 
