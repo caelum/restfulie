@@ -7,7 +7,7 @@ module Restfulie::Client::HTTP#:nodoc:
       selected_links = links.select{ |l| l.rel == method_sym.to_s }
       super if selected_links.empty?
       link = (selected_links.size == 1) ? selected_links.first : selected_links
-
+      
       return link unless link.respond_to?(:type)
       
       representation = Restfulie::Client::HTTP::RequestMarshaller.content_type_for(link.type)

@@ -33,7 +33,8 @@ module Restfulie::Client::HTTP
     end
 
     def self.content_type_for(media_type)
-      type = @@representations[media_type.split(';')[0]] # [/(.*?);/, 1]
+      content_type = media_type.split(';')[0] # [/(.*?);/, 1]
+      type = @@representations[content_type]
       type ? type.new : nil
     end
 
