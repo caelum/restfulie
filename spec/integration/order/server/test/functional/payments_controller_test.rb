@@ -36,11 +36,11 @@ class PaymentsControllerTest < ActionController::TestCase
       { :controller => 'payments', :action => 'pay', :id => order.id.to_s}
     )
     assert_difference('Payment.count') do
-      post :pay, { :id => order.id }, :format => 'atom' 
+      post :pay, { :id => order.id }, :content_type => 'application/atom+xml' 
     end
+    assert @response.content_type, 'application/atom+xml'
     assert_response :success
     assert_template :pay
-    assert @response.content_type, 'application/atom+xml'
     payment = assigns(:payment)
     assert order.id, payment.order.id
   end
