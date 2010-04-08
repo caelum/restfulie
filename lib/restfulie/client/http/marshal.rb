@@ -56,7 +56,8 @@ module Restfulie::Client::HTTP
       if representation
         if has_payload?(method, path, *args)
           payload = get_payload(method, path, *args)
-          payload = representation.marshal(payload)
+          rel = self.respond_to?(:rel) ? self.rel : ""
+          payload = representation.marshal(payload, rel)
           args = set_marshalled_payload(method, path, payload, *args)
         end
         args = add_representation_headers(method, path, representation, *args)

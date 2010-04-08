@@ -9,10 +9,10 @@ module Restfulie::Client::HTTP#:nodoc:
       link = (selected_links.size == 1) ? selected_links.first : selected_links
       
       return link unless link.instance_variable_defined?(:@type)
+      link.accepts(link.type)
       
       representation = Restfulie::Client::HTTP::RequestMarshaller.content_type_for(link.type)
       return representation.prepare_link_for(link) if representation
-      
       link
 
     end

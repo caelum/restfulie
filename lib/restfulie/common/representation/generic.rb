@@ -20,7 +20,7 @@ module Restfulie::Common::Representation
       content
     end
 
-    def marshal(string)
+    def marshal(string, rel)
       string
     end
 
