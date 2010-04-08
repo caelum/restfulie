@@ -2,13 +2,16 @@ module Restfulie
   module Server
     module ActionController
 
-      class Base < ::ApplicationController
-        #unloadable
+      module Base
 
-        # Sets a default responder for this controller. 
-        # Needs to require responder_legacy.rb
-        self.responder = Restfulie::Server::ActionController::RestfulResponder
-        
+        def self.included(base)
+          # Sets a default responder for this controller. 
+          # Needs to require responder_legacy.rb
+          base.responder = Restfulie::Server::ActionController::RestfulResponder
+          # Atom representation is added by default
+          ParamsParser.register('application/atom+xml', Restfulie::Common::Representation::Atom)
+        end
+
       protected
       
         # If your controller inherits from Restfulie::Server::Controller::Base,
