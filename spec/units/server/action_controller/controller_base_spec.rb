@@ -1,6 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require "action_controller"
 
-class BaseController < Restfulie::Server::ActionController::Base
+class BaseController < ::ActionController::Base
+  include Restfulie::Server::ActionController::Base
+
   def index
     render :atom => [AtomifiedModel.new, AtomifiedModel.new, AtomifiedModel.new]
   end
@@ -12,7 +15,6 @@ class BaseController < Restfulie::Server::ActionController::Base
   def show_with_mock
     render :atom => object
   end
-  
 end
 
 ActionController::Routing::Routes.draw do |map|

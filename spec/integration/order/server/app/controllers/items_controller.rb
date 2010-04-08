@@ -1,4 +1,5 @@
-class ItemsController < Restfulie::Server::ActionController::Base
+class ItemsController < ::ApplicationController
+  include Restfulie::Server::ActionController::Base
 
   respond_to :atom, :html
   

@@ -60,6 +60,3 @@ end
   end
 end
 
-# Atom representation is added by default
-Restfulie::Server::ActionController::ParamsParser.register('application/atom+xml', Restfulie::Common::Representation::Atom)
-
