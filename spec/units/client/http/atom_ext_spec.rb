@@ -20,6 +20,10 @@ context Restfulie::Client::HTTP::AtomElementShortcut do
     Extended.new({"{http://namespace,price}" => [10]}).price == 10
   end
 
+  it "should respond to extension name when present" do
+    Extended.new({"{http://namespace,price}" => [10]}).should respond_to(:price)
+  end
+
   it "should return an array when its an array in one namespace" do
     Extended.new({"{http://namespace,price}" => [10, 20]}).price == [10, 20]
   end
