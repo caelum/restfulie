@@ -1,4 +1,7 @@
-module Restfulie::Server::ActionController#:nodoc:
+if defined?(::ActionController) || defined?(::ApplicationController)
+
+  module Restfulie::Server::ActionController#:nodoc:
+  end
 
   %w(
     params_parser

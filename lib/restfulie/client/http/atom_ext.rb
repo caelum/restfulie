@@ -46,6 +46,23 @@ module Restfulie::Client::HTTP#:nodoc:
       end
     end
   end
+  
+  # Offers a way to access Atom entries element's in namespaced extensions.
+  module AtomElementShortcut
+    def method_missing(method_sym,*args)
+      return super(method_sym, *args) unless simple_extensions
+      
+      start = -(method_sym.to_s.length + 1)
+      found = simple_extensions.select do |k, v|
+        method_sym.to_s == k[start..-2]
+      end
+      return super(method_sym, *args) if found.empty?
+      result = found.collect do |pair|
+        pair.last.length==1 ? pair.last.first : pair.last
+      end
+      result.length==1 ? result.first : result
+    end
+  end
 
   # Gives to Atom::Link capabilities to fetch related resources.
   module LinkRequestBuilder
