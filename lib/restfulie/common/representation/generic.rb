@@ -14,6 +14,9 @@ module Restfulie::Common::Representation
 
     # Because there is no media type registered, return the content itself
     def unmarshal(content)
+      def content.links
+        []
+      end
       content
     end
 
