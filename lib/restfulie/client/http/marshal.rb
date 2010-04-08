@@ -20,12 +20,13 @@ module Restfulie::Client::HTTP
     include ::Restfulie::Client::HTTP::RequestBuilder
     
     # accepts a series of media types by default
-    def intialize
+    def initialize
       @acceptable_mediatypes = "application/atom+xml"
     end
 
     @@representations = {
-      'application/atom+xml' => ::Restfulie::Common::Representation::Atom
+      'application/atom+xml' => ::Restfulie::Common::Representation::Atom,
+      'application/xml' => ::Restfulie::Common::Representation::XmlD
     }
     def self.register_representation(media_type,representation)
       @@representations[media_type] = representation
@@ -65,7 +66,7 @@ module Restfulie::Client::HTTP
     # otherwise check if its a raw request, returning the content itself.
     # finally, tries to parse the content with a mediatype handler or returns the response itself.
     def parse_response(response, representation)
-      if response.code != 200
+      if response.code == 201
         location = response.headers['location']
         Restfulie.at(location).accepts(@acceptable_mediatypes).get!
       elsif @raw
@@ -82,7 +83,7 @@ module Restfulie::Client::HTTP
 
     def do_conneg_and_choose_representation(method, path, *args)
       #TODO make a request to server (conneg)
-      representation = @default_representation || @default_representation = @@representations.values.first
+      representation = @default_representation || @default_representation = @@representations['application/atom+xml']
       representation.new
     end
 

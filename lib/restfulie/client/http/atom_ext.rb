@@ -15,7 +15,6 @@ module Restfulie::Client::HTTP#:nodoc:
     include RequestMarshaller
     def path#:nodoc:
       at(href)
-      as(type) if type
       super
     end
   end
