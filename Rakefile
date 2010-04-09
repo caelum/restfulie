@@ -42,6 +42,16 @@ namespace :test do
     Rake::Task[task_name].invoke
     sh "kill -9 #{pid}"
   end
+
+  desc "Execute integration Order tests"
+  task :integration do
+    integration_path = "spec/integration/order/server"
+
+    Dir.chdir(File.join(File.dirname(__FILE__), integration_path)) do
+      system('rake')
+    end
+  end
+  
   namespace :spec do
     spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
     Spec::Rake::SpecTask.new(:all) do |t|
@@ -75,6 +85,8 @@ namespace :test do
   namespace :run do
     task :all do
       start_server_and_invoke_test('test:spec:all')
+      puts "Execution integration tests... (task test:integration)"
+      Rake::Task["test:integration"].invoke()
     end
     task :common do
       start_server_and_invoke_test('test:spec:common')
