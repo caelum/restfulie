@@ -48,6 +48,7 @@ namespace :test do
     integration_path = "spec/integration/order/server"
 
     Dir.chdir(File.join(File.dirname(__FILE__), integration_path)) do
+      system('rake db:drop db:create db:migrate')
       system('rake')
     end
   end
