@@ -37,4 +37,64 @@ class OrdersControllerTest < ActionController::TestCase
     assert orders.last.id, listed_orders.last.id
   end
 
+  test "should destroy order with atom format" do
+    orders = []
+    2.times { orders << Order.create! }
+
+    assert_routing(
+      { :method => :delete, :path => "/orders/#{orders.first.id}" },
+      { :controller => 'orders', :action => 'destroy', :id => "#{orders.first.id}" }
+    )
+
+    delete :destroy, :id => orders.first.id, :format => 'atom'
+
+    assert_response :success
+  end
+
+  test "should destroy order with html format" do
+    orders = []
+    2.times { orders << Order.create! }
+
+    assert_routing(
+      { :method => :delete, :path => "/orders/#{orders.first.id}" },
+      { :controller => 'orders', :action => 'destroy', :id => "#{orders.first.id}" }
+    )
+
+    delete :destroy, :id => orders.first.id, :format => 'html'
+
+    assert_response :found
+    assert @response.content_type, 'text/html'
+  end
+
+  test "should try to destroy order, but fails in atom format" do
+    orders = []
+    orders << Order.create! 
+
+    assert_routing(
+      { :method => :delete, :path => "/orders/#{orders.first.id}" },
+      { :controller => 'orders', :action => 'destroy', :id => "#{orders.first.id}" }
+    )
+
+    delete :destroy, :id => (orders.first.id - 1), :format => 'atom'
+
+    assert_response :conflict
+    #assert @response.content_type, 'text/html'
+  end
+
+  test "should try to destroy order, but fails in html format" do
+    orders = []
+    orders << Order.create! 
+
+    assert_routing(
+      { :method => :delete, :path => "/orders/#{orders.first.id}" },
+      { :controller => 'orders', :action => 'destroy', :id => "#{orders.first.id}" }
+    )
+
+    delete :destroy, :id => (orders.first.id - 1), :format => 'html'
+
+    assert_response :found
+    assert @response.content_type, 'text/html'
+  end
+
+
 end
