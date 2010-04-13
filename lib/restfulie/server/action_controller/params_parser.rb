@@ -42,21 +42,21 @@ end
 # extensions are handled by the Rack stack
 #
 # TODO Change this when porting this code to Rails 3
-::ActionController::ParamsParser.class_eval do
-  def call(env)
-    begin
-      if params = parse_formatted_parameters(env)
-        env["action_controller.request.request_parameters"] = params
-      else
-        if env["CONTENT_LENGTH"] && (env["CONTENT_LENGTH"] != "0")
-          return [415, {'Content-Type' => 'text/html'}, "<html><body><h1>415 Unsupported Media Type</h1></body></html>"]
-        end
-      end
-    rescue
-      return [400, {'Content-Type' => 'text/html'}, "<html><body><h1>400 Bad Request</h1></body></html>"]
-    end
+#::ActionController::ParamsParser.class_eval do
+  #def call(env)
+    #begin
+      #if params = parse_formatted_parameters(env)
+        #env["action_controller.request.request_parameters"] = params
+      #else
+        #if env["CONTENT_LENGTH"] && (env["CONTENT_LENGTH"] != "0")
+          #return [415, {'Content-Type' => 'text/html'}, "<html><body><h1>415 Unsupported Media Type</h1></body></html>"]
+        #end
+      #end
+    #rescue
+      #return [400, {'Content-Type' => 'text/html'}, "<html><body><h1>400 Bad Request</h1></body></html>"]
+    #end
 
-    @app.call(env)
-  end
-end
+    #@app.call(env)
+  #end
+#end
 
