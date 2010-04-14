@@ -38,8 +38,11 @@ context Restfulie::Client::Base do
   it 'should load chained relationship' do
     top_ten_songs = @songs_from_class.top_ten.get!
     a_song = top_ten_songs.entries.first
+    a_song.respond_to?(:related_songs).should be_true
     related_songs = a_song.related_songs.get!
-    similar_song = related_songs.entries.first.similar_song
+    first_related_song = related_songs.entries.first
+    first_related_song.respond_to?(:similar_song).should be_true
+    similar_song = first_related_song.similar_song
     similar_song.get!.title.should == 'Song 4 feed' 
   end
 

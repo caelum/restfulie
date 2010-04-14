@@ -17,27 +17,5 @@ context Restfulie::Client::HTTP::RequestMarshaller do
     raw_response.response.code.should == 200
     raw_response.response.body.should == response_data( 'atoms', 'songs' )
   end 
-  
-  class Link
-    attr_reader :rel
-    def initialize(rel)
-      @rel = rel
-    end
-  end
-  class Linked
-    attr_reader :links
-    def initialize(links)
-      @links = []
-      links.each do |l|
-        @links << Link.new(l)
-      end
-    end
-  end
-  it 'respond whether a resource contains a rel link' do
-    result = Linked.new(["first", "payment"])
-    result.extend Restfulie::Client::HTTP::ResponseHolder
-    result.respond_to?("search").should be_false
-    result.respond_to?("payment").should be_true
-  end
 
 end

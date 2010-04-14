@@ -363,6 +363,29 @@ module Atom # :nodoc:
     end
   end
   
+ 
+  # Offer easily access to Atom link relationships, such as <tt>post.next</tt> for 
+  # <tt>&lt;link rel="next" href="http://resource.entrypoint.com/post/12" type="application/atom+xml" /&gt;</tt> relationships.
+  module LinkShortcut
+
+    def method_missing(method_sym,*args)#:nodoc:
+      selected_links = links.select{ |l| l.rel == method_sym.to_s }
+      super if selected_links.empty?
+      selected_links.size == 1 ? selected_links.first : selected_links
+    end
+
+    def respond_to?(symbol)
+      respond_to_rel?(symbol.to_s) || super(symbol)
+    end
+    
+    private
+    # whether this response contains specific relations
+    def respond_to_rel?(rel)
+      links.any? { |link| link.rel==rel }
+    end
+
+  end
+
   # Represents a Feed as defined by the Atom Syndication Format specification.
   #
   # A feed is the top level element in an atom document.  It is a container for feed level
@@ -407,6 +430,7 @@ module Atom # :nodoc:
   class Feed
     include Xml::Parseable
     include SimpleExtensions
+    include LinkShortcut
     extend Forwardable
     def_delegators :@links, :alternate, :self, :via, :first_page, :last_page, :next_page, :prev_page
 
@@ -556,6 +580,7 @@ module Atom # :nodoc:
   class Entry
     include Xml::Parseable
     include SimpleExtensions
+    include LinkShortcut
     extend Forwardable
     def_delegators :@links, :alternate, :self, :alternates, :enclosures, :edit_link, :via
     
