@@ -362,7 +362,6 @@ module Atom # :nodoc:
       yield(self) if block_given?   
     end
   end
-  
  
   # Offer easily access to Atom link relationships, such as <tt>post.next</tt> for 
   # <tt>&lt;link rel="next" href="http://resource.entrypoint.com/post/12" type="application/atom+xml" /&gt;</tt> relationships.
@@ -384,6 +383,12 @@ module Atom # :nodoc:
       links.any? { |link| link.rel==rel }
     end
 
+  end
+
+  module HashConverter
+    def to_hash
+      Hash.from_xml(to_xml).with_indifferent_access
+    end
   end
 
   # Represents a Feed as defined by the Atom Syndication Format specification.
@@ -431,6 +436,7 @@ module Atom # :nodoc:
     include Xml::Parseable
     include SimpleExtensions
     include LinkShortcut
+    include HashConverter
     extend Forwardable
     def_delegators :@links, :alternate, :self, :via, :first_page, :last_page, :next_page, :prev_page
 
@@ -529,9 +535,6 @@ module Atom # :nodoc:
       end
     end   
 
-    def to_hash
-      Hash.from_xml(to_xml).with_indifferent_access
-    end
 
   end
   
@@ -581,6 +584,7 @@ module Atom # :nodoc:
     include Xml::Parseable
     include SimpleExtensions
     include LinkShortcut
+    include HashConverter
     extend Forwardable
     def_delegators :@links, :alternate, :self, :alternates, :enclosures, :edit_link, :via
     
@@ -634,10 +638,6 @@ module Atom # :nodoc:
       if links.self
         Entry.load_entry(URI.parse(links.self.href), opts)
       end
-    end
-
-    def to_hash
-      Hash.from_xml(to_xml).with_indifferent_access
     end
 
   end
