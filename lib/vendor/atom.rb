@@ -10,7 +10,7 @@ require 'delegate'
 require 'rubygems'
 gem 'libxml-ruby', '>= 1.1.2'
 require 'xml/libxml'
-require 'vendor/atom/xml/parser.rb'
+require File.dirname(__FILE__) +'/atom/xml/parser.rb'
 
 module Atom # :nodoc:
   NAMESPACE = 'http://www.w3.org/2005/Atom' unless defined?(NAMESPACE)
@@ -504,6 +504,11 @@ module Atom # :nodoc:
         self.entries.each(&block)
       end
     end   
+
+    def to_hash
+      Hash.from_xml(to_xml).with_indifferent_access
+    end
+
   end
   
   # Represents an Entry as defined by the Atom Syndication Format specification.
@@ -605,6 +610,11 @@ module Atom # :nodoc:
         Entry.load_entry(URI.parse(links.self.href), opts)
       end
     end
+
+    def to_hash
+      Hash.from_xml(to_xml).with_indifferent_access
+    end
+
   end
 
   # Links provides an Array of Link objects belonging to either a Feed or an Entry.
