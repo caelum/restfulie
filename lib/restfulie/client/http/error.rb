@@ -23,7 +23,7 @@ module Restfulie::Client::HTTP#:nodoc:
 
       end
 
-      class CreatedStatusWithoutLocationHeader < RESTError; end
+      class AutoFollowWithoutLocationError < RESTError; end
       
       #Represents the HTTP code 503
       class ServerNotAvailableError < RESTError

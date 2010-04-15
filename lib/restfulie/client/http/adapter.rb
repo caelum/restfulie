@@ -389,7 +389,7 @@ module Restfulie::Client::HTTP #:nodoc:
         response = super
         if follow_codes.include?(response.code)
           location = response.headers['location'] || response.headers['Location']
-          raise Error::CreatedStatusWithoutLocationHeader.new(self, response) unless location
+          raise Error::AutoFollowWithoutLocationError.new(self, response) unless location
           self.host = location
           response = super(:get, self.path, headers)
         end
