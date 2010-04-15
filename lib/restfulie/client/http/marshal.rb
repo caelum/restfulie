@@ -150,5 +150,5 @@ module Restfulie::Client::HTTP
     end
   end
 
-end
 
+end
