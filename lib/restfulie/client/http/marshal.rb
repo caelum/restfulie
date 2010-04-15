@@ -52,18 +52,23 @@ module Restfulie::Client::HTTP
 
     #Executes super and unmarshalls it
     def request!(method, path, *args)
-      representation = do_conneg_and_choose_representation(method, path, *args)
-      if representation
-        if has_payload?(method, path, *args)
-          payload = get_payload(method, path, *args)
-          rel = self.respond_to?(:rel) ? self.rel : ""
-          payload = representation.marshal(payload, rel)
-          args = set_marshalled_payload(method, path, payload, *args)
-        end
-        args = add_representation_headers(method, path, representation, *args)
+
+      if has_payload?(method, path, *args)
+        payload = get_payload(method, path, *args)
+        rel = self.respond_to?(:rel) ? self.rel : ""
+        marshaller = content_type_for(headers['Content-type'])
+        payload = marshaller.marshal(payload, rel)
+        args = set_marshalled_payload(method, path, payload, *args)
+        args = add_representation_headers(method, path, marshaller, *args)
       end
+      
+      if @acceptable_mediatypes
+        unmarshaller = content_type_for(@acceptable_mediatypes)
+        args = add_representation_headers(method, path, unmarshaller, *args)
+      end
+      
       response = super(method, path, *args) 
-      parse_response(response, representation)
+      parse_response(response)
     end
 
     private
@@ -72,7 +77,7 @@ module Restfulie::Client::HTTP
     # first checks if its a 201, redirecting to the resource location.
     # otherwise check if its a raw request, returning the content itself.
     # finally, tries to parse the content with a mediatype handler or returns the response itself.
-    def parse_response(response, representation)
+    def parse_response(response)
       if response.code == 201
         location = response.headers['location']
         Restfulie.at(location).accepts(@acceptable_mediatypes).get!
@@ -91,12 +96,6 @@ module Restfulie::Client::HTTP
     
     def content_type_for(media_type)
       @@representations[media_type.split(';')[0]].new # [/(.*?);/, 1]
-    end
-
-    def do_conneg_and_choose_representation(method, path, *args)
-      #TODO make a request to server (conneg)
-      representation = @default_representation || @default_representation = @@representations['application/atom+xml']
-      representation.new
     end
 
     def has_payload?(method, path, *args)
