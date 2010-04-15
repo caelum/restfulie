@@ -27,7 +27,6 @@ module Restfulie::Common::Representation
 
   # Implements the interface for marshal Xml media type requests (application/xml)
   class XmlD
-
     cattr_reader :media_type_name
     @@media_type_name = 'application/xml'
 
