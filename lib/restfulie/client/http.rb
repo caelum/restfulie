@@ -7,6 +7,7 @@ end
   cache
   marshal
   atom_ext
+  xml
 ).each do |file|
   require "restfulie/client/http/#{file}"
 end

@@ -25,13 +25,14 @@ module Restfulie::Client::HTTP
     end
 
     @@representations = {
-      'application/atom+xml' => ::Restfulie::Common::Representation::Atom,
-      'application/xml' => ::Restfulie::Common::Representation::XmlD,
-      'text/xml' => ::Restfulie::Common::Representation::XmlD
+      'application/atom+xml' => ::Restfulie::Common::Representation::Atom
     }
     def self.register_representation(media_type,representation)
       @@representations[media_type] = representation
     end
+
+    RequestMarshaller.register_representation('application/xml', ::Restfulie::Common::Representation::XmlD)
+    RequestMarshaller.register_representation('text/xml', ::Restfulie::Common::Representation::XmlD)
 
     def self.content_type_for(media_type)
       content_type = media_type.split(';')[0] # [/(.*?);/, 1]
@@ -121,6 +122,15 @@ module Restfulie::Client::HTTP
       args
     end
 
+  end
+
+  # Gives to Atom::Link capabilities to fetch related resources.
+  module LinkRequestBuilder
+    include Restfulie::Client::HTTP::RequestMarshaller
+    def path#:nodoc:
+      at(href)
+      super
+    end
   end
 
   #=This class includes RequestBuilder module.
