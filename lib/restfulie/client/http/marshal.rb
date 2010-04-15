@@ -58,14 +58,14 @@ module Restfulie::Client::HTTP
       if has_payload?(method, path, *args)
         payload = get_payload(method, path, *args)
         rel = self.respond_to?(:rel) ? self.rel : ""
-        marshaller = content_type_for(headers['Content-type'])
+        marshaller = RequestMarshaller.content_type_for(headers['Content-Type'])
         payload = marshaller.marshal(payload, rel)
         args = set_marshalled_payload(method, path, payload, *args)
         args = add_representation_headers(method, path, marshaller, *args)
       end
       
       if @acceptable_mediatypes
-        unmarshaller = content_type_for(@acceptable_mediatypes)
+        unmarshaller = RequestMarshaller.content_type_for(@acceptable_mediatypes)
         args = add_representation_headers(method, path, unmarshaller, *args)
       end
       
@@ -96,10 +96,6 @@ module Restfulie::Client::HTTP
       end
     end
     
-    def content_type_for(media_type)
-      @@representations[media_type.split(';')[0]].new # [/(.*?);/, 1]
-    end
-
     def has_payload?(method, path, *args)
       [:put,:post].include?(method)
     end
@@ -124,11 +120,12 @@ module Restfulie::Client::HTTP
 
   end
 
-  # Gives to Atom::Link capabilities to fetch related resources.
+  # Gives to Link capabilities to fetch related resources.
   module LinkRequestBuilder
     include Restfulie::Client::HTTP::RequestMarshaller
     def path#:nodoc:
       at(href)
+      as(type) if respond_to?(:content_type) && content_type
       super
     end
   end

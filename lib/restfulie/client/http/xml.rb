@@ -1,3 +1,3 @@
 ::Hash.instance_eval {
-  include Restfulie::Client::HTTP::LinkShortcut
+  include Restfulie::Client::LinkShortcut
 }

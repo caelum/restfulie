@@ -1,6 +1,6 @@
-module Restfulie::Client::HTTP
+module Restfulie::Client
 
-  # Offer easy access to Atom link relationships, such as <tt>post.next</tt> for 
+  # Offer easy access to link relationships, such as <tt>post.next</tt> for 
   # <tt>&lt;link rel="next" href="http://resource.entrypoint.com/post/12" type="application/atom+xml" /&gt;</tt> relationships.
   module LinkShortcut
     def method_missing(method_sym,*args)#:nodoc:
@@ -15,6 +15,24 @@ module Restfulie::Client::HTTP
       return representation.prepare_link_for(link) if representation
       link
 
+    end
+  end
+
+  class Link
+
+    include Restfulie::Client::HTTP::LinkRequestBuilder
+
+    def initialize(options = {})
+      @options = options
+    end
+    def href
+      @options["href"]
+    end
+    def rel
+      @options["rel"]
+    end
+    def content_type
+      @options["type"]
     end
   end
 

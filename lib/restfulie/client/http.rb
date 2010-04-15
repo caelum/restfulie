@@ -6,6 +6,7 @@ end
   adapter
   cache
   marshal
+  link
   atom_ext
   xml
 ).each do |file|
