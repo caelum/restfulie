@@ -26,7 +26,8 @@ module Restfulie::Client::HTTP
 
     @@representations = {
       'application/atom+xml' => ::Restfulie::Common::Representation::Atom,
-      'application/xml' => ::Restfulie::Common::Representation::XmlD
+      'application/xml' => ::Restfulie::Common::Representation::XmlD,
+      'text/xml' => ::Restfulie::Common::Representation::XmlD
     }
     def self.register_representation(media_type,representation)
       @@representations[media_type] = representation
