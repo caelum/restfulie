@@ -61,6 +61,7 @@ module Restfulie::Client::HTTP#:nodoc:
   
 end
 
+
 class Atom::Link
   def content_type
     type

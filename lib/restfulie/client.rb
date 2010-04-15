@@ -3,7 +3,6 @@ require 'restfulie/common'
 module Restfulie::Client; end
 
 %w(
-  link
   http
   configuration
   base

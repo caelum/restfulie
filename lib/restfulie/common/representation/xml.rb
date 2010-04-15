@@ -46,3 +46,4 @@ module Restfulie::Common::Representation
   end
 
 end
+
