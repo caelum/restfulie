@@ -13,18 +13,21 @@ module Restfulie::Common::Representation
       :post => { 'Content-Type' => media_type_name }
     }
 
-    #Convert raw string to rAtom instances
-    def unmarshal(string)
-      ::Atom::Feed.load_feed(string)
+    def unmarshal(object)
+      object.extend(Restfulie::Common::Converter::Atom)
+      object.to_atom
     end
 
-    def marshal(string)
-      string
+    def marshal(object)
+      object.extend(Restfulie::Common::Converter::Atom)
+      object.to_atom.to_s
     end
 
-    def self.to_hash(string)
-      Hash.from_xml(string).with_indifferent_access
+    def self.to_hash(object)
+      object.extend(Restfulie::Common::Converter::Atom)
+      object.to_atom.to_hash
     end
+
   end
 
 end

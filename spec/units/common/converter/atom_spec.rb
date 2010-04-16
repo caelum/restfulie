@@ -13,15 +13,6 @@ describe Restfulie::Common::Converter do
 
   describe 'Atom' do
 
-    it 'should have default media type name application/atom+xml' do
-      Restfulie::Common::Converter::Atom.media_type_name.should == 'application/atom+xml'
-    end
-
-    it 'should have default headers' do
-      Restfulie::Common::Converter::Atom.headers[:get]['Accept'].should        ==  Restfulie::Common::Converter::Atom.media_type_name
-      Restfulie::Common::Converter::Atom.headers[:post]['Content-Type'].should ==  Restfulie::Common::Converter::Atom.media_type_name
-    end
-
     describe 'default convertion' do
 
       it 'should convert string to atom representation' do
