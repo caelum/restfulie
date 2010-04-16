@@ -19,6 +19,12 @@ get "/test/?" do
   'OK'
 end
 
+post "/test/redirect/:location" do
+  r = Rack::Response.new('OK', 201)
+  r.header["Location"] = "#{request.scheme}://#{request.host}:#{request.port}/#{params[:location]}"
+  r.finish
+end
+
 post "/test/?" do
   Rack::Response.new('OK', 201).finish
 end
@@ -33,12 +39,6 @@ end
 
 get "/test/:error" do
   Rack::Response.new('OK', params[:error].to_i).finish
-end
-
-post '/custom/songs' do
-  r = Rack::Response.new('', 201)
-  r.header["Location"] = "http://localhost:4567/songs"
-  r.finish
 end
 
 get '/:file_name' do

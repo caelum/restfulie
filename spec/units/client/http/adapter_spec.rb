@@ -98,7 +98,7 @@ context Restfulie::Client::HTTP do
     end
 
     it 'should follow 201 responses' do
-      @builder.at('/custom/songs').accepts('application/atom+xml').follow(201).post!("custom").code.should == 200
+      @builder.at('/test/redirect/songs').accepts('application/atom+xml').follow(201).post!("custom").code.should == 200
     end
 
   end
