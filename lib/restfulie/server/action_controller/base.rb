@@ -8,8 +8,22 @@ module Restfulie
           # Sets a default responder for this controller. 
           # Needs to require responder_legacy.rb
           base.responder = Restfulie::Server::ActionController::RestfulResponder
+          base.extend(Restfulie::Server::ActionController::Base::ClassMethods)
           # Atom representation is added by default
           ParamsParser.register('application/atom+xml', Restfulie::Common::Representation::Atom)
+        end
+
+        module ClassMethods
+          def call(env)
+            if include_restfulie?
+              return env["action_controller.restfulie.response"] if env.has_key?("action_controller.restfulie.response")
+            end
+            super
+          end
+
+          def include_restfulie?
+            defined?(Restfulie::Server::ActionController::Base) && controller_class_name.constantize.include?(Restfulie::Server::ActionController::Base)
+          end
         end
 
       protected
