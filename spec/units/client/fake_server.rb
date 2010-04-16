@@ -8,7 +8,7 @@ use(Rack::Conneg) do |conneg|
   conneg.set :accept_all_extensions, false
   conneg.set :fallback, :html
   conneg.ignore('/public/')
-  conneg.provide([:atom])
+  conneg.provide([:atom,:xml])
 end
 
 before do
@@ -44,6 +44,8 @@ end
 get '/:file_name' do
   respond_to do |wants|
     wants.atom { response_data( 'atoms', params[:file_name] ) } 
+    wants.xml { response_data( 'atoms', params[:file_name] ) } 
+    wants.html { response_data( 'atoms', params[:file_name] ) } 
   end
 end
 
