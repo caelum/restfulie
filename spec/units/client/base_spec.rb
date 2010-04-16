@@ -10,7 +10,7 @@ end
 context Restfulie::Client::Base do
 
   before(:all) do
-    @songs_from_class = Restfulie::Client::Test::Song.get!
+    @songs_from_class = Restfulie::Client::Test::Song.accepts("application/atom+xml").get!
   end
 
   it 'should load songs' do
