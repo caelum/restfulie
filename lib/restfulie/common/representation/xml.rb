@@ -1,3 +1,27 @@
+class Hash
+  def links(*args)
+    links = fetch("link", [])
+    links = [links] unless links.kind_of? Array
+    links = [] unless links
+    links = links.map do |l|
+      Restfulie::Client::Link.new(l)
+    end
+    if args.empty?
+      links
+    else
+      found = links.find do |link|
+        link.rel == args[0].to_s
+      end
+      found
+    end
+  end
+  def method_missing(sym, *args)
+    self[sym.to_s].nil? ? super(sym, args) : self[sym.to_s]
+  end
+  def respond_to?(sym)
+    include?(sym.to_s) || super(sym)
+  end
+end
 module Restfulie::Common::Representation
 
   # Implements the interface for marshal Xml media type requests (application/xml)
@@ -12,16 +36,7 @@ module Restfulie::Common::Representation
     }
 
     def unmarshal(string)
-      h = Hash.from_xml(string)
-      def h.links
-        debugger
-        links = values[0].fetch("link", [])
-        links = [links] unless links.kind_of? Array
-        links.map do |l|
-          Restfulie::Client::Link.new(l)
-        end
-      end
-      h
+      Hash.from_xml(string).values.first
     end
 
     def marshal(string, rel)
