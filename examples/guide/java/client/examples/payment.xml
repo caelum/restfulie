@@ -1,7 +1,0 @@
-<payment>
-  <amount>15</amount>
-  <cardholderName>Guilherme Silveira</cardholderName>
-  <cardNumber>123456789012</cardNumber>
-  <expiryMonth>12</expiryMonth>
-  <expiryYear>12</expiryYear>
-</payment>

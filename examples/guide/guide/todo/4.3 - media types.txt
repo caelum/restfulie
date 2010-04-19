@@ -1,7 +1,0 @@
-[section Retrieve as xhtml]
-
-[code]
-	server side code to generate the above mentioned code
-[/code]
-
-
