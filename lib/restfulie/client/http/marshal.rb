@@ -62,7 +62,7 @@ module Restfulie::Client::HTTP
         args = set_marshalled_payload(method, path, payload, *args)
         args = add_representation_headers(method, path, marshaller, *args)
       end
-      
+
       if @acceptable_mediatypes
         unmarshaller = RequestMarshaller.content_type_for(@acceptable_mediatypes)
         args = add_representation_headers(method, path, unmarshaller, *args)
@@ -80,7 +80,7 @@ module Restfulie::Client::HTTP
     # finally, tries to parse the content with a mediatype handler or returns the response itself.
     def parse_response(response)
       if response.code == 201
-        request = Restfulie.at(location)
+        request = Restfulie.at(response.headers['location'])
         request.accepts(@acceptable_mediatypes) if @acceptable_mediatypes
         request.get!
       elsif @raw
