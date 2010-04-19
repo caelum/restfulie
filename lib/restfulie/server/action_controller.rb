@@ -1,7 +1,4 @@
-if defined?(::ActionController) || defined?(::ApplicationController)
-
-  module Restfulie::Server::ActionController#:nodoc:
-  end
+module Restfulie::Server::ActionController#:nodoc:
 
   %w(
     params_parser
@@ -9,8 +6,7 @@ if defined?(::ActionController) || defined?(::ApplicationController)
     base
     routing
   ).each do |file|
-    require "restfulie/server/action_controller/#{file}"
+    autoload file.camelize.to_sym, "restfulie/server/action_controller/#{file}"
   end
 
 end
-

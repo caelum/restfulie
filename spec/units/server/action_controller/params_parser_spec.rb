@@ -1,8 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require "action_controller"
 
-class TestController < Restfulie::Server::ActionController::Base
+class TestController < ::ActionController::Base
+  include Restfulie::Server::ActionController::Base
   def create
     render :text => (params.keys - ['controller', 'action']).sort.join(", ")
+  end
+end
+
+class NormalController < ::ActionController::Base
+  def build
+    render :text => (params.keys - ['controller', 'action']).sort.join(", ") 
   end
 end
 
@@ -32,7 +40,29 @@ class ParamsParserTest < ActionController::IntegrationTest
     ActionController::Base.session_store = ActionController::Session::CookieStore
   end
 
-  def test_offer_proper_params_hash_when_doing_post_with_atom 
+  def test_simple_getting
+    with_test_route_set do
+      get '/create', :sort => true
+
+      assert_equal 'sort', @controller.response.body
+      assert @controller.params.has_key?(:sort)
+      assert_equal "true", @controller.params["sort"]
+    end
+  end
+
+ def test_offer_proper_params_hash_when_doing_post_with_xml 
+    with_test_route_set do
+      post '/create', 
+        '<feed xmlns="http://www.w3.org/2005/Atom"><title>Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
+        :content_type => 'application/xml'
+
+      assert_equal 'feed', @controller.response.body
+      assert @controller.params.has_key?(:feed)
+      assert_equal 'Top Ten Songs feed', @controller.params["feed"]['title']
+    end
+  end
+
+ def test_offer_proper_params_hash_when_doing_post_with_atom 
     with_test_route_set do
       post '/create', 
         '<feed xmlns="http://www.w3.org/2005/Atom"><title>Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
@@ -60,18 +90,6 @@ class ParamsParserTest < ActionController::IntegrationTest
     end
   end
 
-  def test_offer_proper_params_hash_when_doing_post_with_xml 
-    with_test_route_set do
-      post '/create', 
-        '<feed xmlns="http://www.w3.org/2005/Atom"><title>Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
-        :content_type => 'application/xml'
-
-      assert_equal 'feed', @controller.response.body
-      assert @controller.params.has_key?(:feed)
-      assert_equal 'Top Ten Songs feed', @controller.params["feed"]['title']
-    end
-  end
-
   def test_unsupported_media_type_when_doing_post_with_csv
     with_test_route_set do
       post '/create', 'name,age\njohndoe,42', 
@@ -94,13 +112,15 @@ class ParamsParserTest < ActionController::IntegrationTest
     Restfulie::Server::ActionController::ParamsParser.unregister('text/csv')
   end
 
-  def test_simple_getting
+  def test_normal_controller_should_behave_just_as_any_rails_controller 
     with_test_route_set do
-      get '/create', :sort => true
+      post '/build', 
+        'foo=1',
+        :content_type => 'application/x-www-form-urlencoded'
 
-      assert_equal 'sort', @controller.response.body
-      assert @controller.params.has_key?(:sort)
-      assert_equal "true", @controller.params["sort"]
+      assert_equal 'foo', @controller.response.body
+      assert @controller.params.has_key?(:foo)
+      assert_equal "1", @controller.params["foo"]
     end
   end
 
@@ -110,6 +130,9 @@ class ParamsParserTest < ActionController::IntegrationTest
         set.draw do |map|
           map.with_options :controller => "test" do |c|
             c.connect "/create", :action => "create"
+          end
+          map.with_options :controller => "normal" do |c|
+            c.connect "/build", :action => "build"
           end
         end
         yield

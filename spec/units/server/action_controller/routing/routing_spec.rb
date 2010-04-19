@@ -1,7 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 module Restfulie::Server::ActionController::Test
-  class AlbumsController < Restfulie::Server::ActionController::Base
+  class AlbumsController < ::ActionController::Base
+    include Restfulie::Server::ActionController::Base
     def index
     end
   end

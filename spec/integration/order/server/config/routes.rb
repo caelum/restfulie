@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :orders, :only => [:new,:destroy,:index,:create] do |orders|
     orders.resources :items, :controller => 'orders/items', :only => [:index,:show,:new]
   end
-  map.add_item_order '/orders/:order_id/items/:index/:id', :action => 'add', :controller => 'order/items', :conditions => { :method => :post }
+  map.add_item_order '/orders/:order_id/items', :action => 'add', :controller => 'orders/items', :conditions => { :method => :post }
 
   map.resources :items, :only => [:new,:destroy,:index,:create]
 
@@ -13,6 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   map.approve_payment '/payments/:id'      , :action => 'approve', :controller => 'payments', :conditions => { :method => :post }
   map.refuse_payment  '/payments/:id'      , :action => 'refuse' , :controller => 'payments', :conditions => { :method => :delete }
 
+  map.root :controller => "home"
   #map.resources :order do |order|
     #order.post '/:id',:state => :opened, :action => :add_item
     #order.post '/'   ,:action => :create

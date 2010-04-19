@@ -1,4 +1,5 @@
-class OrdersController < Restfulie::Server::ActionController::Base
+class OrdersController < ApplicationController
+  include Restfulie::Server::ActionController::Base
 
   respond_to :atom, :html
 
@@ -15,8 +16,17 @@ class OrdersController < Restfulie::Server::ActionController::Base
   end
 
   def destroy
-    Order.delete(params[:id])
-    redirect_to orders_url
+    if Order.delete(params[:id]) != 0
+      respond_with("", :status => :success) do |format|
+        format.html { redirect_to orders_url }
+        format.atom { render :text => "" }
+      end
+    else
+      respond_with() do |format|
+        format.html { redirect_to orders_url }
+        format.atom { render :text => "", :status => :conflict }
+      end
+    end
   end
 
 end
