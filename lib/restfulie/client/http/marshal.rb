@@ -125,7 +125,7 @@ module Restfulie::Client::HTTP
     include Restfulie::Client::HTTP::RequestMarshaller
     def path#:nodoc:
       at(href)
-      as(type) if respond_to?(:content_type) && content_type
+      as(content_type) if respond_to?(:content_type) && content_type
       super
     end
   end
