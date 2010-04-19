@@ -42,8 +42,6 @@ context Restfulie::Common::Representation::XmlD do
       result.should respond_to "entry"
       result.should be_kind_of(Hash)
     end
- 
-
   end
   
 end
