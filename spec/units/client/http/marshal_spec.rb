@@ -53,5 +53,6 @@ context Restfulie::Client::HTTP::RequestMarshaller do
     result = Restfulie.at('http://localhost:4567/html_result').get!
     result.response.headers['content-type'].should == "text/html"
   end
+
   
 end

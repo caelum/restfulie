@@ -74,6 +74,7 @@ module Restfulie::Client::HTTP
 
     private
     
+        
     # parses the http response.
     # first checks if its a 201, redirecting to the resource location.
     # otherwise check if its a raw request, returning the content itself.
