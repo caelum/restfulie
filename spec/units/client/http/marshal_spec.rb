@@ -50,24 +50,8 @@ end
 context Restfulie::Client::HTTP::RequestMarshaller do
   
   it "should retrieve any content type if no accepts is specified" do
-    result = Restfulie.at('http://localhost:4567/songs').get!
+    result = Restfulie.at('http://localhost:4567/html_result').get!
     result.response.headers['content-type'].should == "text/html"
   end
   
-end
-
-class LinkWithContentType
-  include Restfulie::Client::HTTP::LinkRequestBuilder
-  def content_type
-    "text/html"
-  end
-  def href
-    "uri"
-  end
-end
-class LinkWithoutContentType
-  include Restfulie::Client::HTTP::LinkRequestBuilder
-  def href
-    "uri"
-  end
 end
