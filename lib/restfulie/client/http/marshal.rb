@@ -21,7 +21,6 @@ module Restfulie::Client::HTTP
     
     # accepts a series of media types by default
     def initialize
-      @acceptable_mediatypes = "application/atom+xml"
     end
 
     @@representations = {
@@ -81,8 +80,9 @@ module Restfulie::Client::HTTP
     # finally, tries to parse the content with a mediatype handler or returns the response itself.
     def parse_response(response)
       if response.code == 201
-        location = response.headers['location']
-        Restfulie.at(location).accepts(@acceptable_mediatypes).get!
+        request = Restfulie.at(location)
+        request.accepts(@acceptable_mediatypes) if @acceptable_mediatypes
+        request.get!
       elsif @raw
         response
       elsif !response.body.empty?

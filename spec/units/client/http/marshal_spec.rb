@@ -46,3 +46,12 @@ context Restfulie::Client::HTTP::RequestMarshaller do
   end
 
 end
+
+context Restfulie::Client::HTTP::RequestMarshaller do
+  
+  it "should retrieve any content type if no accepts is specified" do
+    result = Restfulie.at('http://localhost:4567/songs').get!
+    result.response.headers['content-type'].should == "text/html"
+  end
+  
+end

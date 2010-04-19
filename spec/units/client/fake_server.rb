@@ -6,7 +6,7 @@ require File.join(File.dirname(__FILE__),'..','data','data_helper')
 
 use(Rack::Conneg) do |conneg|
   conneg.set :accept_all_extensions, false
-  conneg.set :fallback, :html
+  conneg.set :fallback, :atom
   conneg.ignore('/public/')
   conneg.provide([:atom])
 end
@@ -56,6 +56,7 @@ end
 
 get '/:file_name' do
   respond_to do |wants|
+    wants.html { Rack::Response.new('OK', 200).finish }
     wants.atom { response_data( 'atoms', params[:file_name] ) } 
   end
 end
