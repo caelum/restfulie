@@ -44,7 +44,14 @@ module Restfulie::Common::Converter
     def to_atom(recipe_name=nil,atom_type=:feed)
       raise "Undefined atom type #{atom_type}" unless [:entry,:feed].include?(atom_type)
       recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym]
-      atom = recipe.call(self,"::Atom::#{atom_type.to_s.camelize}".constantize.new)
+
+      #TODO remove this bad smell
+      begin
+        atom = recipe.call(self,"::Atom::#{atom_type.to_s.camelize}".constantize.new)
+      rescue ArgumentError
+        atom = to_atom(recipe_name, atom_type == :entry ? :feed : :entry)
+      end
+
       REQUIRED_ATTRIBUTES[atom_type].each do |attr_sym|
         raise "Undefined required value #{attr_sym} from #{atom}" unless atom.send(attr_sym)
       end
