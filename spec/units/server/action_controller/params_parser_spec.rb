@@ -65,7 +65,7 @@ class ParamsParserTest < ActionController::IntegrationTest
  def test_offer_proper_params_hash_when_doing_post_with_atom 
     with_test_route_set do
       post '/create', 
-        '<feed xmlns="http://www.w3.org/2005/Atom"><title>Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
+        '<feed xmlns="http://www.w3.org/2005/Atom"><title>Top Ten Songs feed</title><id>http://local/songs_top_ten</id><updated>2010-12-13T18:30:02Z</updated></feed>',
         :content_type => 'application/atom+xml'
 
       assert_equal 'feed', @controller.response.body
