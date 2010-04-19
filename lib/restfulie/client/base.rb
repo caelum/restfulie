@@ -22,6 +22,10 @@ module Restfulie::Client#:nodoc
     end
 
   end
+  class NilEntryPoint
+    include Restfulie::Client::EntryPoint
+    # extend self
+  end
 
   module Base
     include HTTP::RequestMarshaller
@@ -52,9 +56,11 @@ module Restfulie::Client#:nodoc
 
 end
 
+
 # Shortcut to Restfulie::Client::EntryPoint
 module Restfulie
-  include Client::EntryPoint
-  extend self
+  def self.at(uri)
+    Client::NilEntryPoint.new.at(uri)
+  end
 end
 
