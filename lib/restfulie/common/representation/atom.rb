@@ -20,7 +20,7 @@ module Restfulie::Common::Representation
 
     def marshal(object)
       object.extend(Restfulie::Common::Converter::Atom)
-      object.to_atom.to_s
+      object.to_atom.to_xml
     end
 
     def self.to_hash(object)
