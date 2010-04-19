@@ -56,19 +56,3 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
   
 end
-
-class LinkWithContentType
-  include Restfulie::Client::HTTP::LinkRequestBuilder
-  def content_type
-    "text/html"
-  end
-  def href
-    "uri"
-  end
-end
-class LinkWithoutContentType
-  include Restfulie::Client::HTTP::LinkRequestBuilder
-  def href
-    "uri"
-  end
-end
