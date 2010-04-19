@@ -43,6 +43,7 @@ context Restfulie::Common::Representation::XmlD do
       result.should be_kind_of(Hash)
     end
  
+
   end
   
 end

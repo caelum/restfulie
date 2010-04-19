@@ -22,6 +22,7 @@ class Hash
     include?(sym.to_s) || super(sym)
   end
 end
+
 module Restfulie::Common::Representation
 
   # Implements the interface for marshal Xml media type requests (application/xml)
