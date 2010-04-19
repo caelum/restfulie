@@ -41,11 +41,11 @@ module Restfulie::Common::Converter
       ::Atom::Link.new(options)
     end
 
-    def to_atom(recipe_name=nil,atom_type=:feed)
+    def to_atom(recipe_name=nil,atom_type=:entry)
       raise "Undefined atom type #{atom_type}" unless [:entry,:feed].include?(atom_type)
       recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym]
 
-      #TODO remove this bad smell
+      #TODO Code smell.
       begin
         atom = recipe.call(self,"::Atom::#{atom_type.to_s.camelize}".constantize.new)
       rescue ArgumentError
