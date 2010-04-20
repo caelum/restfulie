@@ -25,15 +25,20 @@ module Restfulie::Client::HTTP
       self
     end
 
+    def post!(payload,options={:recipe => nil})
+      request!(:post, path, payload, options.merge(headers))
+    end
+
     #Executes super if its a raw request, returning the content itself.
     #otherwise tries to parse the content with a mediatype handler or returns the response itself.
     def request!(method, path, *args)
       representation = do_conneg_and_choose_representation(method, path, *args)
+      recipe_name = get_recipe_name(*args)
       return super(method, path, *args) if @raw
       return super(method, path, *args) unless representation
       if has_payload?(method, path, *args)
         payload = get_payload(method, path, *args)
-        payload = representation.marshal(payload)
+        payload = representation.marshal(payload,recipe_name)
         args = set_marshalled_payload(method, path, payload, *args)
       end
       args = add_representation_headers(method, path, representation, *args)
@@ -45,6 +50,13 @@ module Restfulie::Client::HTTP
     end
 
     private
+
+    def get_recipe_name(*args)
+      headers_and_recipe_name = args.extract_options! 
+      recipe_name = headers_and_recipe_name.delete(:recipe)
+      args << headers_and_recipe_name
+      recipe_name
+    end
     
     def do_conneg_and_choose_representation(method, path, *args)
       #TODO make a conneg

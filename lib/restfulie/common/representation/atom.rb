@@ -13,19 +13,19 @@ module Restfulie::Common::Representation
       :post => { 'Content-Type' => media_type_name }
     }
 
-    def unmarshal(object)
+    def unmarshal(object,recipe_name=nil)
       object.extend(Restfulie::Common::Converter::Atom)
-      object.to_atom
+      object.to_atom(recipe_name)
     end
 
-    def marshal(object)
+    def marshal(object,recipe_name=nil)
       object.extend(Restfulie::Common::Converter::Atom)
-      object.to_atom.to_xml
+      object.to_atom(recipe_name).to_xml
     end
 
-    def self.to_hash(object)
+    def self.to_hash(object,recipe_name=nil)
       object.extend(Restfulie::Common::Converter::Atom)
-      object.to_atom.to_hash
+      object.to_atom(recipe_name).to_hash
     end
 
   end

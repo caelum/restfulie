@@ -4,6 +4,12 @@ module Restfulie::Client#:nodoc
     include HTTP::RequestMarshaller
     extend self
 
+    def recipe(converter_sym, options={}, &block)
+      raise 'Undefined block' unless block_given?
+      converter = "Restfulie::Common::Converter::#{converter_sym.to_s.camelize}".constantize
+      converter.describe_recipe(options[:name], &block) 
+    end
+
     @resources_configurations = {}
     def configuration_of(resource_name)
       @resources_configurations[resource_name]

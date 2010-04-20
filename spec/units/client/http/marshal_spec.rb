@@ -26,6 +26,15 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
   context 'marhal' do
 
+    before(:all) do
+      Restfulie.recipe(:atom, :name => :custom_song) do |song,representation|
+        representation.id = "ID/#{song.id}"
+        representation.title = "Title #{song.title}"
+        representation.updated = song.updated
+        representation
+      end
+    end
+
     it 'should unmarshal' do
       songs = @marshaller.at('/songs').accepts('application/atom+xml').get!
 
@@ -58,8 +67,12 @@ context Restfulie::Client::HTTP::RequestMarshaller do
     it 'should marshal' do
       songs = @marshaller.at('/songs').accepts('application/atom+xml').get!
       a_song = songs.entries.first
-      a_song.title = 'Update song'
+      a_song.title = "Update song #{a_song.title}"
+
       songs = @marshaller.at('/test/redirect/songs').post!(a_song)
+      songs.response.code.should == 200
+
+      songs = @marshaller.at('/test/redirect/songs').post!(a_song,:recipe => :custom_song)
       songs.response.code.should == 200
     end
 
