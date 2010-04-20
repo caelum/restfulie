@@ -1,8 +1,8 @@
 require 'nokogiri'
-puts "WARNING! You need libxml version 2.7.7 or superior loaded in your system." if Nokogiri::VERSION_INFO["libxml"]["loaded"] < "2.7.7"
 
 #initialize namespace
 module Restfulie::Common::Representation::Atom
+  
   # Create a new Representation::Atom object using a +string_or_io+
   # object.
   #
@@ -12,13 +12,19 @@ module Restfulie::Common::Representation::Atom
   class Factory
     # RelaxNG file to validate atom
     RELAXNG_ATOM = File.join(File.dirname(__FILE__), 'atom', 'atom.rng')
-    SCHEMA       = ::Nokogiri::XML::RelaxNG(File.open(RELAXNG_ATOM))
+    
+    if Nokogiri::VERSION_INFO["libxml"]["loaded"] < "2.7.7"
+      puts "WARNING! In order to use schema validation on atom representations you need libxml version 2.7.7 or superior loaded in your system." 
+      SCHEMA       = nil
+    else
+      SCHEMA       = ::Nokogiri::XML::RelaxNG(File.open(RELAXNG_ATOM))
+    end
 
     class << self
       def create(string_or_io)
         doc = string_or_io.kind_of?(Nokogiri::XML::Document) ? string_or_io : Nokogiri::XML(string_or_io) 
         
-        unless (errors = SCHEMA.validate(doc)).empty?
+        if SCHEMA && !(errors = SCHEMA.validate(doc)).empty?
           raise Restfulie::Common::Representation::Atom::AtomInvalid.new("Invalid Atom: "+ errors.join(", "))
         end
         
