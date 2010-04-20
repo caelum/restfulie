@@ -6,9 +6,9 @@ require 'spec/rake/spectask'
 require 'rake/rdoctask'
 
 GEM = "restfulie"
-GEM_VERSION = "0.7.3"
+GEM_VERSION = "0.8.0"
 SUMMARY  = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
-AUTHOR   = "Guilherme Silveira, Caue Guerra"
+AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Éverton Ribeiro, George Guimarães, Paulo Ahagon"
 EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
@@ -18,7 +18,7 @@ spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.summary = SUMMARY
   s.require_paths = ['lib']
-  s.files = FileList['lib/**/*.rb', '[A-Z]*'].to_a
+  s.files = FileList['lib/**/*.rb', '[A-Z]*', 'lib/**/*.rng'].to_a
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
   s.add_dependency("responders_backport", ["~> 0.1.0"])
@@ -82,6 +82,10 @@ namespace :test do
       t.rcov = true
       t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
     end
+    desc 'Run coverage test with fake server'
+    task :run do
+      start_server_and_invoke_test('test:rcov:rcov')
+    end
   end
   
   namespace :run do
@@ -120,7 +124,7 @@ begin
     t.files   = ['lib/restfulie/**/*.rb', 'README.textile']   # optional
     # t.options = ['--any', '--extra', '--opts'] # optional
   end
-rescue; end
+rescue LoadError; end
 
 desc "Install the gem locally"
 task :install => [:package] do

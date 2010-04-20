@@ -1,5 +1,11 @@
-member.namespace(:albums) do |ns|
-  ns.length_in_minutes = "#{album.length}m"
+member.values("xmlns:albums" => "http://localhost/albums") do |value|
+  value.id      album.id.to_s
+  value.title   album.title
+  value.updated album.updated_at
+  
+  value["albums"].length_in_minutes "#{album.length}m"
+  value["albums"].description       album.description
 end
 
-member.links << link(:rel => :artistis, :href => album_artists_url(album))
+member.link(:artists, album_artists_url(album))
+

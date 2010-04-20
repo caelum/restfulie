@@ -6,9 +6,9 @@ end
   adapter
   cache
   marshal
-  link
   atom_ext
-  xml
+  xml_ext
+  core_ext
 ).each do |file|
   require "restfulie/client/http/#{file}"
 end

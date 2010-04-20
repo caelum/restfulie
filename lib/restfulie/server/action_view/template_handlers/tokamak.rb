@@ -4,11 +4,14 @@ module Restfulie::Server::ActionView::TemplateHandlers
     include ActionView::TemplateHandlers::Compilable
       
     def compile(template)
-      "extend Restfulie::Common::Builder::Helpers; " +
-      "extend Restfulie::Server::ActionView::Helpers; " +
-      "code_block = lambda { #{template.source} };" + 
-      "builder = code_block.call; " +
-      "builder.send \"to_\#{self.response.content_type}\" "
+      "if request.accept; " +
+        "@restfulie_type_helpers = \"Restfulie::Common::Converter::\#{Mime::Type.lookup(request.accept).to_sym.to_s.titleize}::Helpers\".constantize;" +
+        "extend @restfulie_type_helpers; " +
+        "extend Restfulie::Server::ActionView::Helpers; " +
+        "code_block = lambda { #{template.source} };" + 
+        "builder = code_block.call; " +
+        "builder.to_s; " +
+      "end"
     end
   end
 end

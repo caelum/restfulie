@@ -1,1 +1,11 @@
-describe_collection([], :values => { :title => "index.atom.tokamak" })
+collection([]) do |collection|
+  
+  collection.values do |value|
+    value.id      "1"
+    value.title   "index.atom.tokamak"
+    value.updated Time.now
+  end
+
+  collection.members do |member, item|
+  end
+end

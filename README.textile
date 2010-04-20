@@ -50,10 +50,13 @@ In the server side, all you need to do is notify inherited_resources which media
 That's it. Restfulie will take care of rendering a valid representation according to content negotiation. You can configure the rendering process through a custom tokamak view:
 
 <pre>
-	describe_collection(@orders) do |collection|
-	  collection.id = orders_url
-	  collection.links << link( :rel => :create,  :href => orders_url )
-	  collection.describe_members
+	collection(@orders) do |collection|
+	  collection.values do |value|
+		value.id = orders_url
+	  end
+	  
+	  collection.link("create", orders_url)
+	  collection.members
 	end
 </pre>
 

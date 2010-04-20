@@ -1,1 +1,0 @@
-authorization: http://mail.google.com/mail/#inbox/125d7f15c71d118e

@@ -29,11 +29,11 @@ module Restfulie::Server::ActionController
     end
     
     def set_public_cache_control!
-      cache_control = response.headers["Cache-Control"].split(",").map {|k| k.strip }
+      cache_control = controller.response.headers["Cache-Control"].split(",").map {|k| k.strip }
       cache_control.delete("private")
       cache_control.delete("no-cache")
       cache_control << "public"
-      response.headers["Cache-Control"] = cache_control.join(', ')
+      controller.response.headers["Cache-Control"] = cache_control.join(', ')
     end
   end
 end

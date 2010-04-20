@@ -8,6 +8,7 @@ class OrdersControllerTest < ActionController::TestCase
       { :controller => 'orders', :action => 'create' }
     )
     assert_difference('Order.count') do
+      @request.accept = "application/atom+xml"
       post :create, { :order => {} }, :format => 'atom' 
     end
     assert_response :success
@@ -25,6 +26,7 @@ class OrdersControllerTest < ActionController::TestCase
       { :controller => 'orders', :action => 'index' }
     )
 
+    @request.accept = "application/atom+xml"
     get :index, :format => 'atom'
 
     assert_response :success

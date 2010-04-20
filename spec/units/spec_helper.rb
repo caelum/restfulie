@@ -36,10 +36,11 @@ class AtomifiedModel
   end
 
   def to_atom(options={})
-    Atom::Entry.new do |entry|
-      entry.title     = "entry"
-      entry.published = '123'
-      entry.updated   = '123'
-    end
+    entry = Restfulie::Common::Representation::Atom::Entry.new
+    entry.id        = "entry1"
+    entry.title     = "entry"
+    entry.updated   = Time.parse("2010-05-03T16:29:26-03:00")
+    entry.published = Time.parse("2010-05-03T16:29:26-03:00")
+    entry
   end
 end

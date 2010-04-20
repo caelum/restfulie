@@ -3,11 +3,6 @@ module Restfulie::Client::HTTP#:nodoc:
     #Client errors
     module Error
 
-      #Generic error class and superclass of all other errors raised by client restfulie
-      class BaseError < StandardError; end
-
-      class TranslationError < BaseError; end
-
       # Standard error thrown on major client exceptions
       class RESTError < StandardError
 
@@ -27,6 +22,8 @@ module Restfulie::Client::HTTP#:nodoc:
         end
 
       end
+
+      class AutoFollowWithoutLocationError < RESTError; end
       
       #Represents the HTTP code 503
       class ServerNotAvailableError < RESTError

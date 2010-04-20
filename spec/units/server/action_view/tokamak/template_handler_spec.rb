@@ -17,9 +17,9 @@ describe AlbumsController, :type => :controller do
   
   describe "get index" do
     before do
-      response.content_type = "application/atom+xml"
+      request.accept = "application/atom+xml"
       get :index, :format => :atom
-      @feed = ::Atom::Feed.load_feed(response.body)
+      @feed = Restfulie::Common::Representation::Atom::Factory.create(response.body)
     end
     
     it "generation atom feed to get index" do
@@ -30,28 +30,27 @@ describe AlbumsController, :type => :controller do
       @feed.title.should == "Index Album feed spec"
     end
     
-    it "members artistis transitions included" do
+    it "members artists transitions included" do
       transitions = @feed.entries.first.links
-      transitions.find {|t| t.rel == 'artistis'}.should be_kind_of(::Atom::Link)
+      transitions.find {|t| t.rel == 'artists'}.should be_kind_of(::Restfulie::Common::Representation::Atom::Link)
     end
   end # describe "get index"
   
   describe "get show" do
     before do
-      response.content_type = "application/atom+xml"
+      request.accept = "application/atom+xml"
       @album = Album.first
       get :show, :id => @album.id, :format => :atom
-      @entry = ::Atom::Entry.load_entry(response.body)      
+      @entry = Restfulie::Common::Representation::Atom::Factory.create(response.body)      
     end
   
     it "generation atom entry" do
       @entry.title.should == @album.title
     end
   
-    it "should return eagerloaded values" do
-      @entry.albums_length.to_i.should == @album.length
-      @entry.albums_description.should == @album.description
-      @entry.albums_length_in_minutes.should ==  "#{@album.length}m"
+    it "return extension values" do
+      @entry.doc.at_xpath("albums:length_in_minutes", "albums" => "http://localhost/albums").content.to_i.should == @album.length
+      @entry.doc.at_xpath("albums:description", "albums" => "http://localhost/albums").content.should == @album.description
     end
   end # describe "get show"
 end
