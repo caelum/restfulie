@@ -32,7 +32,7 @@ end
 namespace :test do
   def execute_process(name)
     sh "ruby ./spec/units/client/#{name}.rb &"
-    sleep 4
+    sleep 15
     %x(ps -ef | grep #{name}).split[1]  
   end
   def process(name)
