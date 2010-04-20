@@ -25,7 +25,7 @@ module Restfulie::Common::Representation
     def marshal(entity, rel)
       return entity if entity.kind_of? String
       entity.to_xml
-      string
+      entity
     end
 
     # transforms this content into a parameter hash for rails (server-side usage)
