@@ -13,6 +13,7 @@ gem "yard"
 gem "ruby-debug"
 
 group :test do  
+	gem "nokogiri"
   gem "rspec-rails"
   gem "rcov"
   gem "sinatra"
