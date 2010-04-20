@@ -15,6 +15,7 @@ describe Restfulie::Server::ActionController::Base, :type => :controller do
   tests Restfulie::Server::ActionController::Test::AlbumsController
   
   before(:each) do
+    response.content_type = "application/atom+xml"
   end
   
 end

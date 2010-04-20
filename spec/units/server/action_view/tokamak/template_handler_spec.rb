@@ -17,6 +17,7 @@ describe AlbumsController, :type => :controller do
   
   describe "get index" do
     before do
+      response.content_type = "application/atom+xml"
       get :index, :format => :atom
       @feed = ::Atom::Feed.load_feed(response.body)
     end
@@ -37,6 +38,7 @@ describe AlbumsController, :type => :controller do
   
   describe "get show" do
     before do
+      response.content_type = "application/atom+xml"
       @album = Album.first
       get :show, :id => @album.id, :format => :atom
       @entry = ::Atom::Entry.load_entry(response.body)      
@@ -46,7 +48,7 @@ describe AlbumsController, :type => :controller do
       @entry.title.should == @album.title
     end
   
-    it "return eagerload values" do
+    it "should return eagerloaded values" do
       @entry.albums_length.to_i.should == @album.length
       @entry.albums_description.should == @album.description
       @entry.albums_length_in_minutes.should ==  "#{@album.length}m"

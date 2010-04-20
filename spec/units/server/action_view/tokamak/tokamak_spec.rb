@@ -16,6 +16,10 @@ describe ProjectsController, :type => :controller do
   tests ProjectsController
   integrate_views
 
+  before do
+    response.content_type = "application/atom+xml"
+  end
+
   it "renders view files with tokamak extension" do
     get :index, :format => :atom
     response.body.should include("<title>index.atom.tokamak</title>")

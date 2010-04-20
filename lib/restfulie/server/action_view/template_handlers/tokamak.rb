@@ -8,7 +8,6 @@ module Restfulie::Server::ActionView::TemplateHandlers
       "extend Restfulie::Server::ActionView::Helpers; " +
       "code_block = lambda { #{template.source} };" + 
       "builder = code_block.call; " +
-      # "builder.to_atom "
       "builder.send \"to_\#{self.response.content_type}\" "
     end
   end
