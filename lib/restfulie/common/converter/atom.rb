@@ -15,6 +15,10 @@ module Restfulie::Common::Converter
     @@recipes = {}
 
     class << self
+      
+      def helper
+        Restfulie::Common::Converter::Atom::Helpers
+      end
 
       def describe_recipe(recipe_name, options={}, &block)
         raise 'Undefined recipe' unless block_given?
