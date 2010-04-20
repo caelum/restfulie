@@ -61,7 +61,7 @@ module Restfulie::Client::HTTP
     def do_conneg_and_choose_representation(method, path, *args)
       #TODO make a conneg
       representation = @default_representation || @default_representation = @@representations.values.first
-      representation.new
+      representation
     end
 
     def has_payload?(method, path, *args)

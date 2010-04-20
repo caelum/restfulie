@@ -4,7 +4,7 @@ context Restfulie::Common::Representation::Atom do
   
   context "when unmarshalling" do
     it "should unmarshall an entry" do
-      result = Restfulie::Common::Representation::Atom.new.unmarshal('<entry xmlns="http://www.w3.org/2005/Atom" xmlns:items="http://localhost:3000/items" xmlns:payment="http://openbuy.com/payment" xmlns:item="http://openbuy.com/media/item">
+      result = Restfulie::Common::Representation::Atom.unmarshal('<entry xmlns="http://www.w3.org/2005/Atom" xmlns:items="http://localhost:3000/items" xmlns:payment="http://openbuy.com/payment" xmlns:item="http://openbuy.com/media/item">
          <title>http://localhost:3000/baskets/17/payments/17</title>
          <id>http://localhost:3000/baskets/17/payments/17</id>
          <updated>2010-04-08T20:31:33Z</updated>
@@ -14,7 +14,7 @@ context Restfulie::Common::Representation::Atom do
     end
   
     it "should unmarshall a feed" do
-      result = Restfulie::Common::Representation::Atom.new.unmarshal('<?xml version="1.0" encoding="UTF-8"?>
+      result = Restfulie::Common::Representation::Atom.unmarshal('<?xml version="1.0" encoding="UTF-8"?>
       <feed xmlns="http://www.w3.org/2005/Atom" xmlns:basket="http://openbuy.com/basket">
         <id>http://localhost:3000/baskets/18</id>
         <title>http://localhost:3000/baskets/18</title>
