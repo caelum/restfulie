@@ -81,6 +81,10 @@ namespace :test do
       t.rcov = true
       t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
     end
+    desc 'Run coverage test with fake server'
+    task :run do
+      start_server_and_invoke_test('test:rcov:rcov')
+    end
   end
   
   namespace :run do
