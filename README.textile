@@ -101,6 +101,7 @@ If you want to build the project and run its tests, remember to install all (cli
 gem install rack-conneg
 gem install responders_backport
 gem install json_pure
+gem install sqlite3-ruby
 </pre>
 
 <script type="text/javascript">
