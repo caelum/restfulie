@@ -149,7 +149,8 @@ private
       register_namespace(ns.namespace, ns.uri, kclass)
       ns.each do |key, value|
         unless ATTRIBUTES_ALREADY_IN_ATOM_SPEC.include?(key.to_s)
-          register_element(ns.namespace, key, kclass)
+          options = { :type => (value.kind_of?(Array) ? :collection : :single) }
+          register_element(ns.namespace, key, kclass, options)
           atom.send("#{ns.namespace}_#{key}=".to_sym, value)
         end
       end
@@ -166,9 +167,9 @@ private
     klass.add_extension_namespace(namespace, uri) unless klass.known_namespaces.include? uri
   end
 
-  def register_element(namespace, attribute, klass)
+  def register_element(namespace, attribute, klass, options = {})
     attribute = "#{namespace}:#{attribute}"
-    klass.element(attribute) if element_unregistered?(attribute, klass)
+    klass.element(attribute, options) if element_unregistered?(attribute, klass)
   end
 
   def element_unregistered?(element, klass)

@@ -135,11 +135,14 @@ context "builder representations" do
         builder = describe_collection(@albums, :values => { :id => "http://localhost/albums" }) do |collection|
           collection.namespace(:albums, "http://localhost/albums") do |ns|
             ns.count = 10
+            ns.tags  = ["album", "music", "songs"]
           end
         end
         
-        feed = Atom::Feed.load_feed(builder.to_atom)
+        xml  = builder.to_atom
+        feed = Atom::Feed.load_feed(xml)
         feed.albums_count.to_i.should == 10
+        feed["http://localhost/albums", "tag"].should == ["album", "music", "songs"]
       end
       
       it "customize members" do

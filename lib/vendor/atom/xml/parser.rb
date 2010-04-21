@@ -160,14 +160,17 @@ module Atom
               end
             end
           else
-            self.send(spec.attribute).each do |attribute|
-              if attribute.respond_to?(:to_xml)
-                node << attribute.to_xml(true, spec.name.singularize, nil, namespace_map)
-              else
-                n = XML::Node.new(spec.name.singularize)
-                n['xmlns'] = spec.options[:namespace] if spec.options[:namespace]
-                n << attribute.to_s
-                node << n
+            value = self.send(spec.attribute)
+            if (value.respond_to?(:each))
+              value.each do |attribute|
+                if attribute.respond_to?(:to_xml)
+                  node << attribute.to_xml(true, spec.name.singularize, nil, namespace_map)
+                else
+                  n = XML::Node.new(spec.name.singularize)
+                  n['xmlns'] = spec.options[:namespace] if spec.options[:namespace]
+                  n << attribute.to_s
+                  node << n
+                end
               end
             end
           end
