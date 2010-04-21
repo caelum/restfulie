@@ -4,10 +4,25 @@ require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 context Restfulie::Common::Builder::Helpers do
   include Restfulie::Common::Builder::Helpers
   
-  context "link" do
+  context "parts" do
     it "create a Link" do
       lk = link(:self)
       lk.should be_kind_of(Restfulie::Common::Builder::Rules::Link)
+    end
+
+    it "create a text content" do
+      content = text("Text")
+      content.should be_kind_of(Atom::Content::Text)
+    end
+    
+    it "create a html content" do
+      content = html('<a name="anchor">Anchor</a>')
+      content.should be_kind_of(Atom::Content::Html)
+    end
+
+    it "create a xhtml content" do
+      content = xhtml('<a name="anchor">Anchor</a>')
+      content.should be_kind_of(Atom::Content::Xhtml)
     end
   end
 

@@ -52,7 +52,7 @@ context "builder representations" do
           (describe_member(@album, :values => { :foobar => Time.now })).to_atom
         }.should raise_error(Restfulie::Common::Error::AtomMarshallingError, 'Attribute foobar unsupported in Atom Entry.')
       end
-      
+
       context "namespace personalize" do
         it "with eager load" do
           builder = describe_member(@album, :namespace => "http://example.com/albums")
@@ -75,6 +75,27 @@ context "builder representations" do
         end
       end
       
+      it "complex contents support" do
+        txt_desc   = @album.description
+        html_desc  = "<p>#{@album.description}</p>"
+        xhtml_desc = "<span>#{@album.description}</span>"
+
+        builder = describe_member(@album, :namespace => "http://example.com/albums") do |member|
+          member.content = text(txt_desc)
+
+          member.namespace(:albums) do |ns|
+            ns.desc_html  = html(html_desc)
+            ns.desc_xhtml = xhtml(xhtml_desc)
+          end
+        end
+
+        xml   = builder.to_atom
+        entry = Atom::Entry.load_entry(xml)
+        entry.content.should == txt_desc
+        entry.albums_desc_html.should == html_desc
+      end
+      
+
       context "transitions" do
         
         it "infers the url of the transitions" do

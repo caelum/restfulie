@@ -12,6 +12,21 @@ module Restfulie::Common::Builder::Helpers
   def link(*args)
     Restfulie::Common::Builder::Rules::Link.new(*args)
   end
+
+  # Create object Content::Text
+  def text(*args)
+    ::Atom::Content::Text.new(*args)
+  end
+
+  # Create object Content::Html
+  def html(*args)
+    ::Atom::Content::Html.new(*args)
+  end
+
+  # Create object Content::Xhtml
+  def xhtml(*args)
+    ::Atom::Content::Xhtml.new(*args)
+  end
   
 private
 
