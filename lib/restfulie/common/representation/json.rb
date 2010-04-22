@@ -12,7 +12,8 @@ module Restfulie::Common::Representation
     }
 
     def unmarshal(string)
-      JSON.parse(string)
+      base = JSON.parse(string)
+      base == {} ? {} : base.values.first
     end
 
     def marshal(entity, rel)
