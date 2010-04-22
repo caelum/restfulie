@@ -43,5 +43,17 @@ context Restfulie::Common::Representation::XmlD do
       result.should be_kind_of(Hash)
     end
   end
+  context "when marshalling" do
+
+    it "should return itself if its a string" do
+      result = Restfulie::Common::Representation::XmlD.new.marshal("content", "")
+      result.should == "content"
+    end
+    it "should serialize if its anything else" do
+      hash = {"name" => "value"}
+      result = Restfulie::Common::Representation::XmlD.new.marshal(hash, "")
+      result.should == hash.to_xml
+    end
+  end
   
 end

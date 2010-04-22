@@ -39,8 +39,9 @@ module Restfulie::Common::Representation
       Hash.from_xml(string).values.first
     end
 
-    def marshal(string, rel)
-      string
+    def marshal(entity, rel)
+      return entity if entity.kind_of? String
+      entity.to_xml
     end
 
   end
