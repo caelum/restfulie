@@ -47,9 +47,12 @@ module Restfulie::Common::Converter
 
       #TODO Code smell.
       begin
-        atom = recipe.call(self,"::Atom::#{atom_type.to_s.camelize}".constantize.new)
-      rescue ArgumentError
-        atom = to_atom(recipe_name, atom_type == :entry ? :feed : :entry)
+        atom = "::Atom::#{atom_type.to_s.camelize}".constantize.new
+        recipe.call(self,atom)
+      rescue 
+        atom_type = atom_type == :entry ? :feed : :entry
+        atom = "::Atom::#{atom_type.to_s.camelize}".constantize.new
+        recipe.call(self,atom)
       end
 
       REQUIRED_ATTRIBUTES[atom_type].each do |attr_sym|

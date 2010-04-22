@@ -25,6 +25,10 @@ module Restfulie::Client::HTTP
       self
     end
 
+    def post(payload,options={:recipe => nil})
+      request(:post, path, payload, options.merge(headers))
+    end
+
     def post!(payload,options={:recipe => nil})
       request!(:post, path, payload, options.merge(headers))
     end
