@@ -1,3 +1,14 @@
+# Representation of a namespace. Allows any type of attribute setting and grabbing, i.e.:
+#
+# collection.namespace(:basket, "http://openbuy.com/basket") do |ns|
+#   ns.price = @basket.cost
+# end
+#
+# or
+#
+# collection.describe_members(:namespaces => "http://localhost:3000/items") do |member, item|
+#   member.links << link( :rel => :self, :href => item_url(item))
+# end
 class Restfulie::Common::Builder::Rules::Namespace < Hash
   attr_reader :namespace
   attr_reader :uri
@@ -9,7 +20,6 @@ class Restfulie::Common::Builder::Rules::Namespace < Hash
   end
   
   def uri=(value)
-    raise Restfulie::Common::Error::NameSpaceError.new('Namespace can not be blank uri.') if value.blank?
     @uri = value
   end
 

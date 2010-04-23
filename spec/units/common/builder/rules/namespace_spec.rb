@@ -15,23 +15,18 @@ context Restfulie::Common::Builder::Rules::Namespace do
       @ns.uri.should == "http://albums.example.com"
     end
 
-    it "should auto insert a method not fould" do
+    it "should auto insert a method not found" do
       title = "Entry Song"
       @ns.title = title
       @ns.should be_include(:title)
       @ns.title.should == title
     end
     
-    it "should raise error method is not implemented" do
+    it "should raise error method if accessing something unavailable" do
       lambda {
         @ns.foobar
       }.should raise_error(NoMethodError,  "undefined method `foobar' for {}:#{@ns.class.to_s}")
     end
     
-    it "should not allow blank uri" do
-      lambda {
-        @ns.uri = nil
-      }.should raise_error(Restfulie::Common::Error::NameSpaceError, 'Namespace can not be blank uri.')
-    end
   end # context "create"
 end
