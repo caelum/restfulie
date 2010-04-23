@@ -189,7 +189,7 @@ private
   end
   
   def namespace_enhance(options)
-    if !options[:namespace].nil? && options[:namespace].kind_of?(String)
+    if options[:namespace] && options[:namespace].kind_of?(String)
       options[:namespace] = { :uri => options[:namespace], :eager_load => true }
     end
     options
