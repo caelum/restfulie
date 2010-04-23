@@ -15,14 +15,14 @@ context Restfulie::Common::Builder::Rules::Namespace do
       @ns.uri.should == "http://albums.example.com"
     end
 
-    it "should auto insert a method not found" do
+    it "should respond to inserted values" do
       title = "Entry Song"
       @ns.title = title
       @ns.should be_include(:title)
       @ns.title.should == title
     end
     
-    it "should raise error method if accessing something unavailable" do
+    it "should raise an error if accessing something unavailable" do
       lambda {
         @ns.foobar
       }.should raise_error(NoMethodError,  "undefined method `foobar' for {}:#{@ns.class.to_s}")
