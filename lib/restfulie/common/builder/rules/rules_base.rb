@@ -1,5 +1,6 @@
 module Restfulie::Common::Builder::Rules; end
 
+# Set of rules that can be used to describe a resource in a tokamak view.
 class Restfulie::Common::Builder::Rules::Base
   attr_accessor :blocks
   attr_accessor :links
@@ -18,7 +19,7 @@ class Restfulie::Common::Builder::Rules::Base
     end
   end
 
-  # Use to register namespace
+  # Use to register a namespace
   #
   #==Example:
   #
