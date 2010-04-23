@@ -11,6 +11,7 @@ module Restfulie::Common::Builder; end
   rules/namespace
   rules/member_rule
   rules/collection_rule
+  rules/custom_attributes
 ).each do |file|
   require File.join(File.dirname(__FILE__), 'builder', file)
 end
