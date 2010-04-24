@@ -11,7 +11,7 @@ module Restfulie::Server::ActionView::Helpers
   #
   # in partial:
   #
-  #  member.links << link(:rel => :artistis, :href => album_artists_url(album))
+  #  member.links << link(:rel => :artists, :href => album_artists_url(album))
   #
   # Or passing local variables assing
   #  
