@@ -8,84 +8,65 @@ context "builder representations" do
   
   default_url_options[:host] = 'localhost'
 
-  context "marshalling atom" do
+  context "marshalling xml" do
     context "for member" do
       before do
         @album = Album.first
       end
       
-      it "infer atom values from basic member describe and generation" do
+      it "infer values from basic member describe and generation" do
         builder  = describe_member(@album)
-        entry    = Atom::Entry.load_entry(builder.to_atom)
-        entry.id.should == album_url(@album)
-        entry.title.should == @album.title
-        entry.updated.should == @album.updated_at
+        entry    = Hash.from_xml(builder.to_xml)
+        entry["album"]["id"].should == @album.id.to_s
+        entry["album"]["title"].should == @album.title
+        entry["album"]["updated_at"].should == @album.updated_at.to_s
       end
       
-      it "set atom values from and generation" do
-        id      = "http://localhost/rest/albums/#{@album.id}"
-        title   = "Album title"
-        updated = DateTime.parse(DateTime.now.to_s)
+      it "allow custom values" do
       
         builder  = describe_member(@album) do |member|
-          member.id    = id
-          member.title = title
-          member.updated = updated
+          member.double_id = @album.id*2
         end
       
-        entry = Atom::Entry.load_entry(builder.to_atom)
-        entry.id.should == id
-        entry.title.should == title
-        entry.updated.should == updated
+        entry    = Hash.from_xml(builder.to_xml)
+        entry["album"]["double_id"].should == (@album.id*2).to_s
       end
       
-      it "with values in params" do
-        updated = DateTime.parse(DateTime.now.to_s)
-        builder = describe_member(@album, :values => { :updated => updated })
-      
-        entry = Atom::Entry.load_entry(builder.to_atom)
-        entry.updated.should == updated
-      end
-      
-      it "raiser error invalid value information" do
-        lambda {
-          (describe_member(@album, :values => { :foobar => Time.now })).to_atom
-        }.should raise_error(Restfulie::Common::Error::AtomMarshallingError, 'Attribute foobar unsupported in Atom Entry.')
-      end
-      
-      context "using custom namespaces" do
-        it "with eager load" do
+      context "with custom namespace" do
+        it "should eager load all fields" do
           builder = describe_member(@album, :namespace => "http://example.com/albums")
           
-          entry = Atom::Entry.load_entry(builder.to_atom)
-          entry.albums_length.to_i.should == @album.length
-          entry.albums_description.should == @album.description
+          entry    = Hash.from_xml(builder.to_xml)
+          entry["album"]["id"].should == @album.id.to_s
+          entry["album"]["title"].should == @album.title
+          entry["album"]["updated_at"].should == @album.updated_at.to_s
         end
         
-        it "with eager load and set more values" do
+        it "should allow extra namespace parameters" do
           builder = describe_member(@album, :namespace => "http://example.com/albums") do |member|
             member.namespace(:albums) do |ns|
-              ns.composer = "Composer Name"
+              ns.composer = "chemical brothers"
             end
           end
           
-          entry = Atom::Entry.load_entry(builder.to_atom)
-          entry.albums_description.should == @album.description
-          entry.albums_composer.should == "Composer Name"
+          entry    = Hash.from_xml(builder.to_xml)
+          entry["album"]["composer"].should == "chemical brothers"
         end
       end
       
       context "transitions" do
         
-        it "infers the url of the transitions" do
+        it "should infer the url of the transitions" do
           builder  = describe_member(@album) do |member|
             member.links << link(:self)
             member.links << link(:songs)
           end
-          
-          entry = Atom::Entry.load_entry(builder.to_atom)
-          entry.links.should be_include(create_atom_link('self', album_url(@album)))
-          entry.links.should be_include(create_atom_link('songs', album_songs_url(@album)))
+
+          puts builder.to_xml
+          debugger
+          entry    = Hash.from_xml(builder.to_xml)
+          link_for(entry, "self")["href"].should == album_url(@album)
+          link_for(entry, "songs")["href"].should == album_songs_url(@album)
         end
         
         it "custom transitions" do
@@ -93,14 +74,23 @@ context "builder representations" do
             member.links.delete(:songs)
             member.links << link(:songs)
             
-            member.links << link(:rel => :artist, :href => "http://localhost/albums/1/artist", :type => "application/atom+xml")
-            member.links << link(:rel => 'lyrics', :href => "http://localhost/albums/1/lyrics", :type => "application/atom+xml")
+            member.links << link(:rel => :artist, :href => "http://localhost/albums/1/artist")
+            member.links << link(:rel => 'lyrics', :href => "http://localhost/albums/1/lyrics")
           end
           
-          entry = Atom::Entry.load_entry(builder.to_atom)
-          entry.links.should be_include(create_atom_link('songs' , album_songs_url(@album)))
-          entry.links.should be_include(create_atom_link('artist', "http://localhost/albums/1/artist"))
-          entry.links.should be_include(create_atom_link('lyrics', "http://localhost/albums/1/lyrics"))
+          puts builder.to_xml
+          entry    = Hash.from_xml(builder.to_xml)
+          ["artist", "lyrics"].each do |l|
+            found = link_for(entry, l)
+            found["href"].should == "http://localhost/albums/1/#{l}"
+          end
+          link_for(entry, "songs")["href"].should == album_songs_url(@album)
+        end
+        
+        def link_for(entry, rel)
+          entry["album"]["link"].find do |found|
+            found["rel"]==rel
+          end
         end
       end
       
@@ -190,7 +180,7 @@ context "builder representations" do
       end
     end # context "for member"
 
-  end # context "marshalling atom"
+  end # context "marshalling xml"
   
   def create_atom_link(rel, href, type = "application/atom+xml")
     Atom::Link.new(:rel => rel, :href => href, :type => type)

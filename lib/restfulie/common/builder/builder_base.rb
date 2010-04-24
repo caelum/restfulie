@@ -19,11 +19,11 @@ class Restfulie::Common::Builder::Base
   undef_method :to_json if respond_to?(:to_json)
 
   def respond_to?(symbol, include_private = false)
-    !marshalling_class(symbol).nil? || super
+    marshalling_class(symbol) || super
   end
 
   def method_missing(symbol, *args)
-    unless (marshalling = marshalling_class(symbol)).nil?
+    unless (marshalling = marshalling_class!(symbol)).nil?
       return builder(marshalling, *args)
     end
     super
@@ -43,16 +43,31 @@ private
     marshalling.new(@object, rules_blocks).builder_collection(@options.merge(options))
   end
 
+  def marshalling_classes(media_type)
+      {"application/atom+xml" => Restfulie::Common::Builder::Marshalling::Atom,
+        "atom" => Restfulie::Common::Builder::Marshalling::Atom,
+        "application/xml" => Restfulie::Common::Builder::Marshalling::Xml::Marshaller,
+        "xml" => Restfulie::Common::Builder::Marshalling::Xml::Marshaller,
+        "application/json" => Restfulie::Common::Builder::Marshalling::Json
+        }[media_type.downcase]
+  end
+
   def marshalling_class(method)
+    if (marshalling_name = method.to_s.match(/to_(.*)/))
+      marshalling = marshalling_name[1].downcase
+      marshalling_classes(marshalling)
+    end
+  end
+  
+  def marshalling_class!(method)
     if marshalling_name = method.to_s.match(/to_(.*)/)
-      marshalling = marshalling_name[1].downcase.capitalize.to_sym
-      if Restfulie::Common::Builder::Marshalling.const_defined?(marshalling)
-        begin
-          Restfulie::Common::Builder::Marshalling.const_get(marshalling) 
-        rescue NameError
-          raise Restfulie::Common::Error::UndefinedMarshallingError.new("Marshalling #{marshalling} not found.")
-        end
+      marshalling = marshalling_name[1].downcase
+      if (marshaller = marshalling_classes(marshalling))
+        marshaller
+      else
+        raise Restfulie::Common::Error::UndefinedMarshallingError.new("Marshalling #{marshalling} not found.")
       end
     end
   end
+
 end

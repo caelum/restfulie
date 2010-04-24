@@ -20,9 +20,9 @@ context Restfulie::Common::Builder::Base do
     
     it "returned not implemented marshalling call to_base" do
       builder = create_builder(nil)
-      builder.to_base(:default_rule => false).should == "Base Marshalling not implemented"
+      lambda { builder.to_base(:default_rule => false)}.should raise_error(Restfulie::Common::Error::UndefinedMarshallingError)
       builder = create_builder([])
-      builder.to_base(:default_rule => false).should == "Base Marshalling not implemented"
+      lambda { builder.to_base(:default_rule => false)}.should raise_error(Restfulie::Common::Error::UndefinedMarshallingError)
     end
     
   end # context "create a builder"
@@ -50,11 +50,11 @@ context Restfulie::Common::Builder::Base do
       }.should raise_error(NoMethodError,  "undefined method `foobar' for #{@builder}")
     end
 
-    it "should raiser error for a marshalling not found" do
+    it "should raise error for a marshalling not found" do
       ::Restfulie::Common::Builder::Marshalling.add_autoload_path(File.expand_path(File.dirname(__FILE__) + '/../../lib/marshalling'))
       lambda {
         @builder.to_bar()
-      }.should raise_error(Restfulie::Common::Error::UndefinedMarshallingError, "Marshalling Bar not found.")
+      }.should raise_error(Restfulie::Common::Error::UndefinedMarshallingError)
     end
   end # context "load marshallings"
 end

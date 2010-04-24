@@ -16,7 +16,7 @@ module Restfulie::Common::Builder::Rules::CustomAttributes
     super(sym) || (sym.to_s.last == "=") || custom_attributes[sym.to_s]
   end
   
-  private 
+  private
   
   def custom_attributes
     @custom_attributes ||= {}
