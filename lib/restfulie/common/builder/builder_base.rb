@@ -43,26 +43,26 @@ private
     marshalling.new(@object, rules_blocks).builder_collection(@options.merge(options))
   end
 
-  def marshalling_classes(media_type)
+  def self.marshalling_classes(media_type)
       {"application/atom+xml" => Restfulie::Common::Builder::Marshalling::Atom,
-        "atom" => Restfulie::Common::Builder::Marshalling::Atom,
         "application/xml" => Restfulie::Common::Builder::Marshalling::Xml::Marshaller,
-        "xml" => Restfulie::Common::Builder::Marshalling::Xml::Marshaller,
-        "application/json" => Restfulie::Common::Builder::Marshalling::Json
+        "application/json" => Restfulie::Common::Builder::Marshalling::Json,
+        "atom" => Restfulie::Common::Builder::Marshalling::Atom, # test only
+        "xml" => Restfulie::Common::Builder::Marshalling::Xml::Marshaller # test only
         }[media_type.downcase]
   end
 
   def marshalling_class(method)
     if (marshalling_name = method.to_s.match(/to_(.*)/))
       marshalling = marshalling_name[1].downcase
-      marshalling_classes(marshalling)
+      Restfulie::Common::Builder::Base.marshalling_classes(marshalling)
     end
   end
   
   def marshalling_class!(method)
     if marshalling_name = method.to_s.match(/to_(.*)/)
       marshalling = marshalling_name[1].downcase
-      if (marshaller = marshalling_classes(marshalling))
+      if (marshaller = Restfulie::Common::Builder::Base.marshalling_classes(marshalling))
         marshaller
       else
         raise Restfulie::Common::Error::UndefinedMarshallingError.new("Marshalling #{marshalling} not found.")

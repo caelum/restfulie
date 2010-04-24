@@ -62,8 +62,6 @@ context "builder representations" do
             member.links << link(:songs)
           end
 
-          puts builder.to_xml
-          debugger
           entry    = Hash.from_xml(builder.to_xml)
           link_for(entry, "self")["href"].should == album_url(@album)
           link_for(entry, "songs")["href"].should == album_songs_url(@album)
@@ -78,7 +76,6 @@ context "builder representations" do
             member.links << link(:rel => 'lyrics', :href => "http://localhost/albums/1/lyrics")
           end
           
-          puts builder.to_xml
           entry    = Hash.from_xml(builder.to_xml)
           ["artist", "lyrics"].each do |l|
             found = link_for(entry, l)
