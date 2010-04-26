@@ -35,17 +35,14 @@ module Restfulie::Common::Converter
       raise "Undefined atom type #{atom_type}" unless [:entry,:feed].include?(atom_type)
 
       #TODO Code smell.
-      if is_a?(::String)
-
+      if self.is_a?(::String)
         begin 
-          if atom_type == :entry
-            atom_type = :feed
+          if atom_type == :feed
             atom = ::Atom::Feed.load_feed(self)
           else
-            atom_type = :entry
             atom = ::Atom::Entry.load_entry(self) 
           end
-        rescue
+        rescue ::Atom::Xml::Parseable::ParseError
           atom_type = atom_type == :entry ? :feed : :entry
           atom = to_atom(recipe_name,atom_type)
         end
@@ -56,7 +53,7 @@ module Restfulie::Common::Converter
         begin
           atom = "::Atom::#{atom_type.to_s.camelize}".constantize.new
           recipe.call(self,atom)
-        rescue 
+        rescue ::Atom::Xml::Parseable::ParseError
           atom_type = atom_type == :entry ? :feed : :entry
           atom = "::Atom::#{atom_type.to_s.camelize}".constantize.new
           recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym]

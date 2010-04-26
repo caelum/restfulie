@@ -471,7 +471,7 @@ module Atom # :nodoc:
           o.read
           parse(o)
         else
-          raise ArgumentError, "XML document was missing atom:feed: #{o.read_outer_xml}"
+          raise Xml::Parseable::ParseError, "XML document was missing atom:feed: #{o.read_outer_xml}"
         end
       when Hash
         o.each do |k, v|
@@ -620,7 +620,7 @@ module Atom # :nodoc:
           o.read
           parse(o)
         else
-          raise ArgumentError, "Entry created with node other than atom:entry: #{o.name}"
+          raise Xml::Parseable::ParseError, "Entry created with node other than atom:entry: #{o.name}"
         end
       when Hash
         o.each do |k,v|
@@ -760,7 +760,7 @@ module Atom # :nodoc:
         if current_node_is?(o, 'link')
           parse(o, :once => true)
         else
-          raise ArgumentError, "Link created with node other than atom:link: #{o.name}"
+          raise Xml::Parseable::ParseError, "Link created with node other than atom:link: #{o.name}"
         end
       when Hash
         [:href, :rel, :type, :length, :hreflang, :title].each do |attr|

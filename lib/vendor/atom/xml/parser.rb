@@ -72,6 +72,9 @@ module Atom
     end
     
     module Parseable # :nodoc:
+
+      class ParseError < StandardError; end
+
       def parse(xml, options = {})
         starting_depth = xml.depth
         loop do
