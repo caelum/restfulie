@@ -26,7 +26,6 @@ Appart from the simple server and client examples provided here, you can find th
 * "How-tos":http://restfulie.caelumobjects.com/rails
 * "Buying through Rest: Rest to the enterprise (video)":guilhermesilveira.wordpress.com/2010/04/13/buying-through-rest-applying-rest-to-the-enterprise/
 
-
 h2. Simple server example
 
 In the server side, all you need to do is notify inherited_resources which media types you are able to represent your resource:
