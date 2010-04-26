@@ -312,13 +312,10 @@ module Atom # :nodoc:
         node = XML::Node.new("#{namespace_map.prefix(Atom::NAMESPACE, name)}")
         node['type'] = 'xhtml'
         node['xml:lang'] = self.xml_lang.to_s
-        
-        div = XML::Node.new('div')
+
+        parser = XML::Parser.string("<div>#{to_s}</div>")
+        div = parser.parse.root.copy(true)
         div['xmlns'] = XHTML
-        
-        p = XML::Parser.string(to_s)
-        content = p.parse.root.copy(true)
-        div << content
         
         node << div
         node
