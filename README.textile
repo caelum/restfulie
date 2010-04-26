@@ -13,24 +13,19 @@ h2. Why would I use restfulie?
 
 #  Easy --> writing hypermedia and semantic meaningful media type aware clients
 #  Small -> it's not a bloated solution with a huge list of APIs
-#  HATEOAS --> clients you are unaware of will not bother if you change your URIs
-#  HATEOAS --> resources that you consume will not affect your software whenever they change part of their flow or URIs
+#  HATEOAS --> clients you are unaware of will not bother if you change
+#  HATEOAS --> consumed resources will not affect your software whenever they change their flow
 #  Adaptability --> clients are able to adapt to your changes
  
-h2. Installing
+h2. Documentation
 
-For client side usage, execute:
+Appart from the simple server and client examples provided here, you can find the following links useful:
 
-<pre>
-gem install activesupport
-gem install restfulie
-</pre>
+* "RDocs":http://rdoc.info/projects/caelum/restfulie
+* "Official website":http://restfulie.caelumobjects.com
+* "How-tos":http://restfulie.caelumobjects.com/rails
+* "Buying through Rest: Rest to the enterprise (video)":guilhermesilveira.wordpress.com/2010/04/13/buying-through-rest-applying-rest-to-the-enterprise/
 
-For server side usage, execute:
-
-<pre>
-gem install restfulie
-</pre>
 
 h2. Simple server example
 
@@ -83,6 +78,21 @@ h2. Download source example
 You can view an entire application running Restfulie under *spec/integration/order/server* and *spec/integration/order/client* in this git repository.
 
 "You can also download a full example of a REST based agent and server":http://github.com/caelum/mikyung using Restfulie and Mikyung, according to the Rest Architecture Maturity Model.
+
+h2. Installing
+
+For client side usage, execute:
+
+<pre>
+gem install activesupport
+gem install restfulie
+</pre>
+
+For server side usage, execute:
+
+<pre>
+gem install restfulie
+</pre>
 
 h2. Building the project
 
