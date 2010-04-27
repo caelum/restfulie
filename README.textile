@@ -91,6 +91,7 @@ If you want to build the project and run its tests, remember to install all (cli
 <pre>
 gem install rack-conneg
 gem install responders_backport
+gem install json_pure
 </pre>
 
 <script type="text/javascript">
