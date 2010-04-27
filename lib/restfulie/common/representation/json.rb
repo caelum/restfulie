@@ -12,7 +12,7 @@ module Restfulie::Common::Representation
     }
 
     def unmarshal(string)
-      raise Restfulie::Common::Error::RestfulieError, "Json deserialization not yet implemented" unless type
+      raise Restfulie::Common::Error::RestfulieError, "Json deserialization not yet implemented"
     end
 
     def marshal(string, rel)
