@@ -16,6 +16,7 @@ module Restfulie::Common::Representation
     end
 
     def marshal(entity, rel)
+      return entity if entity.kind_of? String
       entity.to_json
     end
 
