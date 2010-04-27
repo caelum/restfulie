@@ -5,7 +5,7 @@ module Restfulie::Client::HTTP
     attr_accessor :response
     
     def respond_to?(symbol)
-      respond_to_rel?(symbol.to_s) || super(symbol)
+      super(symbol) || (super(:links) && respond_to_rel?(symbol.to_s))
     end
     
     private
@@ -32,8 +32,10 @@ module Restfulie::Client::HTTP
 
     RequestMarshaller.register_representation('application/xml', ::Restfulie::Common::Representation::XmlD)
     RequestMarshaller.register_representation('text/xml', ::Restfulie::Common::Representation::XmlD)
+    # RequestMarshaller.register_representation('application/json', ::Restfulie::Common::Representation::Json)
 
     def self.content_type_for(media_type)
+      return nil unless media_type
       content_type = media_type.split(';')[0] # [/(.*?);/, 1]
       type = @@representations[content_type]
       type ? type.new : nil
@@ -53,11 +55,13 @@ module Restfulie::Client::HTTP
 
     #Executes super and unmarshalls it
     def request!(method, path, *args)
-
+      
       if has_payload?(method, path, *args)
         payload = get_payload(method, path, *args)
         rel = self.respond_to?(:rel) ? self.rel : ""
-        marshaller = RequestMarshaller.content_type_for(headers['Content-Type'])
+        type = headers['Content-Type']
+        raise Restfulie::Common::Error::RestfulieError, "Missing content type related to the data to be submitted" unless type
+        marshaller = RequestMarshaller.content_type_for(type)
         payload = marshaller.marshal(payload, rel)
         args = set_marshalled_payload(method, path, payload, *args)
         args = add_representation_headers(method, path, marshaller, *args)
@@ -67,7 +71,7 @@ module Restfulie::Client::HTTP
         unmarshaller = RequestMarshaller.content_type_for(@acceptable_mediatypes)
         args = add_representation_headers(method, path, unmarshaller, *args)
       end
-      
+
       response = super(method, path, *args) 
       parse_response(response)
     end
@@ -115,7 +119,8 @@ module Restfulie::Client::HTTP
 
     def add_representation_headers(method, path, representation, *args)
       headers = args.extract_options!
-      args << representation.headers[method] 
+      headers = headers.merge(representation.headers[method] || {})
+      args << headers
       args
     end
 
