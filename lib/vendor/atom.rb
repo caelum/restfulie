@@ -313,8 +313,8 @@ module Atom # :nodoc:
         node['type'] = 'xhtml'
         node['xml:lang'] = self.xml_lang.to_s
 
-        parser = XML::Parser.string("<div>#{to_s}</div>")
-        div = parser.parse.root.copy(true)
+        parser = XML::HTMLParser.string("<div>#{to_s}</div>")
+        div = parser.parse.root.first.first.copy(true)
         div['xmlns'] = XHTML
         
         node << div
