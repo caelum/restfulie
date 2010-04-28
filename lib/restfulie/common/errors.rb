@@ -6,4 +6,7 @@ module Restfulie::Common::Error
   # Atom marshallinh error
   class AtomMarshallingError < MarshallingError; end
   class NameSpaceError < AtomMarshallingError; end
+
+  # Converter
+  class ConverterError < RestfulieError; end
 end

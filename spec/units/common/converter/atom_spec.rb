@@ -73,7 +73,6 @@ describe Restfulie::Common::Converter do
           representation.title   = "#{obj.title}/#{obj.id}"
           representation.updated = obj.updated
           representation.links   << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
-          representation
         end        
       end
 
@@ -96,6 +95,30 @@ describe Restfulie::Common::Converter do
         feed.links.size.should == 0
       end
       
+    end
+
+    describe "errors" do
+      it "raiser error to invalid atom type" do
+        lambda {
+          obj = Object.new
+          obj.extend(Restfulie::Common::Converter::Atom)
+          obj.to_atom(nil, :foo)
+        }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined atom type foo")
+      end
+
+      it "raiser error from requerid attribute in string" do
+        s = %w(
+            <?xml version="1.0" encoding="utf-8"?>
+            <feed xmlns="http://www.w3.org/2005/Atom">
+              <title>Example Feed</title>
+              <link href="http://example.org/"/>
+              <updated>2010-12-13T18:30:02Z</updated>
+            </feed> ).join(" ")
+        lambda {
+          s.extend(Restfulie::Common::Converter::Atom)
+          s.to_atom
+        }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined required value id from Atom::Feed")
+      end
     end
 
   end
