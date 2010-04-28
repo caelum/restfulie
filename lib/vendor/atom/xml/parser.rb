@@ -100,13 +100,13 @@ module Atom
         end
       end
     
-      def next_node_is?(xml, element, ns = nil)
+      def self.next_node_is?(xml, element, ns = nil)
         # Get to the next element
         while xml.next == 1 && xml.node_type != XML::Reader::TYPE_ELEMENT; end
         current_node_is?(xml, element, ns)
       end
       
-      def current_node_is?(xml, element, ns = nil)
+      def self.current_node_is?(xml, element, ns = nil)
         xml.node_type == XML::Reader::TYPE_ELEMENT && xml.local_name == element && (ns.nil? || ns == xml.namespace_uri)
       end
   
@@ -271,29 +271,7 @@ module Atom
                 when IO
                   XML::Reader.io(o)
                 when URI
-                  raise ArgumentError, "#{class_name}.load only handles http URIs" if o.scheme != 'http'
-                  response = nil
-                  Net::HTTP.start(o.host, o.port) do |http|
-                    request = Net::HTTP::Get.new(o.request_uri)
-                    if opts[:user] && opts[:pass]
-                      request.basic_auth(opts[:user], opts[:pass])
-                    elsif opts[:hmac_access_id] && opts[:hmac_secret_key]
-                      if Atom::Configuration.auth_hmac_enabled?
-                        AuthHMAC.sign!(request, opts[:hmac_access_id], opts[:hmac_secret_key])
-                      else
-                        raise ArgumentError, "AuthHMAC credentials provides by auth-hmac gem is not installed"
-                      end
-                    end
-                    response = http.request(request)
-                  end
-                  case response
-                  when Net::HTTPSuccess
-                    XML::Reader.string(response.body)
-                  when nil
-                    raise ArgumentError.new("nil response to #{o}")
-                  else
-                    raise Atom::LoadError.new(response)
-                  end
+                  XML::Reader.string(Atom.request_atom(o, opts))
                 else
                   raise ArgumentError, "#{class_name}.load needs String, URI or IO, got #{o.class.name}"
                 end

@@ -17,6 +17,58 @@ module Atom # :nodoc:
   module Pub
     NAMESPACE = 'http://www.w3.org/2007/app'
   end
+
+  class << self
+    def load(origin, options = {})
+      case origin
+      when String
+        xml = XML::Reader.string(origin)
+      when IO
+        xml = XML::Reader.io(origin)
+      when URI
+        xml = XML::Reader.string(request_atom(origin, options))
+      else
+        raise ArgumentError, "Atom load needs String, URI or IO"
+      end
+
+      if Xml::Parseable.next_node_is?(xml, 'entry', Atom::NAMESPACE)
+        Entry.new(xml)
+      elsif Xml::Parseable.current_node_is?(xml, 'feed', Atom::NAMESPACE) || 
+            Xml::Parseable.next_node_is?(xml, 'feed', Atom::NAMESPACE)
+        Feed.new(xml)
+      else
+        raise Xml::Parseable::ParseError, "This is not valid Atom documento. There is no Entry or Feed element."
+      end
+    end
+
+    def request_atom(uri, options = {})
+      raise ArgumentError, "Atom load only handles http URIs" if uri.scheme != 'http'
+      
+      response = nil
+      Net::HTTP.start(uri.host, uri.port) do |http|
+        request = Net::HTTP::Get.new(uri.request_uri)
+        if options[:user] && options[:pass]
+          request.basic_auth(options[:user], options[:pass])
+        elsif options[:hmac_access_id] && options[:hmac_secret_key]
+          if Atom::Configuration.auth_hmac_enabled?
+            AuthHMAC.sign!(request, options[:hmac_access_id], options[:hmac_secret_key])
+          else
+            raise ArgumentError, "AuthHMAC credentials provides by auth-hmac gem is not installed"
+          end
+        end
+        response = http.request(request)
+      end
+
+      case response
+      when Net::HTTPSuccess
+        response.body
+      when nil
+        raise ArgumentError.new("nil response to #{o}")
+      else
+        raise Atom::LoadError.new(response)
+      end
+    end
+  end
   
   # Raised when a Serialization Error occurs.
   class SerializationError < StandardError; end
@@ -345,7 +397,7 @@ module Atom # :nodoc:
 
       case o
       when XML::Reader
-        unless current_node_is?(o, 'source', NAMESPACE)
+        unless Xml::Parseable.current_node_is?(o, 'source', NAMESPACE)
           raise ArgumentError, "Invalid node for atom:source - #{o.name}(#{o.namespace})"
         end
 
@@ -467,7 +519,9 @@ module Atom # :nodoc:
       
       case o
       when XML::Reader
-        if next_node_is?(o, 'feed', Atom::NAMESPACE)
+        if Xml::Parseable.current_node_is?(o, 'feed', Atom::NAMESPACE) ||
+           Xml::Parseable.next_node_is?(o, 'feed', Atom::NAMESPACE)
+
           o.read
           parse(o)
         else
@@ -616,7 +670,7 @@ module Atom # :nodoc:
       
       case o
       when XML::Reader
-        if current_node_is?(o, 'entry', Atom::NAMESPACE) || next_node_is?(o, 'entry', Atom::NAMESPACE)
+        if Xml::Parseable.current_node_is?(o, 'entry', Atom::NAMESPACE) || Xml::Parseable.next_node_is?(o, 'entry', Atom::NAMESPACE)
           o.read
           parse(o)
         else
@@ -757,7 +811,7 @@ module Atom # :nodoc:
     def initialize(o)
       case o
       when XML::Reader
-        if current_node_is?(o, 'link')
+        if Xml::Parseable.current_node_is?(o, 'link')
           parse(o, :once => true)
         else
           raise Xml::Parseable::ParseError, "Link created with node other than atom:link: #{o.name}"
