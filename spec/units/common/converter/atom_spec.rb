@@ -68,7 +68,7 @@ describe Restfulie::Common::Converter do
     describe 'Custom Convertion' do
 
       before(:all) do
-        Restfulie::Common::Converter::Atom.describe_recipe(:simple_recipe) do |obj,representation|
+        Restfulie::Common::Converter::Atom.describe_recipe(:simple_recipe) do |representation, obj|
           representation.id      = obj.id
           representation.title   = "#{obj.title}/#{obj.id}"
           representation.updated = obj.updated

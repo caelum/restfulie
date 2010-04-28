@@ -27,7 +27,7 @@ context Restfulie::Client::HTTP::RequestMarshaller do
   context 'marhal' do
 
     before(:all) do
-      Restfulie.recipe(:atom, :name => :custom_song) do |song,representation|
+      Restfulie.recipe(:atom, :name => :custom_song) do |representation, song|
         representation.id = "ID/#{song.id}"
         representation.title = "Title #{song.title}"
         representation.updated = song.updated

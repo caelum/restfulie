@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 context Restfulie do
 
   before(:all) do
-    Restfulie.recipe(:atom, :name => :item) do |item,entry|
+    Restfulie.recipe(:atom, :name => :item) do |entry, item|
       entry.id      = item[:id]
       entry.title   = item[:title]
       entry.updated = item[:updated]
