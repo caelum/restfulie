@@ -21,34 +21,50 @@ module Restfulie::Common::Converter
       end,
     }
 
-    def self.describe_recipe(recipe_name, options={}, &block)
-      raise 'Undefined recipe' unless block_given?
-      raise 'Undefined recipe_name'   unless recipe_name
-      @@recipes[recipe_name] = block
-    end
+    class << self
 
-    def self.link(options)
-      ::Atom::Link.new(options)
-    end
-
-    def to_atom(recipe_name = nil, atom_type = :entry, &recipe)
-      raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{atom_type}") unless [:entry,:feed].include?(atom_type)
-
-      if self.is_a?(::String)
-        atom = ::Atom.load(self)
-      else
-        recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym] unless block_given?
-        atom   = "::Atom::#{atom_type.to_s.camelize}".constantize.new
-        # Check recipe arity size before calling it
-        recipe.call(*[atom, self][0,recipe.arity])
+      def describe_recipe(recipe_name, options={}, &block)
+        raise 'Undefined recipe' unless block_given?
+        raise 'Undefined recipe_name'   unless recipe_name
+        @@recipes[recipe_name] = block
       end
 
-      REQUIRED_ATTRIBUTES[atom_type].each do |attr_sym|
-        raise Restfulie::Common::Error::ConverterError.new("Undefined required value #{attr_sym} from #{atom.class}") unless atom.send(attr_sym)
+      def link(options)
+        ::Atom::Link.new(options)
       end
-      atom
-    end
 
+      def to_atom(obj, recipe_name = nil, atom_type = :entry, &recipe)
+        raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{atom_type}") unless [:entry,:feed].include?(atom_type)
+
+        if obj.kind_of?(::String)
+          atom = ::Atom.load(obj)
+        else
+          recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym] unless block_given?
+          atom   = "::Atom::#{atom_type.to_s.camelize}".constantize.new
+          # Check recipe arity size before calling it
+          recipe.call(*[atom, obj][0,recipe.arity])
+        end
+
+        REQUIRED_ATTRIBUTES[atom_type].each do |attr_sym|
+          raise Restfulie::Common::Error::ConverterError.new("Undefined required value #{attr_sym} from #{atom.class}") unless atom.send(attr_sym)
+        end
+        atom
+      end
+
+      def to_hash(obj)
+        return obj if obj.kind_of?(Hash)
+
+        xml = nil
+        # TODO: Add validate atom string
+        if obj.kind_of?(::String)
+           xml = obj
+        elsif obj.respond_to?(:to_xml)
+           xml = obj.to_xml
+        end
+
+         Hash.from_xml(xml).with_indifferent_access unless xml.nil?
+      end
+
+    end
   end
-
 end

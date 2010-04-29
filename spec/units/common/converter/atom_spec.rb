@@ -36,9 +36,7 @@ describe Restfulie::Common::Converter do
             </entry>
           </feed> ).join(" ")
 
-        s.extend(Restfulie::Common::Converter::Atom)
-
-        feed = s.to_atom
+        feed = Restfulie::Common::Converter::Atom.to_atom(s)
         feed.title.should == 'Example Feed'
         feed.links.first.href.should == 'http://example.org/'
         feed.updated.year.should == 2010
@@ -52,15 +50,28 @@ describe Restfulie::Common::Converter do
         entry.updated.day.should == 25
         entry.summary.should == 'Some text.'
 
+        hash = Restfulie::Common::Converter::Atom.to_hash(s)
+        hash["feed"]["title"].should == 'Example Feed'
+        hash["feed"]["link"]["href"].should == 'http://example.org/'
+        hash["feed"]["entry"]["title"].should == 'Atom-Powered Robots Run Amok'
       end
 
       it 'should convert simple class to atom representation' do
         obj = Restfulie::Common::Converter::Test::SimpleClass.new('id','title',DateTime.parse(DateTime.now.to_s))
-        obj.extend(Restfulie::Common::Converter::Atom)
-        feed = obj.to_atom
+        feed = Restfulie::Common::Converter::Atom.to_atom(obj)
         feed.id.should == obj.id
         feed.title.should == obj.title
         feed.updated.year.should == obj.updated.year
+      end
+
+      it "should convert feed in hash" do
+        feed = Atom::Feed.new
+        feed.id = 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6'
+        feed.title = "Example Feed"
+
+        hash = Restfulie::Common::Converter::Atom.to_hash(feed)
+        hash["feed"]["id"].should == 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6'
+        hash["feed"]["title"].should == 'Example Feed'
       end
 
     end
@@ -68,7 +79,6 @@ describe Restfulie::Common::Converter do
     describe 'Custom Convertion' do
       before do
         @obj = Restfulie::Common::Converter::Test::SimpleClass.new('id','title',DateTime.parse(DateTime.now.to_s))
-        @obj.extend(Restfulie::Common::Converter::Atom)
       end
 
       it 'should convert simple class to atom representation' do
@@ -79,7 +89,7 @@ describe Restfulie::Common::Converter do
           representation.links   << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
         end
 
-        feed = @obj.to_atom(:simple_recipe)
+        feed = Restfulie::Common::Converter::Atom.to_atom(@obj, :simple_recipe)
         feed.id.should == @obj.id
         feed.title.should == "#{@obj.title}/#{@obj.id}"
         feed.updated.year.should == @obj.updated.year
@@ -89,7 +99,7 @@ describe Restfulie::Common::Converter do
       end
 
       it "should convert with recipe block" do
-        feed = @obj.to_atom do |representation, obj|
+        feed = Restfulie::Common::Converter::Atom.to_atom(@obj) do |representation, obj|
           representation.id      = obj.id
           representation.title   = "#{obj.title}/#{obj.id}"
           representation.updated = obj.updated
@@ -110,8 +120,7 @@ describe Restfulie::Common::Converter do
       it "raiser error to invalid atom type" do
         lambda {
           obj = Object.new
-          obj.extend(Restfulie::Common::Converter::Atom)
-          obj.to_atom(nil, :foo)
+          Restfulie::Common::Converter::Atom.to_atom(obj, nil, :foo)
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined atom type foo")
       end
 
@@ -124,16 +133,14 @@ describe Restfulie::Common::Converter do
               <updated>2010-12-13T18:30:02Z</updated>
             </feed> ).join(" ")
         lambda {
-          s.extend(Restfulie::Common::Converter::Atom)
-          s.to_atom
+          Restfulie::Common::Converter::Atom.to_atom(s)
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined required value id from Atom::Feed")
       end
 
       it "raiser error from requerid attribute in recipe" do
         lambda {
           obj = Object.new
-          obj.extend(Restfulie::Common::Converter::Atom)
-          obj.to_atom do |rep|
+          Restfulie::Common::Converter::Atom.to_atom(obj) do |rep|
             rep.id = obj.object_id
           end
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined required value title from Atom::Entry")
