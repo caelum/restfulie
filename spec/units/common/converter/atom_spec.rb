@@ -66,33 +66,42 @@ describe Restfulie::Common::Converter do
     end
 
     describe 'Custom Convertion' do
+      before do
+        @obj = Restfulie::Common::Converter::Test::SimpleClass.new('id','title',DateTime.parse(DateTime.now.to_s))
+        @obj.extend(Restfulie::Common::Converter::Atom)
+      end
 
-      before(:all) do
+      it 'should convert simple class to atom representation' do
         Restfulie::Common::Converter::Atom.describe_recipe(:simple_recipe) do |representation, obj|
           representation.id      = obj.id
           representation.title   = "#{obj.title}/#{obj.id}"
           representation.updated = obj.updated
           representation.links   << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
-        end        
-      end
+        end
 
-      it 'should convert simple class to atom representation' do
-        obj = Restfulie::Common::Converter::Test::SimpleClass.new('id','title',DateTime.parse(DateTime.now.to_s))
-        obj.extend(Restfulie::Common::Converter::Atom)
-
-        feed = obj.to_atom(:simple_recipe)
-        feed.id.should == obj.id
-        feed.title.should == "#{obj.title}/#{obj.id}"
-        feed.updated.year.should == obj.updated.year
+        feed = @obj.to_atom(:simple_recipe)
+        feed.id.should == @obj.id
+        feed.title.should == "#{@obj.title}/#{@obj.id}"
+        feed.updated.year.should == @obj.updated.year
         link = feed.links.first
         link.href.should == 'http://localhost'
         link.rel.should == :self
+      end
 
-        feed = obj.to_atom
-        feed.id.should == obj.id
-        feed.title.should == obj.title
-        feed.updated.year.should == obj.updated.year
-        feed.links.size.should == 0
+      it "should convert with recipe block" do
+        feed = @obj.to_atom do |representation, obj|
+          representation.id      = obj.id
+          representation.title   = "#{obj.title}/#{obj.id}"
+          representation.updated = obj.updated
+          representation.links   << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
+        end
+        
+        feed.id.should == @obj.id
+        feed.title.should == "#{@obj.title}/#{@obj.id}"
+        feed.updated.year.should == @obj.updated.year
+        link = feed.links.first
+        link.href.should == 'http://localhost'
+        link.rel.should == :self
       end
       
     end
@@ -118,6 +127,16 @@ describe Restfulie::Common::Converter do
           s.extend(Restfulie::Common::Converter::Atom)
           s.to_atom
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined required value id from Atom::Feed")
+      end
+
+      it "raiser error from requerid attribute in recipe" do
+        lambda {
+          obj = Object.new
+          obj.extend(Restfulie::Common::Converter::Atom)
+          obj.to_atom do |rep|
+            rep.id = obj.object_id
+          end
+        }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined required value title from Atom::Entry")
       end
     end
 

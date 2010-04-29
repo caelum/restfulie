@@ -31,15 +31,16 @@ module Restfulie::Common::Converter
       ::Atom::Link.new(options)
     end
 
-    def to_atom(recipe_name = nil, atom_type = :entry)
+    def to_atom(recipe_name = nil, atom_type = :entry, &recipe)
       raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{atom_type}") unless [:entry,:feed].include?(atom_type)
 
       if self.is_a?(::String)
         atom = ::Atom.load(self)
       else
-        recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym]
+        recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym] unless block_given?
         atom   = "::Atom::#{atom_type.to_s.camelize}".constantize.new
-        recipe.call(atom, self)
+        # Check recipe arity size before calling it
+        recipe.call(*[atom, self][0,recipe.arity])
       end
 
       REQUIRED_ATTRIBUTES[atom_type].each do |attr_sym|
