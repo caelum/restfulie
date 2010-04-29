@@ -15,8 +15,13 @@ module Restfulie
 
         module ClassMethods
           def call(env)
-            if include_restfulie?
-              return env["action_controller.restfulie.response"] if env.has_key?("action_controller.restfulie.response")
+            if include_restfulie? && env.has_key?("action_controller.restfulie.response")
+              if logger && logger.info?
+                information = "Status: #{env["action_controller.restfulie.response"][0]} "
+                information << ::ActionController::StatusCodes::STATUS_CODES[env["action_controller.restfulie.response"][0]]
+                logger.info(information) 
+              end
+              return env["action_controller.restfulie.response"] 
             end
             super
           end
