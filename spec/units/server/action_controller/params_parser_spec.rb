@@ -78,11 +78,15 @@ class ParamsParserTest < ActionController::IntegrationTest
     with_test_route_set do
       begin
         $stderr = StringIO.new
+        log_io = StringIO.new
+        ::ActionController::Base.logger = Logger.new(log_io)
+
         post '/create', 
           '<feed xmlns="http://www.w3.org/2005/Atom">Top Ten Songs feed</title><id>http://local/songs_top_ten</id></feed>',
           :content_type => 'application/atom+xml'
 
         assert_response :bad_request
+        assert_match /400 Bad Request/, log_io.string 
         $stderr.rewind 
       ensure
         $stderr = STDERR
@@ -92,10 +96,14 @@ class ParamsParserTest < ActionController::IntegrationTest
 
   def test_unsupported_media_type_when_doing_post_with_csv
     with_test_route_set do
+      log_io = StringIO.new
+      ::ActionController::Base.logger = Logger.new(log_io)
+
       post '/create', 'name,age\njohndoe,42', 
         :content_type => 'text/csv'
 
       assert_response :unsupported_media_type
+      assert_match /415 Unsupported Media Type/, log_io.string 
     end
   end
 
