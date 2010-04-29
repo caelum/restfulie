@@ -2,6 +2,15 @@ module Restfulie::Common::Converter
 
   module Atom
 
+    mattr_reader :media_type_name
+    @@media_type_name = 'application/atom+xml'
+
+    mattr_reader :headers
+    @@headers = { 
+      :get  => { 'Accept'       => media_type_name },
+      :post => { 'Content-Type' => media_type_name }
+    }
+
     REQUIRED_ATTRIBUTES = {
       :feed  => [:title, :id, :updated],
       :entry => [:title, :id, :updated] 
@@ -64,6 +73,19 @@ module Restfulie::Common::Converter
 
          Hash.from_xml(xml).with_indifferent_access unless xml.nil?
       end
+
+
+      def to_s(obj)
+        return obj if obj.kind_of?(String)
+        if obj.respond_to?(:to_xml)
+          obj.to_xml.to_s
+        else
+          obj.to_s
+        end
+      end
+
+      alias_method :unmarshal, :to_atom
+      alias_method :marshal, :to_s
 
     end
   end

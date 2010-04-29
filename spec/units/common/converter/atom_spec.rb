@@ -74,6 +74,17 @@ describe Restfulie::Common::Converter do
         hash["feed"]["title"].should == 'Example Feed'
       end
 
+      it "should convert entry in string" do
+        entry = Atom::Entry.new
+        entry.id = 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6'
+        entry.title = "Example Entry"
+
+        string = Restfulie::Common::Converter::Atom.to_s(entry)
+        entry_by_parser = Atom.load(string)
+        entry_by_parser.id.should == entry.id
+        entry_by_parser.title.should == entry.title
+      end
+
     end
 
     describe 'Custom Convertion' do
