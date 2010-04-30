@@ -10,7 +10,7 @@ module Restfulie
           base.responder = Restfulie::Server::ActionController::RestfulResponder
           base.extend(Restfulie::Server::ActionController::Base::ClassMethods)
           # Atom representation is added by default
-          ParamsParser.register('application/atom+xml', Restfulie::Common::Representation::Atom)
+          ParamsParser.register('application/atom+xml', Restfulie::Common::Converter::Atom)
         end
 
         module ClassMethods

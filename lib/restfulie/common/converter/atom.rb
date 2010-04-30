@@ -59,6 +59,8 @@ module Restfulie::Common::Converter
         end
         atom
       end
+      
+      alias_method :unmarshal, :to_atom
 
       def to_hash(obj)
         return obj if obj.kind_of?(Hash)
@@ -84,9 +86,9 @@ module Restfulie::Common::Converter
         end
       end
 
-      alias_method :unmarshal, :to_atom
-      alias_method :marshal, :to_s
-
+      def marshal(obj, recipe_name = nil)
+         to_atom(obj, recipe_name).to_xml
+      end
     end
   end
 end

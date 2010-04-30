@@ -9,7 +9,7 @@ module Restfulie::Client::HTTP
     include ::Restfulie::Client::HTTP::RequestHistory
     
     @@representations = {
-      'application/atom+xml' => ::Restfulie::Common::Representation::Atom
+      'application/atom+xml' => ::Restfulie::Common::Converter::Atom
     }
     def self.register_representation(media_type,representation)
       @@representations[media_type] = representation

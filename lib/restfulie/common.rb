@@ -15,7 +15,6 @@ end
   errors
   logger
   builder
-  representation
   converter
 ).each do |file| 
   require "restfulie/common/#{file}"
