@@ -39,7 +39,6 @@ class Restfulie::Common::Builder::Marshalling::Xml::MemberRule < Restfulie::Comm
     # Transitions
     links.each do |link|
       atom_link = {:rel => link.rel, :href => link.href, :type => link.type}
-      
 
       # Self
       if link.href.nil?
@@ -94,6 +93,8 @@ private
 
     rule.blocks.unshift(default_collection_rule) if options[:default_rule]
     rule.apply(objects, options)
+    
+    # setup code from Rails to_xml
 
      options[:root]     ||= objects.all? { |e| e.is_a?(objects.first.class) && objects.first.class.to_s != "Hash" } ? objects.first.class.to_s.underscore.pluralize : "records"
      options[:children] ||= options[:root].singularize
@@ -117,7 +118,7 @@ private
      options.delete(:values)
      member_options = options.merge(rule.members_options || {})
      member_options[:skip_instruct] = true
-     result = start_with_namespace(rule.namespaces, writer, root, options[:skip_types] ? {} : {:type => "array"}) do
+     start_with_namespace(rule.namespaces, writer, root, options[:skip_types] ? {} : {}) do
        rule.to_xml(writer)
        yield writer if block_given?
        
@@ -125,7 +126,7 @@ private
          builder_entry(e, writer, children, rule.members_blocks || [], member_options)
        }
      end
-
+     
   end
   
   def start_with_namespace(namespaces, writer, root, condition, &block)
@@ -158,7 +159,7 @@ private
     rule.blocks.unshift(default_member_rule) if options[:default_rule]
     rule.apply(object, options)
     
-    start_with_namespace(rule.namespaces, xml, children, options[:skip_types] ? {} : {:type => "array"}) do |inner_xml|
+    start_with_namespace(rule.namespaces, xml, children, {}) do |inner_xml|
       rule.to_xml(object, inner_xml)
     end
   end
