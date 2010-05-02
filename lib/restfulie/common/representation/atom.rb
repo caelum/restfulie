@@ -22,7 +22,9 @@ module Restfulie::Common::Representation
       end
     end
 
-    def marshal(string, rel)
+    def marshal(entity, rel)
+      return entity if entity.kind_of? String
+      entity.to_xml
       string
     end
 
