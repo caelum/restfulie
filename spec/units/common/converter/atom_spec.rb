@@ -140,14 +140,18 @@ describe Restfulie::Common::Converter do
       end
 
       it 'should convert simple class to atom representation' do
-        Restfulie::Common::Converter::Atom.describe_recipe(:simple_recipe) do |representation, obj|
-          representation.id      = obj.id
-          representation.title   = "#{obj.title}/#{obj.id}"
-          representation.updated = obj.updated
-          representation.links   << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
+        Restfulie::Common::Converter::Atom.describe_recipe(:id_recipe) do |representation, obj|
+          representation.id = obj.id
         end
 
-        feed = Restfulie::Common::Converter::Atom.to_atom(@obj, :recipe => :simple_recipe)
+        Restfulie::Common::Converter::Atom.describe_recipe(:title_recipe) do |representation, obj|
+          representation.title = "#{obj.title}/#{obj.id}"
+        end
+
+        feed = Restfulie::Common::Converter::Atom.to_atom(@obj, :recipes => [:id_recipe, :title_recipe]) do |representation, obj|
+          representation.links << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
+        end
+
         feed.id.should == @obj.id
         feed.title.should == "#{@obj.title}/#{@obj.id}"
         feed.updated.year.should == @obj.updated.year
@@ -200,11 +204,20 @@ describe Restfulie::Common::Converter do
           obj = Object.new
           Restfulie::Common::Converter::Atom.to_atom(obj) do |rep|
             rep.id = obj.object_id
+            rep.title = nil
           end
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined required value title from Atom::Entry")
       end
     end
 
+  end
+
+  def to_atom(*args, &recipe)
+    Restfulie::Common::Converter::Atom.to_atom(*args, &recipe)
+  end
+
+  def register_recipe(*args, &recipe)
+    Restfulie::Common::Converter::Atom.register_recipe(*args, &recipe)
   end
 
 end

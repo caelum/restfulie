@@ -23,7 +23,7 @@ module Restfulie::Common::Converter
       @@recipes["default_#{type}".to_sym] = lambda do |atom, obj, options|
         REQUIRED_ATTRIBUTES[type].each do |attr_sym|
           values   = options[:values][attr_sym] rescue nil
-          values ||= obj.send(attr_sym) if obj.respond_to?(attr_sym)
+          silence_warnings { values ||= obj.send(attr_sym) if obj.respond_to?(attr_sym) }
           atom.send("#{attr_sym}=".to_sym, values)
         end
 
@@ -52,10 +52,21 @@ module Restfulie::Common::Converter
         if obj.kind_of?(::String)
           atom = ::Atom.load(obj)
         else
-          recipe = @@recipes[options[:recipe]] || @@recipes["default_#{options[:atom_type]}".to_sym] unless block_given?
+          
+          recipes = ["default_#{options[:atom_type]}".to_sym]
+          unless options[:recipes].nil?
+             recipes += options[:recipes].kind_of?(Array) ? options[:recipes] : [options[:recipes]]
+          end
+          recipes << recipe if block_given?
+
+          # Get recipes in recipes list
+          recipes.map! { |item| item.respond_to?(:call) ? item : @@recipes[item] }
           atom   = "::Atom::#{options[:atom_type].to_s.camelize}".constantize.new
+
           # Check recipe arity size before calling it
-          recipe.call(*[atom, obj, options][0,recipe.arity])
+          recipes.each do |recipe|
+            recipe.call(*[atom, obj, options][0,recipe.arity])
+          end
         end
 
         REQUIRED_ATTRIBUTES[options[:atom_type]].each do |attr_sym|
@@ -90,8 +101,8 @@ module Restfulie::Common::Converter
         end
       end
 
-      def marshal(obj, recipe = nil)
-         to_atom(obj, :recipe => recipe).to_xml
+      def marshal(obj, recipes = nil)
+         to_atom(obj, :recipes => recipes).to_xml
       end
 
     private 
