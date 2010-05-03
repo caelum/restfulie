@@ -25,11 +25,11 @@ module Restfulie::Client::HTTP
       self
     end
 
-    def post(payload,options={:recipe => nil})
+    def post(payload, options = { :recipe => nil })
       request(:post, path, payload, options.merge(headers))
     end
 
-    def post!(payload,options={:recipe => nil})
+    def post!(payload, options = { :recipe => nil })
       request!(:post, path, payload, options.merge(headers))
     end
 
@@ -37,12 +37,12 @@ module Restfulie::Client::HTTP
     #otherwise tries to parse the content with a mediatype handler or returns the response itself.
     def request!(method, path, *args)
       representation = do_conneg_and_choose_representation(method, path, *args)
-      recipe_name = get_recipe_name(*args)
+      recipe = get_recipe(*args)
       return super(method, path, *args) if @raw
       return super(method, path, *args) unless representation
       if has_payload?(method, path, *args)
         payload = get_payload(method, path, *args)
-        payload = representation.marshal(payload,recipe_name)
+        payload = representation.marshal(payload, recipe)
         args = set_marshalled_payload(method, path, payload, *args)
       end
       args = add_representation_headers(method, path, representation, *args)
@@ -55,11 +55,11 @@ module Restfulie::Client::HTTP
 
     private
 
-    def get_recipe_name(*args)
-      headers_and_recipe_name = args.extract_options! 
-      recipe_name = headers_and_recipe_name.delete(:recipe)
-      args << headers_and_recipe_name
-      recipe_name
+    def get_recipe(*args)
+      headers_and_recipe = args.extract_options! 
+      recipe = headers_and_recipe.delete(:recipe)
+      args << headers_and_recipe
+      recipe
     end
     
     def do_conneg_and_choose_representation(method, path, *args)

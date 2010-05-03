@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 
 module Restfulie::Common::Converter::Test
   class SimpleClass
@@ -83,8 +84,54 @@ describe Restfulie::Common::Converter do
         entry_by_parser = Atom.load(string)
         entry_by_parser.id.should == entry.id
         entry_by_parser.title.should == entry.title
+        entry_by_parser.updated.should == entry.updated
       end
 
+    end
+
+    describe 'Default Convertion' do
+      describe "Entry" do
+        it "should convert simple class object to atom representation" do
+          obj = Restfulie::Common::Converter::Test::SimpleClass.new('id','title',DateTime.parse(DateTime.now.to_s))
+          entry = Restfulie::Common::Converter::Atom.to_atom(obj)
+          entry.id.should == obj.id
+          entry.title.should == obj.title
+          entry.updated.should == obj.updated
+        end
+
+        it "should convert ActiveRecord instance to atom representation" do
+          obj = Album.create(:title => "Album")
+
+          entry = Restfulie::Common::Converter::Atom.to_atom(obj)
+          entry.id.should == obj.id
+          entry.title.should == obj.title
+          entry.updated.should == obj.updated_at
+        end
+
+        it "should convert simple object to entry attom" do
+          obj = Object.new
+          values = { :id => "uri:1212", :title => "Object title", :updated => DateTime.parse("2010-01-13T18:30:02Z")}
+
+          entry = Restfulie::Common::Converter::Atom.to_atom(obj, :values => values)
+          entry.id.should == values[:id]
+          entry.title.should == values[:title]
+          entry.updated.should == values[:updated]
+        end
+      end
+
+      describe "Feed" do
+        it "should convert array of the simple instance to atom represenation" do
+          @time   = DateTime.parse("2010-01-13T18:30:02Z")
+          @albums = [Album.create, Album.create]
+
+          @albums.last.updated_at = @time
+          feed = Restfulie::Common::Converter::Atom.to_atom(@albums, :values => { :id => "uri:1212" })
+          feed.should be_kind_of(Atom::Feed)
+          feed.id.should == "uri:1212"
+          feed.title.should == "Albums feed"
+          feed.updated.should == @albums.first.updated_at.to_datetime
+        end
+      end
     end
 
     describe 'Custom Convertion' do
@@ -100,7 +147,7 @@ describe Restfulie::Common::Converter do
           representation.links   << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
         end
 
-        feed = Restfulie::Common::Converter::Atom.to_atom(@obj, :simple_recipe)
+        feed = Restfulie::Common::Converter::Atom.to_atom(@obj, :recipe => :simple_recipe)
         feed.id.should == @obj.id
         feed.title.should == "#{@obj.title}/#{@obj.id}"
         feed.updated.year.should == @obj.updated.year
@@ -131,7 +178,7 @@ describe Restfulie::Common::Converter do
       it "raiser error to invalid atom type" do
         lambda {
           obj = Object.new
-          Restfulie::Common::Converter::Atom.to_atom(obj, nil, :foo)
+          Restfulie::Common::Converter::Atom.to_atom(obj, :atom_type => :foo)
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined atom type foo")
       end
 

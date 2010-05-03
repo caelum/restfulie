@@ -17,18 +17,20 @@ module Restfulie::Common::Converter
     }
 
     mattr_reader :recipes
-    @@recipes = {
-      :default_feed => lambda do |feed, obj|
-        REQUIRED_ATTRIBUTES[:feed].each do |attr_sym|
-          feed.send("#{attr_sym}=".to_sym,obj.send(attr_sym)) if obj.respond_to?(attr_sym)
+    @@recipes = {}
+
+    REQUIRED_ATTRIBUTES.keys.each do |type|
+      @@recipes["default_#{type}".to_sym] = lambda do |atom, obj, options|
+        REQUIRED_ATTRIBUTES[type].each do |attr_sym|
+          values   = options[:values][attr_sym] rescue nil
+          values ||= obj.send(attr_sym) if obj.respond_to?(attr_sym)
+          atom.send("#{attr_sym}=".to_sym, values)
         end
-      end,
-      :default_entry => lambda do |entry, obj|
-        REQUIRED_ATTRIBUTES[:entry].each do |attr_sym|
-          entry.send("#{attr_sym}=".to_sym,obj.send(attr_sym)) if obj.respond_to?(attr_sym)
-        end
-      end,
-    }
+
+        atom.updated ||= updated(obj)
+        atom.title ||= type == :feed ? "#{obj.first.class.to_s.pluralize.demodulize} feed" : "Entry about #{obj.class.to_s.demodulize}"
+      end
+    end
 
     class << self
 
@@ -42,19 +44,21 @@ module Restfulie::Common::Converter
         ::Atom::Link.new(options)
       end
 
-      def to_atom(obj, recipe_name = nil, atom_type = :entry, &recipe)
-        raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{atom_type}") unless [:entry,:feed].include?(atom_type)
+      def to_atom(obj, options = {}, &recipe)
+        options[:atom_type] ||= obj.respond_to?(:each) ? :feed : :entry
+
+        raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{options[:atom_type]}") unless [:entry,:feed].include?(options[:atom_type])
 
         if obj.kind_of?(::String)
           atom = ::Atom.load(obj)
         else
-          recipe = @@recipes[recipe_name] || @@recipes["default_#{atom_type}".to_sym] unless block_given?
-          atom   = "::Atom::#{atom_type.to_s.camelize}".constantize.new
+          recipe = @@recipes[options[:recipe]] || @@recipes["default_#{options[:atom_type]}".to_sym] unless block_given?
+          atom   = "::Atom::#{options[:atom_type].to_s.camelize}".constantize.new
           # Check recipe arity size before calling it
-          recipe.call(*[atom, obj][0,recipe.arity])
+          recipe.call(*[atom, obj, options][0,recipe.arity])
         end
 
-        REQUIRED_ATTRIBUTES[atom_type].each do |attr_sym|
+        REQUIRED_ATTRIBUTES[options[:atom_type]].each do |attr_sym|
           raise Restfulie::Common::Error::ConverterError.new("Undefined required value #{attr_sym} from #{atom.class}") unless atom.send(attr_sym)
         end
         atom
@@ -86,9 +90,22 @@ module Restfulie::Common::Converter
         end
       end
 
-      def marshal(obj, recipe_name = nil)
-         to_atom(obj, recipe_name).to_xml
+      def marshal(obj, recipe = nil)
+         to_atom(obj, :recipe => recipe).to_xml
       end
+
+    private 
+
+      def updated(obj)
+        if obj.respond_to?(:updated_at)
+          obj.updated_at 
+        elsif obj.respond_to?(:map)
+          obj.map { |item| item.updated_at if item.respond_to?(:updated_at) }.compact.max
+        else
+          Time.now
+        end
+      end
+
     end
   end
 end
