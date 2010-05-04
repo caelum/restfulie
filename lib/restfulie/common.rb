@@ -14,6 +14,7 @@ end
 %w(
   errors
   logger
+  core_ext
   builder
   converter
 ).each do |file| 
