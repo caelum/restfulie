@@ -11,17 +11,27 @@ module Restfulie::Common::Converter
       :post => { 'Content-Type' => media_type_name }
     }
 
-    REQUIRED_ATTRIBUTES = {
-      :feed  => [:title, :id, :updated],
-      :entry => [:title, :id, :updated] 
+    ATOM_ATTRIBUTES = {
+      :entry => {
+        :required    => [:id, :title, :updated],
+        :recommended => [:author, :link, :content, :summary],
+        :optional    => [:category, :contributor, :rights, :published, :source]
+      },
+
+      :feed  => {
+        :required    => [:id, :title, :updated],
+        :recommended => [:author, :link],
+        :optional    => [:category, :contributor, :rights, :generator, :icon, :logo, :subtitle]
+      }
+    
     }
 
     mattr_reader :recipes
     @@recipes = {}
 
-    REQUIRED_ATTRIBUTES.keys.each do |type|
+    ATOM_ATTRIBUTES.keys.each do |type|
       @@recipes["default_#{type}".to_sym] = lambda do |atom, obj, options|
-        REQUIRED_ATTRIBUTES[type].each do |attr_sym|
+        ATOM_ATTRIBUTES[type][:required].each do |attr_sym|
           values   = options[:values][attr_sym] rescue nil
           silence_warnings { values ||= obj.send(attr_sym) if obj.respond_to?(attr_sym) }
           atom.send("#{attr_sym}=".to_sym, values)
@@ -65,11 +75,11 @@ module Restfulie::Common::Converter
 
           # Check recipe arity size before calling it
           recipes.each do |recipe|
-            recipe.call(*[atom, obj, options][0,recipe.arity])
+            recipe.call_include_helpers(Restfulie::Common::Converter::Atom::Helpers, *[atom, obj, options][0,recipe.arity])
           end
         end
 
-        REQUIRED_ATTRIBUTES[options[:atom_type]].each do |attr_sym|
+        ATOM_ATTRIBUTES[options[:atom_type]][:required].each do |attr_sym|
           raise Restfulie::Common::Error::ConverterError.new("Undefined required value #{attr_sym} from #{atom.class}") unless atom.send(attr_sym)
         end
         atom

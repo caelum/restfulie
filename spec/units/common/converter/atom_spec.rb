@@ -11,7 +11,6 @@ module Restfulie::Common::Converter::Test
 end
 
 describe Restfulie::Common::Converter do
-
   describe 'Atom' do
 
     describe 'default convertion' do
@@ -134,21 +133,41 @@ describe Restfulie::Common::Converter do
       end
     end
 
+    describe "Helpers" do
+      describe "namespace" do
+
+        it "should create namespace" do
+          obj = simple_object('uri:1212', 'object title', Time.now)
+
+          feed = to_atom(obj) do |rep|
+            namespace(rep, :album, "http://localhost/albums") do |ns|
+              ns.description = "Album Description"
+              ns.composer = "Composer Name"
+            end
+          end
+
+          feed.album_description.should == "Album Description"
+          feed.album_composer.should == "Composer Name"
+        end
+
+      end
+    end
+
     describe 'Custom Convertion' do
       before do
         @obj = Restfulie::Common::Converter::Test::SimpleClass.new('id','title',DateTime.parse(DateTime.now.to_s))
       end
 
       it 'should convert simple class to atom representation' do
-        Restfulie::Common::Converter::Atom.describe_recipe(:id_recipe) do |representation, obj|
+        describe_recipe(:id_recipe) do |representation, obj|
           representation.id = obj.id
         end
 
-        Restfulie::Common::Converter::Atom.describe_recipe(:title_recipe) do |representation, obj|
+        describe_recipe(:title_recipe) do |representation, obj|
           representation.title = "#{obj.title}/#{obj.id}"
         end
 
-        feed = Restfulie::Common::Converter::Atom.to_atom(@obj, :recipes => [:id_recipe, :title_recipe]) do |representation, obj|
+        feed = to_atom(@obj, :recipes => [:id_recipe, :title_recipe]) do |representation, obj|
           representation.links << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
         end
 
@@ -216,8 +235,12 @@ describe Restfulie::Common::Converter do
     Restfulie::Common::Converter::Atom.to_atom(*args, &recipe)
   end
 
-  def register_recipe(*args, &recipe)
-    Restfulie::Common::Converter::Atom.register_recipe(*args, &recipe)
+  def describe_recipe(*args, &recipe)
+    Restfulie::Common::Converter::Atom.describe_recipe(*args, &recipe)
+  end
+  
+  def simple_object(*args)
+    Restfulie::Common::Converter::Test::SimpleClass.new(*args)
   end
 
 end
