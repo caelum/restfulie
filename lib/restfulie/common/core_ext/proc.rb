@@ -10,31 +10,39 @@ class Proc
     helpers      = [helpers] unless helpers.kind_of?(Array) 
     helpers      = helpers.map { |helper| Object.new.send(:extend, helper) }
     block_caller = eval("self", self.binding)
-    meta_class   = block_caller.instance_eval { (class << self; self; end) }
 
-    old_missing_method = "__modincluded_#{Thread.current.object_id.abs}".to_sym
-
-    meta_class.send(:alias_method, old_missing_method, :method_missing) if block_caller.respond_to?(:method_missing)
-    meta_class.send(:define_method, :method_missing) do |symbol, *args|
-      begin
-        begin
-          helpers.find { |h| h.respond_to?(symbol) }.send(symbol, *args)
-        rescue
-          super
-        end
-      rescue NoMethodError => e
-        error = NameError.new("undefined local variable or method `#{symbol}` for #{block_caller}")
-        error.set_backtrace(caller[0..0] + caller[5..-1])
-        raise error
-      end
+    m = extensible_module(block_caller)
+    m.send(:define_method, :method_missing) do |symbol, *args, &block|
+      mod = helpers.find { |h| h.respond_to?(symbol) }
+      mod.nil? ? super : mod.send(symbol, *args, &block)
     end
 
+    block_caller.extend(m)
     result = old_call(*args)
-
-    meta_class.send(:undef_method, :method_missing)
-    meta_class.send(:alias_method, :method_missing, old_missing_method) if block_caller.respond_to?(old_missing_method)
+    m.send(:remove_method, :method_missing)
 
     result
   end
+
+private
+
+  # Search for extending the module in ancestors
+  def extensible_module(object)
+    ancestors  = object.instance_eval { (class << self; self; end) }.ancestors
+    
+    extend_mod = ancestors.find { |ancestor|
+      !ancestor.instance_methods.include?("method_missing") && ancestor.instance_eval { (class << self; self; end) }.ancestors.include?(ProcIncludedHelpers)
+    }
+
+    if extend_mod.nil?    
+      extend_mod = Module.new
+      extend_mod.extend(ProcIncludedHelpers)
+    end
+
+    extend_mod
+  end
+
+  module ProcIncludedHelpers; end
+
 end
 

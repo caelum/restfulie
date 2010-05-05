@@ -27,6 +27,20 @@ context Proc do
     block.helpers = [ProcSpec::DowncaseHelper, ProcSpec::HttpHelper]
     block.call.should eql([@title.downcase, "http://#{@url}"])
   end
+
+  it "should allow nested blocks" do
+    @title = "Proc Extended Spec"
+    @url   = "example.com"
+    block = lambda do
+      inter_block = lambda do
+        title(@title)
+      end
+      inter_block.call_include_helpers(ProcSpec::DowncaseHelper)
+      [title(@title), add_http(@url)]
+    end
+    block.helpers = [ProcSpec::DowncaseHelper, ProcSpec::HttpHelper]
+    block.call.should eql([@title.downcase, "http://#{@url}"])
+  end
   
   it "should not change context class" do
     f = ProcSpec::Foo.new
@@ -44,6 +58,34 @@ context Proc do
     f.exec_block { |a| a }
     f.booo.should eql("method booo not implemented")
   end
+
+  it "should pass block to helper method" do
+    result = nil
+    f = Proc.new do
+      exec_block do
+        result = "Internal block executed"
+      end
+    end
+
+    f.helpers = ProcSpec::BlockPass
+    f.call
+    result.should == "Internal block executed"
+  end
+
+  it "should raise error" do
+    f = Proc.new {}
+    f.call_include_helpers(ProcSpec::BlockPass)
+    lambda {
+      foo_method(nil)
+    }.should raise_error(NameError)
+  end
+
+  it "should raise error for argument" do
+    f = Proc.new { title("title", "not valid argument") }
+    lambda {
+      f.call_include_helpers(ProcSpec::DowncaseHelper)
+    }.should raise_error(ArgumentError)
+  end
   
 end # context Proc
 
@@ -57,6 +99,12 @@ module ProcSpec
   module HttpHelper
     def add_http(value)
       "http://#{value}"
+    end
+  end
+
+  module BlockPass
+    def exec_block(&block)
+      block.call
     end
   end
 
