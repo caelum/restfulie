@@ -143,11 +143,14 @@ describe Restfulie::Common::Converter do
             namespace(rep, :album, "http://localhost/albums") do |ns|
               ns.description = "Album Description"
               ns.composer = "Composer Name"
+              ns.tags = ["album", "music", "songs"]
             end
           end
 
+          feed = Atom.load(feed.to_xml)
           feed.album_description.should == "Album Description"
           feed.album_composer.should == "Composer Name"
+          feed["http://localhost/albums", "tag"].should == ["album", "music", "songs"]
         end
 
       end
