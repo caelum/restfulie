@@ -1,0 +1,66 @@
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:materias="http://example.com.br">
+
+
+  <id>uri:materia:1</id>
+  <title>Materias</title>
+  <updated>2010-05-03T16:29:26-03:00</updated>
+
+  <author>
+    <name>Éverton Antônio Ribeiro</name>
+    <email>nuxlli@gmail.com</email>
+  </author>
+
+  <author>                              
+    <name>Luis Felipe Cipriani</name>
+    <email>lfcipriani@gmail.com</email>      
+  </author>
+
+  <materias:dominio>editorial</materias:dominio>
+  <count xmlns="http://example.com.br">
+    <materias>1</materias>
+    <albums>1</albums>
+  </count>
+
+  <link href="http://example.com/next" rel="next" />
+  <link href="http://example.com/previus" rel="previous" />
+
+  <entry xmlns:materias="http://example.com.br">
+
+
+    <id>uri:1</id>
+    <title>Materia 1</title>
+    <updated>2010-05-03T16:29:26-03:00</updated>
+
+
+    <materias:tag>tag1</materias:tag><materias:tag>tag2</materias:tag>
+
+    <materias:criacao>
+      <materias:autor>Luis Felipe Cipriani</materias:autor>
+      <materias:data_de_criacao>2010-05-03T16:29:26-03:00</materias:data_de_criacao>
+    </materias:criacao>
+
+    <materias:editorial editoria="veja">
+      <materias:cateoria>categoria 1, categoria 2</materias:cateoria>
+    </materias:editorial>
+
+    <albums:albums xmlns:albums="http://example.com.br">
+      <albums:id>uri:albums:1</albums:id>
+      <albums:title>Album 1</albums:title>
+    </albums:albums>
+
+
+    <albums xmlns="http://example.com.br" xmlns:song="http://example.com.br">
+      
+      <id>1</id>
+      <song:title></song:title>
+    </albums>
+
+
+
+    <link href="http://example.com/image/1" rel="image" />
+    <link href="http://example.com/image/2" rel="image" type="application/atom+xml" />
+
+  </entry>
+
+
+</feed>

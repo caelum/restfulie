@@ -29,19 +29,6 @@ module Restfulie::Common::Converter
     mattr_reader :recipes
     @@recipes = {}
 
-    ATOM_ATTRIBUTES.keys.each do |type|
-      @@recipes["default_#{type}".to_sym] = lambda do |atom, obj, options|
-        ATOM_ATTRIBUTES[type][:required].each do |attr_sym|
-          values   = options[:values][attr_sym] rescue nil
-          silence_warnings { values ||= obj.send(attr_sym) if obj.respond_to?(attr_sym) }
-          atom.send("#{attr_sym}=".to_sym, values)
-        end
-
-        atom.updated ||= updated(obj)
-        atom.title ||= type == :feed ? "#{obj.first.class.to_s.pluralize.demodulize} feed" : "Entry about #{obj.class.to_s.demodulize}"
-      end
-    end
-
     class << self
 
       def describe_recipe(recipe_name, options={}, &block)
@@ -50,39 +37,35 @@ module Restfulie::Common::Converter
         @@recipes[recipe_name] = block
       end
 
-      def link(options)
-        ::Atom::Link.new(options)
-      end
-
-      def to_atom(obj, options = {}, &recipe)
+      def to_atom(obj = nil, options = {}, &recipe)
         options[:atom_type] ||= obj.respond_to?(:each) ? :feed : :entry
 
         raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{options[:atom_type]}") unless [:entry,:feed].include?(options[:atom_type])
+        
+        recipes = []
+        unless options[:recipes].nil?
+           recipes += options[:recipes].kind_of?(Array) ? options[:recipes] : [options[:recipes]]
+        end
+        recipes << recipe if block_given?
 
-        if obj.kind_of?(::String)
-          atom = ::Atom.load(obj)
-        else
-          
-          recipes = ["default_#{options[:atom_type]}".to_sym]
-          unless options[:recipes].nil?
-             recipes += options[:recipes].kind_of?(Array) ? options[:recipes] : [options[:recipes]]
-          end
-          recipes << recipe if block_given?
+        # Check if we got recipes
+        raise Restfulie::Common::Error::ConverterError.new("Recipe required") if recipes.empty?
 
-          # Get recipes in recipes list
-          recipes.map! { |item| item.respond_to?(:call) ? item : @@recipes[item] }
-          atom   = "::Atom::#{options[:atom_type].to_s.camelize}".constantize.new
+        # Get recipes in recipes list
+        recipes.map! { |item| item.respond_to?(:call) ? item : @@recipes[item] }
 
-          # Check recipe arity size before calling it
-          recipes.each do |recipe|
-            recipe.call_include_helpers(Restfulie::Common::Converter::Atom::Helpers, *[atom, obj, options][0,recipe.arity])
-          end
+        # Create representation and proxy
+        proxy = Builder.new(options[:atom_type])
+
+        # Check recipe arity size before calling it
+        recipes.each do |recipe|
+          recipe.call(*[proxy, obj, options][0,recipe.arity])
         end
 
-        ATOM_ATTRIBUTES[options[:atom_type]][:required].each do |attr_sym|
-          raise Restfulie::Common::Error::ConverterError.new("Undefined required value #{attr_sym} from #{atom.class}") unless atom.send(attr_sym)
-        end
-        atom
+        #ATOM_ATTRIBUTES[options[:atom_type]][:required].each do |attr_sym|
+          #raise Restfulie::Common::Error::ConverterError.new("Undefined required value #{attr_sym} from #{atom.class}") unless atom.send(attr_sym)
+        #end
+        proxy.representation
       end
       
       alias_method :unmarshal, :to_atom
@@ -113,18 +96,6 @@ module Restfulie::Common::Converter
 
       def marshal(obj, recipes = nil)
          to_atom(obj, :recipes => recipes).to_xml
-      end
-
-    private 
-
-      def updated(obj)
-        if obj.respond_to?(:updated_at)
-          obj.updated_at 
-        elsif obj.respond_to?(:map)
-          obj.map { |item| item.updated_at if item.respond_to?(:updated_at) }.compact.max
-        else
-          Time.now
-        end
       end
 
     end

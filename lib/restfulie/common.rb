@@ -5,8 +5,6 @@ require 'rubygems'
 require 'active_support'
 require 'action_controller'
 
-require 'vendor/atom'
-
 module Restfulie
   module Common; end
 end
@@ -15,7 +13,7 @@ end
   errors
   logger
   core_ext
-  builder
+  representation
   converter
 ).each do |file| 
   require "restfulie/common/#{file}"

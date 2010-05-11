@@ -2,9 +2,9 @@
 module Restfulie::Common::Converter; end
 
 %w(
+  components
   atom
-  atom/namespace
-  atom/helpers
+  atom/builder
 ).each do |file|
   require File.join(File.dirname(__FILE__), 'converter', file)
 end
