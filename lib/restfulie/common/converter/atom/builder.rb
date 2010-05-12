@@ -12,7 +12,21 @@ module Restfulie::Common::Converter::Atom
     def values(&block)
       yield Restfulie::Common::Converter::Components::Values.new(self)
     end
+    
+    def members(&block)
+      @converter.obj.each do |member|
+        entry = @doc.create_element("entry")
+        entry.parent = @parent
+        @parent = entry
+        block.call(self, member)
+        @parent = entry.parent
+      end
+    end
+    
+    def link
+    end
 
+    # TODO: Verificar o nível para feed e entry, trabalhar os atributos reservados
     def insert(node, *args, &block)
       node = @doc.create_element(node.to_s)
       node.parent = @parent

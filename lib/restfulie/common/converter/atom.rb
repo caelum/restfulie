@@ -11,21 +11,6 @@ module Restfulie::Common::Converter
       :post => { 'Content-Type' => media_type_name }
     }
 
-    ATOM_ATTRIBUTES = {
-      :entry => {
-        :required    => [:id, :title, :updated],
-        :recommended => [:author, :link, :content, :summary],
-        :optional    => [:category, :contributor, :rights, :published, :source]
-      },
-
-      :feed  => {
-        :required    => [:id, :title, :updated],
-        :recommended => [:author, :link],
-        :optional    => [:category, :contributor, :rights, :generator, :icon, :logo, :subtitle]
-      }
-    
-    }
-
     mattr_reader :recipes
     @@recipes = {}
 
@@ -55,17 +40,14 @@ module Restfulie::Common::Converter
         recipes.map! { |item| item.respond_to?(:call) ? item : @@recipes[item] }
 
         # Create representation and proxy
-        proxy = Builder.new(options[:atom_type])
+        builder = Builder.new(options[:atom_type])
 
         # Check recipe arity size before calling it
         recipes.each do |recipe|
-          recipe.call(*[proxy, obj, options][0,recipe.arity])
+          recipe.call(*[builder, obj, options][0,recipe.arity])
         end
 
-        #ATOM_ATTRIBUTES[options[:atom_type]][:required].each do |attr_sym|
-          #raise Restfulie::Common::Error::ConverterError.new("Undefined required value #{attr_sym} from #{atom.class}") unless atom.send(attr_sym)
-        #end
-        proxy.representation
+        builder.representation
       end
       
       alias_method :unmarshal, :to_atom

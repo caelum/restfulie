@@ -58,6 +58,10 @@ module Restfulie::Common::Representation
     def to_xml
       @doc.to_xml
     end
+    
+    def to_s
+      to_xml
+    end
 
   end
 end
