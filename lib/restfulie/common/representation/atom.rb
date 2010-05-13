@@ -4,6 +4,10 @@ require 'nokogiri'
 module Restfulie::Common::Representation
   # Create a new Representation::Atom object using a +string_or_io+
   # object.
+  #
+  # Examples
+  #   xml  = IO.read("spec/units/lib/atoms/full_atom.xml")
+  #   atom = Restfulie::Common::Representation::Atom.new(xml)
   class Atom
     # RelaxNG file to validate atom
     RELAXNG_ATOM = File.join(File.dirname(__FILE__), 'atom', 'atom.rng')
@@ -29,18 +33,32 @@ module Restfulie::Common::Representation
     def initialize(string_or_io)
       @doc = string_or_io.kind_of?(Nokogiri::XML::Document) ? string_or_io : Nokogiri::XML(string_or_io) 
     end
-
+    
+    # Sugar access
     def id
-      @doc.xpath("//id").inner_text
+      css_in_root("id").inner_text
     end
 
     def title
-      @doc.xpath("//title").inner_text
+      css_in_root("title").inner_text
     end
 
     def updated
-      updated = @doc.xpath("//updated").inner_text
+      updated = css_in_root("updated").inner_text
       updated.nil? ? nil : Time.parse(updated)
+    end
+    
+    # Cipri aqui não funfo direito ainda
+    def authors
+      authors = css_in_root("author")
+      authors.empty? ? [] : authors.map do |author|
+        Hash.from_xml(author.to_xml).with_indifferent_access["author"].extend(HashKeyMethodAccess)
+      end
+    end
+      
+    # Tools
+    def css(*args)
+      @doc.css(*args)
     end
 
     def atom_type
@@ -62,14 +80,22 @@ module Restfulie::Common::Representation
     def to_s
       to_xml
     end
-
+    
+  private
+  
+     def css_in_root(rules)
+       css("#{atom_type} > #{rules}")
+     end
+  end
+  
+  module HashKeyMethodAccess
+    def method_missing(symbol, *args, &block)
+      name = symbol.to_s
+      if name =~ /=$/
+        self[name.chop] = args[0]
+      elsif block_given?
+        self[name]
+      end
+    end
   end
 end
-
-#%w(
-  #base
-  #feed
-  #entry
-#).each do |file|
-  #require File.join(File.dirname(__FILE__), 'atom', file)
-#end

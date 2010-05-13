@@ -1,18 +1,17 @@
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:materias="http://example.com.br">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:albums="http://example.com/albums">
 
-
-  <id>uri:materia:1</id>
-  <title>Materias</title>
+  <id>http://example.com/albums/1</id>
+  <title>Albums feed</title>
   <updated>2010-05-03T16:29:26-03:00</updated>
 
   <author>
-    <name>Éverton Antônio Ribeiro</name>
-    <email>nuxlli@gmail.com</email>
+    <name>John Doe</name>
+    <email>joedoe@example.com</email>
   </author>
 
-  <author>                              
-    <name>Luis Felipe Cipriani</name>
-    <email>lfcipriani@gmail.com</email>      
+  <author>
+    <name>Foo Bar</name>
+    <email>foobar@example.com</email>
   </author>
 
   <materias:dominio>editorial</materias:dominio>
