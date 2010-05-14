@@ -87,22 +87,42 @@ describe Restfulie::Common::Converter do
     end
 
     describe "Feed" do
-      it "should create required attributes" do
+      it "should create media type required attributes" do
         time = Time.now
         feed = to_atom([]) do |collection|
           collection.values do |values|
-            values.id      = "http://example.com/feed"
-            values.title   = "Feed"
-            values.updated = time
+            values.id      "http://example.com/feed"
+            values.title   "Feed"
+            values.updated time
 
             values.author { 
-              values.name  = "John Doe"
-              values.email = "joedoe@example.com"
+              values.name  "John Doe"
+              values.email "joedoe@example.com"
             }
             
             values.author { 
-              values.name  = "Foo Bar"
-              values.email = "foobar@example.com"
+              values.name  "Foo Bar"
+              values.email "foobar@example.com"
+            }
+          end
+        end
+
+        feed.atom_type == "feed"
+        feed.id.should == "http://example.com/feed"
+        feed.title.should == "Feed"
+        feed.updated.should == DateTime.parse(time.xmlschema)
+        feed.authors.first.name.should == "John Doe"
+        feed.authors.last.email.should == "foobar@example.com"
+     end
+
+     it "should create tags with namespace" do
+        time = Time.now
+        feed = to_atom([]) do |collection|
+          collection.values do |values|
+            values.domain "publishing"
+            values.count("xmlns:articles" => "http://a.namespace.com.br") {
+              values["articles"].articles 1
+              values["articles"].albums   2
             }
           end
         end
@@ -110,12 +130,8 @@ describe Restfulie::Common::Converter do
         puts feed.to_xml
 
         feed.atom_type == "feed"
-        feed.id.should == "http://example.com/feed"
-        feed.title.should == "Feed"
-        feed.updated.should == DateTime.parse(time.xmlschema)
-        #feed.author.first.name.should == "John Doe"
-        #feed.author.last.email.should == "foobar@example.com"
      end
+
     end
 
     #describe "Helpers" do

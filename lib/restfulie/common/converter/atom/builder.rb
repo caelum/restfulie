@@ -7,10 +7,16 @@ module Restfulie::Common::Converter::Atom
       @parent = @doc.create_element(atom_type.to_s)
       @parent["xmlns"] = "http://www.w3.org/2005/Atom"
       @parent.parent = @doc
+
+      # This restriction is needed to allow Nokogiri Builder to create tags such as <id> or <class> without using the underscore flag 
+      # Reserved words: insert, to_xml, [], method_missing, respond_to? or any starting with __ 
+      Nokogiri::XML::Builder.instance_methods.each do |m|
+        Nokogiri::XML::Builder.send(:undef_method, m) unless m.to_s =~ /insert|to_xml|\[\]|method_missing|respond_to\?|^__/
+      end
     end
 
     def values(&block)
-      yield Restfulie::Common::Converter::Components::Values.new(self)
+      Nokogiri::XML::Builder.with(@parent, &block)
     end
     
     def members(&block)
@@ -26,25 +32,9 @@ module Restfulie::Common::Converter::Atom
     def link
     end
 
-    # TODO: Verificar o nível para feed e entry, trabalhar os atributos reservados
-    def insert(node, *args, &block)
-      node = @doc.create_element(node.to_s)
-      node.parent = @parent
-      
-      unless block_given?
-        value = args.first
-        value = value.xmlschema if value.kind_of?(Time) || value.kind_of?(DateTime)
-        text = @doc.create_text_node(value)
-        text.parent = node
-      else
-        @parent = node
-        block.call
-        @parent = node.parent
-      end
-    end
-
     def representation
       Restfulie::Common::Representation::Atom.new(@doc)
     end
   end
+
 end

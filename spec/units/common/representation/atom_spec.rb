@@ -21,6 +21,6 @@ describe Restfulie::Common::Representation::Atom do
   it "should access author attributes" do
     @atom.authors.size.should == 2
     @atom.authors.first.name.should == "John Doe"
-    @atom.authors.first.email.should == "foobar@example.com"
+    @atom.authors.first.email.should == "joedoe@example.com"
   end
 end

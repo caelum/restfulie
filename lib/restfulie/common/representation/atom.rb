@@ -48,7 +48,7 @@ module Restfulie::Common::Representation
       updated.nil? ? nil : Time.parse(updated)
     end
     
-    # Cipri aqui não funfo direito ainda
+    # Author have name, and optional uri and email, this describes a person
     def authors
       authors = css_in_root("author")
       authors.empty? ? [] : authors.map do |author|
@@ -93,7 +93,7 @@ module Restfulie::Common::Representation
       name = symbol.to_s
       if name =~ /=$/
         self[name.chop] = args[0]
-      elsif block_given?
+      elsif !block_given?
         self[name]
       end
     end
