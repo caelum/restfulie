@@ -106,7 +106,7 @@ describe Restfulie::Common::Converter do
             }
           end
         end
-
+        puts feed.to_xml
         feed.atom_type == "feed"
         feed.id.should == "http://example.com/feed"
         feed.title.should == "Feed"
@@ -118,13 +118,18 @@ describe Restfulie::Common::Converter do
      it "should create tags with namespace" do
         time = Time.now
         feed = to_atom([]) do |collection|
-          collection.values do |values|
+          
+          collection.values("xmlns:music" => "http://a.namespace.com.br") do |values|
+            
             values.domain "publishing"
-            values.count("xmlns:articles" => "http://a.namespace.com.br") {
-              values["articles"].articles 1
-              values["articles"].albums   2
+            
+            values.count("xmlns:articles" => "http://another.namespace.com.br") {
+              values["articles"].articles(1)
+              values["music"].albums(1)
             }
+            
           end
+          
         end
 
         puts feed.to_xml
