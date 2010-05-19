@@ -1,4 +1,6 @@
 module Restfulie::Common::Converter::Components
+  # This is a Blank Slate class to support the renderization of the values block for Resource Representation Interfaces
+  # Every Media type should implemment a Builder with a insert_value method that renders the values block to a specific format
   class Values
     attr_accessor :builder
 
@@ -12,8 +14,8 @@ module Restfulie::Common::Converter::Components
       @current_prefix = nil
     end
 
-    def [](ns)
-      @current_prefix = ns
+    def [](prefix)
+      @current_prefix = prefix
       self
     end
 

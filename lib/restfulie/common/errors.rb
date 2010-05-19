@@ -9,4 +9,7 @@ module Restfulie::Common::Error
 
   # Converter
   class ConverterError < RestfulieError; end
+  
+  # builder
+  class BuilderError < RestfulieError; end
 end

@@ -2,10 +2,11 @@ module Restfulie::Common::Converter::Atom
   class Builder
     attr_accessor :atom_type
 
-    def initialize(atom_type)
+    def initialize(atom_type, obj)
       @doc    = Nokogiri::XML::Document.new
+      @obj    = obj
       @parent = @doc.create_element(atom_type.to_s)
-      @parent["xmlns"] = "http://www.w3.org/2005/Atom"
+      @parent.add_namespace_definition(nil, "http://www.w3.org/2005/Atom")
       @parent.parent = @doc
     end
 
@@ -21,8 +22,10 @@ module Restfulie::Common::Converter::Atom
       yield Restfulie::Common::Converter::Components::Values.new(self)
     end
     
-    def members(&block)
-      @converter.obj.each do |member|
+    def members(a_collection = nil, &block)
+      collection = a_collection || @obj 
+      raise Restfulie::Common::Error::BuilderError("Members method require a collection to execute") unless collection.respond_to?(:each)
+      collection.each do |member|
         entry = @doc.create_element("entry")
         entry.parent = @parent
         @parent = entry
@@ -31,7 +34,10 @@ module Restfulie::Common::Converter::Atom
       end
     end
     
-    def link
+    def link(relationship, uri, options = {})
+      options["rel"] = relationship
+      options["href"] = uri
+      insert_value("link", nil, options)
     end
 
     def insert_value(name, prefix, *args, &block)
@@ -46,7 +52,7 @@ module Restfulie::Common::Converter::Atom
     end
 
     def representation
-      Restfulie::Common::Representation::Atom.new(@doc)
+      Restfulie::Common::Representation::Atom::Factory.create(@doc)
     end
     
   private
