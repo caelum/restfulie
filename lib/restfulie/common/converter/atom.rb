@@ -22,30 +22,27 @@ module Restfulie::Common::Converter
         @@recipes[recipe_name] = block
       end
 
-      def to_atom(obj = nil, options = {}, &recipe)
+      def to_atom(obj = nil, options = {}, &block)
         options[:atom_type] ||= obj.respond_to?(:each) ? :feed : :entry
-
         raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{options[:atom_type]}") unless [:entry,:feed].include?(options[:atom_type])
         
-        recipes = []
-        unless options[:recipes].nil?
-           recipes += options[:recipes].kind_of?(Array) ? options[:recipes] : [options[:recipes]]
+        if block_given?
+          recipe = block
+        else
+          recipe = options[:recipe]          
         end
-        recipes << recipe if block_given?
 
         # Check if we got recipes
-        raise Restfulie::Common::Error::ConverterError.new("Recipe required") if recipes.empty?
+        raise Restfulie::Common::Error::ConverterError.new("Recipe required") unless recipe
 
-        # Get recipes in recipes list
-        recipes.map! { |item| item.respond_to?(:call) ? item : @@recipes[item] }
+        # Get recipe already described
+        recipe = @@recipes[recipe] unless recipe.respond_to?(:call)
 
         # Create representation and proxy
-        builder = Builder.new(options[:atom_type])
+        builder = Builder.new(options[:atom_type], obj)
 
         # Check recipe arity size before calling it
-        recipes.each do |recipe|
-          recipe.call(*[builder, obj, options][0,recipe.arity])
-        end
+        recipe.call(*[builder, obj, options][0,recipe.arity])
 
         builder.representation
       end
