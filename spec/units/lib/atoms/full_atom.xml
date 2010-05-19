@@ -1,65 +1,90 @@
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:albums="http://example.com/albums">
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <id>http://example.com/albums/1</id>
-  <title>Albums feed</title>
-  <updated>2010-05-03T16:29:26-03:00</updated>
+	<id>http://example.com/albums/1</id>
+	<title>Albums feed</title>
+	<subtitle>all your examples are belong to us</subtitle>
+	<updated>2010-05-03T16:29:26-03:00</updated>
 
-  <author>
-    <name>John Doe</name>
-    <email>joedoe@example.com</email>
-  </author>
+	<author>
+		<name>John Doe</name>
+		<email>joedoe@example.com</email>
+		<uri>Http://john.doe.com</uri>
+	</author>
 
-  <author>
-    <name>Foo Bar</name>
-    <email>foobar@example.com</email>
-  </author>
+	<author>
+		<name>Foo Bar</name>
+		<email>foobar@example.com</email>
+	</author>
 
-  <materias:dominio>editorial</materias:dominio>
-  <count xmlns="http://example.com.br">
-    <materias>1</materias>
-    <albums>1</albums>
-  </count>
+	<contributor>
+		<name>Foo Bar</name>
+		<email>foobar@example.com</email>
+	</contributor>
 
-  <link href="http://example.com/next" rel="next" />
-  <link href="http://example.com/previus" rel="previous" />
+	<generator uri="http://restfulie.com" version="1.0">Restfulie</generator>
+	<icon>/icon.jpg</icon>
+	<rights>&lt;b&gt;2005 John Doe&lt;/b&gt;</rights>
 
-  <entry xmlns:materias="http://example.com.br">
+	<link href="http://example.com/albums/1" rel="self" />
+	<link href="http://example.com/albums/1/csv" rel="alternate" type="text/csv" />
 
+	<entry>
 
-    <id>uri:1</id>
-    <title>Materia 1</title>
-    <updated>2010-05-03T16:29:26-03:00</updated>
+	    <id>uri:1</id>
+	    <title>Article 1</title>
+	    <updated>2010-05-03T16:29:26-03:00</updated>
+		<published>2010-05-03T16:29:26-03:00</published>
 
+		<author>
+			<name>Foo Bar</name>
+			<email>foobar@example.com</email>
+		</author>
+		
+		<summary>Some text.</summary>
+		
+		<category term="sports" scheme="http://a.scheme.com" label="Sports"/>
+		
+		<content>a freaking awesome content</content>
 
-    <materias:tag>tag1</materias:tag><materias:tag>tag2</materias:tag>
+		<article xmlns="http://article.namespace.com"  xmlns:albums="http://example.com/albums">
+			<tag>tag1</tag>
+			<tag>tag2</tag>
 
-    <materias:criacao>
-      <materias:autor>Luis Felipe Cipriani</materias:autor>
-      <materias:data_de_criacao>2010-05-03T16:29:26-03:00</materias:data_de_criacao>
-    </materias:criacao>
+		    <editor name="veja">
+		      <category>categoria 1, categoria 2</category>
+		    </editor>
 
-    <materias:editorial editoria="veja">
-      <materias:cateoria>categoria 1, categoria 2</materias:cateoria>
-    </materias:editorial>
+		    <albums:album>
+		      <albums:id>uri:albums:1</albums:id>
+		      <albums:title>Album 1</albums:title>
+		    </albums:album>
 
-    <albums:albums xmlns:albums="http://example.com.br">
-      <albums:id>uri:albums:1</albums:id>
-      <albums:title>Album 1</albums:title>
-    </albums:albums>
+		    <albums:album xmlns:song="http://example.com.br">      
+		      <albums:id>1</albums:id>
+		      <song:title></song:title>
+		    </albums:album>
+		</article>
 
+	    <link href="http://example.com/image/1" rel="image" />
+	    <link href="http://example.com/image/2" rel="image" type="application/atom+xml" />
 
-    <albums xmlns="http://example.com.br" xmlns:song="http://example.com.br">
-      
-      <id>1</id>
-      <song:title></song:title>
-    </albums>
+	</entry>
 
+	<entry>
 
+	    <id>uri:2</id>
+	    <title>Article 2</title>
+	    <updated>2010-05-03T16:29:26-03:00</updated>
 
-    <link href="http://example.com/image/1" rel="image" />
-    <link href="http://example.com/image/2" rel="image" type="application/atom+xml" />
+		<article xmlns="http://article.namespace.com">
+			<tag>tag1</tag>
+			<tag>tag2</tag>
+		</article>
 
-  </entry>
+	    <link href="http://example.com/image/1" rel="image" />
+	    <link href="http://example.com/image/2" rel="image" type="application/atom+xml" />
 
+	</entry>
 
 </feed>
