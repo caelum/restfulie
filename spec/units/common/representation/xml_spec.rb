@@ -39,7 +39,7 @@ context Restfulie::Common::Representation::XmlD do
   context "when unmarshalling" do
     it "should unmarshall an entry" do
       result = Restfulie::Common::Representation::XmlD.new.unmarshal('<root><entry></entry></root>')
-      result.should respond_to "entry"
+      result.should respond_to "root"
       result.should be_kind_of(Hash)
     end
   end
