@@ -24,7 +24,7 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
   end
 
-  context 'marhal' do
+  context 'marshal' do
 
     before(:all) do
       Restfulie.recipe(:atom, :name => :custom_song) do |representation, song|
@@ -48,7 +48,7 @@ context Restfulie::Client::HTTP::RequestMarshaller do
       a_song.title.should == 'Song 1'
       a_song.id.should == 'http://localhost:4567/songs_1'
 
-      top_ten_songs = songs.top_ten.get!
+      top_ten_songs = songs.links.top_ten.get!
       top_ten_songs.response.code.should == 200
       top_ten_songs.title.should == 'Top Ten Songs feed'
       top_ten_songs.id.should == 'http://localhost:4567/songs_top_ten'
@@ -57,10 +57,10 @@ context Restfulie::Client::HTTP::RequestMarshaller do
       a_song.title.should == 'Song 3'
       a_song.id.should == 'http://localhost:4567/song_3'
 
-      top_ten_songs = songs.top_ten.get!
+      top_ten_songs = songs.links.top_ten.get!
       a_song = top_ten_songs.entries.first
-      related_songs = a_song.related_songs.get!
-      similar_song = related_songs.entries.first.similar_song
+      related_songs = a_song.links.related_songs.get!
+      similar_song = related_songs.entries.first.links.similar_song
       similar_song.get!.title.should == 'Song 4 feed' 
     end
 
@@ -72,7 +72,7 @@ context Restfulie::Client::HTTP::RequestMarshaller do
       songs = @marshaller.at('/test/redirect/songs').post!(a_song)
       songs.response.code.should == 200
 
-      songs = @marshaller.at('/test/redirect/songs').post!(a_song,:recipe => :custom_song)
+      songs = @marshaller.at('/test/redirect/songs').post!(a_song, :recipe => :custom_song)
       songs.response.code.should == 200
     end
 

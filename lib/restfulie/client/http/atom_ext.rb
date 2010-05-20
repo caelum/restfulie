@@ -11,6 +11,6 @@ module Restfulie::Client::HTTP#:nodoc:
   end
 
   # inject new behavior in rAtom instances to enable easily access to link relationships.
-  #::Atom::Link.instance_eval { include LinkRequestBuilder }
+  ::Restfulie::Common::Representation::Atom::Link.instance_eval { include LinkRequestBuilder }
   
 end

@@ -161,7 +161,14 @@ module Restfulie::Common::Representation::Atom
     # It has one required attribute, href, and five optional attributes: rel, type, hreflang, title, and length
     def links
       unless @links
-        @links = TagCollection.new(@doc)
+        @links = TagCollection.new(@doc) do |array, symbol, *args|
+          linkset = array.select {|link| link.rel == symbol.to_s }
+          unless linkset.empty?
+            linkset.size == 1 ? linkset.first : linkset
+          else
+            nil
+          end          
+        end
         @doc.xpath("xmlns:link").each do |link|
           @links << Link.new(link)
         end        
@@ -183,8 +190,9 @@ module Restfulie::Common::Representation::Atom
   end
 
   class TagCollection < ::Array
-    def initialize(parent_node)
+    def initialize(parent_node, &block)
       @node = parent_node
+      @method_missing_block = block_given? ? block : nil
       super(0)
     end
     
@@ -200,6 +208,14 @@ module Restfulie::Common::Representation::Atom
       if super(obj)
         obj.doc.unlink
         obj = nil
+      end
+    end
+    
+    def method_missing(symbol, *args, &block)
+      if @method_missing_block
+        @method_missing_block.call(self, symbol, *args)
+      else
+        super
       end
     end
   end
@@ -229,11 +245,12 @@ module Restfulie::Common::Representation::Atom
       @doc["rel"] = value
     end
 
-    def link_type
+    alias_method :__type__, :type
+    def type
       @doc["type"]
     end
     
-    def link_type=(value)
+    def type=(value)
       @doc["type"] = value
     end
 

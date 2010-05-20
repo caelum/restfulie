@@ -23,12 +23,18 @@ describe Restfulie::Common::Representation::Atom do
       @atom.links.size.should == 2
       @atom.links.first.rel.should == "self"
       @atom.links.first.href.should == "http://example.com/albums/1"
+      
+      @atom.links.alternate.href.should == "http://example.com/albums/1/csv"
+      @atom.links.alternate.type.should == "text/csv"
     end
     
     it "should access entries as array" do
       @atom.entries.size.should == 2
       @atom.entries.first.id.should == "uri:1"
       @atom.entries.first.title.should == "Article 1"
+      
+      @atom.entries.first.links.image.first.href.should == "http://example.com/image/1"
+      @atom.entries.first.links.unknow_rel.should == nil
     end
     
   end
