@@ -50,9 +50,9 @@ context Restfulie::Common::Representation::XmlD do
       result.should == "content"
     end
     it "should serialize if its anything else" do
-      hash = {"name" => "value"}
+      hash = {:item => {"name" => "value"}}
       result = Restfulie::Common::Representation::XmlD.new.marshal(hash, "")
-      result.should == hash.to_xml
+      result.should == hash[:item].to_xml(:root => "item")
     end
   end
   

@@ -41,6 +41,7 @@ module Restfulie::Common::Representation
 
     def marshal(entity, rel)
       return entity if entity.kind_of? String
+      return entity.values.first.to_xml(:root => entity.keys.first) if entity.kind_of?(Hash) && entity.size==1
       entity.to_xml
     end
 
