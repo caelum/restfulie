@@ -10,10 +10,10 @@ context Restfulie::Common::Representation::XmlD do
       result.should == hash
     end
     
-    it "should unmarshall an entry, ignoring the root object" do
+    it "should unmarshall an entry, including the root object" do
       hash = {"company" => {"name"=>"value"}}
       result = Restfulie::Common::Representation::Json.new.unmarshal(hash.to_json)
-      result.should == hash["company"]
+      result.should == hash
     end
   end
   context "when marshalling" do

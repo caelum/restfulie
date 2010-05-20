@@ -36,7 +36,7 @@ module Restfulie::Common::Representation
     }
 
     def unmarshal(string)
-      Hash.from_xml(string).values.first
+      Hash.from_xml(string)
     end
 
     def marshal(entity, rel)
