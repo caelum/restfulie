@@ -65,6 +65,16 @@ describe Restfulie::Common::Converter do
         feed.entries.first.id.should == "uri:1"
         feed.entries.first.title.should == "a great article"
      end
+     
+     it "should create a feed from a string input" do
+       full_atom = IO.read(File.dirname(__FILE__) + '/../../lib/atoms/full_atom.xml')
+       feed = to_atom(full_atom)
+       
+       feed.id.should == "http://example.com/albums/1"
+       feed.title.should == "Albums feed"
+       feed.updated.should be_kind_of(Time)
+       feed.updated.should == Time.parse("2010-05-03T16:29:26-03:00")
+    end
 
     end
 
@@ -146,50 +156,6 @@ describe Restfulie::Common::Converter do
     
     end
 
-    #describe 'Custom Convertion' do
-      #before do
-        #@obj = Restfulie::Common::Converter::Test::SimpleClass.new('id','title',DateTime.parse(DateTime.now.to_s))
-      #end
-
-      #it 'should convert simple class to atom representation' do
-        #describe_recipe(:id_recipe) do |representation, obj|
-          #representation.id = obj.id
-        #end
-
-        #describe_recipe(:title_recipe) do |representation, obj|
-          #representation.title = "#{obj.title}/#{obj.id}"
-        #end
-
-        #feed = to_atom(@obj, :recipes => [:id_recipe, :title_recipe]) do |representation, obj|
-          #representation.links << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
-        #end
-
-        #feed.id.should == @obj.id
-        #feed.title.should == "#{@obj.title}/#{@obj.id}"
-        #feed.updated.year.should == @obj.updated.year
-        #link = feed.links.first
-        #link.href.should == 'http://localhost'
-        #link.rel.should == :self
-      #end
-
-      #it "should convert with recipe block" do
-        #feed = Restfulie::Common::Converter::Atom.to_atom(@obj) do |representation, obj|
-          #representation.id      = obj.id
-          #representation.title   = "#{obj.title}/#{obj.id}"
-          #representation.updated = obj.updated
-          #representation.links   << Restfulie::Common::Converter::Atom.link(:href => 'http://localhost', :rel => :self)
-        #end
-        
-        #feed.id.should == @obj.id
-        #feed.title.should == "#{@obj.title}/#{@obj.id}"
-        #feed.updated.year.should == @obj.updated.year
-        #link = feed.links.first
-        #link.href.should == 'http://localhost'
-        #link.rel.should == :self
-      #end
-      
-    #end
-
     describe "Errors" do
       it "should raise error for converter without recipe" do
         lambda {
@@ -197,10 +163,21 @@ describe Restfulie::Common::Converter do
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Recipe required")
       end
       
-      it "raiser error to invalid atom type" do
+      it "raise error to invalid atom type" do
         lambda {
           obj = Object.new
-          Restfulie::Common::Converter::Atom.to_atom(obj, :atom_type => :foo)
+          describe_recipe(:simple_entry) do |member, article|
+            member.values do |values|
+              values.id      "uri:#{article[:id]}"                   
+              values.title   article[:title]
+              values.updated article[:updated]
+            end
+
+            member.link("image", "http://example.com/image/1")
+            member.link("image", "http://example.com/image/2", :type => "application/atom+xml")                                
+          end
+          
+          Restfulie::Common::Converter::Atom.to_atom(obj, :recipe => :simple_entry, :atom_type => :foo)
         }.should raise_error(Restfulie::Common::Error::ConverterError, "Undefined atom type foo")
       end
     end

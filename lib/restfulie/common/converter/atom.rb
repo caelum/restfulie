@@ -23,18 +23,24 @@ module Restfulie::Common::Converter
       end
 
       def to_atom(obj = nil, options = {}, &block)
-        options[:atom_type] ||= obj.respond_to?(:each) ? :feed : :entry
-        raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{options[:atom_type]}") unless [:entry,:feed].include?(options[:atom_type])
+        # just instantiate the string with the atom factory
+        return Restfulie::Common::Representation::Atom::Factory.create(obj) if obj.kind_of?(String)
         
         if block_given?
           recipe = block
         else
           recipe = options[:recipe]          
         end
-
-        # Check if we got recipes
-        raise Restfulie::Common::Error::ConverterError.new("Recipe required") unless recipe
-
+        # Check if the object is already an atom
+        unless recipe
+          return obj if obj.respond_to?(:atom_type) && (obj.atom_type == "feed" || obj.atom_type == "entry")
+          raise Restfulie::Common::Error::ConverterError.new("Recipe required")
+        end
+        
+        # execute with the builder if a recipe is set (even if the obj is an atom)
+        options[:atom_type] ||= obj.respond_to?(:each) ? :feed : :entry
+        raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{options[:atom_type]}") unless [:entry,:feed].include?(options[:atom_type])
+        
         # Get recipe already described
         recipe = @@recipes[recipe] unless recipe.respond_to?(:call)
 
@@ -60,7 +66,7 @@ module Restfulie::Common::Converter
            xml = obj.to_xml
         end
 
-         Hash.from_xml(xml).with_indifferent_access unless xml.nil?
+        Hash.from_xml(xml).with_indifferent_access unless xml.nil?
       end
 
 
