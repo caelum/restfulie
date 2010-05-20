@@ -2,7 +2,7 @@ module Restfulie::Common::Representation::Atom
   
   class Feed < Base
     
-    def initialize(xml_obj)
+    def initialize(xml_obj = nil)
       @generator = nil
       @entries = nil
       super(xml_obj)

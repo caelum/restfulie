@@ -5,8 +5,16 @@ module Restfulie::Common::Representation::Atom
     
     attr_accessor :doc
   
-    def initialize(xml_obj)
-      xml_obj.kind_of?(Nokogiri::XML::Document) ? @doc = xml_obj.root : @doc = xml_obj
+    def initialize(xml_obj = nil)
+      if xml_obj
+        xml_obj.kind_of?(Nokogiri::XML::Document) ? @doc = xml_obj.root : @doc = xml_obj
+      else
+        @doc    = Nokogiri::XML::Document.new
+        root_node = @doc.create_element(atom_type.to_s)
+        root_node.add_namespace_definition(nil, "http://www.w3.org/2005/Atom")
+        root_node.parent = @doc
+        @doc = @doc.root
+      end
     end
     
     # Tools
@@ -91,7 +99,7 @@ module Restfulie::Common::Representation::Atom
       }
     }
     
-    def initialize(xml_obj)
+    def initialize(xml_obj = nil)
       @authors = nil
       @contributors = nil
       @links = nil

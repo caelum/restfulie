@@ -6,6 +6,34 @@ describe Restfulie::Common::Representation::Atom do
     @atom = Restfulie::Common::Representation::Atom::Factory.create(full_atom)
   end
   
+  describe "Atom creation" do
+    it "should be able to create an empty Feed object" do
+      feed = Restfulie::Common::Representation::Atom::Feed.new
+      feed.id = "new_id"
+      feed.title = "new title"
+      a_time = Time.now
+      feed.updated = a_time
+      
+      feed.id.should == "new_id"
+      feed.title.should == "new title"
+      feed.updated.should be_kind_of(Time)
+      feed.updated.should == Time.parse(a_time.to_s)     
+    end
+    
+    it "should be able to create an empty Atom object" do
+      entry = Restfulie::Common::Representation::Atom::Entry.new
+      entry.id = "new_id"
+      entry.title = "new title"
+      a_time = Time.now
+      entry.updated = a_time
+      
+      entry.id.should == "new_id"
+      entry.title.should == "new title"
+      entry.updated.should be_kind_of(Time)
+      entry.updated.should == Time.parse(a_time.to_s)
+    end
+  end
+  
   describe "Feed read" do
     
     it "should access required attributes" do

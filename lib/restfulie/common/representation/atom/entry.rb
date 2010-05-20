@@ -2,7 +2,7 @@ module Restfulie::Common::Representation::Atom
   
   class Entry < Base   
     
-    def initialize(xml_obj)
+    def initialize(xml_obj = nil)
       @source = nil
       super(xml_obj)
     end
