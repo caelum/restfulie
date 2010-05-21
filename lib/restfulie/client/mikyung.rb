@@ -8,6 +8,7 @@ end
   core
   steady_state_walker
   dsl
+  languages
 ).each do |file|
   require "restfulie/client/mikyung/#{file}"
 end

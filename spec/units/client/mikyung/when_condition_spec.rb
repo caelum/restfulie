@@ -13,7 +13,7 @@ context Restfulie::Client::Mikyung::WhenCondition do
 
   it "should execute for every result concatenated" do
     obj = Object.new
-    def obj.content
+    def obj.description
       "will execute something special"
     end
     @condition.results_on obj
