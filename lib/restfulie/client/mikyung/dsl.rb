@@ -1,25 +1,3 @@
-class ThenCondition
-  attr_reader :description
-  def initialize(description)
-    @description = description
-  end
-  
-  def execute(resource, goal, mikyung)
-    goal.then_rules.each do |rule|
-      if Regexp.new(rule[0]).match(@description)
-        matches = Regexp.new(rule[0]).match(@description)
-        if rule[1].arity==1
-          found_rule = rule[1].call(resource)
-        else
-          found_rule = rule[1].call(resource, matches, mikyung)
-        end
-        return found_rule
-      end
-    end
-    nil
-  end
-end
-
 class Restfulie::Client::Mikyung::RestProcessModel
   def method_missing(sym, *args)
     # puts "#{sym} #{args}"
@@ -51,7 +29,7 @@ class Restfulie::Client::Mikyung::RestProcessModel
     rule = when_rules.find do |rule|
       concat.content.match(rule[0])
     end
-    WhenCondition.new(concat.content, rule, concat.content.match(rule[0]))
+    Restfulie::Client::Mikyung::WhenCondition.new(concat.content, rule, concat.content.match(rule[0]))
   end
   
   public
@@ -66,7 +44,7 @@ class Restfulie::Client::Mikyung::RestProcessModel
   
   def Then(concat, &block)
     if concat.respond_to? :content
-      @condition.results_on ThenCondition.new(concat.content)
+      @condition.results_on Restfulie::Client::Mikyung::ThenCondition.new(concat.content)
     else
       then_rules << [concat, block]
     end

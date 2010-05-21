@@ -17,7 +17,7 @@ class Restfulie::Client::Mikyung::WhenCondition
   # will execute the first attached result
   def execute(resource, goal, mikyung)
     @results.each do |result|
-      Restfulie::Common::Logger.logger.info("will '#{result.content}'")
+      Restfulie::Common::Logger.logger.info("will '#{result.description}'")
       return result.execute(resource, goal, mikyung)
     end
   end

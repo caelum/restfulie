@@ -3,6 +3,7 @@ end
 
 %w(
   when_condition
+  then_condition
   concatenator
   core
   steady_state_walker
