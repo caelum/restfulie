@@ -1,33 +1,3 @@
-class WhenCondition
-  attr_reader :results, :extra
-  def initialize(content, rule, params)
-    @content = content
-    @results = []
-    @extra = []
-    @rule = rule
-    @params = params
-  end
-  
-  def execute(resource, goal, mikyung)
-    results.each do |result|
-      Restfulie::Common::Logger.logger.debug("will execute #{result}")
-      return result.execute(resource, goal, mikyung)
-    end
-  end
-
-  def test_for(resource, goal)
-    if @rule[1].arity==2
-      rule_accepts = @rule[1].call(resource, @params)
-    else
-      rule_accepts = @rule[1].call(resource)
-    end
-    return false unless rule_accepts
-    !extra.find do |condition|
-      !condition.test_for(resource, goal)
-    end
-  end
-  
-end
 
 class ThenCondition
   def initialize(content)
@@ -87,7 +57,7 @@ class Restfulie::Client::Mikyung::RestProcessModel
   public
   
   def And(concat)
-    @condition.extra << when_factory(concat)
+    @condition.and when_factory(concat)
   end
   
   def But(concat)
@@ -96,7 +66,7 @@ class Restfulie::Client::Mikyung::RestProcessModel
   
   def Then(concat, &block)
     if concat.respond_to? :content
-      @condition.results << ThenCondition.new(concat.content)
+      @condition.results_on ThenCondition.new(concat.content)
     else
       then_rules << [concat, block]
     end
@@ -104,7 +74,7 @@ class Restfulie::Client::Mikyung::RestProcessModel
 
   def next_step(resource, mikyung)
     conditions.each do |c|
-      if c.test_for(resource, self)
+      if c.should_run_for(resource, self)
         return c.execute(resource, self, mikyung)
       end
     end

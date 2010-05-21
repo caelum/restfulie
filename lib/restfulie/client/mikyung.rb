@@ -2,6 +2,7 @@ module Restfulie::Client::Mikyung
 end
 
 %w(
+  when_condition
   concatenator
   core
   steady_state_walker
