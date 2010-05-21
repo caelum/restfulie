@@ -1,8 +1,9 @@
+# A steady walker that tries 3 times each step
 class Restfulie::Client::SteadyStateWalker
   
   def move(goal, current, mikyung)
     step = goal.next_step(current)
-    raise "No step was found for #{current} with links #{current.links}" unless step
+    raise Restfulie::Client::UnableToAchieveGoalError, "No step was found for #{current}" unless step
     Restfulie::Common::Logger.logger.debug "Mikyung > next step will be #{step}"
     step = step.new if step.kind_of? Class
     try_to_execute(step, current, 3, mikyung)

@@ -7,6 +7,9 @@ end
 # iterates following a series of steps provided a goal and a starting uri.
 #
 # Restfulie::Client::Mikyung.achieve(objective).at(uri).run
+#
+# In order to implement your own walker, supply an object that respond to the move method.
+# Check the run method code.
 class Restfulie::Client::Mikyung
   
   attr_reader :start, :goal, :walker
@@ -36,11 +39,14 @@ class Restfulie::Client::Mikyung
     @start = current = (@start.kind_of? String) ? Restfulie.at(@start).get : @start
     
     while(!@goal.completed?(current))
-      current = @walker.move(@goal, current)
+      current = @walker.move(@goal, current, self)
     end
   end
   
 end
 
 class Mikyung < Restfulie::Client::Mikyung
+end
+
+class Restfulie::Client::UnableToAchieveGoalError < Restfulie::Common::Error::RestfulieError
 end

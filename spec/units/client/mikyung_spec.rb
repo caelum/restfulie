@@ -25,7 +25,7 @@ context Restfulie::Client::Mikyung do
     it "should walk until its completed" do
       @goal.should_receive(:completed?).with(@start).and_return(false)
       second = Object.new
-      @walker.should_receive(:move).with(@goal, @start).and_return(second)
+      @walker.should_receive(:move).with(@goal, @start, @client).and_return(second)
       @goal.should_receive(:completed?).with(second).and_return(true)
       @client.run
     end
