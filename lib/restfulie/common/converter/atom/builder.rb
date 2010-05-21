@@ -35,7 +35,7 @@ module Restfulie::Common::Converter::Atom
     end
     
     def link(relationship, uri, options = {})
-      options["rel"] = relationship
+      options["rel"] = relationship.to_s
       options["href"] = uri
       insert_value("link", nil, options)
     end
