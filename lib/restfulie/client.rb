@@ -6,6 +6,7 @@ module Restfulie::Client; end
   http
   configuration
   base
+  mikyung
 ).each do |file|
   require "restfulie/client/#{file}"
 end
