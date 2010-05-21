@@ -9,20 +9,21 @@ class Array
       options[:skip_attributes]         = true      
     end
     
-    Atom::Feed.new do |feed|
-      # TODO: Define better feed attributes
-      # Array#to_s can return a very long string
-      feed.title   = "Collection of #{map {|i| i.class.name }.uniq.to_sentence}"
-      # TODO: this id does not comply with Rest standards yet
-      feed.id      = hash
-      feed.updated = updated_at
+    feed = Restfulie::Common::Representation::Atom::Feed.new
+    # TODO: Define better feed attributes
+    # Array#to_s can return a very long string
+    feed.title = "Collection of #{map {|i| i.class.name }.uniq.to_sentence}"
+    feed.updated = updated_at
+    # TODO: this id does not comply with Rest standards yet
+    feed.id = hash
     
-      each do |element|
-        feed.entries << element.to_atom(options)
-      end
-      
-      yield feed if block_given?
+    each do |element|
+      feed.entries << element.to_atom(options)
     end
+    
+    yield feed if block_given?
+    
+    feed
   end
   
   # Return max update date for items in collection, for it uses the updated_at of items.
