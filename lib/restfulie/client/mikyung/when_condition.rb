@@ -1,13 +1,20 @@
+# Checks whether one or more rule holds and is capable of executing results.
 class Restfulie::Client::Mikyung::WhenCondition
 
-  def initialize(content, rule, params)
-    @content = content
+  # Creates a conditional execution based on a description.
+  # Its rule is an array where its first element represents a rule name and second a lambda that returns true or false
+  # Its params are extra params that might be passed to the rule
+  # Example
+  # WhenCondition.new("when running", ["", lambda { |resource| resource.human.state=='running' }], "")
+  def initialize(description, rule, params)
+    @description = description
     @results = []
     @extra = []
     @rule = rule
     @params = params
   end
-  
+
+  # will execute the first attached result
   def execute(resource, goal, mikyung)
     @results.each do |result|
       Restfulie::Common::Logger.logger.info("will '#{result.content}'")
@@ -15,6 +22,7 @@ class Restfulie::Client::Mikyung::WhenCondition
     end
   end
 
+  # checks whether this step should execute for a specific resource
   def should_run_for(resource, goal)
     if @rule[1].arity==2
       rule_accepts = @rule[1].call(resource, @params)
@@ -26,11 +34,13 @@ class Restfulie::Client::Mikyung::WhenCondition
       !condition.should_run_for(resource, goal)
     end
   end
-  
+
+  # adds an extra condition to this step
   def and(condition)
     @extra << condition
   end
   
+  # adds an extra result to this step
   def results_on(result)
     @results << result
   end

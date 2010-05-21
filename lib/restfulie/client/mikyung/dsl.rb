@@ -1,13 +1,13 @@
-
 class ThenCondition
-  def initialize(content)
-    @content = content
+  attr_reader :description
+  def initialize(description)
+    @description = description
   end
   
   def execute(resource, goal, mikyung)
     goal.then_rules.each do |rule|
-      if Regexp.new(rule[0]).match(@content)
-        matches = Regexp.new(rule[0]).match(@content)
+      if Regexp.new(rule[0]).match(@description)
+        matches = Regexp.new(rule[0]).match(@description)
         if rule[1].arity==1
           found_rule = rule[1].call(resource)
         else
