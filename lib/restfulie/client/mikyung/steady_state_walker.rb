@@ -2,7 +2,7 @@
 class Restfulie::Client::SteadyStateWalker
   
   def move(goal, current, mikyung)
-    step = goal.next_step(current)
+    step = goal.next_step(current, mikyung)
     raise Restfulie::Client::UnableToAchieveGoalError, "No step was found for #{current}" unless step
     Restfulie::Common::Logger.logger.debug "Mikyung > next step will be #{step}"
     step = step.new if step.kind_of? Class
@@ -18,7 +18,7 @@ class Restfulie::Client::SteadyStateWalker
     raise "Step returned 'give up'" if resource.nil?
 
     if resource.response.code != 200
-      try_to_execute(step, max_attempts - 1)
+      try_to_execute(step, current, max_attempts-1, mikyung)
     else
       Restfulie::Common::Logger.logger.debug resource.response.body
       resource

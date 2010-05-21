@@ -1,9 +1,3 @@
-%w(
-  steady_state_walker
-).each do |file|
-  require "restfulie/client/mikyung/#{file}"
-end
-
 # iterates following a series of steps provided a goal and a starting uri.
 #
 # Restfulie::Client::Mikyung.achieve(objective).at(uri).run
@@ -41,6 +35,7 @@ class Restfulie::Client::Mikyung
     while(!@goal.completed?(current))
       current = @walker.move(@goal, current, self)
     end
+    current
   end
   
 end
@@ -49,4 +44,11 @@ class Mikyung < Restfulie::Client::Mikyung
 end
 
 class Restfulie::Client::UnableToAchieveGoalError < Restfulie::Common::Error::RestfulieError
+end
+
+%w(
+  steady_state_walker
+  dsl
+).each do |file|
+  require "restfulie/client/mikyung/#{file}"
 end
