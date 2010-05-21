@@ -8,7 +8,7 @@ context Restfulie::Client::Mikyung do
       @client = Object.new
       @start = Object.new
       @walker = Object.new
-      @client = Mikyung.new.achieve(@goal).at(@start).walks_with(@walker)
+      @client = Restfulie::Mikyung.new.achieve(@goal).at(@start).walks_with(@walker)
     end
   
     it "should allow access to its goal, starting point and steady state walker" do
@@ -46,7 +46,7 @@ context Restfulie::Client::Mikyung do
       walker = Object.new
       goal = Object.new
       goal.should_receive(:completed?).with(resource).and_return(true)
-      Mikyung.new.achieve(goal).at(start).run
+      Restfulie::Mikyung.new.achieve(goal).at(start).run
     end
     
   end

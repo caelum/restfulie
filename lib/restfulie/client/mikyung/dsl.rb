@@ -1,16 +1,3 @@
-
-class Concatenator
-  attr_reader :content
-  def initialize(content, *args)
-    @content = content
-    args.each do |arg|
-      @content << " " << arg.content
-    end
-    # puts "Created concatenator #{@content}"
-  end
-end
-
-
 class WhenCondition
   attr_reader :results, :extra
   def initialize(content, rule, params)
@@ -63,10 +50,10 @@ class ThenCondition
   end
 end
 
-class Mikyung::RestProcessModel
+class Restfulie::Client::Mikyung::RestProcessModel
   def method_missing(sym, *args)
     # puts "#{sym} #{args}"
-    Concatenator.new(sym.to_s, *args)
+    Restfulie::Client::Mikyung::Concatenator.new(sym.to_s, *args)
   end
   
   def then_rules
@@ -126,7 +113,37 @@ class Mikyung::RestProcessModel
 
 end
 
-class Restfulie::Client::SteadyStateWalker
+module Restfulie::Client::Mikyung::German
+  def Wenn(concat, &block)
+    When(concat, &block)
+  end
+  def Und(concat, &block)
+    And(concat, &block)
+  end
+  def Aber(concat, &block)
+    But(concat, &block)
+  end
+  def Dann(concat, &block)
+    Then(concat, &block)
+  end
+end
+
+module Restfulie::Client::Mikyung::Portuguese
+  def Quando(concat, &block)
+    When(concat, &block)
+  end
+  def E(concat, &block)
+    And(concat, &block)
+  end
+  def Mas(concat, &block)
+    But(concat, &block)
+  end
+  def Entao(concat, &block)
+    Then(concat, &block)
+  end
+end
+
+class Restfulie::Client::Mikyung::SteadyStateWalker
 
   def try_to_execute(step, current, max_attempts, mikyung)
     raise "Unable to proceed when trying to #{step}" if max_attempts == 0

@@ -1,12 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Client::SteadyStateWalker do
+context Restfulie::Client::Mikyung::SteadyStateWalker do
   
   before do
     @goal = Object.new
     @current = Object.new
     @mikyung = Object.new
-    @walker = Restfulie::Client::SteadyStateWalker.new
+    @walker = Restfulie::Client::Mikyung::SteadyStateWalker.new
   end
 
   it "should throw an error if there is no step to follow" do

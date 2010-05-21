@@ -1,5 +1,5 @@
 # A steady walker that tries 3 times each step
-class Restfulie::Client::SteadyStateWalker
+class Restfulie::Client::Mikyung::SteadyStateWalker
   
   def move(goal, current, mikyung)
     step = goal.next_step(current, mikyung)
