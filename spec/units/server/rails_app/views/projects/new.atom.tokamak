@@ -1,3 +1,7 @@
-describe_member(Object.new) do |member|
-  member.title = "new.atom.tokamak"
+member(Object.new) do |member|  
+  member.values do |value|
+    value.id      "1"
+    value.title   "new.atom.tokamak"
+    value.updated Time.now
+  end
 end
