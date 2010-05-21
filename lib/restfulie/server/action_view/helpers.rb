@@ -5,21 +5,21 @@ module Restfulie::Server::ActionView::Helpers
   #
   # Passing the current context to partial in template:
   #
-  #  describe_member(@album) do |member, album|
+  #  member(@album) do |member, album|
   #    partial('member', binding)
   #  end
   #
   # in partial:
   #
-  #  member.links << link(:rel => :artistis, :href => album_artists_url(album))
+  #  member.links << link(:rel => :artists, :href => album_artists_url(album))
   #
   # Or passing local variables assing
-  #  
-  #  descirbe_collection(@albums) do |collection|
-  #    collection.describe_members do |member, album|
-  #      partial('member', :locals => {:member => member, :album => album})
-  #    end
-  #  end
+  #
+  # collection(@albums) do |collection|
+  #   collection.members do |member, album|
+  #     partial("member", :locals => {:member => member, :album => album})
+  #   end
+  # end
   #
   def partial(partial_path, caller_binding = nil)
     template = _pick_partial_template(partial_path)
@@ -27,7 +27,7 @@ module Restfulie::Server::ActionView::Helpers
     # Create a context to assing variables
     if caller_binding.kind_of?(Hash)
       Proc.new do
-        extend Restfulie::Common::Builder::Helpers
+        extend @restfulie_type_helpers
         context = eval("(class << self; self; end)", binding)
         
         unless caller_binding[:locals].nil?
