@@ -1,4 +1,3 @@
-
 class Restfulie::Client::Mikyung::SteadyStateWalker
 
   def try_to_execute(step, current, max_attempts, mikyung)

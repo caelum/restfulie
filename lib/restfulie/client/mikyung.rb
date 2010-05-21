@@ -4,6 +4,7 @@ end
 %w(
   when_condition
   then_condition
+  rest_process_model
   concatenator
   core
   steady_state_walker
