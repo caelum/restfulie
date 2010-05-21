@@ -15,9 +15,8 @@ class Restfulie::Client::SteadyStateWalker
     raise "Unable to proceed when trying to #{step}" if max_attempts == 0
 
     resource = step.execute(current, mikyung)
-    if resource==nil
-      raise "Step returned 'give up'"
-    end
+    raise "Step returned 'give up'" if resource.nil?
+
     if resource.response.code != 200
       try_to_execute(step, max_attempts - 1)
     else
