@@ -47,7 +47,7 @@ end
     begin
       if params = parse_formatted_parameters(env)
         env["action_controller.request.request_parameters"] = params
-      elsif !env["HTTP_CONTENT_TYPE"] == "application/x-www-form-urlencoded" #do not override rails default behaviour for this media type, it's dangerous... (o.O)
+      elsif !(env["CONTENT_TYPE"] == "application/x-www-form-urlencoded") #do not override rails default behaviour for this media type, it's dangerous... (o.O)
         if env["CONTENT_LENGTH"] && (env["CONTENT_LENGTH"] != "0")
           env["action_controller.restfulie.response"] = [415, {'Content-Type' => 'text/html'}, ["<html><body><h1>415 Unsupported Media Type</h1></body></html>"]]
         end
