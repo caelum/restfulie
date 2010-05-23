@@ -25,6 +25,8 @@
 	<generator uri="http://restfulie.com" version="1.0">Restfulie</generator>
 	<icon>/icon.jpg</icon>
 	<rights>&lt;b&gt;2005 John Doe&lt;/b&gt;</rights>
+	
+	<count xmlns="http://a.special.namespace">2</count>
 
 	<link href="http://example.com/albums/1" rel="self" />
 	<link href="http://example.com/albums/1/csv" rel="alternate" type="text/csv" />
@@ -51,8 +53,8 @@
 			<tag>tag1</tag>
 			<tag>tag2</tag>
 
-		    <editor name="veja">
-		      <category>categoria 1, categoria 2</category>
+		    <editor name="foozine">
+		      <category>category 1, category 2</category>
 		    </editor>
 
 		    <albums:album>

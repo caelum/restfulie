@@ -6,6 +6,7 @@ module Restfulie::Common::Representation::Atom
       @generator = nil
       @entries = nil
       super(xml_obj)
+      @reserved = Base::ATOM_ATTRIBUTES[:feed][:required] + Base::ATOM_ATTRIBUTES[:feed][:recommended] + Base::ATOM_ATTRIBUTES[:feed][:optional] + [:entry]
     end
     
     def entries

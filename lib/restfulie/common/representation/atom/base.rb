@@ -104,7 +104,19 @@ module Restfulie::Common::Representation::Atom
       @contributors = nil
       @links = nil
       @categories = nil
+      @reserved = []
       super(xml_obj)
+    end
+    
+    # lists all extension points available in this entry
+    def extensions
+      result = []
+      @doc.children.each do |e|
+        if e.element?
+          result << e unless @reserved.map(&:to_s).include?(e.node_name)
+        end
+      end
+      return result
     end
     
     #simpletext

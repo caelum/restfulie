@@ -5,6 +5,7 @@ module Restfulie::Common::Representation::Atom
     def initialize(xml_obj = nil)
       @source = nil
       super(xml_obj)
+      @reserved = Base::ATOM_ATTRIBUTES[:entry][:required] + Base::ATOM_ATTRIBUTES[:entry][:recommended] + Base::ATOM_ATTRIBUTES[:entry][:optional]
     end
      
     #text

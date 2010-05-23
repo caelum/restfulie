@@ -56,6 +56,12 @@ describe Restfulie::Common::Representation::Atom do
       @atom.links.alternate.type.should == "text/csv"
     end
     
+    it "should support access to feed extensions" do
+      @atom.extensions.size.should == 1
+      @atom.extensions.first.class.should == Nokogiri::XML::Element
+      @atom.extensions.first.content.to_i.should == 2
+    end
+    
     it "should access entries as array" do
       @atom.entries.size.should == 2
       @atom.entries.first.id.should == "uri:1"
@@ -129,6 +135,14 @@ describe Restfulie::Common::Representation::Atom do
       
       entry.summary.should == "Some text."
       entry.content.should == 'a freaking awesome content'
+    end
+    
+    it "should support access to entry extensions" do
+      entry = @atom.entries.first
+
+      entry.extensions.size.should == 1
+      entry.extensions.first.class.should == Nokogiri::XML::Element
+      entry.extensions.first.at_xpath("xmlns:editor", "xmlns" => "http://article.namespace.com")["name"].should == "foozine"
     end
     
   end
