@@ -2,7 +2,7 @@
 module Restfulie::Common::Converter; end
 
 %w(
-  components
+  values
   atom
   atom/builder
   atom/helpers
