@@ -59,7 +59,7 @@ module Restfulie::Common::Converter
         return obj if obj.kind_of?(Hash)
 
         xml = nil
-        # TODO: Add validate atom string
+        
         if obj.kind_of?(::String)
            xml = obj
         elsif obj.respond_to?(:to_xml)

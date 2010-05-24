@@ -1,8 +1,6 @@
 module Restfulie::Common::Representation::Atom
   
   class XML
-    XHTML_LAT1   = File.join(File.dirname(__FILE__), 'xhtml-lat1.ent')
-    
     attr_accessor :doc
   
     def initialize(xml_obj = nil)
