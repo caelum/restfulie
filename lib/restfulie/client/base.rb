@@ -22,7 +22,7 @@ module Restfulie::Client#:nodoc
 
     def retrieve(resource_name)
       returning Object.new do |resource| 
-        restore.extend(Base)
+        resource.extend(Base)
         resource.configure
       end
     end
