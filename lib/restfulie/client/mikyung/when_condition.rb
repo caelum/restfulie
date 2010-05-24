@@ -40,6 +40,11 @@ class Restfulie::Client::Mikyung::WhenCondition
     @extra << condition
   end
   
+  # adds an extra condition to this step
+  def but(condition)
+    @extra << condition
+  end
+  
   # adds an extra result to this step
   def results_on(result)
     @results << result
