@@ -342,6 +342,10 @@ module Restfulie::Client::HTTP #:nodoc:
         request(:post, path, payload, headers)
       end
 
+      def patch(payload)
+        request(:patch, path, payload, headers)
+      end
+
       def put(payload)
         request(:put, path, payload, headers)
       end
@@ -360,6 +364,10 @@ module Restfulie::Client::HTTP #:nodoc:
 
       def post!(payload)
         request!(:post, path, payload, headers)
+      end
+
+      def patch!(payload)
+        request!(:patch, path, payload, headers)
       end
 
       def put!(payload)

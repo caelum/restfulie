@@ -102,7 +102,7 @@ module Restfulie::Client::HTTP
     end
     
     def has_payload?(method, path, *args)
-      [:put,:post].include?(method)
+      [:put,:post,:patch].include?(method)
     end
 
     def get_payload(method, path, *args)
