@@ -6,7 +6,7 @@ require 'spec/rake/spectask'
 require 'rake/rdoctask'
 
 GEM = "restfulie"
-GEM_VERSION = "0.7.2"
+GEM_VERSION = "0.7.3"
 SUMMARY  = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
 AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Éverton Ribeiro, George Guimarães, Paulo Ahagon"
 EMAIL    = "guilherme.silveira@caelum.com.br"

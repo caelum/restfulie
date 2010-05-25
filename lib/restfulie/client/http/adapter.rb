@@ -115,14 +115,14 @@ module Restfulie::Client::HTTP #:nodoc:
 
       #GET HTTP verb without {Error}
       # * <tt>path: '/posts'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def get(path, *args)
         request(:get, path, *args)
       end
 
       #HEAD HTTP verb without {Error}
       # * <tt>path: '/posts'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def head(path, *args)
         request(:head, path, *args)
       end
@@ -130,36 +130,44 @@ module Restfulie::Client::HTTP #:nodoc:
       #POST HTTP verb without {Error}
       # * <tt>path: '/posts'</tt>
       # * <tt>payload: 'some text'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def post(path, payload, *args)
         request(:post, path, payload, *args)
+      end
+      
+      #PATCH HTTP verb without {Error}
+      # * <tt>path: '/posts'</tt>
+      # * <tt>payload: 'some text'</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      def patch(path, payload, *args)
+        request(:patch, path, payload, *args)
       end
 
       #PUT HTTP verb without {Error}
       # * <tt>path: '/posts'</tt>
       # * <tt>payload: 'some text'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def put(path, payload, *args)
         request(:put, path, payload, *args)
       end
 
       #DELETE HTTP verb without {Error}
       # * <tt>path: '/posts'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def delete(path, *args)
         request(:delete, path, *args)
       end
 
       #GET HTTP verb {Error}
       # * <tt>path: '/posts'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def get!(path, *args)
         request!(:get, path, *args)
       end
 
       #HEAD HTTP verb {Error}
       # * <tt>path: '/posts'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def head!(path, *args)
         request!(:head, path, *args)
       end
@@ -167,22 +175,30 @@ module Restfulie::Client::HTTP #:nodoc:
       #POST HTTP verb {Error}
       # * <tt>path: '/posts'</tt>
       # * <tt>payload: 'some text'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def post!(path, payload, *args)
         request!(:post, path, payload, *args)
+      end
+      
+      #PATCH HTTP verb {Error}
+      # * <tt>path: '/posts'</tt>
+      # * <tt>payload: 'some text'</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      def patch!(path, payload, *args)
+        request!(:patch, path, payload, *args)
       end
 
       #PUT HTTP verb {Error}
       # * <tt>path: '/posts'</tt>
       # * <tt>payload: 'some text'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def put!(path, payload, *args)
         request!(:put, path, payload, *args)
       end
 
       #DELETE HTTP verb {Error}
       # * <tt>path: '/posts'</tt>
-      # * <tt>headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def delete!(path, *args)
         request!(:delete, path, *args)
       end
@@ -190,7 +206,7 @@ module Restfulie::Client::HTTP #:nodoc:
       #Executes a request against your server and return a response instance without {Error}
       # * <tt>method: :get,:post,:delete,:head,:put</tt>
       # * <tt>path: '/posts'</tt>
-      # * <tt>args: payload: 'some text' and/or headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def request(method, path, *args)
         request!(method, path, *args) 
       rescue Error::RESTError => se
@@ -200,7 +216,7 @@ module Restfulie::Client::HTTP #:nodoc:
       #Executes a request against your server and return a response instance.
       # * <tt>method: :get,:post,:delete,:head,:put</tt>
       # * <tt>path: '/posts'</tt>
-      # * <tt>args: payload: 'some text' and/or headers: {'Accpet' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
+      # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
       def request!(method, path, *args)
         headers = default_headers.merge(args.extract_options!)
         unless @host.user.blank? && @host.password.blank?
@@ -335,6 +351,10 @@ module Restfulie::Client::HTTP #:nodoc:
         request(:post, path, payload, headers)
       end
 
+      def patch(payload)
+        request(:patch, path, payload, headers)
+      end
+
       def put(payload)
         request(:put, path, payload, headers)
       end
@@ -353,6 +373,10 @@ module Restfulie::Client::HTTP #:nodoc:
 
       def post!(payload)
         request!(:post, path, payload, headers)
+      end
+
+      def patch!(payload)
+        request!(:patch, path, payload, headers)
       end
 
       def put!(payload)

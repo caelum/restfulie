@@ -8,6 +8,7 @@ end
   marshal
   atom_ext
   xml_ext
+  core_ext
 ).each do |file|
   require "restfulie/client/http/#{file}"
 end

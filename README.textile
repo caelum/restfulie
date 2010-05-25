@@ -98,13 +98,11 @@ gem install restfulie
 
 h2. Building the project
 
-If you want to build the project and run its tests, remember to install all (client and server) required gems and:
+If you want to build the project and run its tests, remember to install all (client and server) required gem. 
+"Bundler":http://gembundler.com/ is required to easily manage dependencies
 
 <pre>
-gem install rack-conneg
-gem install responders_backport
-gem install json_pure
-gem install sqlite3-ruby
+bundle install
 </pre>
 
 <script type="text/javascript">

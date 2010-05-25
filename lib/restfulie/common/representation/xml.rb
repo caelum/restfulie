@@ -36,11 +36,12 @@ module Restfulie::Common::Representation
     }
 
     def unmarshal(string)
-      Hash.from_xml(string).values.first
+      Hash.from_xml(string)
     end
 
     def marshal(entity, rel)
       return entity if entity.kind_of? String
+      return entity.values.first.to_xml(:root => entity.keys.first) if entity.kind_of?(Hash) && entity.size==1
       entity.to_xml
     end
 
