@@ -1,4 +1,6 @@
 require 'nokogiri'
+puts "WARNING! You need libxml version 2.7.7 or superior loaded in your system." if Nokogiri::VERSION_INFO["libxml"]["loaded"] < "2.7.7"
+
 #initialize namespace
 module Restfulie::Common::Representation::Atom
   # Create a new Representation::Atom object using a +string_or_io+
