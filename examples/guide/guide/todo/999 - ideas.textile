@@ -1,8 +1,0 @@
-- sequence diagrams on invocations
-- opensearch implementation
-- java chapter
-- c# chapter
-- php chapter
-- erlang chapter
-- jax-rs server chapter
-- spring, jersey and resteasy client chapters
