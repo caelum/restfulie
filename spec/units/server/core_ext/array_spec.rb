@@ -12,15 +12,16 @@ context Array do
     feed = @array.to_atom
     feed = feed.to_xml
     feed.should include("<feed xmlns=\"http://www.w3.org/2005/Atom\"")
-    feed.should include("<published>123</published>")
+    feed.should include("<published>2010-05-03T16:29:26-03:00</published>")
     feed.should include("<title>Collection of AtomifiedModel")
     feed.should include("</feed>")
   end
   
   it "accepts a block to customize fields" do
+    
     feed = @array.to_atom do |f|
-      f.title = "customized title" 
-      f.authors << Atom::Person.new(:name => 'John Doe')
+      f.title = "customized title"
+      f.authors << Restfulie::Common::Representation::Atom::Person.new("author", :name => 'John Doe')
     end.to_xml
     
     feed.should include("<title>customized title</title")

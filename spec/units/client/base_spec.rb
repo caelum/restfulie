@@ -25,7 +25,7 @@ context Restfulie::Client::Base do
   end
 
   it 'should load top ten songs' do
-    top_ten_songs = @songs_from_class.top_ten.get!
+    top_ten_songs = @songs_from_class.links.top_ten.get!
     top_ten_songs.response.code.should == 200
     top_ten_songs.title.should == 'Top Ten Songs feed'
     top_ten_songs.id.should == 'http://localhost:4567/songs_top_ten'
@@ -36,10 +36,11 @@ context Restfulie::Client::Base do
   end
 
   it 'should load chained relationship' do
-    top_ten_songs = @songs_from_class.top_ten.get!
+    top_ten_songs = @songs_from_class.links.top_ten.get!
     a_song = top_ten_songs.entries.first
-    related_songs = a_song.related_songs.get!
-    similar_song = related_songs.entries.first.similar_song
+    related_songs = a_song.links.related_songs.get!
+    first_related_song = related_songs.entries.first
+    similar_song = first_related_song.links.similar_song
     similar_song.get!.title.should == 'Song 4 feed' 
   end
 
@@ -69,7 +70,7 @@ context Restfulie::Client::EntryPoint do
   end
 
   it 'should load top ten songs' do
-    top_ten_songs = @songs_from_ep.top_ten.get!
+    top_ten_songs = @songs_from_ep.links.top_ten.get!
     top_ten_songs.response.code.should == 200
     top_ten_songs.title.should == 'Top Ten Songs feed'
     top_ten_songs.id.should == 'http://localhost:4567/songs_top_ten'
@@ -80,10 +81,10 @@ context Restfulie::Client::EntryPoint do
   end
 
   it 'should load chained relationship' do
-    top_ten_songs = @songs_from_ep.top_ten.get!
+    top_ten_songs = @songs_from_ep.links.top_ten.get!
     a_song = top_ten_songs.entries.first
-    related_songs = a_song.related_songs.get!
-    similar_song = related_songs.entries.first.similar_song
+    related_songs = a_song.links.related_songs.get!
+    similar_song = related_songs.entries.first.links.similar_song
     similar_song.get!.title.should == 'Song 4 feed' 
   end
 
@@ -115,7 +116,7 @@ context Restfulie do
     end
 
     it 'should load top ten songs' do
-      top_ten_songs = @songs.top_ten.get!
+      top_ten_songs = @songs.links.top_ten.get!
       top_ten_songs.response.code.should == 200
       top_ten_songs.title.should == 'Top Ten Songs feed'
       top_ten_songs.id.should == 'http://localhost:4567/songs_top_ten'
@@ -126,10 +127,10 @@ context Restfulie do
     end
 
     it 'should load chained relationship' do
-      top_ten_songs = @songs.top_ten.get!
+      top_ten_songs = @songs.links.top_ten.get!
       a_song = top_ten_songs.entries.first
-      related_songs = a_song.related_songs.get!
-      similar_song = related_songs.entries.first.similar_song
+      related_songs = a_song.links.related_songs.get!
+      similar_song = related_songs.entries.first.links.similar_song
       similar_song.get!.title.should == 'Song 4 feed' 
     end
   end

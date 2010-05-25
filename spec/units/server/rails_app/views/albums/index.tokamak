@@ -1,7 +1,12 @@
-describe_collection(@albums) do |collection|
-  collection.title = "Index Album feed spec"
+collection(@albums) do |collection|
+  
+  collection.values do |value|
+    value.id      "1"
+    value.title   "Index Album feed spec"
+    value.updated Time.now
+  end
 
-  collection.describe_members(:namespace => "http://localhost/albums") do |member, album|
+  collection.members do |member, album|
     partial("member", binding)
   end
 end

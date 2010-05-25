@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+# File: script/console
+irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
+
+libs =  " -r irb/completion"
+libs << " -r #{File.dirname(__FILE__) + '/../lib/restfulie.rb'}"
+puts "Loading Restfulie env"
+exec "#{irb} #{libs} --simple-prompt #{ARGV.join("")}"

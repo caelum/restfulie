@@ -9,21 +9,15 @@ module Restfulie::Client::HTTP #:nodoc:
       attr_reader :code
       attr_reader :body
       attr_reader :headers
-      attr_reader :request
 
-      def initialize(method, path, code, body, headers, request)
+      def initialize(method, path, code, body, headers)
         @method = method
         @path = path
         @code = code
         @body = body 
         @headers = headers
-        @request = request
       end
       
-      def parse
-        self
-      end
-
     end
 
     #=ResponseHandler
@@ -81,11 +75,11 @@ module Restfulie::Client::HTTP #:nodoc:
       # *<tt>path: '/posts'</tt>
       # *<tt>http_response</tt>
       #
-      def self.handle(method, path, http_response, request)
+      def self.handle(method, path, http_response)
         response_class = @@response_handlers[http_response.code.to_i] || Response
         headers = {}
         http_response.header.each { |k, v| headers[k] = v }
-        response_class.new( method, path, http_response.code.to_i, http_response.body, headers, request)
+        response_class.new( method, path, http_response.code.to_i, http_response.body, headers)
       end
 
     end
@@ -217,10 +211,9 @@ module Restfulie::Client::HTTP #:nodoc:
 
         ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
         begin
-          connection = get_connection_provider.send(method, path, *args)
-          response = ResponseHandler.handle(method, path, connection, self).parse
+          response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
         rescue Exception => e
-          raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}, self), e )
+          raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
         end 
 
         case response.code
@@ -378,6 +371,39 @@ module Restfulie::Client::HTTP #:nodoc:
 
     end
 
+
+    #=RequestFollow follow new location of a document usually with response codes 201,301,302,303 and 307. You can also configure other codes.
+    # 
+    #==Example:
+    # @executor = ::Restfulie::Client::HTTP::RequestFollowExecutor.new("http://restfulie.com") #this class includes RequestFollow module.
+    # @executor.at('/custom/songs').accepts('application/atom+xml').follow(201).post!("custom").code
+    module RequestFollow
+      include RequestBuilder
+
+      def follow(code)
+        follow_codes << code unless follow_codes.include?(code)
+        self
+      end
+
+      def request!(method, path, *args)#:nodoc:
+        response = super
+        if follow_codes.include?(response.code)
+          location = response.headers['location'] || response.headers['Location']
+          raise Error::AutoFollowWithoutLocationError.new(self, response) unless location
+          self.host = location
+          response = super(:get, self.path, headers)
+        end
+        response
+      end
+
+      protected
+
+      def follow_codes
+        @follow || @follow = [201,301,302,303,307]        
+      end
+
+    end
+
     #=RequestHistory
     # Uses RequestBuilder and remind previous requests
     #
@@ -386,10 +412,10 @@ module Restfulie::Client::HTTP #:nodoc:
     #   @executor = ::Restfulie::Client::HTTP::RequestHistoryExecutor.new("http://restfulie.com") #this class includes RequestHistory module.
     #   @executor.at('/posts').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #first request
     #   @executor.at('/blogs').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #second request
-    #   @executor.request_history!(0) #doing first request again
+    #   @executor.request_history!(0) #doing first request
     #
     module RequestHistory
-      include RequestBuilder
+      include RequestFollow
 
       attr_accessor_with_default :max_to_remind, 10
 
@@ -457,30 +483,32 @@ module Restfulie::Client::HTTP #:nodoc:
     end
 
     #=This class includes RequestBuilder module.
-    class RequestBuilderExecutor
+    class RequestBuilderExecutor < RequestExecutor
       include RequestBuilder
 
-      # * <tt> host (e.g. 'http://restfulie.com') </tt>
-      # * <tt> default_headers  (e.g. {'Cache-control' => 'no-cache'} ) </tt>
-      def initialize(host, default_headers = {})
-        self.host=host
-        self.default_headers=default_headers
-      end
       def host=(host)
         super
         at(self.host.path)
       end
+
       def at(path)
         @path = path
         self
       end
+
       def path
         @path
       end
+
     end
 
-    #=This class inherits RequestBuilderExecutor and include RequestHistory module.
-    class RequestHistoryExecutor < RequestBuilderExecutor
+    #=This class inherits RequestBuilderExecutor and include RequestFollow module.
+    class RequestFollowExecutor < RequestBuilderExecutor
+      include RequestFollow
+    end
+
+    #=This class inherits RequestFollowExecutor and include RequestHistory module.
+    class RequestHistoryExecutor < RequestFollowExecutor
       include RequestHistory
     end
 

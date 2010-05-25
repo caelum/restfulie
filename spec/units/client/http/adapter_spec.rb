@@ -90,6 +90,19 @@ context Restfulie::Client::HTTP do
 
   end
 
+  context 'RequestFollow' do
+
+    before(:all) do
+      @host = "http://localhost:4567"
+      @builder = Restfulie::Client::HTTP::RequestFollowExecutor.new('http://localhost:4567')
+    end
+
+    it 'should follow 201 responses' do
+      @builder.at('/test/redirect/songs').accepts('application/atom+xml').follow(201).post!("custom").code.should == 200
+    end
+
+  end
+
   context 'RequestHistory' do
 
     before(:all) do

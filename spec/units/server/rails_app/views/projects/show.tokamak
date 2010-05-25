@@ -1,1 +1,7 @@
-describe_member(Object.new, :values => { :title => "show.tokamak" })
+member(Object.new) do |member|  
+  member.values do |value|
+    value.id      "1"
+    value.title   "show.tokamak"
+    value.updated Time.now
+  end
+end

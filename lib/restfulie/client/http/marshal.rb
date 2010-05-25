@@ -3,28 +3,13 @@ module Restfulie::Client::HTTP
 
   module ResponseHolder
     attr_accessor :response
-    
-    def respond_to?(symbol)
-      super(symbol) || (super(:links) && respond_to_rel?(symbol.to_s))
-    end
-    
-    private
-    # whether this response contains specific relations
-    def respond_to_rel?(rel)
-      links.any? { |link| link.rel==rel }
-    end
-    
   end
 
   module RequestMarshaller
-    include ::Restfulie::Client::HTTP::RequestBuilder
+    include ::Restfulie::Client::HTTP::RequestHistory
     
-    # accepts a series of media types by default
-    def initialize
-    end
-
     @@representations = {
-      'application/atom+xml' => ::Restfulie::Common::Representation::Atom
+      'application/atom+xml' => ::Restfulie::Common::Converter::Atom
     }
     def self.register_representation(media_type,representation)
       @@representations[media_type] = representation
@@ -37,14 +22,11 @@ module Restfulie::Client::HTTP
     def self.content_type_for(media_type)
       return nil unless media_type
       content_type = media_type.split(';')[0] # [/(.*?);/, 1]
-      type = @@representations[content_type]
-      type ? type.new : nil
+      @@representations[content_type]
     end
 
     def accepts(media_types)
-      @acceptable_mediatypes = media_types
       @default_representation = @@representations[media_types]
-      raise "Undefined representation for #{media_types}" unless @default_representation
       super
     end
 
@@ -53,16 +35,26 @@ module Restfulie::Client::HTTP
       self
     end
 
-    #Executes super and unmarshalls it
-    def request!(method, path, *args)
-      
+    def post(payload, options = { :recipe => nil })
+      request(:post, path, payload, options.merge(headers))
+    end
+
+    def post!(payload, options = { :recipe => nil })
+      request!(:post, path, payload, options.merge(headers))
+    end
+
+    #Executes super if its a raw request, returning the content itself.
+    #otherwise tries to parse the content with a mediatype handler or returns the response itself.
+    def request!(method, path, *args)      
       if has_payload?(method, path, *args)
+        recipe = get_recipe(*args)
+        
         payload = get_payload(method, path, *args)
         rel = self.respond_to?(:rel) ? self.rel : ""
         type = headers['Content-Type']
         raise Restfulie::Common::Error::RestfulieError, "Missing content type related to the data to be submitted" unless type
         marshaller = RequestMarshaller.content_type_for(type)
-        payload = marshaller.marshal(payload, rel)
+        payload = marshaller.marshal(payload, { :rel => rel, :recipe => recipe })
         args = set_marshalled_payload(method, path, payload, *args)
         args = add_representation_headers(method, path, marshaller, *args)
       end
@@ -78,7 +70,6 @@ module Restfulie::Client::HTTP
 
     private
     
-        
     # parses the http response.
     # first checks if its a 201, redirecting to the resource location.
     # otherwise check if its a raw request, returning the content itself.
@@ -97,10 +88,19 @@ module Restfulie::Client::HTTP
         unmarshalled.response = response
         unmarshalled
       else
+        response.extend(ResponseHolder)
+        response.response = response
         response
       end
     end
-    
+
+    def get_recipe(*args)
+      headers_and_recipe = args.extract_options! 
+      recipe = headers_and_recipe.delete(:recipe)
+      args << headers_and_recipe
+      recipe
+    end
+
     def has_payload?(method, path, *args)
       [:put,:post].include?(method)
     end
@@ -126,34 +126,18 @@ module Restfulie::Client::HTTP
 
   end
 
-  # Gives to Link capabilities to fetch related resources.
   module LinkRequestBuilder
-    include Restfulie::Client::HTTP::RequestMarshaller
+    include RequestMarshaller
     def path#:nodoc:
       at(href)
-      as(content_type) if respond_to?(:content_type) && content_type
+      as(type) if type
       super
     end
   end
 
   #=This class includes RequestBuilder module.
-  class RequestMarshallerExecutor
+  class RequestMarshallerExecutor < RequestHistoryExecutor
     include RequestMarshaller
-
-    # * <tt> host (e.g. 'http://restfulie.com') </tt>
-    # * <tt> default_headers  (e.g. {'Cache-control' => 'no-cache'} ) </tt>
-    def initialize(host, default_headers = {})
-      self.host=host
-      self.default_headers=default_headers
-    end
-
-    def at(path)
-      @path = path
-      self
-    end
-    def path
-      @path
-    end
   end
 
 end

@@ -4,6 +4,12 @@ module Restfulie::Client#:nodoc
     include HTTP::RequestMarshaller
     extend self
 
+    def recipe(converter_sym, options={}, &block)
+      raise 'Undefined block' unless block_given?
+      converter = "Restfulie::Common::Converter::#{converter_sym.to_s.camelize}".constantize
+      converter.describe_recipe(options[:name], &block) 
+    end
+
     @resources_configurations = {}
     def configuration_of(resource_name)
       @resources_configurations[resource_name]
@@ -16,15 +22,11 @@ module Restfulie::Client#:nodoc
 
     def retrieve(resource_name)
       returning Object.new do |resource| 
-        restore.extend(Base)
+        resource.extend(Base)
         resource.configure
       end
     end
 
-  end
-  class NilEntryPoint
-    include Restfulie::Client::EntryPoint
-    # extend self
   end
 
   module Base
@@ -59,8 +61,10 @@ end
 
 # Shortcut to Restfulie::Client::EntryPoint
 module Restfulie
+  extend Restfulie::Client::EntryPoint
+  
   def self.at(uri)
-    Client::NilEntryPoint.new.at(uri)
+    Object.new.send(:extend, Restfulie::Client::EntryPoint).at(uri)
   end
 end
 
