@@ -494,13 +494,8 @@ module Restfulie::Client::HTTP #:nodoc:
 
     end
 
-    #=This class inherits RequestBuilderExecutor and include RequestFollow module.
-    class RequestFollowExecutor < RequestBuilderExecutor
-      include RequestFollow
-    end
-
     #=This class inherits RequestFollowExecutor and include RequestHistory module.
-    class RequestHistoryExecutor < RequestFollowExecutor
+    class RequestHistoryExecutor < RequestBuilderExecutor
       include RequestHistory
     end
 
