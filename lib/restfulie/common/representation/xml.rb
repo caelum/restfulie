@@ -17,22 +17,26 @@ class Hash
 end
 
 class Restfulie::Common::Converter::Xml::Links
+
   def initialize(links)
     links = [links] unless links.kind_of? Array
     links = [] unless links
     @links = links.map do |l|
-      Restfulie::Common::Converter::Xml::Link.new(l)
+      link = Restfulie::Common::Converter::Xml::Link.new(l)
+      link.instance_eval { self.class.send :include, ::Restfulie::Client::HTTP::LinkRequestBuilder }
+      link
     end
   end
+  
   def method_missing(sym, *args)
     @links.find do |link|
       link.rel == sym.to_s
     end
   end
+  
 end
 
 class Restfulie::Common::Converter::Xml::Link
-  # include ::Restfulie::Client::HTTP::LinkRequestBuilder
 
   def initialize(options = {})
     @options = options
@@ -45,6 +49,9 @@ class Restfulie::Common::Converter::Xml::Link
   end
   def content_type
     @options["type"]
+  end
+  def type
+    content_type
   end
 end
 
@@ -59,12 +66,13 @@ module Restfulie::Common::Converter::Xml
       :post => { 'Content-Type' => media_type_name }
     }
 
-    # def marshal(entity, rel)
-    #   return entity if entity.kind_of? String
-    #   return entity.values.first.to_xml(:root => entity.keys.first) if entity.kind_of?(Hash) && entity.size==1
-    #   entity.to_xml
-    # end
-    # 
+    def self.marshal(entity, options = {})
+      to_xml(entity, options)
+    end
+
+    def self.unmarshal(string)
+      Hash.from_xml string
+    end
 
     mattr_reader :recipes
     @@recipes = {}
@@ -83,10 +91,8 @@ module Restfulie::Common::Converter::Xml
       elsif options[:recipe]
         recipe = @@recipes[options[:recipe]]
       else
-        recipe = lambda { |what|
-          debugger
-          puts "what"
-        }
+        return obj.values.first.to_xml(:root => obj.keys.first) if obj.kind_of?(Hash) && obj.size==1
+        return obj.to_xml
       end
       
       # Create representation and proxy
@@ -94,8 +100,7 @@ module Restfulie::Common::Converter::Xml
 
       # Check recipe arity size before calling it
       recipe.call(*[builder, obj, options][0,recipe.arity])
-      puts builder.doc.to_xml
-      Hash.from_xml builder.doc.to_xml
+      builder.doc.to_xml
     end
     
     def self.helper
@@ -143,6 +148,7 @@ class Restfulie::Common::Converter::Xml::Builder
   def link(relationship, uri, options = {})
     options["rel"] = relationship.to_s
     options["href"] = uri
+    options["type"] ||= "application/xml"
     insert_value("link", nil, options)
   end
   

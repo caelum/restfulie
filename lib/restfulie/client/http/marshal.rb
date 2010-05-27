@@ -126,6 +126,8 @@ module Restfulie::Client::HTTP
 
   end
 
+  # NOTE: When including this module remember to override the type method to return
+  # a valid content type as a string.
   module LinkRequestBuilder
     include RequestMarshaller
     def path#:nodoc:

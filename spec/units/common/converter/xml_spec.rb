@@ -51,6 +51,7 @@ describe Restfulie::Common::Converter do
           
         end
         
+        feed = Hash.from_xml feed
         feed["some_articles"]["id"].should == "http://example.com/feed"
         feed["some_articles"]["title"].should == "Feed"
         # feed["updated"].should == DateTime.parse(time.xmlschema)
@@ -70,6 +71,7 @@ describe Restfulie::Common::Converter do
           end
         end
         
+        feed = Hash.from_xml feed
         feed.keys.first.should =="items"
         feed.items.keys.first.should =="item"
         # feed.items.item[0].name.should == "training"
@@ -80,6 +82,23 @@ describe Restfulie::Common::Converter do
     end
 
     describe "Entry" do
+
+      it "should use a default recipe extracting first root element that serializes an entire object if responds to to_xml" do
+        time = Time.now
+        an_article = {:article => {:id => 1, :title => "a great article", :updated => time}}
+        
+        entry = to_xml(an_article)
+        entry.should == an_article[:article].to_xml(:root => "article")
+      end
+
+      it "should use a default recipe that serializes an entire object if responds to to_xml" do
+        time = Time.now
+        an_article = {:id => 1, :title => "a great article", :updated => time}
+        
+        entry = to_xml(an_article)
+        entry.should == an_article.to_xml
+      end
+
       it "should create an entry from builder DSL" do
         time = Time.now
         an_article = {:article => {:id => 1, :title => "a great article", :updated => time}}
@@ -95,6 +114,7 @@ describe Restfulie::Common::Converter do
           member.link("image", "http://example.com/image/2", :type => "application/atom+xml")                                
         end
         
+        entry = Hash.from_xml entry
         entry["article"]["id"].should == "uri:1"
         entry["article"]["title"].should == "a great article"
         # entry["article"]["updated"].should == an_article[:article][:updated]
@@ -118,6 +138,7 @@ describe Restfulie::Common::Converter do
           
         end
         
+        entry = Hash.from_xml entry
         entry["article"]["id"].should == "uri:1"
         entry["article"]["title"].should == "a great article"
         # entry.updated.should == DateTime.parse(time.xmlschema)
@@ -143,6 +164,7 @@ describe Restfulie::Common::Converter do
         
         entry = to_xml(an_article, :atom_type => :entry, :recipe => :simple_entry)
         
+        entry = Hash.from_xml entry
         entry["article"]["id"].should == "uri:1"
         entry.article.title.should == "a great article"
         # entry.updated.should == DateTime.parse(time.xmlschema)
