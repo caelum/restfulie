@@ -29,7 +29,7 @@ module Restfulie
         def self.handlers(code)
           @@response_handlers[code] 
         end
-  
+
         ## 
         # :singleton-method:
         # Use to register response handlers
@@ -46,7 +46,7 @@ module Restfulie
         def self.register(code,response_class)
           @@response_handlers[code] = response_class 
         end
-  
+
         ## 
         # :singleton-method:
         # Request Adapter uses this method to choose response instance

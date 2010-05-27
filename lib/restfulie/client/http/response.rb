@@ -9,7 +9,7 @@ module Restfulie
         attr_reader :code
         attr_reader :body
         attr_reader :headers
-  
+
         def initialize(method, path, code, body, headers)
           @method = method
           @path = path

@@ -18,8 +18,8 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
     it 'should follow 201 responses and shouldnt unmarshal if forcing raw' do
       raw_response = @marshaller.at('/test/redirect/songs').accepts('application/atom+xml').as("application/atom+xml").raw.post!('<?xml version="1.0" encoding="UTF-8" ?><feed xmlns="http://www.w3.org/2005/Atom"><id>http://example.com/albums/1</id><title>Albums feed</title><updated>2010-05-03T16:29:26-03:00</updated></feed>')
-      raw_response.code.should == 200
-      raw_response.body.should == response_data( 'atoms', 'songs' )
+      raw_response.response.code.should == 200
+      raw_response.response.body.should == response_data( 'atoms', 'songs' )
     end
 
   end
