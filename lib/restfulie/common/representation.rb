@@ -1,11 +1,11 @@
 #initialize namespace
-module Restfulie::Common::Representation; end
-
-%w(
-  atom
-  generic
-  json
-  xml
-).each do |file|
-  require File.join(File.dirname(__FILE__), 'representation', file)
+module Restfulie
+  module Common
+    module Representation
+      autoload :Atom, 'restfulie/common/representation/atom'
+      autoload :Generic, 'restfulie/common/representation/generic'
+      autoload :Json, 'restfulie/common/representation/json'
+      autoload :XmlD, 'restfulie/common/representation/xml'
+    end
+  end
 end

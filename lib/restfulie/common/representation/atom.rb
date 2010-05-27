@@ -1,52 +1,19 @@
 require 'nokogiri'
 
-#initialize namespace
-module Restfulie::Common::Representation::Atom
-  
-  # Create a new Representation::Atom object using a +string_or_io+
-  # object.
-  #
-  # Examples
-  #   xml  = IO.read("spec/units/lib/atoms/full_atom.xml")
-  #   atom = Restfulie::Common::Representation::Atom.new(xml)
-  class Factory
-    # RelaxNG file to validate atom
-    RELAXNG_ATOM = File.join(File.dirname(__FILE__), 'atom', 'atom.rng')
-    
-    if Nokogiri::VERSION_INFO["libxml"]["loaded"] < "2.7.7"
-      puts "WARNING! In order to use schema validation on atom representations you need libxml version 2.7.7 or superior loaded in your system." 
-      SCHEMA       = nil
-    else
-      SCHEMA       = ::Nokogiri::XML::RelaxNG(File.open(RELAXNG_ATOM))
+module Restfulie
+  module Common
+    module Representation
+      module Atom
+        autoload :Factory, 'restfulie/common/representation/atom/factory'
+        autoload :XML, 'restfulie/common/representation/atom/xml'
+        autoload :Base, 'restfulie/common/representation/atom/base'
+        autoload :TagCollection, 'restfulie/common/representation/atom/tag_collection'
+        autoload :Link, 'restfulie/common/representation/atom/link'
+        autoload :Person, 'restfulie/common/representation/atom/person'
+        autoload :Category, 'restfulie/common/representation/atom/category'
+        autoload :Feed, 'restfulie/common/representation/atom/feed'
+        autoload :Entry, 'restfulie/common/representation/atom/entry'
+      end
     end
-
-    class << self
-      def create(string_or_io)
-        doc = string_or_io.kind_of?(Nokogiri::XML::Document) ? string_or_io : Nokogiri::XML(string_or_io) 
-        
-        if SCHEMA && !(errors = SCHEMA.validate(doc)).empty?
-          raise Restfulie::Common::Representation::Atom::AtomInvalid.new("Invalid Atom: "+ errors.join(", "))
-        end
-        
-        if doc.root.name == "feed"
-          Restfulie::Common::Representation::Atom::Feed.new(doc)
-        elsif doc.root.name == "entry"
-          Restfulie::Common::Representation::Atom::Entry.new(doc)
-        end        
-      end      
-    end
-    
   end
-  
-  class AtomInvalid < StandardError; end
-  
 end
-
-%w(
-  base
-  feed
-  entry
-).each do |file|
-  require File.join(File.dirname(__FILE__), 'atom', file)
-end
-

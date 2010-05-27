@@ -1,5 +1,2 @@
-%w(
-  proc
-).each do |file|
-  require File.join(File.dirname(__FILE__), 'core_ext', file)
-end
+require 'restfulie/common/core_ext/proc'
+require 'restfulie/common/core_ext/hash'
