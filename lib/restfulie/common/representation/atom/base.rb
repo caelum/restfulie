@@ -126,6 +126,107 @@ module Restfulie
             return @categories
           end
         end
+
+  class TagCollection < ::Array
+    def initialize(parent_node, &block)
+      @node = parent_node
+      @method_missing_block = block_given? ? block : nil
+      super(0)
+    end
+    
+    def <<(obj)
+      obj = [obj] unless obj.kind_of?(Array)
+      obj.each do |o|
+        o.doc.parent = @node
+        super(o)
+      end
+    end
+    
+    def delete(obj)
+      if super(obj)
+        obj.doc.unlink
+        obj = nil
+      end
+    end
+    
+    def method_missing(symbol, *args, &block)
+      if @method_missing_block
+        @method_missing_block.call(self, symbol, *args)
+      else
+        super
+      end
+    end
+  end
+
+  class Link < XML    
+    def initialize(options_or_obj)
+      if options_or_obj.kind_of?(Hash)
+        @doc = Nokogiri::XML::Document.new()
+        options_or_obj = create_element("link", options_or_obj)
+      end
+      super(options_or_obj)
+    end
+    
+    def href
+      @doc["href"]
+    end
+    
+    def href=(value)
+      @doc["href"] = value
+    end
+    
+    def rel
+      @doc["rel"]
+    end
+    
+    def rel=(value)
+      @doc["rel"] = value
+    end
+
+    def type
+      @doc["type"]
+    end
+    
+    def type=(value)
+      @doc["type"] = value
+    end
+
+    def hreflang
+      @doc["hreflang"]
+    end
+    
+    def hreflang=(value)
+      @doc["hreflang"] = value
+    end
+
+    def title
+      @doc["title"]
+    end
+    
+    def title=(value)
+      @doc["title"] = value
+    end
+    
+    def length
+      @doc["length"]
+    end
+    
+    def length=(value)
+      @doc["length"] = value
+    end
+  end
+  
+  class Person < XML    
+    def initialize(node_type, options_or_obj)
+      if options_or_obj.kind_of?(Hash)
+        @doc = Nokogiri::XML::Document.new()
+        node = @doc.create_element(node_type)
+        node.add_namespace_definition(nil, "http://www.w3.org/2005/Atom")
+        node.parent = @doc
+        super(node)
+        options_or_obj.each do |key,value|
+          self.send("#{key}=".to_sym, value)
+        end
       end
     end
   end

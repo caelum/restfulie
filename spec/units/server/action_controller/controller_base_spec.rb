@@ -40,6 +40,7 @@ describe Restfulie::Server::ActionController::Base, :type => :controller do
   end
   
   it "calls to_atom in show's object if object respond_to :to_atom" do
+    @atom = Object.new
     @object.should_receive(:to_atom).once.and_return(@atom)
     @atom.should_receive(:to_xml).once
     get :show_with_mock, :id => 1

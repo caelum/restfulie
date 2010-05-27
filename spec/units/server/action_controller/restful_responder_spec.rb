@@ -60,9 +60,17 @@ describe RestfulController, :type => :controller do
       response.status.to_i.should == 200
     end
     
-    it "does not use cache in PUT requests"
-    it "does not use cache in POST requests" 
-    it "does not set cache for new records"
+    it "does not use cache in PUT requests" do
+      pending
+    end
+
+    it "does not use cache in POST requests" do
+      pending
+    end
+
+    it "does not set cache for new records" do
+      pending
+    end
     
     it "does not set cache if Last-Modified is already in response" do
       get :single, :last_modified => true
