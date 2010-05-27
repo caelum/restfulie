@@ -1,8 +1,10 @@
 if defined? ::ActionView and ::ActionController
-  
-  module Restfulie::Server::ActionView #:nodoc:
+  module Restfulie #:nodoc:
+    module Server #:nodoc:
+      module ActionView #:nodoc:
+        autoload :TemplateHandlers, 'restfulie/server/action_view/template_handlers'
+        autoload :Helpers, 'restfulie/server/action_view/helpers'
+      end
+    end
   end
-  
-  require 'restfulie/server/action_view/template_handlers'
-  require 'restfulie/server/action_view/helpers'
 end

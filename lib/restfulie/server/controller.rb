@@ -1,15 +1,10 @@
 module Restfulie
-  
   module Server
-  
     # Controller which adds default CRUD + search + other operations.
     # TODO: move these actions to controller/base.rb (maybe using InheritedResources, maybe not)
     module Controller
-    
       # creates a model based on the request media-type extracted from its content-type
-      # 
       def create
-
         type = model_type
         return head 415 unless fits_content(type, request.headers['CONTENT_TYPE'])
 
@@ -19,7 +14,6 @@ module Restfulie
         else
           render :xml => @model.errors, :status => :unprocessable_entity
         end
-
       end
     
       # renders this resource
@@ -75,9 +69,6 @@ module Restfulie
                 type.media_type_representations.include?(content_type) :
                 Restfulie::MediaType.default_representations.include?(content_type))
       end
-    
     end
-    
   end
-  
 end
