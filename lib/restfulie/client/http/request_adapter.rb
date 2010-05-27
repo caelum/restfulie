@@ -15,7 +15,7 @@ module Restfulie
         attr_reader   :host
         attr_accessor :cookies
         attr_writer   :default_headers
-  
+
         def host=(host)
           if host.is_a?(::URI)
             @host = host
@@ -23,25 +23,25 @@ module Restfulie
             @host = ::URI.parse(host)
           end
         end
-  
+
         def default_headers
           @default_headers ||= {}
         end
-  
+
         #GET HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def get(path, *args)
           request(:get, path, *args)
         end
-  
+
         #HEAD HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def head(path, *args)
           request(:head, path, *args)
         end
-  
+
         #POST HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
@@ -49,7 +49,7 @@ module Restfulie
         def post(path, payload, *args)
           request(:post, path, payload, *args)
         end
-        
+
         #PATCH HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
@@ -57,7 +57,7 @@ module Restfulie
         def patch(path, payload, *args)
           request(:patch, path, payload, *args)
         end
-  
+
         #PUT HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
@@ -65,28 +65,28 @@ module Restfulie
         def put(path, payload, *args)
           request(:put, path, payload, *args)
         end
-  
+
         #DELETE HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def delete(path, *args)
           request(:delete, path, *args)
         end
-  
+
         #GET HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def get!(path, *args)
           request!(:get, path, *args)
         end
-  
+
         #HEAD HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def head!(path, *args)
           request!(:head, path, *args)
         end
-  
+
         #POST HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
@@ -94,7 +94,7 @@ module Restfulie
         def post!(path, payload, *args)
           request!(:post, path, payload, *args)
         end
-        
+
         #PATCH HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
@@ -102,7 +102,7 @@ module Restfulie
         def patch!(path, payload, *args)
           request!(:patch, path, payload, *args)
         end
-  
+
         #PUT HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
@@ -110,14 +110,14 @@ module Restfulie
         def put!(path, payload, *args)
           request!(:put, path, payload, *args)
         end
-  
+
         #DELETE HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def delete!(path, *args)
           request!(:delete, path, *args)
         end
-  
+
         #Executes a request against your server and return a response instance without {Error}
         # * <tt>method: :get,:post,:delete,:head,:put</tt>
         # * <tt>path: '/posts'</tt>
@@ -127,7 +127,7 @@ module Restfulie
         rescue Error::RESTError => se
           se.response
         end
-  
+
         #Executes a request against your server and return a response instance.
         # * <tt>method: :get,:post,:delete,:head,:put</tt>
         # * <tt>path: '/posts'</tt>
@@ -139,14 +139,14 @@ module Restfulie
           end
           headers['cookie'] = @cookies if @cookies
           args << headers
-  
+
           ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
           begin
             response = ResponseHandler.handle(method, path, get_connection_provider.send(method, path, *args))
           rescue Exception => e
             raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
           end 
-  
+
           case response.code
           when 100..299
             response 
@@ -180,27 +180,27 @@ module Restfulie
             raise Error::UnknownError.new(self, response)
           end
         end
-  
+
         private
-  
+
         def get_connection_provider
           @connection ||= ::Net::HTTP.new(@host.host, @host.port)
         end
-  
+
         protected
-  
+
         def request_to_s(method, path, *args)
           result = ["#{method.to_s.upcase} #{path}"]
-  
+
           arguments = args.dup
           headers = arguments.extract_options!
-  
+
           if [:post, :put].include?(method)
             body = arguments.shift
           end
-  
+
           result << headers.collect { |key, value| "#{key}: #{value}" }.join("\n")
-  
+
           (result + [body ? (body.inspect + "\n") : nil]).compact.join("\n") << "\n"
         end
       end

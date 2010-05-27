@@ -5,11 +5,12 @@ module Restfulie
         include RequestHistory
         
         @@representations = {
-          'application/atom+xml' => Common::Converter::Atom,
-          'application/xml' => Common::Representation::XmlD,
-          'text/xml' => Common::Representation::XmlD,
-          'application/json' => Common::Representation::Json
+          'application/atom+xml' => ::Restfulie::Common::Converter::Atom,
+          'application/xml' => ::Restfulie::Common::Converter::Xml,
+          'text/xml' => ::Restfulie::Common::Converter::Xml,
+          'application/json' => ::Restfulie::Common::Representation::Json
         }
+        
         def self.register_representation(media_type,representation)
           @@representations[media_type] = representation
         end
@@ -118,6 +119,7 @@ module Restfulie
           args << headers
           args
         end
+
       end
     end
   end

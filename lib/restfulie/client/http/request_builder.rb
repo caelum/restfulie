@@ -11,25 +11,25 @@ module Restfulie
       #
       module RequestBuilder
         include RequestAdapter
-  
+
         #Set host
         def at(url)
           self.host = url
           self
         end
-       
+
         #Set Content-Type and Accept headers
         def as(content_type)
           headers['Content-Type'] = content_type
           accepts(content_type)
         end
-       
+
         #Set Accept headers
         def accepts(content_type)
           headers['Accept'] = content_type
           self
         end
-       
+
         #
         #Merge internal header
         #
@@ -39,66 +39,66 @@ module Restfulie
           self.headers.merge!(headers)
           self
         end
-  
+
         def headers
           @headers || @headers = {}
         end
-        
+
         #Path (e.g. http://restfulie.com/posts => /posts)
         def path
           host.path
         end
-  
+
         def get
           request(:get, path, headers)
         end
-  
+
         def head
           request(:head, path, headers)
         end
-  
+
         def post(payload)
           request(:post, path, payload, headers)
         end
-  
+
         def patch(payload)
           request(:patch, path, payload, headers)
         end
-  
+
         def put(payload)
           request(:put, path, payload, headers)
         end
-  
+
         def delete
           request(:delete, path, headers)
         end
-  
+
         def get!
           request!(:get, path, headers)
         end
-  
+
         def head!
           request!(:head, path, headers)
         end
-  
+
         def post!(payload)
           request!(:post, path, payload, headers)
         end
-  
+
         def patch!(payload)
           request!(:patch, path, payload, headers)
         end
-  
+
         def put!(payload)
           request!(:put, path, payload, headers)
         end
-  
+
         def delete!
           request!(:delete, path, headers)
         end
-  
+
         protected
-  
+
         def headers=(h)
           @headers = h
         end
