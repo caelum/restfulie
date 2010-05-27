@@ -164,9 +164,9 @@ class Restfulie::Common::Converter::Xml::Builder
     if obj.kind_of?(Hash) && obj.size==1
       obj.keys.first.to_s
     elsif obj.kind_of?(Array) && !obj.empty?
-      root_element_for(obj.first).pluralize
+      root_element_for(obj.first).underscore.pluralize
     else
-      obj.class.to_s
+      obj.class.to_s.underscore
     end
   end
   

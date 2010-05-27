@@ -10,6 +10,13 @@ module Restfulie::Common::Converter::Test
   end
 end
 
+class Item
+  attr_reader :name
+  def initialize(name)
+    @name = name
+  end
+end
+
 describe Restfulie::Common::Converter do
   describe 'Xml' do
 
@@ -49,6 +56,24 @@ describe Restfulie::Common::Converter do
         # feed["updated"].should == DateTime.parse(time.xmlschema)
         feed.some_articles.authors.author.first["name"].should == "John Doe"
         feed.some_articles.authors.author.last["email"].should == "foobar@example.com"
+        
+     end
+
+      it "should pluralize items on root and singularize on element" do
+        time = Time.now
+        some_articles = [Item.new("training"), Item.new("books")]
+        
+        feed = to_xml(some_articles) do |collection|
+          collection.values do |values|
+            collection.members do |member, item|
+            end
+          end
+        end
+        
+        feed.keys.first.should =="items"
+        feed.items.keys.first.should =="item"
+        # feed.items.item[0].name.should == "training"
+        # feed.items.item[1].name.should == "books"
         
      end
 
