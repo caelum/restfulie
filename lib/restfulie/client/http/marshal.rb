@@ -15,8 +15,8 @@ module Restfulie::Client::HTTP
       @@representations[media_type] = representation
     end
 
-    RequestMarshaller.register_representation('application/xml', ::Restfulie::Common::Representation::XmlD)
-    RequestMarshaller.register_representation('text/xml', ::Restfulie::Common::Representation::XmlD)
+    RequestMarshaller.register_representation('application/xml', ::Restfulie::Common::Converter::Xml)
+    RequestMarshaller.register_representation('text/xml', ::Restfulie::Common::Converter::Xml)
     RequestMarshaller.register_representation('application/json', ::Restfulie::Common::Representation::Json)
 
     def self.content_type_for(media_type)
@@ -126,6 +126,8 @@ module Restfulie::Client::HTTP
 
   end
 
+  # NOTE: When including this module remember to override the type method to return
+  # a valid content type as a string.
   module LinkRequestBuilder
     include RequestMarshaller
     def path#:nodoc:
