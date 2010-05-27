@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Common::Representation::XmlD do
+context Restfulie::Common::Converter::Xml do
   
   context "when unmarshalling" do
 
