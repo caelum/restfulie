@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 20100116230612) do
     t.decimal  "price",      :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "order_id"
+    t.integer  "order_id",   :default => 1
   end
 
   create_table "orders", :force => true do |t|
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 20100116230612) do
     t.decimal  "amount",     :default => 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "order_id"
+    t.integer  "order_id",   :default => 1
   end
 
 end
