@@ -21,6 +21,7 @@ group :test do
   gem "rspec-rails"
   gem "rcov"
   gem "sinatra"
+	gem "state_machine"
   gem "test-unit", "= 1.2.3"
 end  
 
