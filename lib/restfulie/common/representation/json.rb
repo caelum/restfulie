@@ -1,4 +1,6 @@
-module Restfulie::Common::Representation
+module Restfulie
+  module Common
+    module Representation
 
   class Json
     
@@ -122,4 +124,6 @@ module Restfulie::Common::Representation
     end
   end
     
+    end
+  end
 end

@@ -8,7 +8,7 @@ module Restfulie::Common::Converter::Json
     end
 
     def values(options = nil, &block)
-      yield Restfulie::Common::Converter::Components::Values.new(self)
+      yield Restfulie::Common::Converter::Values.new(self)
     end
     
     def members(options = {}, &block)
