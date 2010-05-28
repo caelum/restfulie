@@ -12,7 +12,6 @@ end
 %w(
   errors
   logger
-  core_ext
   representation
   converter
 ).each do |file| 
