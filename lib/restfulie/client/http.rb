@@ -7,6 +7,7 @@ end
   cache
   marshal
   atom_ext
+  json_ext
   xml_ext
   core_ext
 ).each do |file|

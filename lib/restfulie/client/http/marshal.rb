@@ -17,7 +17,7 @@ module Restfulie::Client::HTTP
 
     RequestMarshaller.register_representation('application/xml', ::Restfulie::Common::Representation::XmlD)
     RequestMarshaller.register_representation('text/xml', ::Restfulie::Common::Representation::XmlD)
-    RequestMarshaller.register_representation('application/json', ::Restfulie::Common::Representation::JSON)
+    RequestMarshaller.register_representation('application/json', ::Restfulie::Common::Representation::Json)
 
     def self.content_type_for(media_type)
       return nil unless media_type
