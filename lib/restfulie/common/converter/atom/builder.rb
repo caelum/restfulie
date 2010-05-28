@@ -22,9 +22,9 @@ module Restfulie::Common::Converter::Atom
       yield Restfulie::Common::Converter::Components::Values.new(self)
     end
     
-    def members(a_collection = nil, &block)
-      collection = a_collection || @obj 
-      raise Restfulie::Common::Error::BuilderError("Members method require a collection to execute") unless collection.respond_to?(:each)
+    def members(options = {}, &block)
+      collection = options[:collection] || @obj 
+      raise Restfulie::Common::Error::BuilderError.new("Members method require a collection to execute") unless collection.respond_to?(:each)
       collection.each do |member|
         entry = @doc.create_element("entry")
         entry.parent = @parent
@@ -37,6 +37,7 @@ module Restfulie::Common::Converter::Atom
     def link(relationship, uri, options = {})
       options["rel"] = relationship.to_s
       options["href"] = uri
+      options["type"] ||= "application/atom+xml"
       insert_value("link", nil, options)
     end
 
