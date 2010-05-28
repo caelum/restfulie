@@ -1,6 +1,6 @@
 module Restfulie::Common::Representation
 
-  class JSON
+  class Json
     
     class << self
       def create(obj = nil)
@@ -21,10 +21,8 @@ module Restfulie::Common::Representation
   
   module JSONKeysAsMethods
 
-    # overriding the already deprecated method :type
-    alias_method :__type__, :type
-    def type
-      method_missing(:type)
+    def self.extended(base)
+      [:type, :id].each { |m| base.__free_method__(m) }      
     end
     
     def [](key)
@@ -48,16 +46,28 @@ module Restfulie::Common::Representation
       end
     end
 
-    # if you have a key that is also a method (such as Array#size) 
+    # if you have a key that is also a method (such as Array#size)
     # you can use this to free the method and use the method obj.size
     # to access the value of key "size".
     # you still can access the old method with __[method_name]__
     def __free_method__(sym)
-      self.class.send(:alias_method, "__#{sym.to_s}__".to_sym, sym)
-      self.class.send(:define_method, sym) { method_missing(sym.to_s) }
+      self.__metaclass__.send(:alias_method, "__#{sym.to_s}__".to_sym, sym) unless self.respond_to?("__#{sym.to_s}__")
+      self.__metaclass__.send(:define_method, sym) { method_missing(sym.to_s) }
       self
     end
 
+    def __metaclass__
+      class << self; self; end
+    end
+    
+    # easy accessors to links
+    def links
+      some_links = self["link"]
+      return nil unless some_links
+      some_links = [some_links] unless some_links.kind_of? Array
+      JsonLinkCollection.new(some_links)
+    end
+        
   private
 
     def __normalize__(value)
@@ -74,4 +84,42 @@ module Restfulie::Common::Representation
     
   end
   
+  class JsonLinkCollection
+    def initialize(parent_node)
+      @node = parent_node
+    end
+    
+    def method_missing(symbol, *args, &block)
+      linkset = @node.select {|link| link.rel == symbol.to_s }
+      linkset.map! { |link| JsonLink.new(link) }
+      unless linkset.empty?
+        linkset.size == 1 ? linkset.first : linkset
+      else
+        nil
+      end
+    end
+  end
+  
+  class JsonLink
+    def initialize(obj)
+      @obj = obj
+    end
+    
+    def type
+      @obj.type
+    end
+    
+    def href
+      @obj.href
+    end
+    
+    def rel
+      @obj.rel
+    end
+        
+    def method_missing(symbol, *args, &block)
+      @obj.send(symbol, *args, &block)
+    end
+  end
+    
 end
