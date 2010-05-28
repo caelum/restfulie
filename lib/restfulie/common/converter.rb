@@ -6,6 +6,9 @@ module Restfulie::Common::Converter; end
   atom
   atom/builder
   atom/helpers
+  json
+  json/builder
+  json/helpers
 ).each do |file|
   require File.join(File.dirname(__FILE__), 'converter', file)
 end
