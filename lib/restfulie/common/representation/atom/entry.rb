@@ -9,7 +9,7 @@ module Restfulie
             @reserved = Base::ATOM_ATTRIBUTES[:entry][:required] + Base::ATOM_ATTRIBUTES[:entry][:recommended] + Base::ATOM_ATTRIBUTES[:entry][:optional]
           end
            
-          #text
+          # text
           def content
             text("content")
           end
@@ -18,7 +18,7 @@ module Restfulie
             set_text("content", value)
           end
         
-          #text
+          # text
           def summary
             text("summary")
           end
@@ -27,7 +27,7 @@ module Restfulie
             set_text("summary", value)
           end
         
-          #rfc 3339
+          # rfc 3339
           def published
             value = text("published")
             Time.parse(value) unless value.nil?

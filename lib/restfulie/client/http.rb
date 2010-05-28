@@ -21,7 +21,3 @@ module Restfulie
   end
 end
 
-require 'restfulie/client/http/atom_ext'
-require 'restfulie/client/http/json_ext'
-require 'restfulie/client/http/xml_ext'
-require 'restfulie/client/http/core_ext'

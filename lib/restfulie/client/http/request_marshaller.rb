@@ -6,9 +6,9 @@ module Restfulie
         
         @@representations = {
           'application/atom+xml' => ::Restfulie::Common::Converter::Atom,
-          'application/xml' => ::Restfulie::Common::Converter::Xml,
-          'text/xml' => ::Restfulie::Common::Converter::Xml,
-          'application/json' => ::Restfulie::Common::Converter::Json
+          'application/xml'      => ::Restfulie::Common::Converter::Xml,
+          'text/xml'             => ::Restfulie::Common::Converter::Xml,
+          'application/json'     => ::Restfulie::Common::Converter::Json
         }
         
         def self.register_representation(media_type,representation)
@@ -39,8 +39,8 @@ module Restfulie
           request!(:post, path, payload, options.merge(headers))
         end
     
-        #Executes super if its a raw request, returning the content itself.
-        #otherwise tries to parse the content with a mediatype handler or returns the response itself.
+        # Executes super if its a raw request, returning the content itself.
+        # otherwise tries to parse the content with a mediatype handler or returns the response itself.
         def request!(method, path, *args)      
           if has_payload?(method, path, *args)
             recipe = get_recipe(*args)
@@ -119,7 +119,6 @@ module Restfulie
           args << headers
           args
         end
-
       end
     end
   end

@@ -1,10 +1,10 @@
 module Restfulie
   module Client
     module HTTP #:nodoc:
-      #=RequestHistory
+      # ==== RequestHistory
       # Uses RequestBuilder and remind previous requests
       #
-      #==Example:
+      # ==== Example:
       #
       #   @executor = ::Restfulie::Client::HTTP::RequestHistoryExecutor.new("http://restfulie.com") #this class includes RequestHistory module.
       #   @executor.at('/posts').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #first request

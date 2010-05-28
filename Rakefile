@@ -4,9 +4,10 @@ require 'rake'
 require 'rake/gempackagetask'
 require 'spec/rake/spectask'
 require 'rake/rdoctask'
+require 'lib/restfulie'
 
 GEM = "restfulie"
-GEM_VERSION = "0.8.0"
+GEM_VERSION = Restfulie::VERSION
 SUMMARY  = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
 AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Éverton Ribeiro, George Guimarães, Paulo Ahagon"
 EMAIL    = "guilherme.silveira@caelum.com.br"

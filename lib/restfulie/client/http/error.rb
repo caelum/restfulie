@@ -23,7 +23,7 @@ module Restfulie
   
         class AutoFollowWithoutLocationError < RESTError; end
         
-        #Represents the HTTP code 503
+        # Represents the HTTP code 503
         class ServerNotAvailableError < RESTError
           def initialize(request, response, exception)
             super(request, response)
@@ -33,42 +33,42 @@ module Restfulie
   
         class UnknownError < RESTError;  end
   
-        #Represents the HTTP code 300 range
+        # Represents the HTTP code 300 range
         class Redirection < RESTError; end 
   
         class ClientError < RESTError; end
   
-        #Represents the HTTP code 400
+        # Represents the HTTP code 400
         class BadRequest < ClientError; end 
   
-        #Represents the HTTP code 401
+        # Represents the HTTP code 401
         class Unauthorized < ClientError; end 
   
-        #Represents the HTTP code 403
+        # Represents the HTTP code 403
         class Forbidden < ClientError; end 
   
-        #Represents the HTTP code 404
+        # Represents the HTTP code 404
         class NotFound < ClientError; end 
   
-        #Represents the HTTP code 405
+        # Represents the HTTP code 405
         class MethodNotAllowed < ClientError; end 
   
-        #Represents the HTTP code 412
+        # Represents the HTTP code 412
         class PreconditionFailed < ClientError; end 
   
-        #Represents the HTTP code 407
+        # Represents the HTTP code 407
         class ProxyAuthenticationRequired < ClientError; end 
   
-        #Represents the HTTP code 409
+        # Represents the HTTP code 409
         class Conflict < ClientError; end 
   
-        #Represents the HTTP code 410
+        # Represents the HTTP code 410
         class Gone < ClientError; end 
   
-        #Represents the HTTP code 500
+        # Represents the HTTP code 500
         class ServerError < RESTError; end 
   
-        #Represents the HTTP code 501
+        # Represents the HTTP code 501
         class NotImplemented < ServerError; end 
       end
     end

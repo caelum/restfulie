@@ -1,10 +1,10 @@
 module Restfulie
   module Client
     module HTTP #:nodoc:
-      #=RequestBuilder
+      # ==== RequestBuilder
       # Uses RequestAdapater to create a HTTP Request DSL 
       #
-      #==Example:
+      # ==== Example:
       #
       #   @builder = ::Restfulie::Client::HTTP::RequestBuilderExecutor.new("http://restfulie.com") #this class includes RequestBuilder module.
       #   @builder.at('/posts').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200
@@ -30,8 +30,7 @@ module Restfulie
           self
         end
 
-        #
-        #Merge internal header
+        # Merge internal header
         #
         # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
         #
@@ -44,7 +43,7 @@ module Restfulie
           @headers || @headers = {}
         end
 
-        #Path (e.g. http://restfulie.com/posts => /posts)
+        # Path (e.g. http://restfulie.com/posts => /posts)
         def path
           host.path
         end

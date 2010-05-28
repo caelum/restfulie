@@ -28,21 +28,21 @@ module Restfulie
           @default_headers ||= {}
         end
 
-        #GET HTTP verb without {Error}
+        # GET HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def get(path, *args)
           request(:get, path, *args)
         end
 
-        #HEAD HTTP verb without {Error}
+        # HEAD HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def head(path, *args)
           request(:head, path, *args)
         end
 
-        #POST HTTP verb without {Error}
+        # POST HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
@@ -50,7 +50,7 @@ module Restfulie
           request(:post, path, payload, *args)
         end
 
-        #PATCH HTTP verb without {Error}
+        # PATCH HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
@@ -58,7 +58,7 @@ module Restfulie
           request(:patch, path, payload, *args)
         end
 
-        #PUT HTTP verb without {Error}
+        # PUT HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
@@ -66,28 +66,28 @@ module Restfulie
           request(:put, path, payload, *args)
         end
 
-        #DELETE HTTP verb without {Error}
+        # DELETE HTTP verb without {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def delete(path, *args)
           request(:delete, path, *args)
         end
 
-        #GET HTTP verb {Error}
+        # GET HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def get!(path, *args)
           request!(:get, path, *args)
         end
 
-        #HEAD HTTP verb {Error}
+        # HEAD HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def head!(path, *args)
           request!(:head, path, *args)
         end
 
-        #POST HTTP verb {Error}
+        # POST HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
@@ -95,7 +95,7 @@ module Restfulie
           request!(:post, path, payload, *args)
         end
 
-        #PATCH HTTP verb {Error}
+        # PATCH HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
@@ -103,7 +103,7 @@ module Restfulie
           request!(:patch, path, payload, *args)
         end
 
-        #PUT HTTP verb {Error}
+        # PUT HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>payload: 'some text'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
@@ -111,14 +111,14 @@ module Restfulie
           request!(:put, path, payload, *args)
         end
 
-        #DELETE HTTP verb {Error}
+        # DELETE HTTP verb {Error}
         # * <tt>path: '/posts'</tt>
         # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def delete!(path, *args)
           request!(:delete, path, *args)
         end
 
-        #Executes a request against your server and return a response instance without {Error}
+        # Executes a request against your server and return a response instance without {Error}
         # * <tt>method: :get,:post,:delete,:head,:put</tt>
         # * <tt>path: '/posts'</tt>
         # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
@@ -128,7 +128,7 @@ module Restfulie
           se.response
         end
 
-        #Executes a request against your server and return a response instance.
+        # Executes a request against your server and return a response instance.
         # * <tt>method: :get,:post,:delete,:head,:put</tt>
         # * <tt>path: '/posts'</tt>
         # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>

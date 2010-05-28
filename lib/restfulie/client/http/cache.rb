@@ -17,7 +17,6 @@ module Restfulie
             request(:head, @uri, @headers)
           end
         end
-    
       end
     
       class RequestBuilderExecutorWithCache < RequestBuilderExecutor

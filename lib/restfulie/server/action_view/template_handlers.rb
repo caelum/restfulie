@@ -3,7 +3,9 @@ module Restfulie
     module ActionView
       module TemplateHandlers #:nodoc:
         autoload :Tokamak, 'restfulie/server/action_view/template_handlers/tokamak'
-      
+        
+        # It is needed to explicitly call 'activate!' to install the Tokamak
+        # template handler
         def self.activate!
           if defined? ::ActionView::Template and 
             ::ActionView::Template.respond_to?(:register_template_handler)

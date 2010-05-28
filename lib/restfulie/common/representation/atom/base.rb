@@ -37,7 +37,7 @@ module Restfulie
             return result
           end
           
-          #simpletext
+          # simpletext
           def id
             text("id")
           end
