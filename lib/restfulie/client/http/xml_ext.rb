@@ -1,3 +1,3 @@
-Hash.instance_eval {
+class Hash
   include Restfulie::Client::HTTP::LinkRequestBuilder
-}
+end

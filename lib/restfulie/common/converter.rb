@@ -3,7 +3,7 @@ module Restfulie
     module Converter
       autoload :Values, 'restfulie/common/converter/values'
       autoload :Atom, 'restfulie/common/converter/atom'
-      autoload :Json, 'restfulie/common/converter/xml'
+      autoload :Json, 'restfulie/common/converter/json'
       autoload :Xml, 'restfulie/common/converter/xml'
     end
   end

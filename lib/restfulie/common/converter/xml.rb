@@ -7,7 +7,6 @@ module Restfulie
         autoload :Helpers, 'restfulie/common/converter/xml/helpers'
         autoload :Links, 'restfulie/common/converter/xml/links'
         autoload :Link, 'restfulie/common/converter/xml/link'
-        include Base
         extend Base::ClassMethods
       end
     end

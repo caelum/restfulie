@@ -1,4 +1,11 @@
-module Restfulie::Client::HTTP#:nodoc:
-  # inject new behavior in JsonLink instances to enable easily access to link relationships.
-  ::Restfulie::Common::Representation::JsonLink.instance_eval { include LinkRequestBuilder }
+module Restfulie
+  module Common
+    module Representation
+      class Json
+        class Link
+          include Restfulie::Client::HTTP::LinkRequestBuilder
+        end
+      end
+    end
+  end
 end

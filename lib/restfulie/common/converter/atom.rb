@@ -5,7 +5,6 @@ module Restfulie
         autoload :Base, 'restfulie/common/converter/atom/base'
         autoload :Builder, 'restfulie/common/converter/atom/builder'
         autoload :Helpers, 'restfulie/common/converter/atom/helpers'
-        include Base
         extend Base::ClassMethods
       end
     end

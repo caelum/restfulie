@@ -4,8 +4,9 @@ module Restfulie
     module Representation
       autoload :Atom, 'restfulie/common/representation/atom'
       autoload :Generic, 'restfulie/common/representation/generic'
-      autoload :Json, 'restfulie/common/representation/json'
       autoload :XmlD, 'restfulie/common/representation/xml'
     end
   end
 end
+
+require 'restfulie/common/representation/json'

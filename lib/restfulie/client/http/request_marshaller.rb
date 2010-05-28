@@ -8,7 +8,7 @@ module Restfulie
           'application/atom+xml' => ::Restfulie::Common::Converter::Atom,
           'application/xml' => ::Restfulie::Common::Converter::Xml,
           'text/xml' => ::Restfulie::Common::Converter::Xml,
-          'application/json' => ::Restfulie::Common::Representation::Json
+          'application/json' => ::Restfulie::Common::Converter::Json
         }
         
         def self.register_representation(media_type,representation)
