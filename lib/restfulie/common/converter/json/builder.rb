@@ -10,13 +10,13 @@ module Restfulie
           end
       
           def values(options = nil, &block)
-            yield Restfulie::Common::Converter::Values.new(self)
+            yield Values.new(self)
           end
           
           def members(options = {}, &block)
             collection = options[:collection] || @obj 
-            raise Restfulie::Common::Error::BuilderError.new("Members method require a collection to execute") unless collection.respond_to?(:each)
-            raise Restfulie::Common::Error::BuilderError.new("You need to inform the collection root name") unless options[:name]
+            raise Error::BuilderError.new("Members method require a collection to execute") unless collection.respond_to?(:each)
+            raise Error::BuilderError.new("You need to inform the collection root name") unless options[:name]
             
             collection.each do |member|
               node = {}
@@ -51,7 +51,7 @@ module Restfulie
           end
       
           def representation
-            Restfulie::Common::Representation::Json.create(@doc)
+            Representation::Json.create(@doc)
           end
           
         private

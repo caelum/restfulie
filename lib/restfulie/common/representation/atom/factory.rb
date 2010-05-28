@@ -28,9 +28,9 @@ module Restfulie
             
             case doc.root.name
             when "feed"
-              Feed.new(doc)
+              Restfulie::Common::Representation::Atom::Feed.new(doc)
             when "entry"
-              Entry.new(doc)
+              Restfulie::Common::Representation::Atom::Entry.new(doc)
             end        
           end      
         end

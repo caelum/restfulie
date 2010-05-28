@@ -4,7 +4,6 @@ module Restfulie
       module Atom
         class Builder
           attr_accessor :atom_type
-
           def initialize(atom_type, obj)
             @doc    = Nokogiri::XML::Document.new
             @obj    = obj
@@ -13,15 +12,14 @@ module Restfulie
             @parent.parent = @doc
           end
       
-          def values(options = nil, &block)
+          def values(options = {}, &block)
             options.each do |key,value|
               attr = key.to_s
               if attr =~ /^xmlns(:\w+)?$/
                 ns = attr.split(":", 2)[1]
                 @parent.add_namespace_definition(ns, value)
               end
-            end if options
-            
+            end            
             yield Values.new(self)
           end
           
