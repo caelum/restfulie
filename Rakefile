@@ -12,6 +12,7 @@ AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Éverton Ribeiro, Ge
 EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
+
 spec = Gem::Specification.new do |s|
   s.name = GEM
   s.version = GEM_VERSION
@@ -19,6 +20,7 @@ spec = Gem::Specification.new do |s|
   s.summary = SUMMARY
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb', '[A-Z]*', 'lib/**/*.rng'].to_a
+  s.add_dependency("nokogiri", [">= 1.4.2"])
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
   s.add_dependency("responders_backport", ["~> 0.1.0"])
@@ -31,7 +33,8 @@ end
 
 namespace :test do
   def execute_process(name)
-    sh "ruby ./spec/units/client/#{name}.rb &"  
+    sh "ruby ./spec/units/client/#{name}.rb &"
+    sleep 15
     %x(ps -ef | grep #{name}).split[1]  
   end
   def process(name)

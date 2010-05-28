@@ -1,8 +1,10 @@
-describe_collection(@payments) do |collection|
-  collection.id = payments_url
-  collection.describe_members do |member,payment|
-    member.links << link( :rel => :approve, :href => approve_payment_url(payment.id) )
-    member.links << link( :rel => :refuse, :href => refuse_payment_url(payment.id) )
+collection(@payments) do |collection|
+  collection.values do |value|
+    value.id payments_url
+    value.title "Payments"
+    value.updated Time.now
   end
+  # collection.members do |member,payment|
+  # end
 end
 

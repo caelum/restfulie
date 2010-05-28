@@ -17,6 +17,7 @@ describe ProjectsController, :type => :controller do
   integrate_views
 
   before do
+    request.accept = "application/atom+xml"
     response.content_type = "application/atom+xml"
   end
 

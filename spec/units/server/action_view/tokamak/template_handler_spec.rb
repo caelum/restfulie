@@ -18,6 +18,7 @@ describe AlbumsController, :type => :controller do
   describe "get index" do
     before do
       request.accept = "application/atom+xml"
+      response.content_type = "application/atom+xml"
       get :index, :format => :atom
       @feed = Restfulie::Common::Representation::Atom::Factory.create(response.body)
     end
@@ -38,7 +39,7 @@ describe AlbumsController, :type => :controller do
   
   describe "get show" do
     before do
-      request.accept = "application/atom+xml"
+      response.content_type = "application/atom+xml"
       @album = Album.first
       get :show, :id => @album.id, :format => :atom
       @entry = Restfulie::Common::Representation::Atom::Factory.create(response.body)      

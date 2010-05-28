@@ -15,6 +15,10 @@ module Restfulie::Common::Converter
     @@recipes = {}
 
     class << self
+      
+      def helper
+        Restfulie::Common::Converter::Atom::Helpers
+      end
 
       def describe_recipe(recipe_name, options={}, &block)
         raise 'Undefined recipe' unless block_given?
@@ -28,11 +32,9 @@ module Restfulie::Common::Converter
         
         if block_given?
           recipe = block
+        elsif options[:recipe]          
+          recipe = @@recipes[options[:recipe]]
         else
-          recipe = options[:recipe]          
-        end
-        # Check if the object is already an atom
-        unless recipe
           return obj if obj.respond_to?(:atom_type) && (obj.atom_type == "feed" || obj.atom_type == "entry")
           raise Restfulie::Common::Error::ConverterError.new("Recipe required")
         end
@@ -40,9 +42,6 @@ module Restfulie::Common::Converter
         # execute with the builder if a recipe is set (even if the obj is an atom)
         options[:atom_type] ||= obj.respond_to?(:each) ? :feed : :entry
         raise Restfulie::Common::Error::ConverterError.new("Undefined atom type #{options[:atom_type]}") unless [:entry,:feed].include?(options[:atom_type])
-        
-        # Get recipe already described
-        recipe = @@recipes[recipe] unless recipe.respond_to?(:call)
 
         # Create representation and proxy
         builder = Builder.new(options[:atom_type], obj)
