@@ -1,0 +1,1 @@
+require 'restfulie/common/core_ext/hash'
