@@ -1,9 +1,7 @@
 module Restfulie
   module Server
     module ActionController
-
       module Base
-
         def self.included(base)
           # Sets a default responder for this controller. 
           # Needs to require responder_legacy.rb
@@ -31,20 +29,25 @@ module Restfulie
           end
         end
 
-      protected
-      
-        # If your controller inherits from Restfulie::Server::Controller::Base,
-        # it will have an :atom option, very similar to render :xml
-        def render(options = {}, extra_options = {}, &block)
-          if options && atom = options[:atom]
-            response.content_type ||= Mime::ATOM
-            render_for_text(atom.respond_to?(:to_atom) ? atom.to_atom.to_xml : atom.to_xml, options[:status])
-          else
-            super
-          end
-        end
+        protected
         
+          # If your controller inherits from Restfulie::Server::Controller::Base,
+          # it will have an :atom option, very similar to render :xml
+          def render(options = {}, extra_options = {}, &block)
+            if options && atom = options[:atom]
+              response.content_type ||= Mime::ATOM
+              render_for_text(atom.respond_to?(:to_atom) ? atom.to_atom.to_xml : atom.to_xml, options[:status])
+            else
+              super
+            end
+          end
       end
     end
+  end
+end
+
+class ActionController::Base
+  def self.acts_as_restfulie
+    include Restfulie::Server::ActionController::Base
   end
 end

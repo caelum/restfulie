@@ -1,14 +1,11 @@
-#initialize namespace
-module Restfulie::Common::Converter; end
-
-%w(
-  values
-  atom
-  atom/builder
-  atom/helpers
-  json
-  json/builder
-  json/helpers
-).each do |file|
-  require File.join(File.dirname(__FILE__), 'converter', file)
+module Restfulie
+  module Common
+    module Converter
+      autoload :Values, 'restfulie/common/converter/values'
+      autoload :Atom, 'restfulie/common/converter/atom'
+      autoload :Json, 'restfulie/common/converter/json'
+      autoload :Xml, 'restfulie/common/converter/xml'
+    end
+  end
 end
+

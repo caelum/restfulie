@@ -6,6 +6,7 @@ pkg/*
 tmtags
 *~
 *.swp
+*.swo
 .rvmrc
 *.sqlite3
 log
