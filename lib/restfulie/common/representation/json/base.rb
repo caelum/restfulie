@@ -4,6 +4,8 @@ module Restfulie
       class Json
         module Base
           module ClassMethods
+            
+            # creates a json unmarshalled version of this object
             def create(obj = nil)
               @json = {}
               return @json.extend(KeysAsMethods) unless obj
@@ -16,6 +18,7 @@ module Restfulie
               
               @json.extend(KeysAsMethods)
             end
+            
           end
         end
       end

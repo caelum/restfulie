@@ -8,11 +8,7 @@ module Restfulie
           def initialize(obj, options = {})
             @doc    = Nokogiri::XML::Document.new
             @obj    = obj
-            if options[:root]
-              root = options[:root]
-            else
-              root = root_element_for(obj)
-            end
+            root = options[:root] || Restfulie::Common::Converter.root_element_for(obj)
             @parent = @doc.create_element(root)
             @parent.parent = @doc
           end
@@ -50,7 +46,7 @@ module Restfulie
             collection = a_collection || @obj 
             raise Error::BuilderError("Members method require a collection to execute") unless collection.respond_to?(:each)
             collection.each do |member|
-              entry = @doc.create_element(root_element_for(member))
+              entry = @doc.create_element(Restfulie::Common::Converter.root_element_for(member))
               entry.parent = @parent
               @parent = entry
               block.call(self, member)
@@ -59,16 +55,6 @@ module Restfulie
           end
           
           private
-        
-          def root_element_for(obj)
-            if obj.kind_of?(Hash) && obj.size==1
-              obj.keys.first.to_s
-            elsif obj.kind_of?(Array) && !obj.empty?
-              root_element_for(obj.first).underscore.pluralize
-            else
-              obj.class.to_s.underscore
-            end
-          end
           
           def create_element(node, prefix, *args)
             node = @doc.create_element(node) do |n|

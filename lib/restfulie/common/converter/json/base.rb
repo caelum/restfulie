@@ -72,6 +72,10 @@ module Restfulie
               to_json(obj, options).to_json
             end
             
+            # returns the current helper
+            def helper
+              Helpers
+            end
           end
         end
       end

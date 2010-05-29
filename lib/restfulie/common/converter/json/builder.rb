@@ -16,7 +16,7 @@ module Restfulie
           def members(options = {}, &block)
             collection = options[:collection] || @obj 
             raise Error::BuilderError.new("Members method require a collection to execute") unless collection.respond_to?(:each)
-            raise Error::BuilderError.new("You need to inform the collection root name") unless options[:name]
+            root = options[:root] || Restfulie::Common::Converter.root_element_for(collection)
             
             collection.each do |member|
               node = {}
@@ -26,7 +26,7 @@ module Restfulie
               block.call(self, member)
               @current = parent
               
-              add_to_current(options[:name], node)
+              add_to_current(root, node)
             end
           end
           
@@ -51,7 +51,7 @@ module Restfulie
           end
       
           def representation
-            Representation::Json.create(@doc)
+            Representation::Json.create(@doc).to_json
           end
           
         private
