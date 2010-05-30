@@ -11,7 +11,7 @@ module Restfulie
         if obj.kind_of?(Hash) && obj.size==1
           obj.keys.first.to_s
         elsif obj.kind_of?(Array) && !obj.empty?
-          root_element_for(obj.first).underscore.pluralize
+          root_element_for(obj.first).to_s.underscore.pluralize
         else
           obj.class.to_s.underscore
         end
