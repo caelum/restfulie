@@ -5,6 +5,7 @@ context Restfulie::Client::Mikyung do
   context "when trying to achieve a goal" do
   
     before do
+      @goal = Object.new
       @client = Object.new
       @start = Object.new
       @walker = Object.new
