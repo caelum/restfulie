@@ -100,14 +100,12 @@ describe Restfulie::Common::Converter do
       end
 
       it "should create an entry from builder DSL" do
-        time = Time.now
-        an_article = {:article => {:id => 1, :title => "a great article", :updated => time}}
+        an_article = {:article => {:id => 1, :title => "a great article"}}
         
         entry = to_xml(an_article) do |member, article|
           member.values do |values|
             values.id      "uri:#{article[:article][:id]}"            
             values.title   article[:article][:title]
-            values.updated article[:article][:updated]
           end
           
           member.link("image", "http://example.com/image/1")
@@ -117,18 +115,15 @@ describe Restfulie::Common::Converter do
         entry = Hash.from_xml entry
         entry["article"]["id"].should == "uri:1"
         entry["article"]["title"].should == "a great article"
-        # entry["article"]["updated"].should == an_article[:article][:updated]
       end
 
       it "should be able to declare links inside values block" do
-        time = Time.now
-        an_article = {:article => {:id => 1, :title => "a great article", :updated => time}}
+        an_article = {:article => {:id => 1, :title => "a great article"}}
         
         entry = to_xml(an_article) do |member, article|
           member.values do |values|
             values.id      "uri:#{article[:article][:id]}"            
             values.title   article[:article][:title]
-            values.updated article[:article][:updated]
 
             values.domain("xmlns" => "http://a.namespace.com") {
               member.link("image", "http://example.com/image/1")
@@ -141,7 +136,6 @@ describe Restfulie::Common::Converter do
         entry = Hash.from_xml entry
         entry["article"]["id"].should == "uri:1"
         entry["article"]["title"].should == "a great article"
-        # entry.updated.should == DateTime.parse(time.xmlschema)
         entry.article.domain.links.image.should_not be_nil
         entry.article.domain.links.non_existant.should be_nil
       end
