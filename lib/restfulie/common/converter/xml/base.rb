@@ -36,8 +36,9 @@ module Restfulie
                 recipe = block 
               elsif options[:recipe]
                 recipe = @@recipes[options[:recipe]]
+              elsif obj.kind_of?(Hash) && obj.size==1
+                return obj.values.first.to_xml(:root => obj.keys.first)
               else
-                return obj.values.first.to_xml(:root => obj.keys.first) if obj.kind_of?(Hash) && obj.size==1
                 return obj.to_xml
               end
               
