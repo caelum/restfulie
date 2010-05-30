@@ -42,7 +42,7 @@ describe Restfulie::Common::Converter do
           collection.link("next", "http://a.link.com/next")
           collection.link("previous", "http://a.link.com/previous")
           
-          collection.members(:name => "articles") do |member, article|
+          collection.members(:root => "articles") do |member, article|
             member.values do |values|
               values.id      "uri:#{article[:id]}"                   
               values.title   article[:title]
@@ -54,9 +54,9 @@ describe Restfulie::Common::Converter do
           end
         end
 
+        json = Restfulie::Common::Converter::Json.to_hash(json)
         json.id.should == "http://example.com/json"
         json.title.should == "Feed"
-        json.updated.should == time
         json.author.first.name.should == "John Doe"
         json.author.last.email.should == "foobar@example.com"
         
@@ -92,9 +92,9 @@ describe Restfulie::Common::Converter do
           member.link("image", "http://example.com/image/2", :type => "application/json")                                
         end
         
+        entry = Restfulie::Common::Converter::Json.to_hash(entry)
         entry.id.should == "uri:1"
         entry.title.should == "a great article"
-        entry.updated.should == time
       end
     
       it "should be able to declare links inside values block" do
@@ -114,9 +114,9 @@ describe Restfulie::Common::Converter do
           end
         end
     
+        entry = Restfulie::Common::Converter::Json.to_hash(entry)
         entry.id.should == "uri:1"
         entry.title.should == "a great article"
-        entry.updated.should == time
         
         entry.domain.link.first.rel.should == "image"
       end
@@ -138,10 +138,10 @@ describe Restfulie::Common::Converter do
         an_article = {:id => 1, :title => "a great article", :updated => time}
         
         entry = to_json(an_article, :recipe => :simple_entry)
+        entry = Restfulie::Common::Converter::Json.to_hash(entry)
                 
         entry.id.should == "uri:1"
         entry.title.should == "a great article"
-        entry.updated.should == time
       end
     
     end
