@@ -10,6 +10,7 @@ module Restfulie
         include RequestBuilder
   
         def follow(code = nil)
+          @follow ||= true # turn on follow redirection
           follow_codes << code unless code.nil? or follow_codes.include?(code)
           self
         end
@@ -18,6 +19,7 @@ module Restfulie
           begin
             response = super
           rescue Error::Redirection => e
+            raise e unless @follow # normal behavior for bang methods is to raise the exception
             response = e.response
             if follow_codes.include?(response.code)
               location = response.headers['location'] || response.headers['Location']
@@ -32,7 +34,7 @@ module Restfulie
         protected
   
           def follow_codes
-            @follow || @follow = [201,301,302,303,307]        
+            @follow_codes ||= [201,301,302,303,307]        
           end
       end
     end
