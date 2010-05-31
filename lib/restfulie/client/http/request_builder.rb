@@ -40,7 +40,7 @@ module Restfulie
         end
 
         def headers
-          @headers || @headers = {}
+          @headers ||= {}
         end
 
         # Path (e.g. http://restfulie.com/posts => /posts)

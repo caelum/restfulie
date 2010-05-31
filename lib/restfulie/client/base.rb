@@ -22,7 +22,7 @@ module Restfulie
       end
   
       def resource_name
-        @resource_name || @resource_name = self.class.to_s.to_sym 
+        @resource_name ||= self.class.to_s.to_sym 
       end
     end
   end

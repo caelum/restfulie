@@ -157,6 +157,17 @@ context Restfulie::Client::HTTP do
 
   end
 
+  context "redirection" do
+    before(:all) do
+      @host = "http://localhost:4567"
+      @client = Restfulie.at(@host)
+    end
+
+    it "should follow redirection" do
+      lambda { @client.follow.get!("/test/302") }.should_not raise_error ::Restfulie::Client::HTTP::Error::Redirection
+    end
+  end
+
   context "error conditions" do
 
     before(:all) do

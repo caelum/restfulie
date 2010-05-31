@@ -2,6 +2,7 @@ module Restfulie
   module Client#:nodoc
     module EntryPoint
       include HTTP::RequestMarshaller
+      include HTTP::RequestFollow
       extend self
 
       def self.at(uri)

@@ -15,4 +15,3 @@ module Restfulie
   end
 end
 
-include ActiveSupport::CoreExtensions::Hash

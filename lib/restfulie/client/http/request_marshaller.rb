@@ -79,14 +79,15 @@ module Restfulie
             response
           elsif !response.body.empty?
             representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
-            unmarshalled = representation.unmarshal(response.body)
-            unmarshalled.extend(ResponseHolder)
-            unmarshalled.response = response
-            unmarshalled
+            representation.unmarshal(response.body).tap do |u|
+              u.extend(ResponseHolder)
+              u.response = response
+            end
           else
-            response.extend(ResponseHolder)
-            response.response = response
-            response
+            response.tap do |resp|
+              resp.extend(ResponseHolder)
+              resp.response = response
+            end
           end
         end
     
@@ -108,9 +109,10 @@ module Restfulie
     
         def set_marshalled_payload(method, path, payload, *args)
           headers = args.extract_options!
-          args.shift #old payload
-          args << payload << headers
-          args
+          args.tap do |a|
+            a.shift #old payload
+            a << payload << headers
+          end
         end
     
         def add_representation_headers(method, path, representation, *args)
