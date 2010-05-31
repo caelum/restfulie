@@ -39,7 +39,9 @@ module Restfulie
           end
 
           def method_missing(method)
-            text(method)
+            value = text(method)
+            raise NoMethodError.new("Method #{method} not found.", method) unless value
+            value
           end
 
         protected 

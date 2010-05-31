@@ -79,20 +79,15 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
   end
   
-  # TODO: uncomment when xml representation is ready
-  # it 'should understand a different response content type from its request' do
-  #   result = Restfulie.at('http://localhost:4567/with_content').as("application/xml").post!('<order></order>')
-  #   result.response.headers['content-type'].should == "application/atom+xml"
-  # end
-
+  it 'should understand a different response content type from its request' do
+    result = Restfulie.at('http://localhost:4567/with_content').as("application/xml").post!('<order></order>')
+    result.response.headers['content-type'].should == "application/atom+xml"
+  end
 end
 
 context Restfulie::Client::HTTP::RequestMarshaller do
-  
   it "should retrieve any content type if no accepts is specified" do
     result = Restfulie.at('http://localhost:4567/html_result').get!
     result.response.headers['content-type'].should == "text/html"
   end
-
-  
 end

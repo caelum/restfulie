@@ -41,6 +41,16 @@ get "/test/:error" do
   Rack::Response.new('OK', params[:error].to_i).finish
 end
 
+get '/test_redirection' do
+  r = Rack::Response.new('', 201)
+  r.header["Location"] = "http://localhost:4567/redirected"
+  r.finish
+end
+
+get '/redirected' do
+  "OK"
+end
+
 post '/custom/songs' do
   r = Rack::Response.new('', 201)
   r.header["Location"] = "http://localhost:4567/songs"
