@@ -33,7 +33,9 @@ module Restfulie
           # to access the value of key "size".
           # you still can access the old method with __[method_name]__
           def __free_method__(sym)
-            self.__metaclass__.send(:alias_method, "__#{sym.to_s}__".to_sym, sym) unless self.respond_to?("__#{sym.to_s}__")
+            if self.__metaclass__.method_defined?(sym) && !respond_to?("__#{sym}__")
+              self.__metaclass__.send(:alias_method, "__#{sym}__", sym)
+            end
             self.__metaclass__.send(:define_method, sym) { method_missing(sym.to_s) }
             self
           end

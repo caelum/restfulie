@@ -9,3 +9,5 @@ module Restfulie
     end
   end
 end
+
+require 'restfulie/server/action_controller/patch'
