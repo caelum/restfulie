@@ -6,7 +6,7 @@ require 'rake'
 require 'rake/gempackagetask'
 require 'spec/rake/spectask'
 require 'rake/rdoctask'
-require 'lib/restfulie'
+require File.expand_path('lib/restfulie')
 
 GEM = "restfulie"
 GEM_VERSION = Restfulie::VERSION

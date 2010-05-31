@@ -27,7 +27,9 @@ module Restfulie
             @doc["rel"] = value
           end
       
-          alias_method :__type__, :type
+          if method_defined?(:type)
+            alias_method :__type__, :type
+          end
           def type
             @doc["type"]
           end
