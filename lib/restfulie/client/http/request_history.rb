@@ -17,7 +17,7 @@ module Restfulie
         attr_accessor_with_default :max_to_remind, 10
 
         def snapshots
-          @snapshots || @snapshots = []
+          @snapshots ||= []
         end
 
         def request!(method=nil, path=nil, *args)#:nodoc:
