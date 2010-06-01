@@ -16,6 +16,7 @@ end
 # implementation.
 module Restfulie
   class Mikyung < Restfulie::Client::Mikyung::Core
+    Restfulie::Common::Logger.logger.level = Logger::INFO
     # empty class
   end
 end
