@@ -8,7 +8,7 @@ module Restfulie
           base.responder = Restfulie::Server::ActionController::RestfulResponder
           base.extend(Restfulie::Server::ActionController::Base::ClassMethods)
           # Atom representation is added by default
-          ParamsParser.register('application/atom+xml', Restfulie::Common::Converter::Atom)
+          Restfulie::Server::ActionController::ParamsParser.register('application/atom+xml', Restfulie::Common::Converter::Atom)
         end
 
         module ClassMethods
@@ -33,7 +33,7 @@ module Restfulie
         
           # If your controller inherits from Restfulie::Server::Controller::Base,
           # it will have an :atom option, very similar to render :xml
-          def render(options = {}, extra_options = {}, &block)
+          def render(options = nil, extra_options = {}, &block)
             if options && atom = options[:atom]
               response.content_type ||= Mime::ATOM
               render_for_text(atom.respond_to?(:to_atom) ? atom.to_atom.to_xml : atom.to_xml, options[:status])
