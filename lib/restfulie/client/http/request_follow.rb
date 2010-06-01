@@ -25,7 +25,7 @@ module Restfulie
               location = response.headers['location'] || response.headers['Location']
               raise Error::AutoFollowWithoutLocationError.new(self, response) unless location
               self.host = location
-              response = super(:get, self.path, headers)
+              response = super(:get, location, headers)
             end
             response
           end

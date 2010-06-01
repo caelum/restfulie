@@ -37,7 +37,16 @@ module Restfulie
           def to_s
             to_xml
           end
-          
+
+          def method_missing(method)
+            value = text(method)
+            unless value
+              super
+            else
+              value
+            end
+          end
+
         protected 
       
           def text(node_name)

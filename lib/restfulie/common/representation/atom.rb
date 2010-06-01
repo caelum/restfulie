@@ -13,6 +13,7 @@ module Restfulie
         autoload :Category, 'restfulie/common/representation/atom/category'
         autoload :Feed, 'restfulie/common/representation/atom/feed'
         autoload :Entry, 'restfulie/common/representation/atom/entry'
+        autoload :Source, 'restfulie/common/representation/atom/source'
       end
     end
   end
