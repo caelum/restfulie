@@ -6,7 +6,6 @@ context Restfulie::Client::Mikyung do
   
     before do
       @goal = Object.new
-      @client = Object.new
       @start = Object.new
       @walker = Object.new
       @client = Restfulie::Mikyung.new.achieve(@goal).at(@start).walks_with(@walker)
@@ -20,6 +19,11 @@ context Restfulie::Client::Mikyung do
 
     it "should not walk if goal starts completed" do
       @goal.should_receive(:completed?).with(@start).and_return(true)
+      @restfulie = Object.new
+      @restfulie.should_receive(:get).and_return(@start)
+      @goal.class.should_receive(:get_restfulie).and_return(@restfulie)
+      @goal.should_receive(:steps).and_return(nil)
+      @goal.should_receive(:scenario).and_return(nil)
       @client.run
     end
     
@@ -28,7 +32,12 @@ context Restfulie::Client::Mikyung do
       second = Object.new
       @walker.should_receive(:move).with(@goal, @start, @client).and_return(second)
       @goal.should_receive(:completed?).with(second).and_return(true)
-      @client.run
+      @restfulie = Object.new
+      @restfulie.should_receive(:get).and_return(@start)
+      @goal.class.should_receive(:get_restfulie).and_return(@restfulie)
+      @goal.should_receive(:steps).and_return(nil)
+      @goal.should_receive(:scenario).and_return(nil)
+     @client.run
     end
     
   end
@@ -47,7 +56,9 @@ context Restfulie::Client::Mikyung do
       walker = Object.new
       goal = Object.new
       goal.should_receive(:completed?).with(resource).and_return(true)
-      Restfulie::Mikyung.new.achieve(goal).at(start).run
+      goal.should_receive(:steps).and_return(nil)
+      goal.should_receive(:scenario).and_return(nil)
+     Restfulie::Mikyung.new.achieve(goal).at(start).run
     end
     
   end

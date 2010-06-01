@@ -22,7 +22,9 @@ module Restfulie
             if step.respond_to?(:execute)
               resource = step.execute(current, mikyung)
             end
-        
+
+            # TODO: should it really retry if it is not 200? Or only if it is on the 50x family?
+            # for instance the result could be a 302 redirection
             unless resource.response.code == 200
               try_to_execute(step, current, max_attempts-1, mikyung)
             else

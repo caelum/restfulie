@@ -8,7 +8,7 @@ module Restfulie
       # In order to implement your own walker, supply an object that respond to the move method.
       # Check the run method code.
       class Core
-        attr_reader :start, :goal, :walker
+        attr_reader :start, :goal, :walker, :accepts, :follow
         
         def initialize
           @walker = Restfulie::Client::Mikyung::SteadyStateWalker.new
@@ -29,10 +29,32 @@ module Restfulie
           @start = start
           self
         end
+
+        def follow
+          @follow = true
+          self
+        end
+
+        def accepts(accepts)
+          @accepts = accepts
+          self
+        end
       
         # keeps changing from a steady state to another until its goal has been achieved
         def run
-          @start = current = (@start.kind_of? String) ? Restfulie.at(@start).get : @start
+          if @start.kind_of? String
+            client = Restfulie.at(@start)
+            client = client.follow if @follow
+            client = client.accepts(@accepts) if @accepts
+            @start = current = client.get
+          else
+            # probably configured thru the Rest Process Model class
+            @start = current = @goal.class.get_restfulie.get
+          end
+          
+          # load the steps and scenario
+          @goal.steps 
+          @goal.scenario 
           
           while(!@goal.completed?(current))
             current = @walker.move(@goal, current, self)
