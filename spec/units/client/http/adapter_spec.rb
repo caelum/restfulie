@@ -101,23 +101,57 @@ context Restfulie::Client::HTTP do
       end
     end
     
-   #it "should delete and respond 200 code" do
-   #  @builder.at("/test").delete.code.to_i.should == 200
-   #  @builder.at('/test').accepts('application/xml').delete.code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').delete.code.to_i.should == 200
-   #  @builder.at('/test').with('Accept-Language' => 'en').delete.code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').delete.code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').delete!.code.to_i.should == 200
-   #end
-   #
-   #it "should head and respond 200 code" do
-   #  @builder.at("/test").head.code.to_i.should == 200
-   #  @builder.at('/test').accepts('application/xml').head.code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').head.code.to_i.should == 200
-   #  @builder.at('/test').with('Accept-Language' => 'en').head.code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').head.code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').head!.code.to_i.should == 200
-   #end
+    context "On DELETE" do
+      
+      it "should respond 200 code" do
+        builder.at("/test").delete.code.to_i.should == 200
+      end
+      
+      it "should accepts xml and respond 200 code" do
+        builder.at('/test').accepts('application/xml').delete.code.to_i.should == 200
+      end
+      
+      it "as xml should respond 200 code" do
+        builder.at('/test').as('application/xml').delete.code.to_i.should == 200
+      end
+      
+      it "should respond 200 code with accept language en" do
+        builder.at('/test').with('Accept-Language' => 'en').delete.code.to_i.should == 200
+      end
+      
+      it "should respond 200 code as xml accepts atom+xml with accept language en" do
+        builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').delete.code.to_i.should == 200
+      end
+      
+    end
+
+    context "On HEAD" do
+      
+      it "should respond 200 code" do
+        builder.at("/test").head.code.to_i.should == 200 
+      end
+      
+      it "should respond 200 code and accepts xml" do
+        builder.at('/test').accepts('application/xml').head.code.to_i.should == 200 
+      end
+      
+      it "should respond 200 code as xml" do
+        builder.at('/test').as('application/xml').head.code.to_i.should == 200
+      end
+      
+      it "should respond 200 code with accept language en" do
+        builder.at('/test').with('Accept-Language' => 'en').head.code.to_i.should == 200
+      end
+      
+      it "should respond 200 code as xml and accepts atom+xml with accepts language en" do
+        builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').head.code.to_i.should == 200
+      end
+      
+      it "should respond 200 code as xml and accepts atom+xml with accepts language en in a destructive method" do
+        builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').head!.code.to_i.should == 200
+      end
+      
+    end
 
   end
 
