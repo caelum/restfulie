@@ -15,7 +15,7 @@ context Restfulie::Server::Configuration do
     end
     
     Restfulie::Server::Configuration.host.should == "myhost.com"
-    Restfulie::Server::Configuration.named_route_prefix == :prefix
+    Restfulie::Server::Configuration.named_route_prefix.should == :prefix
   end
   
   after(:all) do
