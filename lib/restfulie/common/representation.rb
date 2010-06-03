@@ -4,7 +4,6 @@ module Restfulie
       autoload :Atom, 'restfulie/common/representation/atom'
       autoload :Generic, 'restfulie/common/representation/generic'
       autoload :Json, 'restfulie/common/representation/json'
-      autoload :XmlD, 'restfulie/common/representation/xml'
     end
   end
 end
