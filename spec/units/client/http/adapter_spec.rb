@@ -74,16 +74,33 @@ context Restfulie::Client::HTTP do
       end
       
     end
+    
+    context "On PUT" do
+      it "should respond to 200 code" do
+        builder.at("/test").put("test").code.to_i.should == 200
+      end
       
-   #it "should put and respond 200 code" do
-   #  @builder.at("/test").put("test").code.to_i.should == 200
-   #  @builder.at('/test').accepts('application/xml').put("test").code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').put("test").code.to_i.should == 200
-   #  @builder.at('/test').with('Accept-Language' => 'en').put("test").code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').put("test").code.to_i.should == 200
-   #  @builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').put!("test").code.to_i.should == 200
-   #end
-   #
+      it "should accepts xml and respond to 200 code" do
+        builder.at('/test').accepts('application/xml').put("test").code.to_i.should == 200
+      end
+      
+      it "should respond to 200 code as xml" do
+        builder.at('/test').as('application/xml').put("test").code.to_i.should == 200
+      end
+      
+      it "should include accept language and respond 200" do
+        builder.at('/test').with('Accept-Language' => 'en').put("test").code.to_i.should == 200
+      end
+      
+      it "should respond 200 code as xml and accepts xml with en language" do
+        builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').put("test").code.to_i.should == 200
+      end
+      
+      it "should respond 200 code as xml and accept atom and language" do
+        builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').put!("test").code.to_i.should == 200
+      end
+    end
+    
    #it "should delete and respond 200 code" do
    #  @builder.at("/test").delete.code.to_i.should == 200
    #  @builder.at('/test').accepts('application/xml').delete.code.to_i.should == 200
