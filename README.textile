@@ -1,7 +1,7 @@
 h1. Web site
 
-Restfulie's website can be found at "http://restfulie.caelum.com.br":http://restfulie.caelum.com.br
-Mikyung's, a REST agent framework built on top of Restfulie can be seen at "http://github.com/caelum/mikyung":http://github.com/caelum/mikyung.
+Restfulie's website can be found at "http://restfulie.caelumobjects.com":http://restfulie.caelumobjects.com
+From there you can see some videos and read the "Restfulie from Scratch guide":http://restfulie.caelumobjects.com/caelumobjects-restful-rails.pdf.
 
 h1. Quit pretending
 
@@ -17,15 +17,6 @@ h2. Why would I use restfulie?
 #  HATEOAS --> consumed resources will not affect your software whenever they change their flow
 #  Adaptability --> clients are able to adapt to your changes
  
-h2. Documentation
-
-Appart from the simple server and client examples provided here, you can find the following links useful:
-
-* "RDocs":http://rdoc.info/projects/caelum/restfulie
-* "Official website":http://restfulie.caelumobjects.com
-* "How-tos":http://restfulie.caelumobjects.com/rails
-* "Buying through Rest: Rest to the enterprise (video)":guilhermesilveira.wordpress.com/2010/04/13/buying-through-rest-applying-rest-to-the-enterprise/
-
 h2. Simple server example
 
 In the server side, all you need to do is notify inherited_resources which media types you are able to represent your resource:
@@ -75,11 +66,20 @@ puts receipt.id
 
 In order to create a full REST client, "watch this video":http://guilhermesilveira.wordpress.com.
 
-h2. Download source example
+h2. Full examples
 
 You can view an entire application running Restfulie under *spec/integration/order/server* and *spec/integration/order/client* in this git repository.
 
-"You can also download a full example of a REST based agent and server":http://github.com/caelum/mikyung using Restfulie and Mikyung, according to the Rest Architecture Maturity Model.
+"You can also download a full example of a REST based agent and server":http://github.com/caelum/full-restfulie-examples using Restfulie, according to the Rest Architecture Maturity Model.
+
+h2. Documentation
+
+Appart from the simple server and client examples provided here, you can find the following links useful:
+
+* "RDocs":http://rdoc.info/projects/caelum/restfulie
+* "Official website":http://restfulie.caelumobjects.com
+* "How-tos":http://restfulie.caelumobjects.com/rails
+* "Buying through Rest: Rest to the enterprise (video)":guilhermesilveira.wordpress.com/2010/04/13/buying-through-rest-applying-rest-to-the-enterprise/
 
 h2. Installing
 
