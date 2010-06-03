@@ -15,7 +15,6 @@ AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Everton Ribeiro, Geo
 EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
-
 spec = Gem::Specification.new do |s|
   s.name = GEM
   s.version = GEM_VERSION
@@ -39,9 +38,11 @@ def execute_process(name)
   sleep 15
   %x(ps -ef | grep #{name}).split[1]  
 end
+
 def process(name)
   %x(ps -ef | grep #{name} | grep -v grep).split[1] || execute_process(name)
 end
+
 def start_server_and_invoke_test(task_name)
   pid = process "fake_server"
   puts "fake_server pid >>>> #{pid}"
