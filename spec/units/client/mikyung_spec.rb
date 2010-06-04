@@ -11,9 +11,15 @@ context Restfulie::Client::Mikyung do
       @client = Restfulie::Mikyung.new.achieve(@goal).at(@start).walks_with(@walker)
     end
   
-    it "should allow access to its goal, starting point and steady state walker" do
+    it "should allow access to its goal" do
       @client.goal.should == @goal
+    end
+
+    it "should allow access to its start point" do
       @client.start.should == @start
+    end
+    
+    it "should allow access to its steady state walker" do
       @client.walker.should == @walker
     end
 

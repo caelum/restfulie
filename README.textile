@@ -78,8 +78,8 @@ Appart from the simple server and client examples provided here, you can find th
 
 * "RDocs":http://rdoc.info/projects/caelum/restfulie
 * "Official website":http://restfulie.caelumobjects.com
-* "How-tos":http://restfulie.caelumobjects.com/rails
-* "Buying through Rest: Rest to the enterprise (video)":guilhermesilveira.wordpress.com/2010/04/13/buying-through-rest-applying-rest-to-the-enterprise/
+* "How-tos":http://restfulie.caelumobjects.com/caelumobjects-restful-rails.pdf
+* "Buying through Rest: Rest to the enterprise (video)":http://guilhermesilveira.wordpress.com/2010/04/13/buying-through-rest-applying-rest-to-the-enterprise/
 
 h2. Installing
 

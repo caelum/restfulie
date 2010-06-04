@@ -15,7 +15,6 @@ AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Everton Ribeiro, Geo
 EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
-
 spec = Gem::Specification.new do |s|
   s.name = GEM
   s.version = GEM_VERSION
@@ -34,22 +33,30 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
 end
 
-namespace :test do
-  def execute_process(name)
-    sh "ruby ./spec/units/client/#{name}.rb &"
-    sleep 15
-    %x(ps -ef | grep #{name}).split[1]  
-  end
-  def process(name)
-    %x(ps -ef | grep #{name} | grep -v grep).split[1] || execute_process(name)
-  end
-  def start_server_and_invoke_test(task_name)
-    pid = process "fake_server"
-    puts "fake_server pid >>>> #{pid}"
-    Rake::Task[task_name].invoke
-    sh "kill -9 #{pid}"
-  end
+def execute_process(name)
+  sh "ruby ./spec/units/client/#{name}.rb &"
+  sleep 15
+  %x(ps -ef | grep #{name}).split[1]  
+end
 
+def process(name)
+  %x(ps -ef | grep #{name} | grep -v grep).split[1] || execute_process(name)
+end
+
+def start_server_and_invoke_test(task_name)
+  pid = process "fake_server"
+  puts "fake_server pid >>>> #{pid}"
+  Rake::Task[task_name].invoke
+  sh "kill -9 #{pid}"
+end
+
+desc 'Start server'
+task :server do
+  process 'fake_server' 
+end
+
+namespace :test do
+  
   desc "Execute integration Order tests"
   task :integration do
     integration_path = "spec/integration/order/server"
