@@ -7,6 +7,12 @@ module Restfulie
     autoload :EntryPoint, 'restfulie/client/entry_point'
     autoload :Base, 'restfulie/client/base'
     autoload :Mikyung, 'restfulie/client/mikyung'
+    autoload :Cache, 'restfulie/client/cache'
+    
+    mattr_accessor :cache_provider
+
+    Restfulie::Client.cache_provider = Restfulie::Client::Cache::Basic.new
+
   end
 end
 
