@@ -7,6 +7,17 @@ module Restfulie
           super
         end
           
+        # default implementation that will check whether caching can be applied
+        def do_http_cache?
+          resources.flatten.select do |resource|
+            resource.respond_to?(:updated_at)
+          end &&
+            @http_cache != false && 
+            controller.response.last_modified.nil? &&
+            ::ActionController::Base.perform_caching &&
+            !new_record?
+        end
+
         protected
           def do_http_cache!
             timestamp = resources.flatten.select do |resource|
@@ -14,20 +25,12 @@ module Restfulie
             end.map do |resource|
               (resource.updated_at || Time.now).utc
             end.max
-      
+
             controller.response.last_modified = timestamp if timestamp
             set_public_cache_control!
       
             head :not_modified if fresh = request.fresh?(controller.response)
             fresh
-          end
-      
-          def do_http_cache?
-            get? && 
-              @http_cache != false && 
-              ::ActionController::Base.perform_caching &&
-              !new_record? && 
-              controller.response.last_modified.nil?
           end
       
           def new_record?

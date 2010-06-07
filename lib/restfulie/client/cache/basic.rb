@@ -16,11 +16,12 @@ module Restfulie::Client::Cache
 
     def get(url, req)
 
-      response = cache_get( key_for(url, req), req)
+      key = key_for(url, req)
+      response = cache_get( key, req)
       return nil if response.nil?
 
       if response.has_expired_cache?
-        remove(key_for(url, req))
+        remove(key)
       else
         Restfulie::Common::Logger.logger.debug "RETURNING cache #{url} #{req}"
         cache_hit response
