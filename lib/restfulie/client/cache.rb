@@ -7,3 +7,5 @@ module Restfulie
     end
   end
 end
+require 'restfulie/client/cache/http_ext'
+
