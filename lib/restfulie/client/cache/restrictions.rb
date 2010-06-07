@@ -4,6 +4,7 @@ module Restfulie::Client::Cache
 
       # checks whether this request verb and its cache headers allow caching
       def may_cache?(request,response)
+        debugger
         may_cache_method?(request) && response.may_cache?
       end
 

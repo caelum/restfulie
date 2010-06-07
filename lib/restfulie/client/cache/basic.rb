@@ -6,18 +6,19 @@
 module Restfulie::Client::Cache
   class Basic
 
-    def put(url, req, response)
+    def put(key, response)
+      req = key[2]
       if Restfulie::Client::Cache::Restrictions.may_cache?(req, response)
         Restfulie::Common::Logger.logger.debug "caching #{url} #{req} #{response}"
-        cache_add(key_for(url, req), req, response)
+        cache_add(key, req, response)
       end
       response
     end
 
-    def get(url, req)
+    def get(key)
 
-      key = key_for(url, req)
-      response = cache_get( key, req)
+      puts "trying to get"
+      response = cache_get(key, key[2])
       return nil if response.nil?
 
       if response.has_expired_cache?
@@ -49,10 +50,15 @@ module Restfulie::Client::Cache
     end
 
     def cache_get(key, req)
+      puts "trying to get"
       return nil if cache[key].nil?
+      puts "trying to get"
       cache[key].each do |cached|
+        puts "trying to get"
         old_req = cached.first
+        puts "trying to get"
         old_response = cached.last
+        puts "trying to get"
         return old_response if old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req)
       end
       nil
@@ -65,10 +71,6 @@ module Restfulie::Client::Cache
 
     def cache
       @cache ||= {}
-    end
-
-    def key_for(url, req)
-      [url, req.class]
     end
 
   end
