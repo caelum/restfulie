@@ -9,8 +9,9 @@ module Restfulie
     autoload :Mikyung, 'restfulie/client/mikyung'
     autoload :Cache, 'restfulie/client/cache'
     
-    mattr_accessor :cache_provider
+    mattr_accessor :cache_provider, :cache_store
 
+    Restfulie::Client.cache_store = ActiveSupport::Cache::MemoryStore.new
     Restfulie::Client.cache_provider = Restfulie::Client::Cache::Basic.new
 
   end

@@ -64,7 +64,7 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
 
   # checks if the header's max-age is available and no no-store if available.
   def may_cache?
-    may_cache_field?(get_fields('Cache-control'))
+    may_cache_field?(headers['cache-control'])
   end
   
   # Returns whether this cache control field allows caching
@@ -75,6 +75,7 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
   def may_cache_field?(field)
     return false if field.nil?
     
+    debugger
     if field.kind_of? Array
       field.each do |f|
         return false if !may_cache_field?(f)

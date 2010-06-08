@@ -43,18 +43,14 @@ module Restfulie::Client::Cache
     end
 
     def cache_add(key, req, response)
-      if cache[key].nil?
-        cache[key] = []
-      end
-      cache[key] << [req, response]
+      values = cache.read(key) || []
+      values << [req, response]
+      cache.write(key, values)
     end
 
     def cache_get(key, req)
-      puts "trying to get"
-      return nil if cache[key].nil?
-      puts "trying to get"
-      cache[key].each do |cached|
-        puts "trying to get"
+      return nil unless cache.exist?(key)
+      cache.read(key).each do |cached|
         old_req = cached.first
         puts "trying to get"
         old_response = cached.last
@@ -64,13 +60,13 @@ module Restfulie::Client::Cache
       nil
     end
 
-    def remove(what)
-      @cache.delete(what)
+    def remove(key)
+      cache.delete(key)
       nil
     end
 
     def cache
-      @cache ||= {}
+      Restfulie::Client.cache_store
     end
 
   end

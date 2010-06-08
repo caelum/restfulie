@@ -149,7 +149,7 @@ module Restfulie
             return response if response
             response = ResponseHandler.handle(method, path, http_request.send(method, path, *args))
           rescue Exception => e
-            Restfulie::Common::Logger.logger.error "unable to do something #{e}"
+            Restfulie::Common::Logger.logger.error(e)
             raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
           end 
 
