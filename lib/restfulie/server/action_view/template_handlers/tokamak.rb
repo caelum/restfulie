@@ -11,6 +11,10 @@ module Restfulie
             "extend Restfulie::Server::ActionView::Helpers; " +
             "code_block = lambda { #{template.source} };" + 
             "builder = code_block.call; " +
+            "links = builder.links.collect do |link|; " +
+            '"<#{link.href}>; rel=#{link.rel}"; ' +
+            "end; " +
+            "self.response.headers['Link'] = links.join(', '); " +
             "builder.to_s"
           end
         end

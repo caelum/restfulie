@@ -25,6 +25,7 @@ describe ProjectsController, :type => :controller do
     request.accept = "application/atom+xml"
     get :index, :format => :atom
     response.body.should include("<title>index.atom.tokamak</title>")
+    response.header["Link"].should == "<http://google.com>; rel=create, <http://google.com/test>; rel=show"
   end
 
   it "renders view files without explicit format" do

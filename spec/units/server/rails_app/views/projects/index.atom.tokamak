@@ -5,6 +5,9 @@ collection([]) do |collection|
     value.title   "index.atom.tokamak"
     value.updated Time.now
   end
+  
+  collection.link "create", "http://google.com"
+  collection.link "show", "http://google.com/test"
 
   collection.members do |member, item|
   end
