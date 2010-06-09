@@ -108,7 +108,7 @@ module Restfulie
                 end          
               end
               @doc.xpath("xmlns:link").each do |link|
-                @links << Link.new(link.attributes)
+                @links << Link.new(link)
               end        
             end
             
