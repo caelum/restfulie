@@ -6,25 +6,24 @@
 module Restfulie::Client::Cache
   class Basic
 
-    def put(key, response)
-      req = key[2]
-      if Restfulie::Client::Cache::Restrictions.may_cache?(req, response)
-        Restfulie::Common::Logger.logger.debug "caching #{url} #{req} #{response}"
+    def put(key, req, response)
+      if Restfulie::Client::Cache::Restrictions.may_cache?(response)
+        Restfulie::Common::Logger.logger.debug "caching #{key} #{response}"
         cache_add(key, req, response)
       end
       response
     end
 
-    def get(key)
+    def get(key, request, verb)
 
-      puts "trying to get"
-      response = cache_get(key, key[2])
+      # debugger
+      response = cache_get(key, request, verb)
       return nil if response.nil?
 
       if response.has_expired_cache?
         remove(key)
       else
-        Restfulie::Common::Logger.logger.debug "RETURNING cache #{url} #{req}"
+        Restfulie::Common::Logger.logger.debug "RETURNING cache #{key}"
         cache_hit response
       end
 
@@ -43,21 +42,24 @@ module Restfulie::Client::Cache
     end
 
     def cache_add(key, req, response)
-      values = cache.read(key) || []
+      values = (cache.read(key) || []).dup
       values << [req, response]
       cache.write(key, values)
     end
 
-    def cache_get(key, req)
+    def cache_get(key, req, verb)
       return nil unless cache.exist?(key)
-      cache.read(key).each do |cached|
+      found = cache.read(key).find do |cached|
         old_req = cached.first
-        puts "trying to get"
         old_response = cached.last
-        puts "trying to get"
-        return old_response if old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req)
+        if old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req) &&
+          old_response.method == verb
+          old_response
+        else
+          false
+        end
       end
-      nil
+      found ? found.last : nil
     end
 
     def remove(key)

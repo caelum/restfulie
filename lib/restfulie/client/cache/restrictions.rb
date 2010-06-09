@@ -3,7 +3,7 @@ module Restfulie::Client::Cache
     class << self
 
       # checks whether this request verb and its cache headers allow caching
-      def may_cache?(request,response)
+      def may_cache?(response)
         may_cache_method?(response.method) && response.may_cache?
       end
 

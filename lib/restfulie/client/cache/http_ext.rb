@@ -43,7 +43,7 @@ end
 module Restfulie::Client::HTTP::ResponseCacheCheck
 
   def cache_max_age
-    val = header_value_from('Cache-control', /^\s*max-age=(\d+)/)
+    val = header_value_from('cache-control', /^\s*max-age=(\d+)/)
     if val
       val.to_i
     else
@@ -52,14 +52,14 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
   end
   
   def header_value_from(header, expression)
-    h = value_for(get_fields(header)[0], expression)
+    h = value_for(headers[header], expression)
     return nil if h.nil?
     h.match(expression)[1]
   end
   
   def has_expired_cache?
-    return true if self['Date'].nil?
-    Time.now > Time.rfc2822(self['Date']) + cache_max_age.seconds
+    return true if headers['date'].nil?
+    Time.now > Time.rfc2822(headers['date']) + cache_max_age.seconds
   end
 
   # checks if the header's max-age is available and no no-store if available.
@@ -75,7 +75,6 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
   def may_cache_field?(field)
     return false if field.nil?
     
-    debugger
     if field.kind_of? Array
       field.each do |f|
         return false if !may_cache_field?(f)
@@ -85,11 +84,12 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
 
     max_age_header = value_for(field, /^max-age=(\d+)/)
     return false if max_age_header.nil?
-    max_age = max_age_header[1]
     
-    return false if value_for(field, /^no-store/)
-    
-    true
+    if value_for(field, /^no-store/)
+      false
+    else
+      true
+    end
   end
 
   # extracts the header value for an specific expression, which can be located at the start or in the middle
@@ -106,8 +106,8 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
   # vary_headers_for({'Accept'=>'application/xml', 'Date' =>'...', 'Accept-Language'=>'de'}) == ['application/xml', 'de']
   # vary_headers_for({'Date' => '...', 'Accept-Language'=>'de'}) == [nil, 'de']
   def vary_headers_for(request)
-    return nil if self['Vary'].nil?
-    self['Vary'].split(',').map do |key|
+    return nil if headers['Vary'].nil?
+    headers['Vary'].split(',').map do |key|
       request[key.strip]
     end
   end
