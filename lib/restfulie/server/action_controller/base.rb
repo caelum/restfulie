@@ -45,9 +45,3 @@ module Restfulie
     end
   end
 end
-
-class ActionController::Base
-  def self.acts_as_restfulie
-    include Restfulie::Server::ActionController::Base
-  end
-end

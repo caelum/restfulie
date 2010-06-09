@@ -12,3 +12,9 @@ end
 
 require 'restfulie/server/core_ext'
 Restfulie::Server::ActionView::TemplateHandlers.activate!
+
+class ActionController::Base
+  def self.restfulie
+    include Restfulie::Server::ActionController::Base
+  end
+end
