@@ -125,7 +125,7 @@ module Restfulie
         def request(method, path, *args)
           request!(method, path, *args) 
         rescue Error::RESTError => se
-          se.response
+          [[@host, path], nil, se.response]
         end
 
         # Executes a request against your server and return a response instance.

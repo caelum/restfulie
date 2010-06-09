@@ -50,10 +50,10 @@ context Restfulie::Client::HTTP::Response do
 
   context "while retrieveing cache information" do
     
-    it "should invoke may_ache_field with cachec ontrol" do
+    it "should invoke may_ache_field with cache control" do
       response = Object.new
       controls = [:cache_headers]
-      @response.should_receive(:get_fields).with('Cache-control').and_return(controls)
+      @response.should_receive(:headers).and_return('cache-control' => controls)
       @response.should_receive(:may_cache_field?).with(controls).and_return(response)
       @response.may_cache?.should == response
     end
@@ -98,47 +98,34 @@ context Restfulie::Client::HTTP::Response do
   context "when retrieving caching values" do
     
     it "should return 0 if the header value is not present" do
-      @response.should_receive(:header_value_from).with('Cache-control', /^\s*max-age=(\d+)/).and_return(nil)
+      @response.should_receive(:header_value_from).with('cache-control', /^\s*max-age=(\d+)/).and_return(nil)
       @response.cache_max_age.should == 0
     end
     
     it "should return the parsed value if the header value is not present" do
-      @response.should_receive(:header_value_from).with('Cache-control', /^\s*max-age=(\d+)/).and_return("57")
+      @response.should_receive(:header_value_from).with('cache-control', /^\s*max-age=(\d+)/).and_return("57")
       @response.cache_max_age.should == 57
     end
     
     it "should return nothing if the header is not there" do
       field = Object.new
-      @response.should_receive(:get_fields).with('header').and_return([field])
+      @response.should_receive(:headers).and_return('header' => field)
       @response.should_receive(:value_for).with(field, 'expression').and_return(nil)
       @response.header_value_from('header','expression').should be_nil
     end
     
     it "should return the matching expression when extracting the header value" do
       field = Object.new
-      @response.should_receive(:get_fields).with('header').and_return([field])
+      @response.should_receive(:headers).and_return('header' => field)
       @response.should_receive(:value_for).with(field, /as(df)/).and_return("asdf")
       @response.header_value_from('header', /as(df)/).should == "df"
     end
     
   end
   
-  class HeaderMock
-    def initialize(entity)
-      @entity=entity
-    end
-    def []=(key, value)
-      @entity.stub(:[]).with(key).and_return(value)
-    end
-  end
-  
-  def headers(entity)
-    HeaderMock.new(entity)
-  end
-
   context "when retrieving caching values" do
     it "should expire the response if there is no date" do
-      headers(@response)['Date'] = nil
+      @response.should_receive(:headers).and_return('Date' => nil)
       @response.should be_has_expired_cache
     end
 
@@ -146,7 +133,7 @@ context Restfulie::Client::HTTP::Response do
       Time.should_receive(:now).and_return(201)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      headers(@response)['Date'] = Object.new
+      @response.should_receive(:headers).and_return('Date' => Object.new)
       @response.has_expired_cache?.should be_true
     end
 
@@ -154,7 +141,7 @@ context Restfulie::Client::HTTP::Response do
       Time.should_receive(:now).and_return(199)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      headers(@response)['Date'] = Object.new
+      @response.should_receive(:headers).and_return('Date' => Object.new)
       @response.has_expired_cache?.should be_false
     end
 
@@ -168,22 +155,21 @@ context Restfulie::Client::HTTP::Response do
     end
     
     it "should answer with the header from the request matching Vary header" do
-      headers(@response)['Vary'] = 'Accept'
-      headers(@request)['Accept'] = 'application/xml'
+      @response.stub(:headers).and_return('Vary' => 'Accept')
+      @request.stub(:headers).and_return('Accept' => 'application/xml')
       @response.vary_headers_for(@request).should == ['application/xml']
     end
 
     it "should answer with all headers from the request matching Vary header" do
-      headers(@response)['Vary'] = 'Accept, Accept-language'
-      headers(@request)['Accept'] = 'application/xml'
-      headers(@request)['Accept-language'] = 'de'
+      @response.stub(:headers).and_return('Vary' => 'Accept, Accept-language')
+      @request.stub(:headers).and_return('Accept' => 'application/xml', 'Accept-language' => 'de')
       @response.vary_headers_for(@request).should == ['application/xml', 'de']
     end
 
     it "should answer with nil from the request matching Vary header when non-existent" do
-      headers(@response)['Vary'] = 'Accept,Accept-language'
-      headers(@request)['Accept'] = nil
-      headers(@request)['Accept-language'] = 'de'
+      @response.stub(:headers).and_return('Vary' => 'Accept, Accept-language')
+      @response.stub(:[]).with('Vary').and_return('Accept, Accept-language')
+      @request.stub(:headers).and_return('Accept-language' => 'de')
       @response.vary_headers_for(@request).should == [nil, 'de']
     end
     
