@@ -11,4 +11,3 @@ class Restfulie::Client::Cache::Basic
 end
 
 BuyingProcess.run
-# BuyingProcess.run
