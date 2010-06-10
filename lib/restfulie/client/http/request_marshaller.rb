@@ -60,12 +60,10 @@ module Restfulie
             args = add_representation_headers(method, path, unmarshaller, *args)
           end
     
-          http_request, response = super(method, path, *args) 
-          # return response if response.kind_of?(ResponseHolder)
-          Restfulie::Client.cache_provider.put(http_request, response)
+          key, req, response = super(method, path, *args) 
+          Restfulie::Client.cache_provider.put(key, req, response)
 
-          response = parse_response(response)
-          response
+          parse_response(response)
         end
     
         private

@@ -48,7 +48,7 @@ module Restfulie
           cached = CACHES.inject(false) do |cached, cache|
             cached || cache.do_http_cache(self)
           end
-          if ::ActionController::Base.perform_caching && cached.nil?
+          if ::ActionController::Base.perform_caching && !cached.nil?
             set_public_cache_control!
             head :not_modified if fresh = request.fresh?(controller.response)
             fresh

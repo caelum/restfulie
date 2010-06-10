@@ -37,7 +37,7 @@ module Restfulie
         def request(method=nil, path=nil, *args)#:nodoc:
           request!(method, path, *args) 
         rescue Error::RESTError => se
-          se.response
+          [[@host, path], nil, se.response]
         end
 
         def history(number)

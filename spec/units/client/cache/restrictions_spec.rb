@@ -3,29 +3,23 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 context Restfulie::Client::Cache::Restrictions do
 
   it "should not cache DELETE, PUT, TRACE, HEAD, OPTIONS" do
-    mocked = Object.new
-    mocked.should_receive(:kind_of?).and_return(false)
-    mocked.should_receive(:kind_of?).and_return(false)
-    Restfulie::Client::Cache::Restrictions.may_cache_method?(mocked).should be_false
+    [:delete, :put, :trace, :head, :options, :patch].each do |verb|
+      Restfulie::Client::Cache::Restrictions.may_cache_method?(verb).should be_false
+    end
   end
 
   it "should cache GET and POST" do
-    mocked = Object.new
-    mocked.should_receive(:kind_of?).with(Net::HTTP::Post).and_return(true)
-    Restfulie::Client::Cache::Restrictions.may_cache_method?(mocked).should be_true
-
-    mocked = Object.new
-    mocked.should_receive(:kind_of?).with(Net::HTTP::Get).and_return(true)
-    mocked.should_receive(:kind_of?).with(Net::HTTP::Post).and_return(false)
-    Restfulie::Client::Cache::Restrictions.may_cache_method?(mocked).should be_true
+    Restfulie::Client::Cache::Restrictions.may_cache_method?(:post).should be_true
+    Restfulie::Client::Cache::Restrictions.may_cache_method?(:get).should be_true
   end
   
-  it "should cache if has the Cache-Control and max-age header" do
+  it "should cache if the response may be cached" do
     request = Object.new
     response = mock(Net::HTTPResponse)
-    Restfulie::Client::Cache::Restrictions.should_receive(:may_cache_method?).with(request).and_return true
+    Restfulie::Client::Cache::Restrictions.should_receive(:may_cache_method?).with(:get).and_return true
     response.should_receive(:may_cache?).and_return true
+    response.should_receive(:method).and_return :get
         
-    Restfulie::Client::Cache::Restrictions.may_cache?(request, response).should be_true
+    Restfulie::Client::Cache::Restrictions.may_cache?(response).should be_true
   end
 end

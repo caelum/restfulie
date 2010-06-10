@@ -125,7 +125,7 @@ module Restfulie
         def request(method, path, *args)
           request!(method, path, *args) 
         rescue Error::RESTError => se
-          se.response
+          [[@host, path], nil, se.response]
         end
 
         # Executes a request against your server and return a response instance.
@@ -143,19 +143,17 @@ module Restfulie
           ::Restfulie::Common::Logger.logger.info(request_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
           begin
             http_request = get_connection_provider
-            puts "retrieving"
-            response = Restfulie::Client.cache_provider.get([@host, path, http_request])
-            puts "retrieving #{response}"
-            return response if response
+            response = Restfulie::Client.cache_provider.get([@host, path], http_request, method)
+            return [[@host, path], http_request, response] if response
             response = ResponseHandler.handle(method, path, http_request.send(method, path, *args))
           rescue Exception => e
-            Restfulie::Common::Logger.logger.error "unable to do something #{e}"
+            Restfulie::Common::Logger.logger.error(e)
             raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
           end 
 
           case response.code
           when 100..299
-            [[@host, path, http_request], response]
+            [[@host, path], http_request, response]
           when 300..399
             raise Error::Redirection.new(self, response)
           when 400
