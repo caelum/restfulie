@@ -33,6 +33,13 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
 end
 
+# optionally loads a task if the required gems exist
+def optionally
+  begin
+    yield
+  rescue LoadError; end
+end
+
 def execute_process(name)
   sh "ruby ./spec/units/client/#{name}.rb &"
   sleep 15
@@ -48,6 +55,25 @@ def start_server_and_invoke_test(task_name)
   puts "fake_server pid >>>> #{pid}"
   Rake::Task[task_name].invoke
   sh "kill -9 #{pid}"
+end
+
+def kill_server
+  c = `(ps -ef | grep 'script/server')`.split(/\n/)
+  c.each do |line|
+    pid = line.split[1]
+    system "kill -9 #{pid}"
+  end
+end
+
+def wait_server
+  15.times do 
+    begin
+      Net::HTTP.get(URI.parse('http://localhost:3000/'))
+      return
+    rescue
+      sleep 1
+    end
+  end
 end
 
 desc 'Start server'
@@ -120,6 +146,19 @@ namespace :test do
       start_server_and_invoke_test('test:rcov:rcov')
     end
   end
+
+  desc "runs all example tests"
+  task :examples do
+    kill_server
+    enter_dir = "cd full-examples/rest_from_scratch/part_3"
+    system "#{enter_dir} && RAILS_ENV=test rake db:reset db:seed"
+    system "#{enter_dir} && RAILS_ENV=test script/server &"
+    wait_server
+    system "sleep 5 && curl http://localhost:3000/items"
+    system "#{enter_dir} && rake spec"
+    kill_server
+  end
+
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
@@ -128,16 +167,14 @@ end
 
 Rake::RDocTask.new("rdoc") do |rdoc|
    rdoc.options << '--line-numbers' << '--inline-source'
-#   rdoc.rdoc_files.include('lib/**/**/*.rb')
 end
 
-begin
+optionally do
   require 'yard'
   YARD::Rake::YardocTask.new do |t|
-    t.files   = ['lib/restfulie/**/*.rb', 'README.textile']   # optional
-    # t.options = ['--any', '--extra', '--opts'] # optional
+    t.files   = ['lib/restfulie/**/*.rb', 'README.textile']
   end
-rescue LoadError; end
+end
 
 desc "Install the gem locally"
 task :install => [:package] do
