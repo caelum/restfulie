@@ -5,3 +5,8 @@
 #   
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
+
+Item.create :name => "Caelum Rest Training", :price => "400"
+Item.create :name => "Water", :price => "2"
+Item.create :name => "Rest in veneza", :price => "800"
+Item.create :name => "Calpis", :price => "10"
