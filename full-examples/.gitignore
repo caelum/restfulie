@@ -1,0 +1,4 @@
+log
+pkg
+db/*.sqlite3
+.DS_Store
