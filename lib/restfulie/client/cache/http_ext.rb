@@ -59,7 +59,8 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
   
   def has_expired_cache?
     return true if headers['date'].nil?
-    Time.now > Time.rfc2822(headers['date']) + cache_max_age.seconds
+    max_time = Time.rfc2822(headers['date']) + cache_max_age.seconds
+    Time.now > max_time
   end
 
   # checks if the header's max-age is available and no no-store if available.
@@ -106,8 +107,8 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
   # vary_headers_for({'Accept'=>'application/xml', 'Date' =>'...', 'Accept-Language'=>'de'}) == ['application/xml', 'de']
   # vary_headers_for({'Date' => '...', 'Accept-Language'=>'de'}) == [nil, 'de']
   def vary_headers_for(request)
-    return nil if headers['Vary'].nil?
-    headers['Vary'].split(',').map do |key|
+    return nil if headers['vary'].nil?
+    headers['vary'].split(',').map do |key|
       request[key.strip]
     end
   end

@@ -125,7 +125,7 @@ context Restfulie::Client::HTTP::Response do
   
   context "when retrieving caching values" do
     it "should expire the response if there is no date" do
-      @response.should_receive(:headers).and_return('Date' => nil)
+      @response.should_receive(:headers).and_return('date' => nil)
       @response.should be_has_expired_cache
     end
 
@@ -133,15 +133,15 @@ context Restfulie::Client::HTTP::Response do
       Time.should_receive(:now).and_return(201)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      @response.should_receive(:headers).and_return('Date' => Object.new)
+      @response.stub(:headers).and_return('date' => Object.new)
       @response.has_expired_cache?.should be_true
     end
 
-    it "should expire the response if its in the past with" do
+    it "should expire the response if its in the future with" do
       Time.should_receive(:now).and_return(199)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      @response.should_receive(:headers).and_return('Date' => Object.new)
+      @response.stub(:headers).and_return('date' => Object.new)
       @response.has_expired_cache?.should be_false
     end
 
@@ -154,22 +154,24 @@ context Restfulie::Client::HTTP::Response do
       @request.extend Restfulie::Client::HTTP::ResponseCacheCheck
     end
     
-    it "should answer with the header from the request matching Vary header" do
-      @response.stub(:headers).and_return('Vary' => 'Accept')
-      @request.stub(:headers).and_return('Accept' => 'application/xml')
+    it "should answer with the header from the request matching vary header" do
+      @response.stub(:headers).and_return('vary' => 'accept')
+      @request.stub(:[]).with('accept').and_return('application/xml')
       @response.vary_headers_for(@request).should == ['application/xml']
     end
 
-    it "should answer with all headers from the request matching Vary header" do
-      @response.stub(:headers).and_return('Vary' => 'Accept, Accept-language')
-      @request.stub(:headers).and_return('Accept' => 'application/xml', 'Accept-language' => 'de')
+    it "should answer with all headers from the request matching vary header" do
+      @response.stub(:headers).and_return('vary' => 'accept, accept-language')
+      @request.stub(:[]).with('accept').and_return('application/xml')
+      @request.stub(:[]).with('accept-language').and_return('de')
       @response.vary_headers_for(@request).should == ['application/xml', 'de']
     end
 
-    it "should answer with nil from the request matching Vary header when non-existent" do
-      @response.stub(:headers).and_return('Vary' => 'Accept, Accept-language')
-      @response.stub(:[]).with('Vary').and_return('Accept, Accept-language')
-      @request.stub(:headers).and_return('Accept-language' => 'de')
+    it "should answer with nil from the request matching vary header when non-existent" do
+      @response.stub(:headers).and_return('vary' => 'accept, accept-language')
+      @response.stub(:[]).with('vary').and_return('accept, accept-language')
+      @request.stub(:[]).with('accept').and_return(nil)
+      @request.stub(:[]).with('accept-language').and_return('de')
       @response.vary_headers_for(@request).should == [nil, 'de']
     end
     
