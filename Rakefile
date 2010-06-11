@@ -42,7 +42,7 @@ end
 
 def execute_process(name)
   sh "ruby ./spec/units/client/#{name}.rb &"
-  sleep 15
+  wait_server 4567
   %x(ps -ef | grep #{name}).split[1]  
 end
 
@@ -51,24 +51,24 @@ def process(name)
 end
 
 def start_server_and_invoke_test(task_name)
+  kill_server "fake_server"
   pid = process "fake_server"
-  puts "fake_server pid >>>> #{pid}"
   Rake::Task[task_name].invoke
-  sh "kill -9 #{pid}"
+  kill_server "fake_server"
 end
 
-def kill_server
-  c = `(ps -ef | grep 'script/server')`.split(/\n/)
+def kill_server(where)
+  c = `(ps -ef | grep '#{where}')`.split(/\n/)
   c.each do |line|
     pid = line.split[1]
     system "kill -9 #{pid}"
   end
 end
 
-def wait_server
+def wait_server(port=3000)
   (1..15).each do 
     begin
-      Net::HTTP.get(URI.parse('http://localhost:3000/'))
+      Net::HTTP.get(URI.parse("http://localhost:#{port}/"))
       return
     rescue
       sleep 1
@@ -151,12 +151,12 @@ namespace :test do
 
   desc "runs all example tests"
   task :examples do
-    kill_server
+    kill_server "script/server"
     enter_dir = "cd full-examples/rest_from_scratch/part_3"
     system "#{enter_dir} && rake db:reset db:seed && script/server -d"
     wait_server
     system "#{enter_dir} && rake spec"
-    kill_server
+    kill_server "script/server"
   end
 
 end

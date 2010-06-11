@@ -24,6 +24,7 @@ context Restfulie::Client::Base do
     a_song.id.should == 'http://localhost:4567/songs_1'
   end
 
+
   it 'should load top ten songs' do
     top_ten_songs = @songs_from_class.links.top_ten.get!
     top_ten_songs.response.code.should == 200
