@@ -33,6 +33,13 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
 end
 
+# optionally loads a task if the required gems exist
+def optionally
+  begin
+    yield
+  rescue LoadError; end
+end
+
 def execute_process(name)
   sh "ruby ./spec/units/client/#{name}.rb &"
   sleep 15
@@ -48,6 +55,26 @@ def start_server_and_invoke_test(task_name)
   puts "fake_server pid >>>> #{pid}"
   Rake::Task[task_name].invoke
   sh "kill -9 #{pid}"
+end
+
+def kill_server
+  c = `(ps -ef | grep 'script/server')`.split(/\n/)
+  c.each do |line|
+    pid = line.split[1]
+    system "kill -9 #{pid}"
+  end
+end
+
+def wait_server
+  (1..15).each do 
+    begin
+      Net::HTTP.get(URI.parse('http://localhost:3000/'))
+      return
+    rescue
+      sleep 1
+    end
+  end
+  raise "Waited for the server but it did not finish"
 end
 
 desc 'Start server'
@@ -106,6 +133,7 @@ namespace :test do
       start_server_and_invoke_test('test:spec:all')
       puts "Execution integration tests... (task test:integration)"
       Rake::Task["test:integration"].invoke()
+      Rake::Task["test:examples"].invoke()
     end
     task :common do
       start_server_and_invoke_test('test:spec:common')
@@ -120,6 +148,17 @@ namespace :test do
       start_server_and_invoke_test('test:rcov:rcov')
     end
   end
+
+  desc "runs all example tests"
+  task :examples do
+    kill_server
+    enter_dir = "cd full-examples/rest_from_scratch/part_3"
+    system "#{enter_dir} && rake db:reset db:seed && script/server -d"
+    wait_server
+    system "#{enter_dir} && rake spec"
+    kill_server
+  end
+
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
@@ -128,16 +167,14 @@ end
 
 Rake::RDocTask.new("rdoc") do |rdoc|
    rdoc.options << '--line-numbers' << '--inline-source'
-#   rdoc.rdoc_files.include('lib/**/**/*.rb')
 end
 
-begin
+optionally do
   require 'yard'
   YARD::Rake::YardocTask.new do |t|
-    t.files   = ['lib/restfulie/**/*.rb', 'README.textile']   # optional
-    # t.options = ['--any', '--extra', '--opts'] # optional
+    t.files   = ['lib/restfulie/**/*.rb', 'README.textile']
   end
-rescue LoadError; end
+end
 
 desc "Install the gem locally"
 task :install => [:package] do

@@ -1,0 +1,9 @@
+member(@basket) do |member, basket|
+  member.link "payment", basket_payments_url(@basket)
+  member.link "self", basket_url(@basket)
+  
+  member.values { |values|
+    values.price @basket.price
+  }
+  
+end

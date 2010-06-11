@@ -1,0 +1,7 @@
+member(@payment) do |member, payment|
+  
+  member.values { |values|
+    values.price payment.basket.price
+  }
+  
+end
