@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100610230044) do
+ActiveRecord::Schema.define(:version => 20100421000609) do
 
   create_table "baskets", :force => true do |t|
     t.datetime "created_at"

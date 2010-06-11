@@ -66,7 +66,7 @@ def kill_server
 end
 
 def wait_server
-  15.times do 
+  (1..15).each do 
     begin
       Net::HTTP.get(URI.parse('http://localhost:3000/'))
       return
@@ -74,6 +74,7 @@ def wait_server
       sleep 1
     end
   end
+  raise "Waited for the server but it did not finish"
 end
 
 desc 'Start server'
@@ -132,6 +133,7 @@ namespace :test do
       start_server_and_invoke_test('test:spec:all')
       puts "Execution integration tests... (task test:integration)"
       Rake::Task["test:integration"].invoke()
+      Rake::Task["test:examples"].invoke()
     end
     task :common do
       start_server_and_invoke_test('test:spec:common')
@@ -151,10 +153,8 @@ namespace :test do
   task :examples do
     kill_server
     enter_dir = "cd full-examples/rest_from_scratch/part_3"
-    system "#{enter_dir} && RAILS_ENV=test rake db:reset db:seed"
-    system "#{enter_dir} && RAILS_ENV=test script/server &"
+    system "#{enter_dir} && rake db:reset db:seed && script/server -d"
     wait_server
-    system "sleep 5 && curl http://localhost:3000/items"
     system "#{enter_dir} && rake spec"
     kill_server
   end
