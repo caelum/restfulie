@@ -11,7 +11,7 @@ class ItemsController < ApplicationController
   
   def create
     @item = Item.create(params[:item])
-    render :text => "", :status => 201, :location => item_url(@item)
+    respond_with @item, :status => :created
   end
   
   def show
