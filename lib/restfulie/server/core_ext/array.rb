@@ -12,8 +12,9 @@ class Array
     feed = Restfulie::Common::Representation::Atom::Feed.new
     # TODO: Define better feed attributes
     # Array#to_s can return a very long string
-    feed.title = "Collection of #{map {|i| i.class.name }.uniq.to_sentence}"
-    feed.updated = updated_at
+    feed.title      = "Collection of #{map {|i| i.class.name }.uniq.to_sentence}"
+    feed.updated    = updated_at
+    feed.published  = published_at
     # TODO: this id does not comply with Rest standards yet
     feed.id = hash
     
@@ -42,5 +43,9 @@ class Array
   #
   def updated_at(field = :updated_at)
     map { |item| item.send(field) if item.respond_to?(field) }.compact.max || Time.now
+  end
+
+  def published_at(field = :published_at)
+    map { |item| item.send(field) if item.respond_to?(field) }.compact.min || Time.now
   end
 end
