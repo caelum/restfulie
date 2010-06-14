@@ -63,7 +63,16 @@ module Restfulie
           def updated=(value)
             set_text("updated", value)
           end
-      
+
+          def published
+            value = text("published")
+            Time.parse(value) unless value.nil?
+          end
+
+          def published=(value)
+            set_text("published", value)
+          end
+
           # text
           def rights
             text("rights")

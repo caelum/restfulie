@@ -39,8 +39,8 @@ class AtomifiedModel
     entry = Restfulie::Common::Representation::Atom::Entry.new
     entry.id        = "entry1"
     entry.title     = "entry"
-    entry.updated   = Time.parse("2010-05-03T16:29:26-03:00")
-    entry.published = Time.parse("2010-05-03T16:29:26-03:00")
+    entry.updated   = Time.parse("2010-05-03T16:29:26Z")
+    entry.published = Time.parse("2010-05-03T16:29:26Z")
     entry
   end
 end
