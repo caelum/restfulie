@@ -114,3 +114,22 @@ try {
 var pageTracker = _gat._getTracker("UA-11770776-1");
 pageTracker._trackPageview();
 } catch(err) {}</script>
+
+h2. Contributions
+
+Restfulie was created and is maintained by "http://caelumobjects.com":Caelum, and has received enormous contributions from all those developers:
+
+Project Leader: Guilherme Silveira, "http://caelum.com.br":Caelum
+Caue Guerra, caelum
+George Guimaraes, abril and plataforma
+Fabio Akita
+Diego Carrion
+Leandro Silva
+Gavin-John Noonan
+Antonio Marques
+Luis Cipriani, abril
+Everton Ribeiro, abril
+Paulo Ahagon, abril
+Elomar França
+Thomas Stefano
+"http://www.caikesouza.com/blog":Caike Souza
