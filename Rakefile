@@ -151,6 +151,7 @@ namespace :test do
 
   desc "runs all example tests"
   task :examples do
+    Rake::Task["install"].invoke()
     kill_server "script/server"
     enter_dir = "cd full-examples/rest_from_scratch/part_3"
     system "#{enter_dir} && rake db:reset db:seed && script/server -d"

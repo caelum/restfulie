@@ -23,4 +23,5 @@ group :test do
   gem "sinatra"
 	gem "state_machine"
   gem "test-unit", "= 1.2.3"
+	gem "rails", "= 2.3.5"
 end  
