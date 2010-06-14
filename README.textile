@@ -119,7 +119,9 @@ h2. Contributions
 
 Restfulie was created and is maintained by "http://caelumobjects.com":Caelum, and has received enormous contributions from all those developers:
 
-Project Leader: Guilherme Silveira, "http://caelum.com.br":Caelum
+Project Leader
+Guilherme Silveira, "http://caelum.com.br":Caelum
+
 Caue Guerra, caelum
 George Guimaraes, abril and plataforma
 Fabio Akita
