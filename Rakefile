@@ -40,28 +40,10 @@ def optionally
   rescue LoadError; end
 end
 
-def execute_process(name)
-  sh "ruby ./spec/units/client/#{name}.rb &"
-  wait_server 4567
-  %x(ps -ef | grep #{name}).split[1]  
-end
-
-def process(name)
-  %x(ps -ef | grep #{name} | grep -v grep).split[1] || execute_process(name)
-end
-
 def start_server_and_invoke_test(task_name)
-  kill_server "fake_server"
-  pid = process "fake_server"
-  Rake::Task[task_name].invoke
-  kill_server "fake_server"
-end
-
-def kill_server(where)
-  c = `(ps -ef | grep '#{where}')`.split(/\n/)
-  c.each do |line|
-    pid = line.split[1]
-    system "kill -9 #{pid}"
+  IO.popen("ruby ./spec/units/client/fake_server.rb") do |pipe|
+    Rake::Task[task_name].invoke
+    Process.kill 'INT', pipe.pid
   end
 end
 
@@ -152,12 +134,15 @@ namespace :test do
   desc "runs all example tests"
   task :examples do
     Rake::Task["install"].invoke()
-    kill_server "script/server"
-    enter_dir = "cd full-examples/rest_from_scratch/part_3"
-    system "#{enter_dir} && rake db:reset db:seed && script/server -d"
-    wait_server
-    system "#{enter_dir} && rake spec"
-    kill_server "script/server"
+
+    target_dir = "full-examples/rest_from_scratch/part_3"
+    system "cd #{target_dir} && rake db:reset db:seed"
+
+    IO.popen("ruby #{target_dir}/script/server") do |pipe|
+      system "cd #{target_dir} && rake spec"
+      Process.kill 'INT', pipe.pid
+    end
+
   end
 
 end
