@@ -42,8 +42,8 @@ end
 
 def start_server_and_invoke_test(task_name)
   IO.popen("ruby ./spec/units/client/fake_server.rb") do |pipe|
-    Rake::Task[task_name].invoke
     wait_server(4567)
+    Rake::Task[task_name].invoke
     Process.kill 'INT', pipe.pid
   end
 end
