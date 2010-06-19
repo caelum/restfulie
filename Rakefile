@@ -140,6 +140,7 @@ namespace :test do
     system "cd #{target_dir} && rake db:reset db:seed"
 
     IO.popen("ruby #{target_dir}/script/server") do |pipe|
+      wait_server
       system "cd #{target_dir} && rake spec"
       Process.kill 'INT', pipe.pid
     end
