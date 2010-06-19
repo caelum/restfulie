@@ -4,7 +4,7 @@ context Restfulie do
     
   it "should work with twitter" do
     statuses = Restfulie.at("http://twitter.com/statuses/public_timeline.xml").get
-    statuses.each do |status|
+    statuses.statuses.each do |status|
       puts "#{status.user.screen_name}: #{status.text}, #{status.created_at}"
     end
   end
