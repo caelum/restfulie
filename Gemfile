@@ -24,4 +24,5 @@ group :test do
 	gem "state_machine"
   gem "test-unit", "= 1.2.3"
 	gem "rails", "= 2.3.5"
+	gem "fakeweb"
 end  
