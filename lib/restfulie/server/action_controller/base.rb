@@ -25,7 +25,7 @@ module Restfulie
           end
 
           def include_restfulie?
-            defined?(Restfulie::Server::ActionController::Base) && controller_class_name.constantize.include?(Restfulie::Server::ActionController::Base)
+            defined?(Restfulie::Server::ActionController::Base) && self.include?(Restfulie::Server::ActionController::Base)
           end
         end
 

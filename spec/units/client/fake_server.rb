@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'rack/conneg'
+require 'active_support'
 
 require File.join(File.dirname(__FILE__),'..','lib','data_helper')
 
@@ -39,6 +40,10 @@ end
 
 get "/test/:error" do
   Rack::Response.new('OK', params[:error].to_i).finish
+end
+
+get "/request_with_querystring" do
+  params.to_json
 end
 
 get '/test_redirection' do
