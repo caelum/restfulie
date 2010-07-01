@@ -44,3 +44,36 @@ class AtomifiedModel
     entry
   end
 end
+
+module ResponseMatchers
+
+  class ResponseStatus
+
+    def initialize(response_code)
+      @expected_code = response_code.to_i
+    end
+
+    def matches?(response_header)
+      @actual_code = response_header[2].code
+      @expected_code == @actual_code
+    end
+
+    def failure_message
+        "expected response status to be #{@expected_code} but it's #{@actual_code}"
+    end
+
+    def negative_failure_message
+        "didn't expect #{@expected_code} to be #{@actual_code}"
+    end
+
+  end
+
+  def respond_with_status(response_code)
+    ResponseStatus.new(response_code)
+  end
+
+end
+
+Spec::Runner.configure do |config|
+   config.include(ResponseMatchers)
+end
