@@ -134,4 +134,5 @@ Everton Ribeiro, abril
 Paulo Ahagon, abril
 Elomar França
 Thomas Stefano
+"http://www.caelum.com.br":"David Paniz"
 "http://www.caikesouza.com/blog":Caike Souza
