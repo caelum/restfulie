@@ -14,12 +14,14 @@ module Restfulie
       module RequestHistory
         include RequestBuilder
 
-        attr_accessor_with_default :max_to_remind, 10
-
         def snapshots
           @snapshots ||= []
         end
 
+        def max_to_remind
+          10
+        end
+        
         def request!(method=nil, path=nil, *args)#:nodoc:
           if method == nil || path == nil 
             raise 'History not selected' unless @snapshot
