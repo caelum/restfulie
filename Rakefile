@@ -99,8 +99,7 @@ namespace :test do
   
   namespace :rcov do
     Spec::Rake::SpecTask.new('rcov') do |t|
-      options_file = File.expand_path('spec/units/spec.opts')
-      t.spec_opts = %w(-fs -fh:doc/specs.html --color)
+      t.spec_opts = %w(-fs --color)
       t.spec_files = FileList['spec/units/**/*_spec.rb']
       t.rcov = true
       t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
