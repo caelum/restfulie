@@ -1,7 +1,7 @@
 # A sample Gemfile
 source :gemcutter
 #
-gem "rails"
+gem "rails", ">= 3.0.0.rc"
 gem "libxml-ruby"
 
 gem "rack-conneg"
@@ -18,11 +18,13 @@ end
 
 group :test do  
   gem "nokogiri"
-  gem "rspec-rails"
+  gem "rspec-rails", ">= 2.0.0.beta.19"
+#  gem "rspec-rails"
   gem "rcov"
   gem "sinatra"
 	gem "state_machine"
   gem "test-unit", "= 1.2.3"
-	gem "rails", "= 2.3.5"
+	gem "rails", ">= 3.0.0.rc"
+#	gem "rails", "= 2.3.5"
 	gem "fakeweb"
 end  

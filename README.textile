@@ -136,3 +136,8 @@ Elomar França
 Thomas Stefano
 "http://www.caelum.com.br":"David Paniz"
 "http://www.caikesouza.com/blog":Caike Souza
+
+h2. Riding rails3
+
+gem install bundler -v=1.0.0.rc.1
+bundle install
