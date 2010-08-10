@@ -10,7 +10,7 @@ require 'rails/version'
 RAILS_ROOT = File.join(File.dirname(__FILE__), 'server', 'rails_app')
 $:.unshift(RAILS_ROOT)
 
-require 'spec/rails'
+require 'rspec/rails'
 
 require 'rexml/document'
 require 'rcov'
