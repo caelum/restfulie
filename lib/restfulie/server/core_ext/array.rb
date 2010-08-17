@@ -42,10 +42,10 @@ class Array
   #   albums.updated_at(:created_at)
   #
   def updated_at(field = :updated_at)
-    map { |item| item.send(field) if item.respond_to?(field) }.compact.max || Time.now
+    max_by {|o| o.send(field)} || Time.now
   end
 
   def published_at(field = :published_at)
-    map { |item| item.send(field) if item.respond_to?(field) }.compact.min || Time.now
+    min_by {|o| o.send(field)} || Time.now
   end
 end
