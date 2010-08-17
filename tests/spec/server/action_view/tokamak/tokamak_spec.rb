@@ -8,13 +8,11 @@ class ProjectsController < ApplicationController
   def new; end
 end
 
-ActionController::Routing::Routes.draw do |map|
-  map.connect ":controller/:action/:id"
-end
-
 describe ProjectsController, :type => :controller do
-  tests ProjectsController
-  integrate_views
+  it "should be included back" do
+    tests ProjectsController
+  end
+  render_views
 
   before do
     request.accept = "application/atom+xml"

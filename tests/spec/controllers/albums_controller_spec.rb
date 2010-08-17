@@ -1,24 +1,22 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../../../lib/models')
-require File.expand_path(File.dirname(__FILE__) + '/../../../lib/routes')
+require 'spec_helper'
 
-class AlbumsController < ApplicationController
-  def index
-    @albums = Album.all
-  end
+describe AlbumsController do
   
-  def show
-    @album  = Album.find(params[:id])
+  before do
+    3.times do |i|
+      album = Album.create!(:title => "Album #{i}", :description => "Description #{i}", :length => i*10)
+      4.times do |j|
+        album.songs.create!(:title => "Song #{j} from Album #{i}", :description => "Description for song #{j} from Album #{i}", :length => j*10 + i)
+      end
+    end
   end
-end
 
-describe AlbumsController, :type => :controller do
-  integrate_views
+  render_views
   
   describe "get index" do
     before do
       request.accept = "application/atom+xml"
-      response.content_type = "application/atom+xml"
+      response.stub (:content_type) { "application/atom+xml" }
       get :index, :format => :atom
       @feed = Restfulie::Common::Representation::Atom::Factory.create(response.body)
     end
@@ -54,4 +52,5 @@ describe AlbumsController, :type => :controller do
       @entry.doc.at_xpath("albums:description", "albums" => "http://localhost/albums").content.should == @album.description
     end
   end # describe "get show"
+  
 end

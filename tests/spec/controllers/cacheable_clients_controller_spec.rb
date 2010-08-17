@@ -1,35 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
-class RestfulController < ApplicationController
-  self.responder = Restfulie::Server::ActionController::RestfulResponder
-  respond_to :atom
-
-  def single
-    response.last_modified = Time.utc(2010, 2) if params[:last_modified]
-    respond_with(AtomifiedModel.new(Time.utc(2010)))
-  end
-
-  def collection
-    respond_with [AtomifiedModel.new(Time.utc(2010)), AtomifiedModel.new(Time.utc(2009))]
-  end
-
-  def new_record
-    model = AtomifiedModel.new(Time.utc(2010))
-    model.new_record = true
-    respond_with(model)
-  end
-
-  def empty
-    respond_with []
-  end
-end
-
-ActionController::Routing::Routes.draw do |map|
-  map.connect ':controller/:action/:id'
-end
-
-describe RestfulController, :type => :controller do
-  
+describe CacheableClientsController do
   before(:each) do
     request.accept = "application/atom+xml"
   end
@@ -91,4 +62,5 @@ describe RestfulController, :type => :controller do
       response.status.to_i.should == 200
     end
   end      
+
 end
