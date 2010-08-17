@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe AlbumsController do
   
   before do
-    response.stub (:content_type) { "application/atom+xml" }
+    response.stub(:content_type) { "application/atom+xml" }
     
     3.times do |i|
       album = Album.create!(:title => "Album #{i}", :description => "Description #{i}", :length => i*10)
