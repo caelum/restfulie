@@ -22,6 +22,8 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
 
+gem 'restfulie', '1.0.0.beta.1'
+
 group :test, :development do
   gem "rspec-rails", ">= 2.0.0.beta.19"
 end
