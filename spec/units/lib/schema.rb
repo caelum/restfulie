@@ -17,15 +17,4 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :name, :string
   end
   
-  [:songs, :albums].each do |table|
-    create_table table do |t|
-      t.string :title
-      t.string :description
-      t.integer :length
-      
-      t.belongs_to :album if table == :songs
-      
-      t.timestamps
-    end
-  end
 end
