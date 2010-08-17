@@ -1,22 +1,12 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
+require 'spec_helper'
 
-class ProjectsController < ApplicationController
-  self.responder = Restfulie::Server::ActionController::RestfulResponder
+describe ProjectsController do
 
-  def index; end
-  def show; end
-  def new; end
-end
-
-describe ProjectsController, :type => :controller do
-  it "should be included back" do
-    tests ProjectsController
-  end
   render_views
 
   before do
     request.accept = "application/atom+xml"
-    response.content_type = "application/atom+xml"
+    response.stub (:content_type) { "application/atom+xml" }
   end
 
   it "renders view files with tokamak extension" do
