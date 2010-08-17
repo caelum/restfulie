@@ -25,8 +25,6 @@ module Restfulie
         # end
         #
         def partial(partial_path, caller_binding = nil)
-          template = _pick_partial_template(partial_path)
-      
           # Create a context to assing variables
           if caller_binding.kind_of?(Hash)
             Proc.new do
@@ -42,6 +40,7 @@ module Restfulie
               partial(partial_path, binding)
             end.call
           else
+            template = _pick_partial_template(partial_path)
             eval(template.source, caller_binding, template.path)
           end
         end

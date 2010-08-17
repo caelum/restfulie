@@ -1,0 +1,22 @@
+collection(@albums) do |collection|
+  
+  collection.values do |value|
+    value.id      "1"
+    value.title   "Index Album feed spec"
+    value.updated Time.now
+  end
+
+  collection.members do |member, album|
+    member.values("xmlns:albums" => "http://localhost/albums") do |value|
+      value.id      album.id.to_s
+      value.title   album.title
+      value.updated album.updated_at
+
+      value["albums"].length_in_minutes "#{album.length}m"
+      value["albums"].description       album.description
+    end
+
+    member.link(:artists, album_artists_url(album))
+
+  end
+end
