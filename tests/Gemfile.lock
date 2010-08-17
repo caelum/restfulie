@@ -35,6 +35,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     i18n (0.4.1)
+    json_pure (1.4.6)
     mail (2.2.5)
       activesupport (>= 2.3.6)
       mime-types
@@ -61,6 +62,13 @@ GEM
       rake (>= 0.8.3)
       thor (~> 0.14.0)
     rake (0.8.7)
+    responders_backport (0.1.2)
+    restfulie (1.0.0.beta.1)
+      actionpack (>= 2.3.2)
+      activesupport (>= 2.3.2)
+      json_pure (>= 1.2.4)
+      nokogiri (>= 1.4.2)
+      responders_backport (~> 0.1.0)
     rspec (2.0.0.beta.19)
       rspec-core (= 2.0.0.beta.19)
       rspec-expectations (= 2.0.0.beta.19)
@@ -87,5 +95,6 @@ PLATFORMS
 
 DEPENDENCIES
   rails (= 3.0.0.rc)
+  restfulie (= 1.0.0.beta.1)
   rspec-rails (>= 2.0.0.beta.19)
   sqlite3-ruby
