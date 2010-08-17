@@ -42,10 +42,20 @@ class Array
   #   albums.updated_at(:created_at)
   #
   def updated_at(field = :updated_at)
-    max_by {|o| o.send(field)} || Time.now
+    max = max_by{|o| o.send(field)}
+    if max
+      max.send(field)
+    else
+      Time.now
+    end
   end
 
   def published_at(field = :published_at)
-    min_by {|o| o.send(field)} || Time.now
+    min = min_by{|o| o.send(field)}
+    if min
+      min.send(field)
+    else
+      Time.now
+    end
   end
 end

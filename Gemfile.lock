@@ -116,10 +116,10 @@ DEPENDENCIES
   libxml-ruby
   nokogiri
   rack-conneg
-  rails (= 3.0.0.rc)
+  rails (>= 3.0.0.rc)
   rcov
   responders_backport
-  rspec-rails (= 2.0.0.beta.19)
+  rspec-rails (>= 2.0.0.beta.19)
   ruby-debug
   sinatra
   sqlite3-ruby

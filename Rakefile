@@ -4,7 +4,6 @@ require 'rubygems'
 require 'rubygems/specification'
 require 'rake'
 require 'rake/gempackagetask'
-require 'spec/rake/spectask'
 require 'rake/rdoctask'
 require File.expand_path('lib/restfulie')
 
@@ -77,38 +76,38 @@ namespace :test do
     end
   end
   
-  namespace :spec do
-    spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
-    Spec::Rake::SpecTask.new(:all) do |t|
-      t.spec_files = FileList['spec/units/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:common) do |t|
-      t.spec_files = FileList['spec/common/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:client) do |t|
-      t.spec_files = FileList['spec/units/client/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:server) do |t|
-      t.spec_files = FileList['spec/units/server/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-  end
+  # namespace :spec do
+  #   spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
+  #     Spec::Rake::SpecTask.new(:all) do |t|
+  #       t.spec_files = FileList['spec/units/**/*_spec.rb']
+  #       t.spec_opts = spec_opts
+  #     end
+  #     Spec::Rake::SpecTask.new(:common) do |t|
+  #       t.spec_files = FileList['spec/common/**/*_spec.rb']
+  #       t.spec_opts = spec_opts
+  #     end
+  #     Spec::Rake::SpecTask.new(:client) do |t|
+  #       t.spec_files = FileList['spec/units/client/**/*_spec.rb']
+  #       t.spec_opts = spec_opts
+  #     end
+  #     Spec::Rake::SpecTask.new(:server) do |t|
+  #       t.spec_files = FileList['spec/units/server/**/*_spec.rb']
+  #       t.spec_opts = spec_opts
+  #     end
+  # end
   
-  namespace :rcov do
-    Spec::Rake::SpecTask.new('rcov') do |t|
-      t.spec_opts = %w(-fs --color)
-      t.spec_files = FileList['spec/units/**/*_spec.rb']
-      t.rcov = true
-      t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
-    end
-    desc 'Run coverage test with fake server'
-    task :run do
-      start_server_and_invoke_test('test:rcov:rcov')
-    end
-  end
+  # namespace :rcov do
+  #   Spec::Rake::SpecTask.new('rcov') do |t|
+  #       t.spec_opts = %w(-fs --color)
+  #       t.spec_files = FileList['spec/units/**/*_spec.rb']
+  #       t.rcov = true
+  #       t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
+  #     end
+  #     desc 'Run coverage test with fake server'
+  #     task :run do
+  #       start_server_and_invoke_test('test:rcov:rcov')
+  #     end
+  # end
   
   namespace :run do
     task :all do
