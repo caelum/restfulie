@@ -41,15 +41,27 @@ context Array do
     
   end
   
-  it "get the max time to update the items" do
+  it "should use the most recent date as updated one" do
     first = SimpleElement.new
     second = SimpleElement.new
+    
     [first, second].updated_at.should == second.updated_at
+    [first, first].updated_at.should == first.updated_at
+    
+    now = Time.now
+    Time.should_receive(:now).and_return(now)
+    [].updated_at.should == now
   end
   
-  it "custom field usinged to find max updated" do
+  it "should return the oldest published date" do
     first = SimpleElement.new
     second = SimpleElement.new
+
     [first, second].published_at.should == first.published_at
+    [first, first].published_at.should == first.published_at
+    
+    now = 545
+    Time.should_receive(:now).and_return(now)
+    [].updated_at.should == now
   end
 end
