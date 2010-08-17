@@ -8,6 +8,7 @@ context Restfulie::Server::Configuration do
     end
   end
   
+  
   context "save configurations in Restfulie::Server" do
 
     before do
