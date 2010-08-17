@@ -1,4 +1,4 @@
-require 'spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe AlbumsController do
   
@@ -40,15 +40,18 @@ describe AlbumsController do
     before do
       response.content_type = "application/atom+xml"
       @album = Album.first
+      pending
       get :show, :id => @album.id, :format => :atom
       @entry = Restfulie::Common::Representation::Atom::Factory.create(response.body)      
     end
   
     it "generation atom entry" do
+      pending
       @entry.title.should == @album.title
     end
   
     it "return extension values" do
+      pending
       @entry.doc.at_xpath("albums:length_in_minutes", "albums" => "http://localhost/albums").content.to_i.should == @album.length
       @entry.doc.at_xpath("albums:description", "albums" => "http://localhost/albums").content.should == @album.description
     end
