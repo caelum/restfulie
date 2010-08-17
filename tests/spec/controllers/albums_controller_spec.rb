@@ -3,6 +3,8 @@ require 'spec_helper'
 describe AlbumsController do
   
   before do
+    response.stub (:content_type) { "application/atom+xml" }
+    
     3.times do |i|
       album = Album.create!(:title => "Album #{i}", :description => "Description #{i}", :length => i*10)
       4.times do |j|
@@ -16,7 +18,6 @@ describe AlbumsController do
   describe "get index" do
     before do
       request.accept = "application/atom+xml"
-      response.stub (:content_type) { "application/atom+xml" }
       get :index, :format => :atom
       @feed = Restfulie::Common::Representation::Atom::Factory.create(response.body)
     end
