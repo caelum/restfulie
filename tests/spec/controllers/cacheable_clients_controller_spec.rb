@@ -5,9 +5,9 @@ describe CacheableClientsController do
     request.accept = "application/atom+xml"
   end
   
-  context "single resource" do
+  context "requesting a single resource" do
     
-    it "does not set Etag" do
+    it "should not set Etag" do
       get :single
       controller.response.etag.should == nil
     end
@@ -18,7 +18,7 @@ describe CacheableClientsController do
       response.status.to_i.should == 200
     end
     
-    it "returns 304 Not Modified if client's cache is still valid" do
+    it "should return 304 Not Modified if client's cache is still valid" do
       request.env["HTTP_IF_MODIFIED_SINCE"] = Time.utc(2010).httpdate
       get :single
       response.status.to_i.should == 304
