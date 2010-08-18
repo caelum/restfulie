@@ -25,7 +25,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'restfulie', '1.0.0.beta.1'
 
 group :test, :development do
-	gem "sinatra"
+	# gem "sinatra"
 	gem "rack-conneg"
   gem "rspec-rails", ">= 2.0.0.beta.19"
 end
