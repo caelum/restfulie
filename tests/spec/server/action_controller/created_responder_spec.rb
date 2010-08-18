@@ -15,7 +15,7 @@ describe Restfulie::Server::ActionController::CreatedResponder do
       responder = Object.new
       responder.extend ToFormatReceiver
       responder.extend Restfulie::Server::ActionController::CreatedResponder
-      responder.should_receive(:options).and_return({:status => 300})
+      responder.stub(:options).and_return({:status => 300})
       responder.to_format
       responder.received.should be_true
     end
@@ -35,7 +35,7 @@ describe Restfulie::Server::ActionController::CreatedResponder do
       responder = Object.new
       responder.extend Restfulie::Server::ActionController::CreatedResponder
       responder.stub(:resource).and_return(resource)
-      responder.should_receive(:options).and_return({:status => what})
+      responder.stub(:options).and_return({:status => what})
       responder.should_receive(:controller).and_return(controller)
       responder.should_receive(:head).with(:status => 201, :location => uri)
       responder.to_format
