@@ -29,4 +29,8 @@ module FakeServer
   
 end
 
-FakeServer.start_server_and_invoke_test('nothing')
+namespace :test do
+  task :pegadinha_do_malandro do
+    FakeServer.start_server_and_invoke_test('nothing')
+  end
+end
