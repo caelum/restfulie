@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 
 module Restfulie::Common::Converter::Test
   class SimpleClass
@@ -67,7 +66,7 @@ describe Restfulie::Common::Converter do
      end
      
      it "should create a feed from a string input" do
-       full_atom = IO.read(File.dirname(__FILE__) + '/../../lib/atoms/full_atom.xml')
+       full_atom = IO.read(File.dirname(__FILE__) + '/../full_atom.xml')
        feed = to_atom(full_atom)
        
        feed.id.should == "http://example.com/albums/1"

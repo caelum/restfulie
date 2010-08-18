@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 
 module Restfulie::Common::Converter::Test
   class SimpleClass

@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Restfulie::Common::Representation::Atom do
   before :all do
-    full_atom = IO.read(File.dirname(__FILE__) + '/../../lib/atoms/full_atom.xml')
+    full_atom = IO.read(File.dirname(__FILE__) + '/../full_atom.xml')
     @atom = Restfulie::Common::Representation::Atom::Factory.create(full_atom)
   end
   
