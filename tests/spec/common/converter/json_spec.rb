@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/models')
 require 'json'
 
 module Restfulie::Common::Converter::Test
@@ -66,7 +65,7 @@ describe Restfulie::Common::Converter do
     end
      
     it "should create a collection from a string input" do
-      full_json = IO.read(File.dirname(__FILE__) + '/../../lib/jsons/full_json.js')
+      full_json = IO.read(File.dirname(__FILE__) + '/../full_json.js')
       json = to_json(full_json)
 
       json["articles"]["size"].should  == 2

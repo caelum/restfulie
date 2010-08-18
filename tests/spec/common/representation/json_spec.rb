@@ -4,7 +4,7 @@ require 'json'
 context Restfulie::Common::Representation::Json do
   
   before :all do
-    full_json = IO.read(File.dirname(__FILE__) + '/../../lib/jsons/full_json.js')
+    full_json = IO.read(File.dirname(__FILE__) + '/../full_json.js')
     @json = Restfulie::Common::Representation::Json.create(full_json)
   end
   
