@@ -1,0 +1,1 @@
+Those tests are integration tests (as in the server side) but full end-to-end tests, with code from the Restfulie client side.
