@@ -15,24 +15,20 @@ class CreationController < ApplicationController
 
 end
 
-ActionController::Routing::Routes.draw do |map|
-  map.connect ':controller/:action/:id'
-end
-
-describe CreationController, :type => :controller do
-  
-  before(:each) do
-    request.accept = "application/atom+xml"
-  end
+describe CreationController do
   
   context "creating a resource" do
     
     it "should return 201 with location" do
+      request.accept = "application/atom+xml"
+      
       uri = "http://newlocation.com/uri"
-      controller.should_receive(:url_for).and_return uri
+      
+      controller.stub(:url_for).and_return uri
+
       post :create
-      controller.response.code.should == "201"
-      controller.response.headers["Location"].should == uri
+      response.code.should == "201"
+      response.headers["Location"].should == uri
     end
 
   end      

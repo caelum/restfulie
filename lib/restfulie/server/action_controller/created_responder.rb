@@ -6,7 +6,7 @@ module Restfulie
       module CreatedResponder
 
         def to_format
-          if [201, :created].include? options[:status]
+          if (options[:status] == 201) || (options[:status] == :created)
             head :status => 201, :location => controller.url_for(resource)
           else
             super
