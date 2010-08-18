@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 context Restfulie::Client::Cache::Basic do
   
   before do
-    @response = mock Net::HTTPResponse
+    @response = Net::HTTPResponse
   end
   
   it "should put on the cache if Cache-Control is enabled" do
@@ -24,7 +24,6 @@ context Restfulie::Client::Cache::Basic do
   it "should respect the vary header" do
     url = Object.new
     request = Object.new
-    @response = mock Net::HTTPResponse
     cache = Restfulie::Client::Cache::Basic.new
     @response.should_receive(:vary_headers_for).with(request).and_return(1)
     @response.should_receive(:vary_headers_for).with(request).and_return(2)
@@ -38,7 +37,6 @@ context Restfulie::Client::Cache::Basic do
   it "should not put on the cache if Cache-Control is enabled" do
     url = Object.new
     request = Object.new
-    @response = mock Net::HTTPResponse
     cache = Restfulie::Client::Cache::Basic.new
     
     Restfulie::Client::Cache::Restrictions.should_receive(:may_cache?).with(@response).and_return(false)
@@ -50,7 +48,6 @@ context Restfulie::Client::Cache::Basic do
   it "should remove from cache if expired" do
     url = Object.new
     request = Object.new
-    @response = mock Net::HTTPResponse
     cache = Restfulie::Client::Cache::Basic.new
     @response.should_receive(:vary_headers_for).with(request).and_return(1)
     @response.should_receive(:vary_headers_for).with(request).and_return(1)
@@ -66,7 +63,6 @@ context Restfulie::Client::Cache::Basic do
   it "should allow cache clean up" do
     url = Object.new
     request = Object.new
-    @response = mock Net::HTTPResponse
     cache = Restfulie::Client::Cache::Basic.new
     
     Restfulie::Client::Cache::Restrictions.should_receive(:may_cache?).with(@response).and_return(true)
