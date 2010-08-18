@@ -5,3 +5,28 @@ require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
 Tests::Application.load_tasks
+
+module FakeServer
+  def self.wait_server(port=3000)
+    (1..15).each do 
+      begin
+        Net::HTTP.get(URI.parse("http://localhost:#{port}/"))
+        return
+      rescue
+        sleep 1
+      end
+    end
+    raise "Waited for the server but it did not finish"
+  end
+  
+  def self.start_server_and_invoke_test(task_name)
+    IO.popen("ruby ./spec/requests/fake_server.rb") do |pipe|
+      wait_server(4567)
+      Rake::Task[task_name].invoke
+      Process.kill 'INT', pipe.pid
+    end
+  end
+  
+end
+
+FakeServer.start_server_and_invoke_test('nothing')

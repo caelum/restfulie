@@ -3,7 +3,7 @@ require 'sinatra'
 require 'rack/conneg'
 require 'active_support'
 
-require File.join(File.dirname(__FILE__),'..','lib','data_helper')
+require File.join(File.dirname(__FILE__),'..','support','data_helper')
 
 use(Rack::Conneg) do |conneg|
   conneg.set :accept_all_extensions, false
