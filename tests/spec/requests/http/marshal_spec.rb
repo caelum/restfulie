@@ -55,7 +55,7 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
     it 'should unmarshal' do
       songs = @marshaller.at('/songs').accepts('application/atom+xml').get!
-
+      
       songs.response.code.should == 200
       songs.title.should == 'Songs feed'
       songs.id.should == 'http://localhost:4567/songs'
@@ -84,6 +84,7 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
     it 'should marshal' do
       songs = @marshaller.at('/songs').accepts('application/atom+xml').get!
+
       a_song = songs.entries.first
       a_song.title = "Update song #{a_song.title}"
 
