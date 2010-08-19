@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'rack/conneg'
 require 'active_support'
+require 'json'
 
 require File.join(File.dirname(__FILE__),'..','support','data_helper')
 
@@ -14,6 +15,10 @@ end
 
 before do
   content_type negotiated_type
+end
+
+get "/favicon" do
+  Rack::Response.new('OK', 200).finish
 end
 
 get "/test/?" do
