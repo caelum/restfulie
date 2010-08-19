@@ -1,10 +1,42 @@
 module Restfulie
   module Server
     module ActionController
-      class ParamsParser
-        # This class is just a proxy for the extension point offered by ActionController::Base
+      
+      # This class is just a proxy for the extension point offered by ActionDispatch::ParamsParser
+      class ParamsParser3
+        
+        def register(content_type, representation)
+          ActionDispatch::ParamsParser.DEFAULT_PARSERS[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
+        end
+        
+        def unregister(content_type)
+          ActionDispatch::ParamsParser.DEFAULT_PARSERS.delete(Mime::Type.lookup(content_type))
+        end
+      end
+
+      # This class is just a proxy for the extension point offered by ActionController::Base
+      class ParamsParser2
+
         @@param_parsers = ::ActionController::Base.param_parsers
 
+        def register(content_type, representation)
+          @@param_parsers[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
+        end
+        
+        def unregister(content_type)
+          @@param_parsers.delete(Mime::Type.lookup(content_type))
+        end
+      end
+      
+      
+      class ParamsParser
+        
+        def self.rails3?
+          defined?(::ActionDispatch) && defined?(::ActionDispatch::ParamsParser)
+        end
+
+        @parser = rails3? ? ParamsParser3.new : ParamsParser.new
+        
         ## 
         # :singleton-method:
         # Use it to register param parsers on the server side.
@@ -15,9 +47,9 @@ module Restfulie
         #   Restfulie::Server::ActionController::ParamsParser.register('application/atom+xml', Atom)
         #
         def self.register(content_type, representation)
-          @@param_parsers[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
+          @parser.register(content_type, representation)
         end
-        
+
         ## 
         # :singleton-method:
         # Use it to unregister param parsers on the server side.
@@ -27,9 +59,10 @@ module Restfulie
         #   Restfulie::Server::ActionController::ParamsParser.unregister('application/atom+xml')
         #
         def self.unregister(content_type)
-          @@param_parsers.delete(Mime::Type.lookup(content_type))
+          @parser.unregister(content_type)
         end
       end
+      
     end
   end
 end
