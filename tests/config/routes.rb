@@ -1,9 +1,11 @@
 Tests::Application.routes.draw do
+
   resources :albums do
     resources :songs, :controller => 'albums/songs'
     resources :artists, :controller => 'albums/artists'
   end
   resources :songs
+  resources :artists
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
