@@ -25,7 +25,7 @@ context Restfulie::Client::Mikyung do
 
     it "should not walk if goal starts completed" do
       @goal.should_receive(:completed?).with(@start).and_return(true)
-      @restfulie = Object.new
+      @restfulie = mock Restfulie::Client::Mikyung
       @restfulie.should_receive(:get).and_return(@start)
       @goal.class.should_receive(:get_restfulie).and_return(@restfulie)
       @goal.should_receive(:steps).and_return(nil)
@@ -38,7 +38,7 @@ context Restfulie::Client::Mikyung do
       second = Object.new
       @walker.should_receive(:move).with(@goal, @start, @client).and_return(second)
       @goal.should_receive(:completed?).with(second).and_return(true)
-      @restfulie = Object.new
+      @restfulie = mock Restfulie::Client::Mikyung
       @restfulie.should_receive(:get).and_return(@start)
       @goal.class.should_receive(:get_restfulie).and_return(@restfulie)
       @goal.should_receive(:steps).and_return(nil)
@@ -52,7 +52,7 @@ context Restfulie::Client::Mikyung do
     
     it "should start invoking a restfulie get if the entry point is an uri" do
       start = "http://www.caelumobjects.com"
-      restfulie = Object.new
+      restfulie = mock Restfulie::Client::Mikyung
       Restfulie.should_receive(:at).with(start).and_return(restfulie)
       
       resource = Object.new
