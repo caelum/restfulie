@@ -16,7 +16,7 @@ collection(@albums) do |collection|
       value["albums"].description       album.description
     end
 
-    member.link(:artists, album_artist_url(album))
+    member.link(:artists, album_artists_url(album))
 
   end
 end
