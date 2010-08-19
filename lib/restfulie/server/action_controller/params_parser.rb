@@ -6,25 +6,27 @@ module Restfulie
       class ParamsParser3
         
         def register(content_type, representation)
-          ActionDispatch::ParamsParser.DEFAULT_PARSERS[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
+          ActionDispatch::ParamsParser::DEFAULT_PARSERS[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
         end
         
         def unregister(content_type)
-          ActionDispatch::ParamsParser.DEFAULT_PARSERS.delete(Mime::Type.lookup(content_type))
+          ActionDispatch::ParamsParser::DEFAULT_PARSERS.delete(Mime::Type.lookup(content_type))
         end
       end
 
       # This class is just a proxy for the extension point offered by ActionController::Base
       class ParamsParser2
 
-        @@param_parsers = ::ActionController::Base.param_parsers
+        def param_parsers
+          ::ActionController::Base.param_parsers
+        end
 
         def register(content_type, representation)
-          @@param_parsers[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
+          param_parsers[Mime::Type.lookup(content_type)] = representation.method(:to_hash).to_proc
         end
         
         def unregister(content_type)
-          @@param_parsers.delete(Mime::Type.lookup(content_type))
+          param_parsers.delete(Mime::Type.lookup(content_type))
         end
       end
       
@@ -35,7 +37,36 @@ module Restfulie
           defined?(::ActionDispatch) && defined?(::ActionDispatch::ParamsParser)
         end
 
-        @parser = rails3? ? ParamsParser3.new : ParamsParser.new
+        if rails3?
+          @parser = ParamsParser3.new
+        else
+          @parser = ParamsParser2.new
+          # This monkey patch is needed because Rails 2.3.5 doesn't support
+          # a way of use rescue_from ActionController handling to return
+          # bad request status when trying to parse an invalid body request
+          #
+          # In Rails 3 this won't be necessary, because all exception handling
+          # extensions are handled by the Rack stack
+          #
+          # TODO Change this when porting this code to Rails 3
+          ::ActionController::ParamsParser.class_eval do
+            def call(env)
+              begin
+                if params = parse_formatted_parameters(env)
+                  env["action_controller.request.request_parameters"] = params
+                elsif !(env["CONTENT_TYPE"] == "application/x-www-form-urlencoded") #do not override rails default behaviour for this media type, it's dangerous... (o.O)
+                  if env["CONTENT_LENGTH"] && (env["CONTENT_LENGTH"] != "0")
+                    env["action_controller.restfulie.response"] = [415, {'Content-Type' => 'text/html'}, ["<html><body><h1>415 Unsupported Media Type</h1></body></html>"]]
+                  end
+                end
+              rescue
+                env["action_controller.restfulie.response"] = [400, {'Content-Type' => 'text/html'}, ["<html><body><h1>400 Bad Request</h1></body></html>"]]
+              end
+
+              @app.call(env)
+            end
+          end
+        end
         
         ## 
         # :singleton-method:
@@ -64,32 +95,6 @@ module Restfulie
       end
       
     end
-  end
-end
-
-# This monkey patch is needed because Rails 2.3.5 doesn't support
-# a way of use rescue_from ActionController handling to return
-# bad request status when trying to parse an invalid body request
-#
-# In Rails 3 this won't be necessary, because all exception handling
-# extensions are handled by the Rack stack
-#
-# TODO Change this when porting this code to Rails 3
-::ActionController::ParamsParser.class_eval do
-  def call(env)
-    begin
-      if params = parse_formatted_parameters(env)
-        env["action_controller.request.request_parameters"] = params
-      elsif !(env["CONTENT_TYPE"] == "application/x-www-form-urlencoded") #do not override rails default behaviour for this media type, it's dangerous... (o.O)
-        if env["CONTENT_LENGTH"] && (env["CONTENT_LENGTH"] != "0")
-          env["action_controller.restfulie.response"] = [415, {'Content-Type' => 'text/html'}, ["<html><body><h1>415 Unsupported Media Type</h1></body></html>"]]
-        end
-      end
-    rescue
-      env["action_controller.restfulie.response"] = [400, {'Content-Type' => 'text/html'}, ["<html><body><h1>400 Bad Request</h1></body></html>"]]
-    end
-
-    @app.call(env)
   end
 end
 
