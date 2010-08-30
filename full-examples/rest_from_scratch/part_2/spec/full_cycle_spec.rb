@@ -19,6 +19,8 @@ describe ItemsController do
 
       # creates the payment
       resource = resource.basket.links.payment.post! payment
+      
+      resource.payment.cardholder.should == "guilherme silveira"
 
     end
     
