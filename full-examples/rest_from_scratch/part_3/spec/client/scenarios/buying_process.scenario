@@ -1,0 +1,15 @@
+When there is a required item
+And there is a basket
+But didnt create a basket
+Then create the basket
+
+When there is a required item
+And there is a basket
+Then add to the basket
+
+When it is a basket
+And there are still products to buy
+Then start again
+
+When there is a payment
+Then pay
