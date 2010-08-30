@@ -1,0 +1,14 @@
+collection(@items) do |collection|
+
+  collection.link "basket", baskets_url
+  
+  collection.members do |member, item|
+    member.link :self, item_url(item)
+    member.values { |values|
+      values.id     item.id
+      values.name   item.name
+      values.price  item.price
+    }
+  end
+  
+end

@@ -1,9 +1,0 @@
-collection(@items) do |collection|
-
-  collection.link "basket", baskets_url
-  
-  collection.members do |member, item|
-    partial "show", binding
-  end
-  
-end
