@@ -1,7 +1,8 @@
 RestFromScratch::Application.routes.draw do
-  resources :payments
 
-  resources :baskets
+  resources :baskets do
+    resources :payments
+  end
 
   resources :items
 
