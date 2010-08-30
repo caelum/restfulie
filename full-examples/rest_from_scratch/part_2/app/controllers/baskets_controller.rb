@@ -8,6 +8,8 @@ class BasketsController < ApplicationController
   def create
     @basket = Basket.new
     params[:basket][:items].each do |item|
+      puts item.class
+      puts item[:id]
       @basket.items << Item.find(item[:id])
     end
     @basket.save

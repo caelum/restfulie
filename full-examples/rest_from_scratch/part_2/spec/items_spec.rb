@@ -21,8 +21,8 @@ describe ItemsController do
     
     it "should retrieve an array" do
       p = Restfulie.at('http://localhost:3000/items').get
-      p.items[0].name.should == "Agile Training"
-      p.items[0].price.should == 500
+      p.items.item[0].name.should == "Agile Training"
+      p.items.item[0].price.should == "500.0"
     end
     
   end
