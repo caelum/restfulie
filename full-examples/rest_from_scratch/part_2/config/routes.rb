@@ -1,4 +1,8 @@
 RestFromScratch::Application.routes.draw do
+  resources :payments
+
+  resources :baskets
+
   resources :items
 
   # The priority is based upon order of creation:

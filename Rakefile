@@ -1,10 +1,9 @@
-# encoding: UTF-8
-
 require 'rubygems'
 require 'rubygems/specification'
 require 'rake'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
+require 'rspec'
 require File.expand_path('lib/restfulie')
 
 GEM = "restfulie"
@@ -76,25 +75,25 @@ namespace :test do
     end
   end
   
-  # namespace :spec do
-  #   spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
-  #     Spec::Rake::SpecTask.new(:all) do |t|
-  #       t.spec_files = FileList['spec/units/**/*_spec.rb']
-  #       t.spec_opts = spec_opts
-  #     end
-  #     Spec::Rake::SpecTask.new(:common) do |t|
-  #       t.spec_files = FileList['spec/common/**/*_spec.rb']
-  #       t.spec_opts = spec_opts
-  #     end
-  #     Spec::Rake::SpecTask.new(:client) do |t|
-  #       t.spec_files = FileList['spec/units/client/**/*_spec.rb']
-  #       t.spec_opts = spec_opts
-  #     end
-  #     Spec::Rake::SpecTask.new(:server) do |t|
-  #       t.spec_files = FileList['spec/units/server/**/*_spec.rb']
-  #       t.spec_opts = spec_opts
-  #     end
-  # end
+  task :spec do
+    # spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
+    RSpec::Core::RakeTask.new(:all) do |t|
+      t.spec_files = FileList['spec/units/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
+    Spec::Rake::SpecTask.new(:common) do |t|
+      t.spec_files = FileList['spec/common/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
+    Spec::Rake::SpecTask.new(:client) do |t|
+      t.spec_files = FileList['spec/units/client/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
+    Spec::Rake::SpecTask.new(:server) do |t|
+      t.spec_files = FileList['spec/units/server/**/*_spec.rb']
+      t.spec_opts = spec_opts
+    end
+  end
   
   # namespace :rcov do
   #   Spec::Rake::SpecTask.new('rcov') do |t|
@@ -115,15 +114,6 @@ namespace :test do
       puts "Execution integration tests... (task test:integration)"
       Rake::Task["test:integration"].invoke()
       Rake::Task["test:examples"].invoke()
-    end
-    task :common do
-      start_server_and_invoke_test('test:spec:common')
-    end
-    task :client do
-      start_server_and_invoke_test('test:spec:client')
-    end
-    task :server do
-      start_server_and_invoke_test('test:spec:server')
     end
     task :rcov do
       start_server_and_invoke_test('test:rcov:rcov')

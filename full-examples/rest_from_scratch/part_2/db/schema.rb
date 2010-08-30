@@ -10,11 +10,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100830171258) do
+ActiveRecord::Schema.define(:version => 20100830180203) do
+
+  create_table "baskets", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "items", :force => true do |t|
     t.string   "name"
     t.decimal  "price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "payments", :force => true do |t|
+    t.string   "cardnumber"
+    t.string   "cardholder"
+    t.decimal  "amount"
+    t.integer  "basket_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
