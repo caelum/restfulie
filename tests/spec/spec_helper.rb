@@ -56,3 +56,6 @@ RSpec.configure do |config|
 
   config.include(ResponseMatchers)
 end
+
+# Change output logger
+Restfulie::Common::Logger.logger = ActiveSupport::BufferedLogger.new(File.join(File.dirname(__FILE__), "logs", "spec.log"))
