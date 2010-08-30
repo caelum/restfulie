@@ -28,8 +28,6 @@ module Restfulie
             defined?(Restfulie::Server::ActionController::Base) && self.include?(Restfulie::Server::ActionController::Base)
           end
         end
-
-        protected
         
           # If your controller inherits from Restfulie::Server::Controller::Base,
           # it will have an :atom option, very similar to render :xml
@@ -39,7 +37,7 @@ module Restfulie
               representation = atom.respond_to?(:to_atom) ? atom.to_atom.to_xml : atom.to_xml
               options[:text] = representation
               options[:atom] = nil
-              render options
+              super options
             else
               super
             end

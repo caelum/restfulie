@@ -14,5 +14,4 @@ class PaymentsController < ApplicationController
     respond_with @payment
   end
 
-
 end
