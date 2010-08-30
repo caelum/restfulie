@@ -6,6 +6,8 @@ class CreateItems < ActiveRecord::Migration
 
       t.timestamps
     end
+    Item.create :name => "REST in practice", :price => 400.0
+    Item.create :name => "Calpis", :price => 10.0
   end
 
   def self.down

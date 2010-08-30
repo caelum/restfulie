@@ -12,7 +12,7 @@ end
 require 'spec_helper'
 
 describe ItemsController do
-  
+
   context "when creating an item" do
 
     it "should keep its values" do
