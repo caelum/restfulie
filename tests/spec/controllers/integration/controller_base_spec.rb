@@ -1,31 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require "action_controller"
 
-class BaseController < ::ActionController::Base
-  include Restfulie::Server::ActionController::Base
-
-  def index
-    render :atom => [AtomifiedModel.new, AtomifiedModel.new, AtomifiedModel.new]
-  end
-  
-  def show
-    render :atom => AtomifiedModel.new
-  end
-  
-  def show_with_mock
-    render :atom => object
-  end
-end
-
-ActionController::Routing::Routes.draw do |map|
-  map.connect ':controller/:action/:id'
-end
-
-describe Restfulie::Server::ActionController::Base, :type => :controller do
-  tests BaseController
+describe RenderController do
   
   before(:each) do
-    @object = mock("ModelWithToAtom")
+    @object = Object.new
     @controller.stub!(:object).and_return(@object)
   end
   

@@ -15,7 +15,11 @@ class AtomifiedModel
     entry.id        = "entry1"
     entry.title     = "entry"
     entry.updated   = Time.parse("2010-05-03T16:29:26Z")
-    entry.published = Time.parse("2010-05-03T16:29:26Z")
+    entry.published = published_at
     entry
+  end
+  
+  def published_at
+    Time.parse("2010-05-03T16:29:26Z")
   end
 end

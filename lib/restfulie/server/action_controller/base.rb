@@ -36,7 +36,10 @@ module Restfulie
           def render(options = nil, extra_options = {}, &block)
             if options && atom = options[:atom]
               response.content_type ||= Mime::ATOM
-              render_for_text(atom.respond_to?(:to_atom) ? atom.to_atom.to_xml : atom.to_xml, options[:status])
+              representation = atom.respond_to?(:to_atom) ? atom.to_atom.to_xml : atom.to_xml
+              options[:text] = representation
+              options[:atom] = nil
+              render options
             else
               super
             end
