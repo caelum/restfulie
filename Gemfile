@@ -5,7 +5,6 @@ gem "rails", ">= 3.0.0"
 gem "libxml-ruby"
 
 gem "rack-conneg"
-gem "responders_backport"
 gem "json_pure"
 gem "sqlite3-ruby"
 gem "yard"
