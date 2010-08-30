@@ -1,7 +1,7 @@
 # A sample Gemfile
 source :gemcutter
 #
-gem "rails", ">= 3.0.0.rc"
+gem "rails", ">= 3.0.0"
 gem "libxml-ruby"
 
 gem "rack-conneg"
@@ -24,7 +24,5 @@ group :test do
   gem "sinatra"
 	gem "state_machine"
   gem "test-unit", "= 1.2.3"
-	gem "rails", ">= 3.0.0.rc"
-#	gem "rails", "= 2.3.5"
 	gem "fakeweb"
 end  
