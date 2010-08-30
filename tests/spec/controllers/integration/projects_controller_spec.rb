@@ -6,7 +6,7 @@ describe ProjectsController do
 
   before do
     request.accept = "application/atom+xml"
-    response.stub (:content_type) { "application/atom+xml" }
+    response.stub(:content_type) { "application/atom+xml" }
   end
 
   it "renders view files with tokamak extension" do
