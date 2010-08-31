@@ -1,3 +1,0 @@
-member(@item) do |member, item|
-  partial "show", binding
-end
