@@ -140,7 +140,7 @@ task :make_spec do
 end
 
 desc "Builds the project"
-task :build => "test:spec"
+task :build => ["install", "test:spec"]
 
 desc "Default build will run specs"
 task :default => :build
