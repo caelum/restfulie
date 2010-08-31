@@ -45,10 +45,10 @@ module FakeServer
     raise "Waited for the server but it did not finish"
   end
   
-  def self.start_server_and_invoke_test(task_name)
-    IO.popen("ruby ./spec/requests/fake_server.rb") do |pipe|
+  def self.start_sinatra
+    IO.popen("cd tests && ruby ./spec/requests/fake_server.rb") do |pipe|
       wait_server 4567
-      Rake::Task[task_name].invoke
+      yield
       Process.kill 'INT', pipe.pid
     end
   end
@@ -76,6 +76,14 @@ end
 namespace :test do
   
   task :spec do
+    FakeServer.start_sinatra do
+      FakeServer.start_server_and_run_spec "tests"
+    end
+  end
+  
+  task :integration do
+    FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_1"
+    FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_2"
     FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_3"
   end
   
