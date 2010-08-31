@@ -131,7 +131,6 @@ Thomas Stefano
 "David Paniz":"http://www.caelum.com.br"
 "Caike Souza":"http://www.caikesouza.com/blog"
 
-h2. Riding rails3
+h2. Rails 2
 
-gem install bundler -v=1.0.0.rc.1
-bundle install
+If you want to use Restfulie with Rails2, please use any release up to 0.9.2 and its minor releases.
