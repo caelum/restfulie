@@ -1,5 +1,4 @@
 require 'restfulie/common'
-require 'responders_backport'
 
 module Restfulie
   module Server
