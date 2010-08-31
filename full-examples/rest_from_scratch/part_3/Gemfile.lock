@@ -63,7 +63,7 @@ GEM
       thor (~> 0.14.0)
     rake (0.8.7)
     responders_backport (0.1.2)
-    restfulie (0.9.0)
+    restfulie (0.9.3)
       actionpack (>= 2.3.2)
       activesupport (>= 2.3.2)
       json_pure (>= 1.2.4)
