@@ -1,4 +1,5 @@
 class BasketsController < ApplicationController
+
   
   include Restfulie::Server::ActionController::Base
   
@@ -7,6 +8,8 @@ class BasketsController < ApplicationController
   def create
     @basket = Basket.new
     params[:basket][:items].each do |item|
+      puts item.class
+      puts item[:id]
       @basket.items << Item.find(item[:id])
     end
     @basket.save
@@ -17,5 +20,6 @@ class BasketsController < ApplicationController
     @basket = Basket.find(params[:id])
     respond_with @basket
   end
+
 
 end

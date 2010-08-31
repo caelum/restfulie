@@ -1,11 +1,10 @@
 # A sample Gemfile
 source :gemcutter
 #
-gem "rails"
+gem "rails", ">= 3.0.0"
 gem "libxml-ruby"
 
 gem "rack-conneg"
-gem "responders_backport"
 gem "json_pure"
 gem "sqlite3-ruby"
 gem "yard"
@@ -18,11 +17,10 @@ end
 
 group :test do  
   gem "nokogiri"
-  gem "rspec-rails"
+  gem "rspec-rails", ">= 2.0.0.beta.19"
   gem "rcov"
   gem "sinatra"
 	gem "state_machine"
   gem "test-unit", "= 1.2.3"
-	gem "rails", "= 2.3.5"
 	gem "fakeweb"
 end  

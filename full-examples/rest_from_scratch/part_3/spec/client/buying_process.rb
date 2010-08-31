@@ -15,8 +15,9 @@ class BuyingProcess < Restfulie::Client::Mikyung::RestProcessModel
     Restfulie::Common::Logger.logger.level = Logger::ERROR
     goal = BuyingProcess.new("Rest", "Calpis")
     result = Restfulie::Mikyung.new.achieve(goal).run
+    
     result.response.code.should == 200
-    result.payment.price.should == "410.0"
+    result.payment.amount.should == 410.0
     puts "Goal Achieved"
   end
 end

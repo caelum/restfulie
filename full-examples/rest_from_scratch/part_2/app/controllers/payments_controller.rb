@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-  
+
   include Restfulie::Server::ActionController::Base
   
   respond_to :xml, :json

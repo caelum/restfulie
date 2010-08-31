@@ -1,5 +1,4 @@
 require 'rubygems'
-require  'ruby-debug' 
 require 'restfulie'
 require 'client/buying_process.rb'
 
@@ -10,4 +9,16 @@ class Restfulie::Client::Cache::Basic
   end
 end
 
-BuyingProcess.run
+require 'spec_helper'
+
+describe ItemsController do
+
+  context "when creating an item" do
+
+    it "should keep its values" do
+      BuyingProcess.run
+    end
+
+  end
+  
+end

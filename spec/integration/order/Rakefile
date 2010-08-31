@@ -1,6 +1,0 @@
-require 'rubygems'
-require 'rake'
-
-desc "Default build will run specs"
-task :default => :spec
-

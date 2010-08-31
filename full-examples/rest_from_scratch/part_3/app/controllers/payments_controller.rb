@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-  
+
   include Restfulie::Server::ActionController::Base
   
   respond_to :xml, :json
@@ -11,7 +11,6 @@ class PaymentsController < ApplicationController
   
   def show
     @payment = Payment.find(params[:id])
-    # debugger
     respond_with @payment
   end
 

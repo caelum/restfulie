@@ -1,4 +1,5 @@
 class BasketsController < ApplicationController
+
   
   include Restfulie::Server::ActionController::Base
   
@@ -7,12 +8,14 @@ class BasketsController < ApplicationController
   def create
     @basket = Basket.new
     params[:basket][:items].each do |item|
+      puts item.class
+      puts item[:id]
       @basket.items << Item.find(item[:id])
     end
     @basket.save
     render :text => "", :status => 201, :location => basket_url(@basket)
   end
-
+  
   def update
     @basket = Basket.find(params[:id])
     params[:items].each do |item|
@@ -21,10 +24,11 @@ class BasketsController < ApplicationController
     @basket.save
     render :text => "", :status => 201, :location => basket_url(@basket)
   end
-  
+
   def show
     @basket = Basket.find(params[:id])
-    respond_with @basket, :expires_in => 2.minutes
+    respond_with @basket
   end
+
 
 end

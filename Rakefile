@@ -1,17 +1,17 @@
-# encoding: UTF-8
-
 require 'rubygems'
 require 'rubygems/specification'
 require 'rake'
 require 'rake/gempackagetask'
-require 'spec/rake/spectask'
 require 'rake/rdoctask'
+require 'rspec'
+require 'rspec/core'
+require 'rspec/core/rake_task'
 require File.expand_path('lib/restfulie')
 
 GEM = "restfulie"
 GEM_VERSION = Restfulie::VERSION
 SUMMARY  = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
-AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Everton Ribeiro, George Guimaraes, Paulo Ahagon"
+AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Everton Ribeiro, George Guimaraes, Paulo Ahagon, Several contributors"
 EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
@@ -25,12 +25,53 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("nokogiri", [">= 1.4.2"])
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
-  s.add_dependency("responders_backport", ["~> 0.1.0"])
   s.add_dependency("json_pure", [">= 1.2.4"])
 
   s.author = AUTHOR
   s.email = EMAIL
   s.homepage = HOMEPAGE
+end
+
+module FakeServer
+  def self.wait_server(port=3000)
+    (1..15).each do 
+      begin
+        Net::HTTP.get(URI.parse("http://localhost:#{port}/"))
+        return
+      rescue
+        sleep 1
+      end
+    end
+    raise "Waited for the server but it did not finish"
+  end
+  
+  def self.start_sinatra
+    IO.popen("cd tests && ruby ./spec/requests/fake_server.rb") do |pipe|
+      wait_server 4567
+      yield
+      Process.kill 'INT', pipe.pid
+    end
+  end
+  
+  def self.run(setup, process)
+    success = IO.popen(setup) do |pipe|
+      wait_server
+      success = system "rake spec"
+      Process.kill 'INT', pipe.pid
+      success
+    end
+    if !success
+      raise "Some of the specs failed"
+    end
+  end
+  
+  def self.start_server_and_run_spec(target_dir)
+    success = Dir.chdir(File.join(File.dirname(__FILE__), target_dir)) do
+      system('rake db:drop db:create db:migrate')
+      self.run "rails server", "rake spec"
+    end
+  end
+  
 end
 
 # optionally loads a task if the required gems exist
@@ -40,113 +81,35 @@ def optionally
   rescue LoadError; end
 end
 
-def start_server_and_invoke_test(task_name)
-  IO.popen("ruby ./spec/units/client/fake_server.rb") do |pipe|
-    wait_server(4567)
-    Rake::Task[task_name].invoke
-    Process.kill 'INT', pipe.pid
-  end
-end
-
-def wait_server(port=3000)
-  (1..15).each do 
-    begin
-      Net::HTTP.get(URI.parse("http://localhost:#{port}/"))
-      return
-    rescue
-      sleep 1
-    end
-  end
-  raise "Waited for the server but it did not finish"
-end
-
-desc 'Start server'
-task :server do
-  process 'fake_server' 
-end
-
 namespace :test do
   
-  desc "Execute integration Order tests"
+  task :spec do
+    FakeServer.start_sinatra do
+      FakeServer.start_server_and_run_spec "tests"
+    end
+  end
+  
   task :integration do
-    integration_path = "spec/integration/order/server"
-
-    Dir.chdir(File.join(File.dirname(__FILE__), integration_path)) do
-      system('rake db:drop db:create db:migrate')
-      system('rake')
-    end
+    FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_1"
+    FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_2"
+    FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_3"
   end
   
-  namespace :spec do
-    spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
-    Spec::Rake::SpecTask.new(:all) do |t|
-      t.spec_files = FileList['spec/units/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:common) do |t|
-      t.spec_files = FileList['spec/common/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:client) do |t|
-      t.spec_files = FileList['spec/units/client/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:server) do |t|
-      t.spec_files = FileList['spec/units/server/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-  end
+  task :all => ["spec","integration"]
   
-  namespace :rcov do
-    Spec::Rake::SpecTask.new('rcov') do |t|
-      options_file = File.expand_path('spec/units/spec.opts')
-      t.spec_opts = %w(-fs -fh:doc/specs.html --color)
-      t.spec_files = FileList['spec/units/**/*_spec.rb']
-      t.rcov = true
-      t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
-    end
-    desc 'Run coverage test with fake server'
-    task :run do
-      start_server_and_invoke_test('test:rcov:rcov')
-    end
-  end
+  # namespace :rcov do
+  #   Spec::Rake::SpecTask.new('rcov') do |t|
+  #       t.spec_opts = %w(-fs --color)
+  #       t.spec_files = FileList['spec/units/**/*_spec.rb']
+  #       t.rcov = true
+  #       t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
+  #     end
+  #     desc 'Run coverage test with fake server'
+  #     task :run do
+  #       start_server_and_invoke_test('test:rcov:rcov')
+  #     end
+  # end
   
-  namespace :run do
-    task :all do
-      start_server_and_invoke_test('test:spec:all')
-      puts "Execution integration tests... (task test:integration)"
-      Rake::Task["test:integration"].invoke()
-      Rake::Task["test:examples"].invoke()
-    end
-    task :common do
-      start_server_and_invoke_test('test:spec:common')
-    end
-    task :client do
-      start_server_and_invoke_test('test:spec:client')
-    end
-    task :server do
-      start_server_and_invoke_test('test:spec:server')
-    end
-    task :rcov do
-      start_server_and_invoke_test('test:rcov:rcov')
-    end
-  end
-
-  desc "runs all example tests"
-  task :examples do
-    Rake::Task["install"].invoke()
-
-    target_dir = "full-examples/rest_from_scratch/part_3"
-    system "cd #{target_dir} && rake db:reset db:seed"
-
-    IO.popen("ruby #{target_dir}/script/server") do |pipe|
-      wait_server
-      system "cd #{target_dir} && rake spec"
-      Process.kill 'INT', pipe.pid
-    end
-
-  end
-
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
@@ -177,8 +140,8 @@ task :make_spec do
 end
 
 desc "Builds the project"
-task :build => :spec
+task :build => ["install", "test:spec"]
 
 desc "Default build will run specs"
-task :default => ['test:run:all']
+task :default => :build
 
