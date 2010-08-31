@@ -5,6 +5,11 @@ describe ItemsController do
   context "when retrieving data" do
     
     it "should retrieve an array" do
+
+      p = Restfulie.at('http://localhost:3000/items').as("application/xml").post("<item><name>Agile Training</name><price>500</price></item>")
+      p.response.code.should == 200
+      p.item.price.should == 500
+
       # retrieves the list
       resource = Restfulie.at("http://localhost:3000/items").accepts("application/xml").get
 
