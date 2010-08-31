@@ -95,6 +95,8 @@ namespace :test do
     FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_3"
   end
   
+  task :all => ["spec","integration"]
+  
   # namespace :rcov do
   #   Spec::Rake::SpecTask.new('rcov') do |t|
   #       t.spec_opts = %w(-fs --color)
@@ -138,8 +140,8 @@ task :make_spec do
 end
 
 desc "Builds the project"
-task :build => :spec
+task :build => "test:spec"
 
 desc "Default build will run specs"
-task :default => ['test:run:all']
+task :default => :build
 
