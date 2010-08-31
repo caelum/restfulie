@@ -11,9 +11,10 @@ context Restfulie do
 
   it "should work with twitter" do
     statuses = Restfulie.at("http://twitter.com/statuses/public_timeline.xml").get
-    statuses.statuses.each do |status|
-      puts "#{status.user.screen_name}: #{status.text}, #{status.created_at}"
-    end
+    statuses.statuses[0].user.screen_name.should == "fionnaps"
+    # statuses.statuses.each do |status|
+      # puts "#{status.user.screen_name}: #{status.text}, #{status.created_at}"
+    # end
   end
   
   after do
