@@ -19,9 +19,10 @@ module Restfulie
           template_registry.register_template_handler(:tokamak, 
                 Restfulie::Server::ActionView::TemplateHandlers::Tokamak)
       
-          if defined?(::ActionController::Base) && ::ActionController::Base.respond_to?(:exempt_from_layout)
-            ::ActionController::Base.exempt_from_layout :tokamak 
-          end    
+          # TODO unsure if it can be removed. check feedback prior to 1.0.0
+          # if defined?(::ActionController::Base) && ::ActionController::Base.respond_to?(:exempt_from_layout)
+            # ::ActionController::Base.exempt_from_layout :tokamak 
+          # end    
         end
       end
     end
