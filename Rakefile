@@ -4,6 +4,8 @@ require 'rake'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rspec'
+require 'rspec/core'
+require 'rspec/core/rake_task'
 require File.expand_path('lib/restfulie')
 
 GEM = "restfulie"
@@ -53,10 +55,13 @@ module FakeServer
   end
   
   def self.start_server_and_run_spec(target_dir)
-    IO.popen("cd #{target_dir} && rails server") do |pipe|
-      wait_server
-      system "cd #{target_dir} && rake spec"
-      Process.kill 'INT', pipe.pid
+    Dir.chdir(File.join(File.dirname(__FILE__), target_dir)) do
+      system('rake db:drop db:create db:migrate')
+      IO.popen("rails server") do |pipe|
+        wait_server
+        system "rake spec"
+        Process.kill 'INT', pipe.pid
+      end
     end
   end
   
@@ -73,7 +78,7 @@ namespace :test do
   
   desc "Execute integration Order tests"
   task :integration do
-    integration_path = "spec/integration/order/server"
+    integration_path = "full-examples/rest_from_scratch/part_3"
 
     Dir.chdir(File.join(File.dirname(__FILE__), integration_path)) do
       system('rake db:drop db:create db:migrate')
@@ -82,23 +87,7 @@ namespace :test do
   end
   
   task :spec do
-    # spec_opts = ['--options', File.join(File.dirname(__FILE__) , 'spec', 'units', 'spec.opts')]
-    RSpec::Core::RakeTask.new(:all) do |t|
-      t.spec_files = FileList['spec/units/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:common) do |t|
-      t.spec_files = FileList['spec/common/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:client) do |t|
-      t.spec_files = FileList['spec/units/client/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
-    Spec::Rake::SpecTask.new(:server) do |t|
-      t.spec_files = FileList['spec/units/server/**/*_spec.rb']
-      t.spec_opts = spec_opts
-    end
+    FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_3"
   end
   
   # namespace :rcov do
