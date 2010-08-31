@@ -76,16 +76,6 @@ end
 
 namespace :test do
   
-  desc "Execute integration Order tests"
-  task :integration do
-    integration_path = "full-examples/rest_from_scratch/part_3"
-
-    Dir.chdir(File.join(File.dirname(__FILE__), integration_path)) do
-      system('rake db:drop db:create db:migrate')
-      system('rake')
-    end
-  end
-  
   task :spec do
     FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_3"
   end
@@ -103,29 +93,6 @@ namespace :test do
   #     end
   # end
   
-  namespace :run do
-    task :all do
-      start_server_and_invoke_test('test:spec:all')
-      puts "Execution integration tests... (task test:integration)"
-      Rake::Task["test:integration"].invoke()
-      Rake::Task["test:examples"].invoke()
-    end
-    task :rcov do
-      start_server_and_invoke_test('test:rcov:rcov')
-    end
-  end
-
-  desc "runs all example tests"
-  task :examples do
-    Rake::Task["install"].invoke()
-
-    target_dir = "full-examples/rest_from_scratch/part_3"
-    system "cd #{target_dir} && rake db:reset db:seed"
-
-    FakeServer.start_server_and_run_spec target_dir
-
-  end
-
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
