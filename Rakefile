@@ -53,14 +53,22 @@ module FakeServer
     end
   end
   
+  def self.run(setup, process)
+    success = IO.popen(setup) do |pipe|
+      wait_server
+      success = system "rake spec"
+      Process.kill 'INT', pipe.pid
+      success
+    end
+    if !success
+      raise "Some of the specs failed"
+    end
+  end
+  
   def self.start_server_and_run_spec(target_dir)
-    Dir.chdir(File.join(File.dirname(__FILE__), target_dir)) do
+    success = Dir.chdir(File.join(File.dirname(__FILE__), target_dir)) do
       system('rake db:drop db:create db:migrate')
-      IO.popen("rails server") do |pipe|
-        wait_server
-        system "rake spec"
-        Process.kill 'INT', pipe.pid
-      end
+      self.run "rails server", "rake spec"
     end
   end
   
