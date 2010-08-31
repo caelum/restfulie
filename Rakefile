@@ -31,36 +31,42 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
 end
 
+module FakeServer
+  def self.wait_server(port=3000)
+    (1..15).each do 
+      begin
+        Net::HTTP.get(URI.parse("http://localhost:#{port}/"))
+        return
+      rescue
+        sleep 1
+      end
+    end
+    raise "Waited for the server but it did not finish"
+  end
+  
+  def self.start_server_and_invoke_test(task_name)
+    IO.popen("ruby ./spec/requests/fake_server.rb") do |pipe|
+      wait_server 4567
+      Rake::Task[task_name].invoke
+      Process.kill 'INT', pipe.pid
+    end
+  end
+  
+  def self.start_server_and_run_spec(target_dir)
+    IO.popen("cd #{target_dir} && rails server") do |pipe|
+      wait_server
+      system "cd #{target_dir} && rake spec"
+      Process.kill 'INT', pipe.pid
+    end
+  end
+  
+end
+
 # optionally loads a task if the required gems exist
 def optionally
   begin
     yield
   rescue LoadError; end
-end
-
-def start_server_and_invoke_test(task_name)
-  IO.popen("ruby ./spec/units/client/fake_server.rb") do |pipe|
-    wait_server(4567)
-    Rake::Task[task_name].invoke
-    Process.kill 'INT', pipe.pid
-  end
-end
-
-def wait_server(port=3000)
-  (1..15).each do 
-    begin
-      Net::HTTP.get(URI.parse("http://localhost:#{port}/"))
-      return
-    rescue
-      sleep 1
-    end
-  end
-  raise "Waited for the server but it did not finish"
-end
-
-desc 'Start server'
-task :server do
-  process 'fake_server' 
 end
 
 namespace :test do
@@ -127,11 +133,7 @@ namespace :test do
     target_dir = "full-examples/rest_from_scratch/part_3"
     system "cd #{target_dir} && rake db:reset db:seed"
 
-    IO.popen("ruby #{target_dir}/script/server") do |pipe|
-      wait_server
-      system "cd #{target_dir} && rake spec"
-      Process.kill 'INT', pipe.pid
-    end
+    FakeServer.start_server_and_run_spec target_dir
 
   end
 
