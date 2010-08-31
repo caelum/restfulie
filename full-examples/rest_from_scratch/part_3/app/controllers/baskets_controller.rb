@@ -16,6 +16,15 @@ class BasketsController < ApplicationController
     render :text => "", :status => 201, :location => basket_url(@basket)
   end
   
+  def update
+    @basket = Basket.find(params[:id])
+    params[:items].each do |item|
+      @basket.items << Item.find(item[:id])
+    end
+    @basket.save
+    render :text => "", :status => 201, :location => basket_url(@basket)
+  end
+
   def show
     @basket = Basket.find(params[:id])
     respond_with @basket

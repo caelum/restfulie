@@ -6,6 +6,8 @@ RestFromScratch::Application.routes.draw do
 
   resources :items
 
+  match "baskets/:id", :controller => :baskets, :action => :update, :conditions => {:method => :patch}
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
