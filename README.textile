@@ -111,10 +111,10 @@ pageTracker._trackPageview();
 
 h2. Contributions
 
-Restfulie was created and is maintained by "http://caelumobjects.com":Caelum, and has received enormous contributions from all those developers:
+Restfulie was created and is maintained by "Caelum":http://caelumobjects.com, and has received enormous contributions from all those developers:
 
 Project Leader
-Guilherme Silveira, "http://caelum.com.br":Caelum
+Guilherme Silveira, "Caelum":http://www.caelum.com.br
 
 Caue Guerra, caelum
 George Guimaraes, abril and plataforma
@@ -128,8 +128,8 @@ Everton Ribeiro, abril
 Paulo Ahagon, abril
 Elomar França
 Thomas Stefano
-"http://www.caelum.com.br":"David Paniz"
-"http://www.caikesouza.com/blog":Caike Souza
+"David Paniz":"http://www.caelum.com.br"
+"Caike Souza":"http://www.caikesouza.com/blog"
 
 h2. Riding rails3
 
