@@ -11,7 +11,7 @@ require File.expand_path('lib/restfulie')
 GEM = "restfulie"
 GEM_VERSION = Restfulie::VERSION
 SUMMARY  = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
-AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Everton Ribeiro, George Guimaraes, Paulo Ahagon"
+AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Everton Ribeiro, George Guimaraes, Paulo Ahagon, Several contributors"
 EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
@@ -25,7 +25,6 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("nokogiri", [">= 1.4.2"])
   s.add_dependency("actionpack", [">= 2.3.2"])
   s.add_dependency("activesupport", [">= 2.3.2"])
-  s.add_dependency("responders_backport", ["~> 0.1.0"])
   s.add_dependency("json_pure", [">= 1.2.4"])
 
   s.author = AUTHOR
