@@ -18,7 +18,6 @@ end
 group :test do  
   gem "nokogiri"
   gem "rspec-rails", ">= 2.0.0.beta.19"
-#  gem "rspec-rails"
   gem "rcov"
   gem "sinatra"
 	gem "state_machine"
