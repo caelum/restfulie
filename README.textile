@@ -89,6 +89,8 @@ Execute:
 gem install restfulie
 </pre>
 
+For use in Rails 2.3, make sure to require the responders_backport gem in addition to the restfulie gem, either in environment.rb or in the Gemfile.
+
 h2. Building the project
 
 If you want to build the project and run its tests, remember to install all (client and server) required gem. 
