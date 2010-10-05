@@ -51,7 +51,7 @@ That's it. Restfulie will take care of rendering a valid representation accordin
 	end
 </pre>
 
-You can go through an entire application by "watching this video":http://guilhermesilveira.wordpress.com or "downloading an example application":http://github.com/caelum/mikyung.
+You can go through an entire application by "watching this video":http://guilhermesilveira.wordpress.com or "downloading an example application contained within the restfulie ":http://github.com/caelum/restfulie/tree/master/full-examples/rest_from_scratch/
 
 h2. Simple client example
 
@@ -70,7 +70,7 @@ h2. Full examples
 
 You can view an entire application running Restfulie under *spec/integration/order/server* and *spec/integration/order/client* in this git repository.
 
-"You can also download a full example of a REST based agent and server":http://github.com/caelum/full-restfulie-examples using Restfulie, according to the Rest Architecture Maturity Model.
+"You can also download a full example of a REST based agent and server":http://github.com/caelum/restfulie/tree/master/full-examples/rest_from_scratch/ using Restfulie, according to the Rest Architecture Maturity Model.
 
 h2. Documentation
 
