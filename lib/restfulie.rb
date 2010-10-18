@@ -13,4 +13,15 @@ module Restfulie
   def self.at(uri)
     Object.new.send(:extend, Restfulie::Client::EntryPoint).at(uri)
   end
+
+  def self.using(&block)
+    RestfulieUsing.new.instance_eval(&block)
+  end
+  
+end
+
+module RestfulieUsing
+  def method_missing(sym, *args)
+    @current = "Restfulie::Client::HTTP::#{sym.to_s.classify}".constantize.new(@current || RequestAdapter.new, *args)
+  end
 end
