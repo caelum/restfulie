@@ -29,6 +29,10 @@ module Restfulie
           @default_headers ||= {}
         end
 
+        def headers
+          @headers ||= {}
+        end
+
         # Executes a request against your server and return a response instance without {Error}
         # * <tt>method: :get,:post,:delete,:head,:put</tt>
         # * <tt>path: '/posts'</tt>

@@ -44,10 +44,6 @@ module Restfulie
           self
         end
 
-        def headers
-          @headers ||= {}
-        end
-
         # Path (e.g. http://restfulie.com/posts => /posts)
         def path
           host.path
