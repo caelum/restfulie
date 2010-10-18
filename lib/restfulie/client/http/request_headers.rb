@@ -19,7 +19,7 @@ module Restfulie
 
         #Set host
         def at(url)
-          self.host = url
+          host = url
           self
         end
 
@@ -40,7 +40,7 @@ module Restfulie
         # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
         #
         def with(headers)
-          self.headers.merge!(headers)
+          headers.merge!(headers)
           self
         end
 
