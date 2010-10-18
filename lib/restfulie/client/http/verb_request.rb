@@ -22,8 +22,8 @@ class Restfulie::Client::HTTP::VerbRequest < MasterDelegator
   # * <tt>path: '/posts'</tt>
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-  def post(payload)
-    request(:post, path, payload, headers)
+  def post(payload, options = {:recipe => nil})
+    request(:post, path, payload, options.merge(headers))
   end
 
   # PATCH HTTP verb without {Error}
@@ -67,8 +67,8 @@ class Restfulie::Client::HTTP::VerbRequest < MasterDelegator
   # * <tt>path: '/posts'</tt>
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-  def post!(payload)
-    request!(:post, path, payload, headers)
+  def post!(payload, options = {:recipe => nil})
+    request!(:post, path, payload, options.merge(headers))
   end
 
   # PATCH HTTP verb {Error}

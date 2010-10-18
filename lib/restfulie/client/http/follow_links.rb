@@ -6,7 +6,7 @@ module Restfulie
       # ==== Example:
       # @executor = ::Restfulie::Client::HTTP::FollowLinksExecutor.new("http://restfulie.com") #this class includes FollowLinks module.
       # @executor.at('/custom/songs').accepts('application/atom+xml').follow(201).post!("custom").code
-      module FollowLinks < MasterDelegator
+      class FollowLinks < MasterDelegator
         
         def initialize(requester)
           @requester = requester

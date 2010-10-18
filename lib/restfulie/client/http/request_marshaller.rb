@@ -1,8 +1,11 @@
 module Restfulie
   module Client
     module HTTP
-      module RequestMarshaller
-        include RequestHistory
+      class RequestMarshaller < MasterDelegator
+
+        def initialize(requester)
+          @requester = requester
+        end
         
         @@representations = {
           'application/atom+xml' => ::Restfulie::Common::Converter::Atom,
@@ -29,14 +32,6 @@ module Restfulie
         def raw
           @raw = true
           self
-        end
-    
-        def post(payload, options = { :recipe => nil })
-          request(:post, path, payload, options.merge(headers))
-        end
-    
-        def post!(payload, options = { :recipe => nil })
-          request!(:post, path, payload, options.merge(headers))
         end
     
         # Executes super if its a raw request, returning the content itself.
