@@ -5,9 +5,9 @@ module Restfulie
       class RequestFollowExecutor < MasterDelegator
         def initialize
           @requester = Restfulie.using {
-            verb_request
             follow_links
             headers_dsl
+            verb_request
           }
         end
       end
@@ -16,9 +16,9 @@ module Restfulie
       class RequestHistoryExecutor < MasterDelegator
         def initialize
           @requester = Restfulie.using {
-            verb_request
             request_history
             headers_dsl
+            verb_request
           }
         end
       end
@@ -27,10 +27,10 @@ module Restfulie
       class RequestMarshallerExecutor < MasterDelegator
         def initialize
           @requester = Restfulie.using {
-            verb_request
             request_marshaller
             request_history
             headers_dsl
+            verb_request
           }
         end
       end
@@ -39,8 +39,8 @@ module Restfulie
       class RequestBuilderExecutor < MasterDelegator
         def initialize
           @requester = Restfulie.using {
-            verb_request
             headers_dsl
+            verb_request
           }
         end
     end
