@@ -3,7 +3,7 @@ module Restfulie
     module HTTP #:nodoc:
       #=This class includes RequestBuilder module.
       class RequestBuilderExecutor < RequestExecutor
-        include RequestBuilder
+        include RequestHeaders
 
         def host=(host)
           super

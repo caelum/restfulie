@@ -11,7 +11,8 @@ module Restfulie
       #   @re = ::Restfulie::Client::HTTP::RequestExecutor.new('http://restfulie.com') #this class includes RequestAdapter module.
       #   puts @re.as('application/atom+xml').get!('/posts').title #=> 'Hello World!'
       #
-      module RequestAdapter
+      class RequestAdapter
+        
         attr_reader   :host
         attr_accessor :cookies
         attr_writer   :default_headers
@@ -26,96 +27,6 @@ module Restfulie
 
         def default_headers
           @default_headers ||= {}
-        end
-
-        # GET HTTP verb without {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def get(path, *args)
-          request(:get, path, *args)
-        end
-
-        # HEAD HTTP verb without {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def head(path, *args)
-          request(:head, path, *args)
-        end
-
-        # POST HTTP verb without {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>payload: 'some text'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def post(path, payload, *args)
-          request(:post, path, payload, *args)
-        end
-
-        # PATCH HTTP verb without {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>payload: 'some text'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def patch(path, payload, *args)
-          request(:patch, path, payload, *args)
-        end
-
-        # PUT HTTP verb without {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>payload: 'some text'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def put(path, payload, *args)
-          request(:put, path, payload, *args)
-        end
-
-        # DELETE HTTP verb without {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def delete(path, *args)
-          request(:delete, path, *args)
-        end
-
-        # GET HTTP verb {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def get!(path, *args)
-          request!(:get, path, *args)
-        end
-
-        # HEAD HTTP verb {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def head!(path, *args)
-          request!(:head, path, *args)
-        end
-
-        # POST HTTP verb {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>payload: 'some text'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def post!(path, payload, *args)
-          request!(:post, path, payload, *args)
-        end
-
-        # PATCH HTTP verb {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>payload: 'some text'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def patch!(path, payload, *args)
-          request!(:patch, path, payload, *args)
-        end
-
-        # PUT HTTP verb {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>payload: 'some text'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def put!(path, payload, *args)
-          request!(:put, path, payload, *args)
-        end
-
-        # DELETE HTTP verb {Error}
-        # * <tt>path: '/posts'</tt>
-        # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def delete!(path, *args)
-          request!(:delete, path, *args)
         end
 
         # Executes a request against your server and return a response instance without {Error}
@@ -144,6 +55,9 @@ module Restfulie
           begin
             http_request = get_connection_provider
             response = Restfulie::Client.cache_provider.get([@host, path], http_request, method)
+            # if response.has_cookie?
+            #   default_headers << response.cookies
+            # end
             return [[@host, path], http_request, response] if response
             response = ResponseHandler.handle(method, path, http_request.send(method, path, *args))
           rescue Exception => e
