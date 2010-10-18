@@ -1,13 +1,16 @@
 module Restfulie
   module Client
     module HTTP #:nodoc:
-      # ==== RequestFollow follow new location of a document usually with response codes 201,301,302,303 and 307. You can also configure other codes.
+      # ==== FollowLinks follow new location of a document usually with response codes 201,301,302,303 and 307. You can also configure other codes.
       # 
       # ==== Example:
-      # @executor = ::Restfulie::Client::HTTP::RequestFollowExecutor.new("http://restfulie.com") #this class includes RequestFollow module.
+      # @executor = ::Restfulie::Client::HTTP::FollowLinksExecutor.new("http://restfulie.com") #this class includes FollowLinks module.
       # @executor.at('/custom/songs').accepts('application/atom+xml').follow(201).post!("custom").code
-      module RequestFollow
-        include HeadersDsl
+      module FollowLinks < MasterDelegator
+        
+        def initialize(requester)
+          @requester = requester
+        end
   
         def follow(code = nil)
           @follow ||= true # turn on follow redirection
