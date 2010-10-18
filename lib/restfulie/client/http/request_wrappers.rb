@@ -5,7 +5,7 @@ module Restfulie
       class RequestFollowExecutor < MasterDelegator
         def initialize
           @requester = Restfulie.using {
-            follow_links
+            follow_link
             headers_dsl
             verb_request
           }

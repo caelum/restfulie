@@ -46,6 +46,13 @@ module Restfulie
 
         # Path (e.g. http://restfulie.com/posts => /posts)
         def path
+          puts "GOING TO START ATTTTTTTTT #{url}"
+          puts
+          puts
+          puts
+          puts
+          puts
+          puts
           host.path
         end
         

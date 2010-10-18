@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Client::HTTP::RequestBuilder do
+context Restfulie::Client::HTTP::VerbRequest do
   context "chaining requests" do
     it "should accept parameters in get requests" do
       @result = Restfulie::Client::EntryPoint.at('http://localhost:4567/request_with_querystring').get!(:foo => "bar", :bar => "foo")

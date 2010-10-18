@@ -16,6 +16,10 @@ module Restfulie
         attr_reader   :host
         attr_accessor :cookies
         attr_writer   :default_headers
+        
+        def host
+          @host
+        end
 
         def host=(host)
           if host.is_a?(::URI)

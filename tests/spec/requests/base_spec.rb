@@ -1,16 +1,15 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-module Restfulie::Client::Test
-  class Song
-    include ::Restfulie::Client::Base
-    uses_restfulie { |config| config.entry_point = 'http://localhost:4567/songs' }
-  end
-end
-
 context Restfulie::Client::Base do
 
   before(:all) do
-    @songs_from_class = Restfulie::Client::Test::Song.accepts("application/atom+xml").get!
+    # module Restfulie::Client::Test
+    #   class Song
+    #     include ::Restfulie::Client::Base
+    #     uses_restfulie { |config| config.entry_point = 'http://localhost:4567/songs' }
+    #   end
+    # end
+    # @songs_from_class = Restfulie::Client::Test::Song.accepts("application/atom+xml").get!
   end
 
   it 'should load songs' do
@@ -56,6 +55,8 @@ end
 context Restfulie::Client::EntryPoint do
 
   before(:all) do
+    b = Restfulie::Client::EntryPoint.at('http://localhost:4567/songs').accepts('application/atom+xml')
+    puts b
     @songs_from_ep = Restfulie::Client::EntryPoint.at('http://localhost:4567/songs').accepts('application/atom+xml').get!
   end
 

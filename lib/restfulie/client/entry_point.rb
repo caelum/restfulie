@@ -1,14 +1,8 @@
+
 module Restfulie
   module Client#:nodoc
-    module EntryPoint
-      include HTTP::RequestMarshaller
-      include HTTP::FollowLinks
-      extend self
-
-      def self.at(uri)
-        Object.new.send(:extend, EntryPoint).at(uri)
-      end
-
+    
+    module HTTP::RecipeModule
       def recipe(converter_sym, options={}, &block)
         raise 'Undefined block' unless block_given?
         converter = "Restfulie::Common::Converter::#{converter_sym.to_s.camelize}".constantize
@@ -31,6 +25,38 @@ module Restfulie
           resource.configure
         end
       end
+    end
+    
+    class HTTP::Recipe < MasterDelegator
+
+      def initialize(requester)
+        @requester = requester
+        @resources_configurations = {}
+      end
+      
+      include Restfulie::Client::HTTP::RecipeModule
+
+    end
+    
+    class EntryPoint
+      
+      @resources_configurations = {}
+      extend Restfulie::Client::HTTP::RecipeModule
+      
+      def initialize(requester)
+        @requester = requester
+      end
+
+      def self.at(uri)
+        Restfulie.using {
+          recipe
+          follow_link
+          request_marshaller
+          headers_dsl
+          verb_request
+        }.at(uri)
+      end
+
     end
   end
 end

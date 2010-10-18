@@ -2,6 +2,7 @@ require 'restfulie/common'
 
 module Restfulie
   module Client
+    autoload :MasterDelegator, 'restfulie/client/master_delegator'
     autoload :HTTP, 'restfulie/client/http'
     autoload :Configuration, 'restfulie/client/configuration'
     autoload :EntryPoint, 'restfulie/client/entry_point'

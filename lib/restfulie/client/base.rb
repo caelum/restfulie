@@ -1,7 +1,6 @@
 module Restfulie
   module Client#:nodoc
     module Base
-      include HTTP::RequestMarshaller
      
       def self.included(base)#:nodoc
         base.extend(self)
