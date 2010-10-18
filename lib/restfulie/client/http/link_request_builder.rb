@@ -2,8 +2,8 @@ module Restfulie
   module Client
     module HTTP
       module LinkRequestBuilder
-        include RequestMarshaller
-        include FollowLinks
+        # include RequestMarshaller
+        # include FollowLinks
 
         def path#:nodoc:
           at(href)
