@@ -12,7 +12,7 @@ module Restfulie
       #   @executor.request_history!(0) #doing first request
       #
       module RequestHistory
-        include RequestHeaders
+        include HeadersDsl
 
         def snapshots
           @snapshots ||= []

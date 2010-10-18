@@ -7,7 +7,7 @@ module Restfulie
       # @executor = ::Restfulie::Client::HTTP::RequestFollowExecutor.new("http://restfulie.com") #this class includes RequestFollow module.
       # @executor.at('/custom/songs').accepts('application/atom+xml').follow(201).post!("custom").code
       module RequestFollow
-        include RequestHeaders
+        include HeadersDsl
   
         def follow(code = nil)
           @follow ||= true # turn on follow redirection

@@ -3,15 +3,15 @@ require 'uri'
 module Restfulie
   module Client
     module HTTP #:nodoc:
-      # ==== RequestHeaders
+      # ==== HeadersDsl
       # Uses RequestAdapater to create a HTTP Request DSL 
       #
       # ==== Example:
       #
-      #   @builder = ::Restfulie::Client::HTTP::RequestBuilderExecutor.new("http://restfulie.com") #this class includes RequestHeaders module.
+      #   @builder = ::Restfulie::Client::HTTP::RequestBuilderExecutor.new("http://restfulie.com") #this class includes HeadersDsl module.
       #   @builder.at('/posts').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200
       #
-      class RequestHeaders < MasterDelegator
+      class HeadersDsl < MasterDelegator
         
         def initialize(requester)
           @requester = requester
