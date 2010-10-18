@@ -11,8 +11,11 @@ module Restfulie
       #   @executor.at('/blogs').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #second request
       #   @executor.request_history!(0) #doing first request
       #
-      module RequestHistory
-        include HeadersDsl
+      class RequestHistory < MasterDelegator
+        
+        def initialize(requester)
+          @requester = requester
+        end
 
         def snapshots
           @snapshots ||= []
