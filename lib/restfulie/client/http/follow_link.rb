@@ -20,7 +20,7 @@ module Restfulie
   
         def request!(method, path, *args)#:nodoc:
           begin
-            response = super
+            response = delegate(:request!, method, path, *args)
           rescue Error::Redirection => e
             raise e unless @follow # normal behavior for bang methods is to raise the exception
             response = e.response
@@ -28,7 +28,7 @@ module Restfulie
               location = response.headers['location'] || response.headers['Location']
               raise Error::AutoFollowWithoutLocationError.new(self, response) unless location
               self.host = location
-              response = super(:get, location, headers)
+              response = delegate(:request!, :get, location, headers)
             end
             response
           end
