@@ -16,51 +16,6 @@ module Restfulie
         def initialize(requester)
           @requester = requester
         end
-
-        #Set host
-        def at(url)
-          host = url
-          self
-        end
-
-        #Set Content-Type and Accept headers
-        def as(content_type)
-          headers['Content-Type'] = content_type
-          accepts(content_type)
-        end
-
-        #Set Accept headers
-        def accepts(content_type)
-          headers['Accept'] = content_type
-          self
-        end
-
-        # Merge internal header
-        #
-        # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
-        #
-        def with(headers)
-          headers.merge!(headers)
-          self
-        end
-
-        # Path (e.g. http://restfulie.com/posts => /posts)
-        def path
-          puts "GOING TO START ATTTTTTTTT #{url}"
-          puts
-          puts
-          puts
-          puts
-          puts
-          puts
-          host.path
-        end
-        
-        protected
-
-        def headers=(h)
-          @headers = h
-        end
       end
     end
   end

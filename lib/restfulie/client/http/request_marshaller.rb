@@ -26,7 +26,7 @@ module Restfulie
     
         def accepts(media_types)
           @default_representation = @@representations[media_types]
-          super
+          delegate(:accepts, media_types)
         end
     
         def raw
@@ -55,7 +55,7 @@ module Restfulie
             args = add_representation_headers(method, path, unmarshaller, *args)
           end
     
-          key, req, response = super(method, path, *args) 
+          key, req, response = delegate(:request, method, path, *args) 
           Restfulie::Client.cache_provider.put(key, req, response)
 
           parse_response(response)
@@ -74,7 +74,7 @@ module Restfulie
             request.get!
           elsif @raw
             response
-          elsif !response.body.empty?
+          elsif (!response.body.nil?) && !response.body.empty?
             representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
             representation.unmarshal(response.body).tap do |u|
               u.extend(ResponseHolder)

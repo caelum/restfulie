@@ -52,7 +52,6 @@ module Restfulie
           recipe
           follow_link
           request_marshaller
-          headers_dsl
           verb_request
         }.at(uri)
       end

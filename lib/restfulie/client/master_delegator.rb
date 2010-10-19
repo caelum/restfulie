@@ -8,11 +8,24 @@ class MasterDelegator
 
   def method_missing(sym, *args, &block)
     if original_respond_to?(sym)
-      super(sym, *args, &block)
-    else @requester.respond_to?(sym)
+      result = super(sym, *args, &block)
+    elsif @requester.respond_to?(sym)
       result = @requester.send(sym, *args, &block)
-      result==@requester ? self : result
+    else
+      # let it go
+      return super(sym, *args, &block)
     end
+    delegate_parse result
+  end
+  
+  protected
+  
+  def delegate(what, *args, &block)
+    delegate_parse @requester.send(what, *args, &block)
+  end
+  
+  def delegate_parse(result)
+    (result == @requester) ? self : result
   end
   
 end

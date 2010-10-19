@@ -6,7 +6,7 @@ context Restfulie::Client::HTTP do
 
     before(:all) do
       @host = "http://localhost:4567"
-      @client = ::Restfulie::Client::HTTP::RequestExecutor.new(@host)
+      @client = Restfulie.at(@host)
     end
 
     it "should get and respond 200 code" do

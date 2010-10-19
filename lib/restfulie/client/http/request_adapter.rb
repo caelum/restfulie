@@ -13,10 +13,41 @@ module Restfulie
       #
       class RequestAdapter
         
-        attr_reader   :host
         attr_accessor :cookies
         attr_writer   :default_headers
         
+        #Set host
+        def at(url)
+          self.host= url
+          self
+        end
+
+        #Set Content-Type and Accept headers
+        def as(content_type)
+          headers['Content-Type'] = content_type
+          accepts(content_type)
+        end
+
+        #Set Accept headers
+        def accepts(content_type)
+          headers['Accept'] = content_type
+          self
+        end
+
+        # Merge internal header
+        #
+        # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
+        #
+        def with(headers)
+          headers.merge!(headers)
+          self
+        end
+
+        # Path (e.g. http://restfulie.com/posts => /posts)
+        def path
+          host.path
+        end
+
         def host
           @host
         end
@@ -114,6 +145,10 @@ module Restfulie
         end
 
         protected
+
+        def headers=(h)
+          @headers = h
+        end
 
         def request_to_s(method, path, *args)
           result = ["#{method.to_s.upcase} #{path}"]

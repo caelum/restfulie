@@ -1,5 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+require 'ruby-debug'
+
 context Restfulie::Client::Base do
 
   before(:all) do
@@ -55,9 +57,9 @@ end
 context Restfulie::Client::EntryPoint do
 
   before(:all) do
-    b = Restfulie::Client::EntryPoint.at('http://localhost:4567/songs').accepts('application/atom+xml')
-    puts b
-    @songs_from_ep = Restfulie::Client::EntryPoint.at('http://localhost:4567/songs').accepts('application/atom+xml').get!
+    r = Restfulie::Client::EntryPoint.at('http://localhost:4567/songs')
+    r = r.accepts('application/atom+xml')
+    @songs_from_ep = r.get!
   end
 
   it 'should load songs' do

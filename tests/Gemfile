@@ -29,6 +29,9 @@ group :test, :development do
 	gem "sinatra"
 	gem "rack-conneg"
   gem "rspec-rails", ">= 2.0.0.beta.19"
+	gem "autotest"
+	gem "autotest-fsevent"
+	gem "ruby-debug"
 end
 
 # Bundle gems for the local environment. Make sure to
