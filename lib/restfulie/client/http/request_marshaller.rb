@@ -112,8 +112,7 @@ module Restfulie
             args = add_representation_headers(method, path, unmarshaller, *args)
           end
     
-          key, req, response = delegate(:request, method, path, *args) 
-          response
+          delegate(:request, method, path, *args) 
 
         end
     
