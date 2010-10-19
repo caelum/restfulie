@@ -5,7 +5,6 @@ module Restfulie
       autoload :Response, 'restfulie/client/http/response'
       autoload :ResponseHandler, 'restfulie/client/http/response_handler'
       autoload :RequestAdapter, 'restfulie/client/http/request_adapter'
-      autoload :HeadersDsl, 'restfulie/client/http/headers_dsl'
       autoload :FollowLink, 'restfulie/client/http/follow_link'
       autoload :RequestHistory, 'restfulie/client/http/request_history'
       autoload :RequestBuilderExecutor, 'restfulie/client/http/request_wrappers'
