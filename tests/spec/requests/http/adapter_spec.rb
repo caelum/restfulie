@@ -54,7 +54,6 @@ context Restfulie::Client::HTTP do
     context "On GET" do
       
       it "should respond to 200 code" do
-        debugger
         builder.at('/test/200').get.should respond_with_status(200)
       end
       
