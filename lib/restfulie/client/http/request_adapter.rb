@@ -16,6 +16,37 @@ module Restfulie
         attr_accessor :cookies, :response_handler
         attr_writer   :default_headers
         
+        class EnhanceResponse
+          def initialize(requester)
+            @requester = requester
+          end
+
+          def parse(host, path, http_request, request, response)
+            resp = @requester.parse(host, path, http_request, request, response)
+            resp.extend(ResponseHolder)
+            resp.response = response
+            resp
+          end
+        end
+        
+        class IgnoreError
+          
+          def initialize(requester)
+            @requester = requester
+          end
+
+          def parse(host, path, http_request, request, response)
+            begin
+              @requester.parse(host, path, http_request, request, response)
+            rescue Error::RESTError => se
+              if response.code==409
+                debugger
+              end
+              se
+            end
+          end
+          
+        end
         class CatchAndThrow
           def parse(host, path, http_request, request, response)
             case response.code
@@ -36,6 +67,7 @@ module Restfulie
             when 407
               raise Error::ProxyAuthenticationRequired.new(request, response)
             when 409
+              debugger
               raise Error::Conflict.new(request, response)
             when 410
               raise Error::Gone.new(request, response)
@@ -119,9 +151,11 @@ module Restfulie
         # * <tt>path: '/posts'</tt>
         # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def request(method, path, *args)
+          if path=="/test/409"
+            debugger
+          end
+          @response_handler = IgnoreError.new(@response_handler)
           request!(method, path, *args) 
-        rescue Error::RESTError => se
-          [[@host, path], nil, se.response]
         end
 
         # Executes a request against your server and return a response instance.
@@ -143,7 +177,7 @@ module Restfulie
             # if response.has_cookie?
             #   default_headers << response.cookies
             # end
-            return [[@host, path], http_request, response] if response
+            return response if response
             response = http_request.send(method, path, *args)
             response = ResponseHandler.handle(method, path, response)
           rescue Exception => e
@@ -151,7 +185,7 @@ module Restfulie
             raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
           end
           
-          response_handler.parse(@host, path, http_request, self, response)
+          EnhanceResponse.new(response_handler).parse(@host, path, http_request, self, response)
 
         end
 

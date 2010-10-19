@@ -17,7 +17,7 @@ module ResponseMatchers
     end
 
     def matches?(response_header)
-      @actual_code = response_header.code
+      @actual_code = response_header.response.code
       @expected_code == @actual_code
     end
 

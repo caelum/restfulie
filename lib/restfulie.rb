@@ -11,9 +11,9 @@ module Restfulie
   # creates a new entry point for executing requests
   def self.at(uri)
     Restfulie.using {
-      request_marshaller
       recipe
       follow_link
+      request_marshaller
       verb_request
     }.at(uri)
   end

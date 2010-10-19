@@ -35,17 +35,9 @@ module Restfulie
             response
           elsif (!response.body.nil?) && !response.body.empty?
             representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
-            representation.unmarshal(response.body).tap do |u|
-              u.extend(ResponseHolder)
-              u.response = response
-              u
-            end
+            representation.unmarshal(response.body)
           else
-            response.tap do |resp|
-              resp.extend(ResponseHolder)
-              resp.response = response
-              resp
-            end
+            response
           end
         end
       end
@@ -112,7 +104,7 @@ module Restfulie
             args = add_representation_headers(method, path, unmarshaller, *args)
           end
     
-          delegate(:request, method, path, *args) 
+          delegate(:request!, method, path, *args) 
 
         end
     
