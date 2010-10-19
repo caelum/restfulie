@@ -28,21 +28,21 @@ module Restfulie
         def request!(method=nil, path=nil, *args)#:nodoc:
           if method == nil || path == nil 
             raise 'History not selected' unless @snapshot
-            super( @snapshot[:method], @snapshot[:path], *@snapshot[:args] )
+            delegate (:request!, @snapshot[:method], @snapshot[:path], *@snapshot[:args] )
           else
             @snapshot = make_snapshot(method, path, *args)
             unless snapshots.include?(@snapshot)
               snapshots.shift if snapshots.size >= max_to_remind
               snapshots << @snapshot
             end
-            super
+            delegate :request!, method, path, *args
           end
         end
 
         def request(method=nil, path=nil, *args)#:nodoc:
           request!(method, path, *args) 
         rescue Error::RESTError => se
-          [[@host, path], nil, se.response]
+          se
         end
 
         def history(number)

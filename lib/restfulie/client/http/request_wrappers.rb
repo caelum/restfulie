@@ -15,6 +15,10 @@ module Restfulie
       class RequestHistoryExecutor < MasterDelegator
         def initialize(host)
           @requester = Restfulie.using {
+            # recipe
+            # follow_link
+            # request_marshaller
+            # verb_request
             request_history
             verb_request
           }.at(host)
