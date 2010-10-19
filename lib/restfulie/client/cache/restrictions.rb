@@ -4,7 +4,7 @@ module Restfulie::Client::Cache
 
       # checks whether this request verb and its cache headers allow caching
       def may_cache?(response)
-        may_cache_method?(response.method) && response.may_cache?
+        response && may_cache_method?(response.method) && response.may_cache?
       end
 
       # only Post and Get requests are cacheable so far
