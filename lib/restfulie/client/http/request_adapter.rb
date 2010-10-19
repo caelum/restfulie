@@ -60,7 +60,11 @@ module Restfulie
         
         #Set host
         def at(url)
-          self.host= url
+          if self.host.nil?
+            self.host= url
+          else
+            self.host= self.host + url
+          end
           self
         end
 
