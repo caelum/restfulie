@@ -17,12 +17,13 @@ module Restfulie
           debugger
           if response.code == 201
             request = Restfulie.at(response.headers['location'])
-            request.accepts(config.acceptable_mediatypes) if config.acceptable_mediatypes
+            request.accepts(@config.acceptable_mediatypes) if @config.acceptable_mediatypes
             request.get!
-          elsif config.raw
+          elsif @config.raw?
             response
           elsif (!response.body.nil?) && !response.body.empty?
-            representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
+            representation = RequestMarshaller.content_type_for(response.headers['content-type'])
+            representation ||= Restfulie::Common::Representation::Generic.new
             representation.unmarshal(response.body).tap do |u|
               u.extend(ResponseHolder)
               u.response = response
@@ -38,11 +39,16 @@ module Restfulie
       
       class RequestMarshaller < MasterDelegator
         
-        attr_reader :raw, :acceptable_mediatypes
+        attr_reader :acceptable_mediatypes
 
         def initialize(requester)
           @requester = requester
           @requester.response_handler= UnmarshallHandler.new(self, @requester.response_handler)
+          @raw = false
+        end
+        
+        def raw?
+          @raw
         end
         
         @@representations = {
