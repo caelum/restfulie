@@ -14,7 +14,7 @@ context Restfulie::Client::HTTP do
     end
 
     it "should put and respond 200 code" do
-      @client.at("/test").as("application/xml").put("<test></test>").response.code.should == 200
+      @client.at("/test").as("text/plain").put("<test></test>").response.code.should == 200
     end
 
     it "should delete and respond 200 code" do
@@ -30,11 +30,11 @@ context Restfulie::Client::HTTP do
     end
 
     it "should post! and respond 201 code" do
-      @client.at("/test").as("application/xml").post!("<test></test>").should respond_with_status(201)
+      @client.at("/test").as("text/plain").post!("<test></test>").should respond_with_status(201)
     end
 
     it "should put! and respond 200 code" do
-      @client.at("/test").as("application/xml").put!("<test></test>").response.code.should == 200
+      @client.at("/test").as("text/plain").put!("<test></test>").response.code.should == 200
     end
 
     it "should delete! and respond 200 code" do
