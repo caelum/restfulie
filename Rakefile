@@ -95,6 +95,13 @@ namespace :test do
     FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_3"
   end
   
+  task :sinatra do
+    FakeServer.start_sinatra do
+      puts "Press something to quit"
+      gets
+    end
+  end
+  
   task :all => ["spec","integration"]
   
   # namespace :rcov do
