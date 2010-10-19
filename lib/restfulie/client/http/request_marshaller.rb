@@ -2,6 +2,18 @@ module Restfulie
   module Client
     module HTTP
       
+      class CacheHandler
+        
+        def initialize(requester)
+          @requester = requester
+        end
+        
+        def parse(host, path, http_request, request, response)
+          Restfulie::Client.cache_provider.put([host, path], http_request, response)
+          @requester.parse(host, path, http_request, request, response)
+        end
+      end
+      
       class UnmarshallHandler
         
         def initialize(config, requester)
@@ -14,6 +26,7 @@ module Restfulie
         # otherwise check if its a raw request, returning the content itself.
         # finally, tries to parse the content with a mediatype handler or returns the response itself.
         def parse(host, path, http_request, request, response)
+          response = @requester.parse(host, path, http_request, request, response)
           if response.code == 201
             request = Restfulie.at(response.headers['location'])
             request.accepts(@config.acceptable_mediatypes) if @config.acceptable_mediatypes
@@ -36,14 +49,14 @@ module Restfulie
           end
         end
       end
-      
+
       class RequestMarshaller < MasterDelegator
         
         attr_reader :acceptable_mediatypes
 
         def initialize(requester)
           @requester = requester
-          @requester.response_handler= UnmarshallHandler.new(self, @requester.response_handler)
+          @requester.response_handler= UnmarshallHandler.new(self, CacheHandler.new(@requester.response_handler))
           @raw = false
         end
         
@@ -80,7 +93,7 @@ module Restfulie
     
         # Executes super if its a raw request, returning the content itself.
         # otherwise tries to parse the content with a mediatype handler or returns the response itself.
-        def request!(method, path, *args)      
+        def request!(method, path, *args)     
           if has_payload?(method, path, *args)
             recipe = get_recipe(*args)
             
@@ -100,7 +113,7 @@ module Restfulie
           end
     
           key, req, response = delegate(:request, method, path, *args) 
-          Restfulie::Client.cache_provider.put(key, req, response)
+          response
 
         end
     

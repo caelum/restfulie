@@ -20,7 +20,7 @@ module Restfulie
           def parse(host, path, http_request, request, response)
             case response.code
             when 100..299
-              [[host, path], http_request, response]
+              response
             when 300..399
               raise Error::Redirection.new(request, response)
             when 400
