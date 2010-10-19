@@ -21,16 +21,17 @@ module Restfulie
           elsif @config.raw?
             response
           elsif (!response.body.nil?) && !response.body.empty?
-            representation = RequestMarshaller.content_type_for(response.headers['content-type'])
-            representation ||= Restfulie::Common::Representation::Generic.new
+            representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
             representation.unmarshal(response.body).tap do |u|
               u.extend(ResponseHolder)
               u.response = response
+              u
             end
           else
             response.tap do |resp|
               resp.extend(ResponseHolder)
               resp.response = response
+              resp
             end
           end
         end
