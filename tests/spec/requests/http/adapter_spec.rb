@@ -238,7 +238,7 @@ context Restfulie::Client::HTTP do
 
     before(:all) do
       @host = "http://localhost:4567"
-      @client = ::Restfulie::Client::HTTP::RequestExecutor.new(@host)
+      @client = Restfulie.at(@host)
     end
 
     it "raise Error::Redirection error when 300..399  code is returned" do

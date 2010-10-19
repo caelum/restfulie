@@ -43,15 +43,15 @@ context Restfulie::Client::HTTP::RequestMarshaller do
 
   context 'marshal' do
 
-    before(:all) do
-      Restfulie.recipe(:atom, :name => :custom_song) do |representation, song|
-        representation.values do |value|
-          value.id      "ID/#{song.id}"
-          value.title   "Title #{song.title}"
-          value.updated song.updated
-        end        
-      end
-    end
+    # before(:all) do
+    #   Restfulie.recipe(:atom, :name => :custom_song) do |representation, song|
+    #     representation.values do |value|
+    #       value.id      "ID/#{song.id}"
+    #       value.title   "Title #{song.title}"
+    #       value.updated song.updated
+    #     end        
+    #   end
+    # end
 
     it 'should unmarshal' do
       pending
