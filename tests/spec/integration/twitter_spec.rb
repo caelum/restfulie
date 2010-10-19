@@ -10,7 +10,6 @@ context Restfulie do
   end
 
   it "should work with twitter" do
-    debugger
     twitter = Restfulie.at(TWITTER_ENTRY_POINT).get
     twitter.statuses[0].user.screen_name.should == "fionnaps"
   end
