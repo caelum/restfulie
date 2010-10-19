@@ -1,10 +1,48 @@
 module Restfulie
   module Client
     module HTTP
+      
+      class UnmarshallHandler
+        
+        def initialize(config, requester)
+          @config = config
+          @requester = requester
+        end
+        
+        # parses the http response.
+        # first checks if its a 201, redirecting to the resource location.
+        # otherwise check if its a raw request, returning the content itself.
+        # finally, tries to parse the content with a mediatype handler or returns the response itself.
+        def parse(host, path, http_request, request, response)
+          debugger
+          if response.code == 201
+            request = Restfulie.at(response.headers['location'])
+            request.accepts(config.acceptable_mediatypes) if config.acceptable_mediatypes
+            request.get!
+          elsif config.raw
+            response
+          elsif (!response.body.nil?) && !response.body.empty?
+            representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
+            representation.unmarshal(response.body).tap do |u|
+              u.extend(ResponseHolder)
+              u.response = response
+            end
+          else
+            response.tap do |resp|
+              resp.extend(ResponseHolder)
+              resp.response = response
+            end
+          end
+        end
+      end
+      
       class RequestMarshaller < MasterDelegator
+        
+        attr_reader :raw, :acceptable_mediatypes
 
         def initialize(requester)
           @requester = requester
+          @requester.response_handler= UnmarshallHandler.new(self, @requester.response_handler)
         end
         
         @@representations = {
@@ -58,35 +96,9 @@ module Restfulie
           key, req, response = delegate(:request, method, path, *args) 
           Restfulie::Client.cache_provider.put(key, req, response)
 
-          parse_response(response)
         end
     
         private
-        
-        # parses the http response.
-        # first checks if its a 201, redirecting to the resource location.
-        # otherwise check if its a raw request, returning the content itself.
-        # finally, tries to parse the content with a mediatype handler or returns the response itself.
-        def parse_response(response)
-          if response.code == 201
-            request = Restfulie.at(response.headers['location'])
-            request.accepts(@acceptable_mediatypes) if @acceptable_mediatypes
-            request.get!
-          elsif @raw
-            response
-          elsif (!response.body.nil?) && !response.body.empty?
-            representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
-            representation.unmarshal(response.body).tap do |u|
-              u.extend(ResponseHolder)
-              u.response = response
-            end
-          else
-            response.tap do |resp|
-              resp.extend(ResponseHolder)
-              resp.response = response
-            end
-          end
-        end
     
         def get_recipe(*args)
           headers_and_recipe = args.extract_options! 

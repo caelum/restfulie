@@ -6,15 +6,13 @@ context Restfulie do
 
   before do
     FakeWeb.allow_net_connect = false
-     FakeWeb.register_uri(:get, TWITTER_ENTRY_POINT, :response => Responses::Twitter.public_timeline)
- end
+    FakeWeb.register_uri(:get, TWITTER_ENTRY_POINT, :response => Responses::Twitter.public_timeline)
+  end
 
   it "should work with twitter" do
-    statuses = Restfulie.at("http://twitter.com/statuses/public_timeline.xml").get
-    statuses.statuses[0].user.screen_name.should == "fionnaps"
-    # statuses.statuses.each do |status|
-      # puts "#{status.user.screen_name}: #{status.text}, #{status.created_at}"
-    # end
+    debugger
+    twitter = Restfulie.at(TWITTER_ENTRY_POINT).get
+    twitter.statuses[0].user.screen_name.should == "fionnaps"
   end
   
   after do

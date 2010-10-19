@@ -13,8 +13,50 @@ module Restfulie
       #
       class RequestAdapter
         
-        attr_accessor :cookies
+        attr_accessor :cookies, :response_handler
         attr_writer   :default_headers
+        
+        class CatchAndThrow
+          def parse(host, path, http_request, request, response)
+            case response.code
+            when 100..299
+              [[host, path], http_request, response]
+            when 300..399
+              raise Error::Redirection.new(request, response)
+            when 400
+              raise Error::BadRequest.new(request, response)
+            when 401
+              raise Error::Unauthorized.new(request, response)
+            when 403
+              raise Error::Forbidden.new(request, response)
+            when 404
+              raise Error::NotFound.new(request, response)
+            when 405
+              raise Error::MethodNotAllowed.new(request, response)
+            when 407
+              raise Error::ProxyAuthenticationRequired.new(request, response)
+            when 409
+              raise Error::Conflict.new(request, response)
+            when 410
+              raise Error::Gone.new(request, response)
+            when 412
+              raise Error::PreconditionFailed.new(request, response)
+            when 402, 406, 408, 411, 413..499
+              raise Error::ClientError.new(request, response)
+            when 501
+              raise Error::NotImplemented.new(request, response)
+            when 500, 502..599
+              raise Error::ServerError.new(request, response)
+            else
+              raise Error::UnknownError.new(request, response)
+            end
+          end
+          
+        end
+        
+        def initialize
+          @response_handler = CatchAndThrow.new
+        end
         
         #Set host
         def at(url)
@@ -98,44 +140,15 @@ module Restfulie
             #   default_headers << response.cookies
             # end
             return [[@host, path], http_request, response] if response
-            response = ResponseHandler.handle(method, path, http_request.send(method, path, *args))
+            response = http_request.send(method, path, *args)
+            response = ResponseHandler.handle(method, path, response)
           rescue Exception => e
             Restfulie::Common::Logger.logger.error(e)
             raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
-          end 
-
-          case response.code
-          when 100..299
-            [[@host, path], http_request, response]
-          when 300..399
-            raise Error::Redirection.new(self, response)
-          when 400
-            raise Error::BadRequest.new(self, response)
-          when 401
-            raise Error::Unauthorized.new(self, response)
-          when 403
-            raise Error::Forbidden.new(self, response)
-          when 404
-            raise Error::NotFound.new(self, response)
-          when 405
-            raise Error::MethodNotAllowed.new(self, response)
-          when 407
-            raise Error::ProxyAuthenticationRequired.new(self, response)
-          when 409
-            raise Error::Conflict.new(self, response)
-          when 410
-            raise Error::Gone.new(self, response)
-          when 412
-            raise Error::PreconditionFailed.new(self, response)
-          when 402, 406, 408, 411, 413..499
-            raise Error::ClientError.new(self, response)
-          when 501
-            raise Error::NotImplemented.new(self, response)
-          when 500, 502..599
-            raise Error::ServerError.new(self, response)
-          else
-            raise Error::UnknownError.new(self, response)
           end
+          
+          response_handler.parse(@host, path, http_request, self, response)
+
         end
 
         private
