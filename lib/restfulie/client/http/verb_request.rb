@@ -8,7 +8,7 @@ class Restfulie::Client::HTTP::VerbRequest < MasterDelegator
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def get(params = {})
-    request(:get, add_querystring(path, params), headers)
+    request(:get, add_query_string(path, params), headers)
   end
 
   # HEAD HTTP verb without {Error}
@@ -53,7 +53,7 @@ class Restfulie::Client::HTTP::VerbRequest < MasterDelegator
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def get!(params = {})
-    request!(:get, add_querystring(path, params), headers)
+    request!(:get, add_query_string(path, params), headers)
   end
 
   # HEAD HTTP verb {Error}
@@ -96,7 +96,7 @@ class Restfulie::Client::HTTP::VerbRequest < MasterDelegator
 
   protected
   
-  def add_querystring(path, params)
+  def add_query_string(path, params)
     params = params.map { |param, value| "#{param}=#{value}"}.join("&")
     params.blank? ? path : URI.escape("#{path}?#{params}")
   end

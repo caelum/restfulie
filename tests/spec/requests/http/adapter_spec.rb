@@ -10,39 +10,39 @@ context Restfulie::Client::HTTP do
     end
 
     it "should get and respond 200 code" do
-      @client.get("/test").should respond_with_status(200)
+      @client.at("/test").get.should respond_with_status(200)
     end
 
     it "should put and respond 200 code" do
-      @client.put("/test", "test").should respond_with_status(200)
+      @client.at("/test").put("test").should respond_with_status(200)
     end
 
     it "should delete and respond 200 code" do
-      @client.delete("/test").should respond_with_status(200)
+      @client.at("/test").delete.should respond_with_status(200)
     end
 
     it "should head and respond 200 code" do
-      @client.head("/test").should respond_with_status(200)
+      @client.at("/test").head.should respond_with_status(200)
     end
 
     it "should get! and respond 200 code" do
-      @client.get!("/test").should respond_with_status(200)
+      @client.at("/test").get!.should respond_with_status(200)
     end
 
     it "should post! and respond 201 code" do
-      @client.post!("/test", "test").should respond_with_status(201)
+      @client.at("/test", "test").post!.should respond_with_status(201)
     end
 
     it "should put! and respond 200 code" do
-      @client.put!("/test", "test").should respond_with_status(200)
+      @client.at("/test", "test").put!.should respond_with_status(200)
     end
 
     it "should delete! and respond 200 code" do
-      @client.delete!("/test").should respond_with_status(200)
+      @client.at("/test").delete!.should respond_with_status(200)
     end
 
     it "should head! and respond 200 code" do
-      @client.head!("/test").should respond_with_status(200)
+      @client.at("/test").head!.should respond_with_status(200)
     end
 
   end
