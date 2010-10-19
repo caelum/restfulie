@@ -39,9 +39,6 @@ module Restfulie
             begin
               @requester.parse(host, path, http_request, request, response)
             rescue Error::RESTError => se
-              if response.code==409
-                debugger
-              end
               se
             end
           end
@@ -67,7 +64,6 @@ module Restfulie
             when 407
               raise Error::ProxyAuthenticationRequired.new(request, response)
             when 409
-              debugger
               raise Error::Conflict.new(request, response)
             when 410
               raise Error::Gone.new(request, response)
@@ -151,9 +147,6 @@ module Restfulie
         # * <tt>path: '/posts'</tt>
         # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def request(method, path, *args)
-          if path=="/test/409"
-            debugger
-          end
           @response_handler = IgnoreError.new(@response_handler)
           request!(method, path, *args) 
         end

@@ -295,7 +295,7 @@ context Restfulie::Client::HTTP do
     end
     
     it "raise Error::Conflict error when 409 code is returned" do
-     lambda { debugger; @client.at("/test/409").get! }.should raise_exception ::Restfulie::Client::HTTP::Error::Conflict
+     lambda { @client.at("/test/409").get! }.should raise_exception ::Restfulie::Client::HTTP::Error::Conflict
     end
 
     it "raise Error::Gone error when 410 code is returned" do
