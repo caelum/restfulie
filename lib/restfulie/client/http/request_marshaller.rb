@@ -14,7 +14,6 @@ module Restfulie
         # otherwise check if its a raw request, returning the content itself.
         # finally, tries to parse the content with a mediatype handler or returns the response itself.
         def parse(host, path, http_request, request, response)
-          debugger
           if response.code == 201
             request = Restfulie.at(response.headers['location'])
             request.accepts(@config.acceptable_mediatypes) if @config.acceptable_mediatypes
