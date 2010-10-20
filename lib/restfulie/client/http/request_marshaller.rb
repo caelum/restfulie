@@ -1,46 +1,6 @@
 module Restfulie
   module Client
     module HTTP
-      
-      class CacheHandler
-        
-        def initialize(requester)
-          @requester = requester
-        end
-        
-        def parse(host, path, http_request, request, response)
-          Restfulie::Client.cache_provider.put([host, path], http_request, response)
-          @requester.parse(host, path, http_request, request, response)
-        end
-      end
-      
-      class UnmarshallHandler
-        
-        def initialize(config, requester)
-          @config = config
-          @requester = requester
-        end
-        
-        # parses the http response.
-        # first checks if its a 201, redirecting to the resource location.
-        # otherwise check if its a raw request, returning the content itself.
-        # finally, tries to parse the content with a mediatype handler or returns the response itself.
-        def parse(host, path, http_request, request, response)
-          response = @requester.parse(host, path, http_request, request, response)
-          if response.code == 201
-            request = Restfulie.at(response.headers['location'])
-            request.accepts(@config.acceptable_mediatypes) if @config.acceptable_mediatypes
-            request.get!
-          elsif @config.raw?
-            response
-          elsif (!response.body.nil?) && !response.body.empty?
-            representation = RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
-            representation.unmarshal(response.body)
-          else
-            response
-          end
-        end
-      end
 
       class RequestMarshaller < MasterDelegator
         
@@ -48,7 +8,7 @@ module Restfulie
 
         def initialize(requester)
           @requester = requester
-          @requester.response_handler= UnmarshallHandler.new(self, CacheHandler.new(@requester.response_handler))
+          @requester.response_handler= Restfulie::Client::Response::UnmarshallHandler.new(self, Restfulie::Client::Response::CacheHandler.new(@requester.response_handler))
           @raw = false
         end
         

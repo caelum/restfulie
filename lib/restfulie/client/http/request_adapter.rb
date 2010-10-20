@@ -17,7 +17,7 @@ module Restfulie
         attr_writer   :default_headers
 
         def initialize
-          @response_handler = CatchAndThrow.new
+          @response_handler = Restfulie::Client::Response::CatchAndThrow.new
         end
         
         #Set host
@@ -81,7 +81,7 @@ module Restfulie
         # * <tt>path: '/posts'</tt>
         # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
         def request(method, path, *args)
-          @response_handler = IgnoreError.new(@response_handler)
+          @response_handler = Restfulie::Client::Response::IgnoreError.new(@response_handler)
           request!(method, path, *args) 
         end
 
