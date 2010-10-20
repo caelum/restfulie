@@ -1,6 +1,14 @@
 module Restfulie
   module Client#:nodoc
     module Base
+      
+      def method_missing(sym, *args, &block)
+        if @base_position.respond_to?(sym)
+          @base_position.send sym, *args, &block
+        else
+          super(sym, *args, &block)
+        end
+      end
      
       def self.included(base)#:nodoc
         base.extend(self)
@@ -14,7 +22,7 @@ module Restfulie
       def configure
         configuration = EntryPoint.configuration_of(resource_name)
         raise "Undefined configuration for #{resource_name}" unless configuration
-        at(configuration.entry_point)
+        @base_position = Restfulie.at(configuration.entry_point)
         configuration.representations.each do |representation_name,representation|
           register_representation(representation_name,representation)
         end

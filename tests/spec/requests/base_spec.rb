@@ -5,13 +5,13 @@ require 'ruby-debug'
 context Restfulie::Client::Base do
 
   before(:all) do
-    # module Restfulie::Client::Test
-    #   class Song
-    #     include ::Restfulie::Client::Base
-    #     uses_restfulie { |config| config.entry_point = 'http://localhost:4567/songs' }
-    #   end
-    # end
-    # @songs_from_class = Restfulie::Client::Test::Song.accepts("application/atom+xml").get!
+    module Restfulie::Client::Test
+      class Song
+        include ::Restfulie::Client::Base
+        uses_restfulie { |config| config.entry_point = 'http://localhost:4567/songs' }
+      end
+    end
+    @songs_from_class = Restfulie::Client::Test::Song.accepts("application/atom+xml").get!
   end
 
   it 'should load songs' do
