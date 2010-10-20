@@ -8,7 +8,9 @@ module Restfulie
 
         def initialize(requester)
           @requester = requester
-          @requester.response_handler= Restfulie::Client::Response::UnmarshallHandler.new(self, Restfulie::Client::Response::CacheHandler.new(@requester.response_handler))
+          @requester.response_handler= Restfulie::Client::Response::CacheHandler.new(@requester.response_handler)
+          @requester.response_handler= Restfulie::Client::Response::UnmarshallHandler.new(self, @requester.response_handler)
+          @requester.response_handler= Restfulie::Client::Response::CreatedRedirect.new(self, @requester.response_handler)
           @raw = false
         end
         
@@ -54,6 +56,7 @@ module Restfulie
             type = headers['Content-Type']
             raise Restfulie::Common::Error::RestfulieError, "Missing content type related to the data to be submitted" unless type
             marshaller = RequestMarshaller.content_type_for(type)
+            raise Restfulie::Common::Error::RestfulieError, "Missing content type for #{type} related to the data to be submitted" unless marshaller
             payload = marshaller.marshal(payload, { :rel => rel, :recipe => recipe }) unless payload.nil? || (payload.kind_of?(String) && payload.empty?)
             args = set_marshalled_payload(method, path, payload, *args)
             args = add_representation_headers(method, path, marshaller, *args)

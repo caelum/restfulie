@@ -1,7 +1,6 @@
 module Restfulie
   module Client
     module Response
-      
       class EnhanceResponse
         def initialize(requester)
           @requester = requester
@@ -9,8 +8,8 @@ module Restfulie
 
         def parse(host, path, http_request, request, response)
           resp = @requester.parse(host, path, http_request, request, response)
-          unless resp.kind_of? ResponseHolder
-            resp.extend(ResponseHolder)
+          unless resp.kind_of? ::Restfulie::Client::HTTP::ResponseHolder
+            resp.extend(::Restfulie::Client::HTTP::ResponseHolder)
             resp.response = response
           end
           resp

@@ -14,11 +14,7 @@ module Restfulie
         # finally, tries to parse the content with a mediatype handler or returns the response itself.
         def parse(host, path, http_request, request, response)
           response = @requester.parse(host, path, http_request, request, response)
-          if response.code == 201
-            request = Restfulie.at(response.headers['location'])
-            request.accepts(@config.acceptable_mediatypes) if @config.acceptable_mediatypes
-            request.get!
-          elsif @config.raw?
+          if @config.raw?
             response
           elsif (!response.body.nil?) && !response.body.empty?
             representation = Restfulie::Client::HTTP::RequestMarshaller.content_type_for(response.headers['content-type']) || Restfulie::Common::Representation::Generic.new
