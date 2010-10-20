@@ -4,6 +4,7 @@ module Restfulie
   module Client
     autoload :MasterDelegator, 'restfulie/client/master_delegator'
     autoload :HTTP, 'restfulie/client/http'
+    autoload :Response, 'restfulie/client/response'
     autoload :Configuration, 'restfulie/client/configuration'
     autoload :EntryPoint, 'restfulie/client/entry_point'
     autoload :Base, 'restfulie/client/base'
