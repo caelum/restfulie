@@ -211,11 +211,11 @@ context Restfulie::Client::HTTP do
     end
 
     it 'should respond FakeResponse' do
-      client.at('/test/307').get.response.class.should equal FakeResponse
+      client.at('/test/307').get.response.should be_kind_of FakeResponse
     end
 
     it 'should respond default Response' do
-      client.at('/test/299').get[2].class.should equal ::Restfulie::Client::HTTP::Response
+      client.at('/test/299').get.response.should be_kind_of ::Restfulie::Client::HTTP::Response
     end
 
   end
