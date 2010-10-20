@@ -26,7 +26,6 @@ module Restfulie
               response = delegate(:request!, method, path, *args)
             rescue Error::Redirection => e
               response = e.response
-              debugger
               if follow_codes.include?(response.code)
                 location = response.headers['location'] || response.headers['Location']
                 raise Error::AutoFollowWithoutLocationError.new(self, response) unless location

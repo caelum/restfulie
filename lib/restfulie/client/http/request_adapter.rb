@@ -104,14 +104,12 @@ module Restfulie
             response = Restfulie::Client.cache_provider.get([@host, path], http_request, method)
             return response if response
             response = http_request.send(method, path, *args)
-            debugger if path=="/test/701"
             response = ResponseHandler.handle(method, path, response)
           rescue Exception => e
-            Restfulie::Common::Logger.logger.error(e)
-            raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
+            response = e
           end
           
-          Restfulie::Client::Response::EnhanceResponse.new(response_handler).parse(@host, path, http_request, self, response)
+          Restfulie::Client::Response::EnhanceResponse.new(response_handler).parse(@host, path, http_request, self, response, method)
 
         end
 

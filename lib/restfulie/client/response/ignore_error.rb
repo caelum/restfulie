@@ -7,9 +7,9 @@ module Restfulie
           @requester = requester
         end
 
-        def parse(host, path, http_request, request, response)
+        def parse(host, path, http_request, request, response, method)
           begin
-            @requester.parse(host, path, http_request, request, response)
+            @requester.parse(host, path, http_request, request, response, method)
           rescue Restfulie::Client::HTTP::Error::RESTError => se
             se
           end

@@ -8,8 +8,8 @@ module Restfulie
           @requester = requester
         end
 
-        def parse(host, path, http_request, request, response)
-          result = @requester.parse(host, path, http_request, request, response)
+        def parse(host, path, http_request, request, response, method)
+          result = @requester.parse(host, path, http_request, request, response, method)
           response = result.respond_to?(:response) ? result.response : result
           if response.respond_to?(:code) && response.code == 201
             request = Restfulie.at(response.headers['location'])

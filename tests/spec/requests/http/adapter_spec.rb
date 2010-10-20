@@ -340,10 +340,12 @@ context Restfulie::Client::HTTP do
     end
 
    it "receives error when 503 code is returned" do
-      @client.at(nil).get.should respond_with_status(503)
+     debugger
+      Restfulie.at("http://localhost:2222/").get.should respond_with_status(503)
     end
+    
     it "raise Error::ServerNotAvailableError error when 503 code is returned" do
-      lambda { @client.at(nil,nil).get! }.should raise_exception ::Restfulie::Client::HTTP::Error::ServerNotAvailableError
+      lambda { Restfulie.at("http://localhost:2222/").get! }.should raise_exception ::Restfulie::Client::HTTP::Error::ServerNotAvailableError
     end
 
    it "receives error when 502..599 code is returned" do

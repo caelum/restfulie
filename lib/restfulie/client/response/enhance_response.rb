@@ -6,8 +6,8 @@ module Restfulie
           @requester = requester
         end
 
-        def parse(host, path, http_request, request, response)
-          resp = @requester.parse(host, path, http_request, request, response)
+        def parse(host, path, http_request, request, response, method)
+          resp = @requester.parse(host, path, http_request, request, response, method)
           unless resp.kind_of? ::Restfulie::Client::HTTP::ResponseHolder
             resp.extend(::Restfulie::Client::HTTP::ResponseHolder)
             resp.response = response

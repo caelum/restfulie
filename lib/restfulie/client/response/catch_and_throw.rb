@@ -2,7 +2,11 @@ module Restfulie
   module Client
     module Response
       class CatchAndThrow
-        def parse(host, path, http_request, request, response)
+        def parse(host, path, http_request, request, response, method)
+          if response.kind_of? Exception
+            Restfulie::Common::Logger.logger.error(response)
+            raise Restfulie::Client::HTTP::Error::ServerNotAvailableError.new(request, Response.new(method, path, 503, nil, {}), response )
+          end
           case response.code
           when 100..299
             response

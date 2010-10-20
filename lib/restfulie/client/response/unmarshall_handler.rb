@@ -12,8 +12,8 @@ module Restfulie
         # first checks if its a 201, redirecting to the resource location.
         # otherwise check if its a raw request, returning the content itself.
         # finally, tries to parse the content with a mediatype handler or returns the response itself.
-        def parse(host, path, http_request, request, response)
-          response = @requester.parse(host, path, http_request, request, response)
+        def parse(host, path, http_request, request, response, method)
+          response = @requester.parse(host, path, http_request, request, response, method)
           if @config.raw?
             response
           elsif (!response.body.nil?) && !response.body.empty?

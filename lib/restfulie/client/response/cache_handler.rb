@@ -7,9 +7,11 @@ module Restfulie
           @requester = requester
         end
 
-        def parse(host, path, http_request, request, response)
-          Restfulie::Client.cache_provider.put([host, path], http_request, response)
-          @requester.parse(host, path, http_request, request, response)
+        def parse(host, path, http_request, request, response, method)
+          unless response.kind_of? Exception
+            Restfulie::Client.cache_provider.put([host, path], http_request, response)
+          end
+          @requester.parse(host, path, http_request, request, response, method)
         end
       end
     end
