@@ -160,6 +160,7 @@ module Restfulie
           unless @host.user.blank? && @host.password.blank?
             headers["Authorization"] = "Basic " + ["#{@host.user}:#{@host.password}"].pack("m").delete("\r\n")
           end
+          headers.delete :recipe
           headers['cookie'] = @cookies if @cookies
           args << headers
 
@@ -167,9 +168,6 @@ module Restfulie
           begin
             http_request = get_connection_provider
             response = Restfulie::Client.cache_provider.get([@host, path], http_request, method)
-            # if response.has_cookie?
-            #   default_headers << response.cookies
-            # end
             return response if response
             response = http_request.send(method, path, *args)
             response = ResponseHandler.handle(method, path, response)
