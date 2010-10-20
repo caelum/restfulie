@@ -5,7 +5,7 @@ module Restfulie
       autoload :IgnoreError, 'restfulie/client/response/ignore_error'
       autoload :CatchAndThrow, 'restfulie/client/response/catch_and_throw'
       autoload :CacheHandler, 'restfulie/client/response/cache_handler'
-      autoload :UnmarshalHandler, 'restfulie/client/response/unmarshal_handler'
+      autoload :UnmarshallHandler, 'restfulie/client/response/unmarshall_handler'
     end
   end
 end
