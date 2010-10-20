@@ -111,7 +111,7 @@ module Restfulie
             raise Error::ServerNotAvailableError.new(self, Response.new(method, path, 503, nil, {}), e )
           end
           
-          EnhanceResponse.new(response_handler).parse(@host, path, http_request, self, response)
+          Restfulie::Client::Response::EnhanceResponse.new(response_handler).parse(@host, path, http_request, self, response)
 
         end
 
