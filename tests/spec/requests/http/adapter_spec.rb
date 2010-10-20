@@ -222,7 +222,10 @@ context Restfulie::Client::HTTP do
 
   context "redirection" do
     
-    let(:resp) { Restfulie.at("http://localhost:4567/test_redirection").follow.get! }
+    let(:resp) {
+      debugger
+      Restfulie.at("http://localhost:4567/test_redirection").follow.get!
+    }
     
     it "should follow redirection" do
       resp.response.path.should == "/redirected"

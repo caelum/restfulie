@@ -23,8 +23,10 @@ module Restfulie
 
           def parse(host, path, http_request, request, response)
             resp = @requester.parse(host, path, http_request, request, response)
-            resp.extend(ResponseHolder)
-            resp.response = response
+            unless resp.kind_of? ResponseHolder
+              resp.extend(ResponseHolder)
+              resp.response = response
+            end
             resp
           end
         end

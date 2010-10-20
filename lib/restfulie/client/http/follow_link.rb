@@ -14,23 +14,29 @@ module Restfulie
   
         def follow(code = nil)
           @follow ||= true # turn on follow redirection
-          follow_codes << code unless code.nil? or follow_codes.include?(code)
+          unless code.nil? or follow_codes.include?(code)
+            follow_codes << code
+          end
           self
         end
   
         def request!(method, path, *args)#:nodoc:
-          begin
-            response = delegate(:request!, method, path, *args)
-          rescue Error::Redirection => e
-            raise e unless @follow # normal behavior for bang methods is to raise the exception
-            response = e.response
-            if follow_codes.include?(response.code)
-              location = response.headers['location'] || response.headers['Location']
-              raise Error::AutoFollowWithoutLocationError.new(self, response) unless location
-              self.host = location
-              response = delegate(:request!, :get, location, headers)
+          if @follow
+            begin
+              response = delegate(:request!, method, path, *args)
+            rescue Error::Redirection => e
+              response = e.response
+              debugger
+              if follow_codes.include?(response.code)
+                location = response.headers['location'] || response.headers['Location']
+                raise Error::AutoFollowWithoutLocationError.new(self, response) unless location
+                self.host = location
+                response = delegate(:request!, :get, location, headers)
+              end
+              response
             end
-            response
+          else
+            response = delegate(:request!, method, path, *args)
           end
         end
   
