@@ -202,20 +202,20 @@ context Restfulie::Client::HTTP do
 
     class FakeResponse < ::Restfulie::Client::HTTP::Response
     end
-    ::Restfulie::Client::HTTP::ResponseHandler.register(701,FakeResponse)
+    ::Restfulie::Client::HTTP::ResponseHandler.register(307,FakeResponse)
 
     let(:client) { Restfulie.at("http://localhost:4567") }
 
-    it 'should have FakeResponder as Response Handler to 201' do
-      ::Restfulie::Client::HTTP::ResponseHandler.handlers(701).should equal FakeResponse
+    it 'should have FakeResponder as Response Handler to 307' do
+      ::Restfulie::Client::HTTP::ResponseHandler.handlers(307).should equal FakeResponse
     end
 
     it 'should respond FakeResponse' do
-      client.get('/test/701').should equal FakeResponse
+      client.at('/test/307').get.response.class.should equal FakeResponse
     end
 
     it 'should respond default Response' do
-      client.get('/test/299')[2].class.should equal ::Restfulie::Client::HTTP::Response
+      client.at('/test/299').get[2].class.should equal ::Restfulie::Client::HTTP::Response
     end
 
   end

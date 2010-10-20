@@ -170,6 +170,7 @@ module Restfulie
             response = Restfulie::Client.cache_provider.get([@host, path], http_request, method)
             return response if response
             response = http_request.send(method, path, *args)
+            debugger if path=="/test/701"
             response = ResponseHandler.handle(method, path, response)
           rescue Exception => e
             Restfulie::Common::Logger.logger.error(e)
