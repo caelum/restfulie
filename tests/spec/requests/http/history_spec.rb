@@ -6,7 +6,7 @@ context Restfulie::Client::HTTP do
   
     before(:all) do
       @host = "http://localhost:4567"
-      @builder = Restfulie.history.at(@host)
+      @builder = Restfulie.at(@host).history
     end
   
     it "should remember last requests" do
