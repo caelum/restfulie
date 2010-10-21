@@ -3,20 +3,31 @@ module Restfulie::Client
 
     def initialize
       @requests = []
+      @responses = []
       base
+      request :base_request
+      response :enhance_response
+    end
+    
+    def request(what)
+      req = "Restfulie::Client::Feature::#{what.to_s.classify}".constantize
+      @requests << req
+    end
+
+    def response(what)
+      response = "Restfulie::Client::Feature::#{what.to_s.classify}".constantize
+      @responses << response
     end
 
     def method_missing(sym, *args)
-      request = "Restfulie::Client::Feature::#{sym.to_s.classify}Request".constantize
-      @requests << request
-      
       trait = "Restfulie::Client::Feature::#{sym.to_s.classify}".constantize
       self.extend trait
       self
     end
     
     def request_flow
-      Parser.new(@requests).continue(self)
+      http_response = Parser.new(@requests).continue(self)
+      response = Parser.new(@responses).continue(self, http_response)
     end
 
   end
@@ -28,13 +39,15 @@ module Restfulie::Client
       @following = @stack.shift
     end
     
-    def continue(request)
+    def continue(*args)
       current = @following
-      if @following==nil
-        return "finished"
+      if current.nil?
+        return args[2]
       end
       @following = @stack.shift
-      current.new.execute(self, @request)
+      filter = current.new
+      debugger
+      filter.execute(self, *args)
     end
     
   end
