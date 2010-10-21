@@ -3,6 +3,7 @@ module Restfulie::Client
     autoload :EnhanceResponse, 'restfulie/client/feature/enhance_response'
     autoload :Base, 'restfulie/client/feature/base'
     autoload :Verb, 'restfulie/client/feature/verb'
+    autoload :FollowRequest, 'restfulie/client/feature/follow_link'
   end
 end
 

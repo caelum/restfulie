@@ -7,19 +7,15 @@ module Restfulie::Client
       trait :base
       trait :verb
       request :base_request
-      response :enhance_response
+      request :enhance_response
     end
     
     def request(what)
       req = "Restfulie::Client::Feature::#{what.to_s.classify}".constantize
       @requests << req
+      self
     end
 
-    def response(what)
-      response = "Restfulie::Client::Feature::#{what.to_s.classify}".constantize
-      @requests << response
-    end
-    
     def trait(sym)
       t = "Restfulie::Client::Feature::#{sym.to_s.classify}".constantize
       self.extend t
@@ -27,7 +23,19 @@ module Restfulie::Client
     end
 
     def method_missing(sym, *args)
-      trait sym
+      if Restfulie::Client::Feature.const_defined? sym.to_s.classify
+        loaded = true
+        trait sym
+      end
+      if Restfulie::Client::Feature.const_defined? "#{sym.to_s.classify}Request"
+        loaded = true
+        request "#{sym.to_s}Request"
+      end
+      if loaded
+        self
+      else
+        super sym, *args
+      end
     end
     
     def request_flow(env = {})
@@ -40,15 +48,13 @@ module Restfulie::Client
     
     def initialize(stack)
       @stack = stack.dup
-      @following = @stack.shift
     end
     
     def continue(*args)
-      current = @following
+      current = @stack.pop
       if current.nil?
         return args[2]
       end
-      @following = @stack.shift
       filter = current.new
       filter.execute(self, *args)
     end
