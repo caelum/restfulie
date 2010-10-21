@@ -51,33 +51,6 @@ context Restfulie::Client::HTTP do
 
   end
 
-  # context 'HTTP Builder' do
-  # 
-  #   let(:builder) { ::Restfulie::Client::HTTP::RequestBuilderExecutor.new("http://localhost:4567") }
-  #   
-  #   context "On GET" do
-  #     
-  #     it "should respond to 200 code" do
-  #       builder.at('/test/200').get.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should accepts and respond to 200 code on xml" do
-  #       builder.at('/test/200').accepts('application/xml').get.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should respond to 200 code as xml" do
-  #       builder.at('/test/200').as('application/xml').get.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should accept language and respond 200" do
-  #       builder.at('/test/200').with('Accept-Language' => 'en').get.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should respond 200 code as xml and accept atom and language" do
-  #       builder.at('/test/200').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.should respond_with_status(200)
-  #     end
-  #     
-  #   end
   #   
   #   context "On PUT" do
   #     it "should respond to 200 code" do
