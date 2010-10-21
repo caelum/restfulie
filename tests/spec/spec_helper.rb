@@ -20,11 +20,11 @@ module ResponseMatchers
   class ResponseStatus
 
     def initialize(response_code)
-      @expected_code = response_code.to_i
+      @expected_code = response_code.to_s
     end
 
     def matches?(response_header)
-      @actual_code = response_header.response.code
+      @actual_code = response_header.code
       @expected_code == @actual_code
     end
 
