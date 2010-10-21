@@ -271,8 +271,9 @@ context Restfulie::Client::HTTP do
     it "raise Error::Forbidden error when 403 code is returned" do
       @client.at("/test/403").get.should respond_with_status(403)
     end
+    
     it "receives error when 403 code is returned" do
-      lambda { @client.at!("/test/403").get! }.should raise_exception ::Restfulie::Client::HTTP::Error::Forbidden
+      lambda { Restfulie.at("http://localhost:4567/test/403").get! }.should raise_exception ::Restfulie::Client::HTTP::Error::Forbidden
     end
 
     it "raise Error::NotFound error when 404 code is returned" do
@@ -340,7 +341,6 @@ context Restfulie::Client::HTTP do
     end
 
    it "receives error when 503 code is returned" do
-     debugger
       Restfulie.at("http://localhost:2222/").get.should respond_with_status(503)
     end
     
