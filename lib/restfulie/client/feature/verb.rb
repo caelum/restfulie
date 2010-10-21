@@ -57,6 +57,7 @@ module Restfulie::Client::Feature::Verb
   def get!(params = {})
     @verb = :get
     at query_string(params)
+    request :throw_error
     request_flow :throw_error => true
   end
 

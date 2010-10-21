@@ -19,7 +19,7 @@ class Restfulie::Client::Feature::FollowRequest
       raise Error::AutoFollowWithoutLocationError.new(request, resp) unless location
       # use the first location available
       location = location[0]
-      Restfulie.debug.at(location).get
+      Restfulie.at(location).get
     else
       resp
     end
