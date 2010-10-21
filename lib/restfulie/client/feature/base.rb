@@ -36,7 +36,7 @@ module Restfulie::Client::Feature
 
     # Path (e.g. http://restfulie.com/posts => /posts)
     def path
-      host.path
+      host.path + (host.query.nil? ? "" : "?#{host.query}")
     end
 
     def host=(host)
