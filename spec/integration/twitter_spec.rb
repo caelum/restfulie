@@ -11,7 +11,7 @@ context Restfulie do
 
   it "should work with twitter" do
     twitter = Restfulie.at(TWITTER_ENTRY_POINT).get
-    twitter.statuses[0].user.screen_name.should == "fionnaps"
+    twitter.resource.statuses[0].user.screen_name.should == "fionnaps"
   end
   
   after do
