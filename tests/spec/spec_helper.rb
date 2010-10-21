@@ -8,6 +8,13 @@ require 'rspec/rails'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
+class Object
+  def debug
+    debugger
+    self
+  end
+end
+
 module ResponseMatchers
 
   class ResponseStatus
