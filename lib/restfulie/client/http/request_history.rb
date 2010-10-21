@@ -39,6 +39,14 @@ module Restfulie
           end
         end
 
+        def request(method = nil, path = nil, *args)
+          begin
+            request!(method, path, *args) 
+          rescue Restfulie::Client::HTTP::Error::RESTError => se
+            se
+          end
+        end
+        
         def history(number)
           @snapshot = snapshots[number]
           raise "Undefined snapshot for #{number}" unless @snapshot

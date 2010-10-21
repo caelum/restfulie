@@ -164,6 +164,10 @@ context Restfulie::Client::HTTP do
     before(:all) do
       @host = "http://localhost:4567"
       @builder = ::Restfulie::Client::HTTP::RequestHistoryExecutor.new(@host)
+      @builder = Restfulie.using {
+        request_history
+        verb_request
+      }.at(@host)
     end
 
     it "should remember last requests" do

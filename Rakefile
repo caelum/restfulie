@@ -104,19 +104,11 @@ namespace :test do
   
   task :all => ["spec","integration"]
   
-  # namespace :rcov do
-  #   Spec::Rake::SpecTask.new('rcov') do |t|
-  #       t.spec_opts = %w(-fs --color)
-  #       t.spec_files = FileList['spec/units/**/*_spec.rb']
-  #       t.rcov = true
-  #       t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
-  #     end
-  #     desc 'Run coverage test with fake server'
-  #     task :run do
-  #       start_server_and_invoke_test('test:rcov:rcov')
-  #     end
-  # end
-  
+end
+
+RSpec::Core::RakeTask.new(:spec) do |t|
+  # t.spec_files = FileList['spec_*.rb']
+  # t.options = '-v'
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

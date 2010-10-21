@@ -10,6 +10,7 @@ module Restfulie
     autoload :Base, 'restfulie/client/base'
     autoload :Mikyung, 'restfulie/client/mikyung'
     autoload :Cache, 'restfulie/client/cache'
+    autoload :Feature, 'restfulie/client/feature'
     
     mattr_accessor :cache_provider, :cache_store
 
