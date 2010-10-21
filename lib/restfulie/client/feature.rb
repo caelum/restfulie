@@ -4,6 +4,7 @@ module Restfulie::Client
     autoload :Base, 'restfulie/client/feature/base'
     autoload :Verb, 'restfulie/client/feature/verb'
     autoload :FollowRequest, 'restfulie/client/feature/follow_link'
+    autoload :ThrowError, 'restfulie/client/feature/throw_error'
   end
 end
 
