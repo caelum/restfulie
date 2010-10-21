@@ -30,7 +30,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def patch(payload)
-    request(:patch, path, payload, headers)
+    @verb = :patch
+    request_flow :payload => payload
   end
 
   # PUT HTTP verb without {Error}
@@ -38,7 +39,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def put(payload)
-    request(:put, path, payload, headers)
+    @verb = :head
+    request_flow :payload => payload
   end
 
   # DELETE HTTP verb without {Error}
@@ -53,7 +55,9 @@ module Restfulie::Client::Feature::Verb
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def get!(params = {})
-    request!(:get, add_query_string(path, params), headers)
+    @verb = :get!
+    at query_string(params)
+    request_flow
   end
 
   # HEAD HTTP verb {Error}
@@ -77,7 +81,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def patch!(payload)
-    request!(:patch, path, payload, headers)
+    @verb = :patch!
+    request_flow :payload => payload
   end
 
   # PUT HTTP verb {Error}
@@ -85,7 +90,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def put!(payload)
-    request!(:put, path, payload, headers)
+    @verb = :put!
+    request_flow :payload => payload
   end
 
   # DELETE HTTP verb {Error}

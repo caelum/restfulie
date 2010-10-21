@@ -30,9 +30,8 @@ module Restfulie::Client
       trait sym
     end
     
-    def request_flow
-      http_response = Parser.new(@requests).continue(self, nil)
-      # response = Parser.new(@responses).continue(self, http_response)
+    def request_flow(env = {})
+      Parser.new(@requests).continue(self, nil, env)
     end
 
   end
@@ -51,7 +50,6 @@ module Restfulie::Client
       end
       @following = @stack.shift
       filter = current.new
-      # debugger
       filter.execute(self, *args)
     end
     

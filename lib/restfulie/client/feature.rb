@@ -10,15 +10,15 @@ module Restfulie::Client::Feature
 
   class BaseRequest
     
-    def execute(flow, request, response)
-      request!(request.verb, request.host, request.path, request, flow)
+    def execute(flow, request, response, env)
+      request!(request.verb, request.host, request.path, request, flow, env)
     end
     
     # Executes a request against your server and return a response instance.
     # * <tt>method: :get,:post,:delete,:head,:put</tt>
     # * <tt>path: '/posts'</tt>
     # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-    def request!(method, host, path, request, flow, *args)
+    def request!(method, host, path, request, flow, env, *args)
       headers = request.default_headers.merge(args.extract_options!)
       unless host.user.blank? && host.password.blank?
         headers["Authorization"] = "Basic " + ["#{host.user}:#{host.password}"].pack("m").delete("\r\n")
@@ -39,7 +39,7 @@ module Restfulie::Client::Feature
         response = e
       end
       
-      flow.continue(request, response)
+      flow.continue(request, response, env)
       
       # Restfulie::Client::Response::EnhanceResponse.new(response_handler).parse(host, path, http_request, self, response, method)
 
