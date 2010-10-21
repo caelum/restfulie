@@ -80,7 +80,7 @@ module Restfulie
         # * <tt>method: :get,:post,:delete,:head,:put</tt>
         # * <tt>path: '/posts'</tt>
         # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-        def request(method, path, *args)
+        def request(method = nil, path = nil, *args)
           @response_handler = Restfulie::Client::Response::IgnoreError.new(@response_handler)
           request!(method, path, *args) 
         end

@@ -39,13 +39,6 @@ module Restfulie
           end
         end
 
-        # making method and path optional
-        def request(method=nil, path=nil, *args)#:nodoc:
-          request!(method, path, *args) 
-        rescue Error::RESTError => se
-          se
-        end
-        
         def history(number)
           @snapshot = snapshots[number]
           raise "Undefined snapshot for #{number}" unless @snapshot
