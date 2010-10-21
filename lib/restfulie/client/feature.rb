@@ -1,6 +1,8 @@
 module Restfulie::Client
   module Feature
-    class Nil
+    module Base
+      def at(uri)
+      end
     end
   end
 end

@@ -17,6 +17,10 @@ context Restfulie do
       Restfulie.use{custom}.respond_to?(:custom_history).should be_true
     end
     
+    it "should accepts the old methods after adding new ones" do
+      Restfulie.use{custom}.respond_to?(:at).should be_true
+    end
+    
   end
 
 end

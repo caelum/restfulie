@@ -11,7 +11,8 @@ module Restfulie
   class RestfulieDsl
 
     def initialize
-      @traits = [Restfulie::Client::Feature::Nil.new]
+      @traits = []
+      base
     end
 
     def method_missing(sym, *args)
