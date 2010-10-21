@@ -9,6 +9,7 @@ context Restfulie::Client::HTTP do
     }
     
     it "should follow redirection" do
+      pending "should support request history"
       resp.response.request.path.should == "/redirected"
     end
     
