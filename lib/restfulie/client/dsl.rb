@@ -50,13 +50,13 @@ module Restfulie::Client
       @stack = stack.dup
     end
     
-    def continue(*args)
+    def continue(request, response, env)
       current = @stack.pop
       if current.nil?
         return args[2]
       end
       filter = current.new
-      filter.execute(self, *args)
+      filter.execute(self, request, response, env)
     end
     
   end

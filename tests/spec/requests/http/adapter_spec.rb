@@ -77,61 +77,7 @@ context Restfulie::Client::HTTP do
   #       builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').put!("test").should respond_with_status(200)
   #     end
   #   end
-  #   
-  #   context "On DELETE" do
-  #     
-  #     it "should respond 200 code" do
-  #       builder.at("/test").delete.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should accepts xml and respond 200 code" do
-  #       builder.at('/test').accepts('application/xml').delete.should respond_with_status(200)
-  #     end
-  #     
-  #     it "as xml should respond 200 code" do
-  #       builder.at('/test').as('application/xml').delete.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should respond 200 code with accept language en" do
-  #       builder.at('/test').with('Accept-Language' => 'en').delete.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should respond 200 code as xml accepts atom+xml with accept language en" do
-  #       builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').delete.should respond_with_status(200)
-  #     end
-  #     
-  #   end
-  # 
-  #   context "On HEAD" do
-  #     
-  #     it "should respond 200 code" do
-  #       builder.at("/test").head.should respond_with_status(200) 
-  #     end
-  #     
-  #     it "should respond 200 code and accepts xml" do
-  #       builder.at('/test').accepts('application/xml').head.should respond_with_status(200) 
-  #     end
-  #     
-  #     it "should respond 200 code as xml" do
-  #       builder.at('/test').as('application/xml').head.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should respond 200 code with accept language en" do
-  #       builder.at('/test').with('Accept-Language' => 'en').head.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should respond 200 code as xml and accepts atom+xml with accepts language en" do
-  #       builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').head.should respond_with_status(200)
-  #     end
-  #     
-  #     it "should respond 200 code as xml and accepts atom+xml with accepts language en in a destructive method" do
-  #       builder.at('/test').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').head!.should respond_with_status(200)
-  #     end
-  #     
-  #   end
-  # 
-  # end
-  # 
+
   # context 'RequestHistory' do
   # 
   #   before(:all) do
@@ -199,22 +145,6 @@ context Restfulie::Client::HTTP do
   #     client.at('/test/299').get.response.should be_kind_of ::Restfulie::Client::HTTP::Response
   #   end
   # 
-  # end
-  # 
-  # context "redirection" do
-  #   
-  #   let(:resp) {
-  #     Restfulie.at("http://localhost:4567/test_redirection").follow.get!
-  #   }
-  #   
-  #   it "should follow redirection" do
-  #     resp.response.path.should == "/redirected"
-  #   end
-  #   
-  #   it "should set the body as 'OK'" do
-  #     resp.response.body.should == "OK"
-  #   end
-  #   
   # end
   # 
   # context "error conditions" do

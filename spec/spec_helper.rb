@@ -7,3 +7,10 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 require 'restfulie'
 require 'ruby-debug'
+
+class Object
+  def debug
+    debugger
+    self
+  end
+end
