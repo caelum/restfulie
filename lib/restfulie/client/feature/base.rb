@@ -1,20 +1,7 @@
 module Restfulie::Client::Feature
   module Base
   
-    attr_reader :default_headers
-  
-    def cookies
-      @cookies
-    end
-  
-    def verb
-      @method
-    end
-  
-    def get
-      @method = :get
-      request_flow
-    end
+    attr_reader :default_headers, :cookies, :verb, :host
   
     #Set host
     def at(url)
@@ -50,10 +37,6 @@ module Restfulie::Client::Feature
     # Path (e.g. http://restfulie.com/posts => /posts)
     def path
       host.path
-    end
-
-    def host
-      @host
     end
 
     def host=(host)

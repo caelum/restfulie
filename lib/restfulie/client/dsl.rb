@@ -4,7 +4,8 @@ module Restfulie::Client
     def initialize
       @requests = []
       @responses = []
-      base
+      trait :base
+      trait :verb
       request :base_request
       response :enhance_response
     end
@@ -18,11 +19,15 @@ module Restfulie::Client
       response = "Restfulie::Client::Feature::#{what.to_s.classify}".constantize
       @requests << response
     end
+    
+    def trait(sym)
+      t = "Restfulie::Client::Feature::#{sym.to_s.classify}".constantize
+      self.extend t
+      self
+    end
 
     def method_missing(sym, *args)
-      trait = "Restfulie::Client::Feature::#{sym.to_s.classify}".constantize
-      self.extend trait
-      self
+      trait sym
     end
     
     def request_flow
