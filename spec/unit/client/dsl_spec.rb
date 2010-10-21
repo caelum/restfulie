@@ -23,6 +23,20 @@ describe Restfulie::Client::Dsl do
       do_nothing.should_receive(:execute).with(parser, args)
       parser.continue(args)
     end
+
+    it "should invoke first the most recent ones" do
+      do_nothing = Object.new
+      invoke_next = Object.new
+      parser = Restfulie::Client::Parser.new([Factory.new(do_nothing), Factory.new(invoke_next)])
+      
+      args = [1, 2, 3]
+
+      do_nothing.should_receive(:execute).with(parser, args)
+      def invoke_next.execute(parser, *args)
+        parser.continue(*args)
+      end
+      parser.continue(args)
+    end
     
   end
 
