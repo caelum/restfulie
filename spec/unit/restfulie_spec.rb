@@ -12,6 +12,10 @@ context Restfulie do
       def custom_history
       end
     end
+    class Restfulie::Client::Feature::CustomRequest
+      def custom_history
+      end
+    end
     
     it "should allow adding extra methods by usage" do
       Restfulie.use{custom}.respond_to?(:custom_history).should be_true
