@@ -10,12 +10,7 @@ module Restfulie
 
   # creates a new entry point for executing requests
   def self.at(uri)
-    Restfulie.using {
-      recipe
-      follow_link
-      request_marshaller
-      verb_request
-    }.at(uri)
+    Restfulie.use.at(uri)
   end
 
   def self.using(&block)
@@ -23,7 +18,11 @@ module Restfulie
   end
   
   def self.use(&block)
-    Restfulie::Client::Dsl.new.instance_eval(&block)
+    if block_given?
+      Restfulie::Client::Dsl.new.instance_eval(&block)
+    else
+      Restfulie::Client::Dsl.new
+    end
   end
   
 end
