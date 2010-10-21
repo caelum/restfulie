@@ -5,6 +5,8 @@ module Restfulie::Client
     autoload :Verb, 'restfulie/client/feature/verb'
     autoload :FollowRequest, 'restfulie/client/feature/follow_link'
     autoload :ThrowError, 'restfulie/client/feature/throw_error'
+    autoload :History, 'restfulie/client/feature/history'
+    autoload :HistoryRequest, 'restfulie/client/feature/history_request'
   end
 end
 
