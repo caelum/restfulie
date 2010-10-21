@@ -5,25 +5,9 @@ require 'restfulie/common'
 require 'restfulie/client'
 require 'restfulie/server'
 
-# Shortcut to Restfulie::Client::EntryPoint
+# Shortcut to RestfulieDsl
 module Restfulie
 
-  class RestfulieDsl
-
-    def initialize
-      @traits = []
-      base
-    end
-
-    def method_missing(sym, *args)
-      trait = "Restfulie::Client::Feature::#{sym.to_s.classify}".constantize
-      @traits << trait
-      self.extend trait
-      self
-    end
-
-  end
-  
   # creates a new entry point for executing requests
   def self.at(uri)
     Restfulie.using {
@@ -39,7 +23,7 @@ module Restfulie
   end
   
   def self.use(&block)
-    RestfulieDsl.new.instance_eval(&block)
+    Restfulie::Client::Dsl.new.instance_eval(&block)
   end
   
 end

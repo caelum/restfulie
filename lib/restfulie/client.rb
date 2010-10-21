@@ -11,6 +11,7 @@ module Restfulie
     autoload :Mikyung, 'restfulie/client/mikyung'
     autoload :Cache, 'restfulie/client/cache'
     autoload :Feature, 'restfulie/client/feature'
+    autoload :Dsl, 'restfulie/client/dsl'
     
     mattr_accessor :cache_provider, :cache_store
 
