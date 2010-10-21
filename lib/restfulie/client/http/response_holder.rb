@@ -5,10 +5,15 @@ module Restfulie
         attr_accessor :response
         
         def resource
-          type = response.respond_to?(:headers) ? response.headers['content-type'] : response['content-type']
+          type = headers['content-type'] || response['Content-Type']
           representation = Restfulie::Client::HTTP::RequestMarshaller.content_type_for(type) || Restfulie::Common::Representation::Generic.new
           representation.unmarshal(response.body)
         end
+        
+        def headers
+          response.to_hash
+        end
+        
       end
     end
   end

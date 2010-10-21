@@ -14,10 +14,12 @@ class Restfulie::Client::Feature::FollowRequest
 
   def execute(flow, request, response, env)
     resp = flow.continue(request, response, env)
-    if follow_codes.include?(resp.code)
-      location = response.headers['location'] || response.headers['Location']
-      raise Error::AutoFollowWithoutLocationError.new(request, response) unless location
-      Restfulie.at(location).get
+    if follow_codes.include?(resp.code.to_i)
+      location = resp.response.headers['location'] || resp.response.headers['Location']
+      raise Error::AutoFollowWithoutLocationError.new(request, resp) unless location
+      # use the first location available
+      location = location[0]
+      Restfulie.debug.at(location).get
     else
       resp
     end
