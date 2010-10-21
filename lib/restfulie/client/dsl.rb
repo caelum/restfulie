@@ -16,7 +16,7 @@ module Restfulie::Client
 
     def response(what)
       response = "Restfulie::Client::Feature::#{what.to_s.classify}".constantize
-      @responses << response
+      @requests << response
     end
 
     def method_missing(sym, *args)
@@ -26,8 +26,8 @@ module Restfulie::Client
     end
     
     def request_flow
-      http_response = Parser.new(@requests).continue(self)
-      response = Parser.new(@responses).continue(self, http_response)
+      http_response = Parser.new(@requests).continue(self, nil)
+      # response = Parser.new(@responses).continue(self, http_response)
     end
 
   end
@@ -46,7 +46,7 @@ module Restfulie::Client
       end
       @following = @stack.shift
       filter = current.new
-      debugger
+      # debugger
       filter.execute(self, *args)
     end
     
