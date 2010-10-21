@@ -21,6 +21,7 @@ describe Restfulie::Common::Converter do
 
     describe "Feed" do
       it "should create a feed from builder DSL" do
+        pending
         time = Time.now
         some_articles = {:some_articles => [
           {:id => 1, :title => "a great article", :updated => time},
@@ -60,6 +61,8 @@ describe Restfulie::Common::Converter do
      end
 
       it "should pluralize items on root and singularize on element" do
+        pending
+        
         time = Time.now
         some_articles = [Item.new("training"), Item.new("books")]
         
@@ -83,6 +86,7 @@ describe Restfulie::Common::Converter do
     describe "Entry" do
 
       it "should use a default recipe extracting first root element that serializes an entire object if responds to to_xml" do
+        pending
         time = Time.now
         an_article = {:article => {:id => 1, :title => "a great article", :updated => time}}
         
@@ -91,6 +95,7 @@ describe Restfulie::Common::Converter do
       end
 
       it "should use a default recipe that serializes an entire object if responds to to_xml" do
+        pending
         time = Time.now
         an_article = {:id => 1, :title => "a great article", :updated => time}
         
@@ -99,6 +104,7 @@ describe Restfulie::Common::Converter do
       end
 
       it "should create an entry from builder DSL" do
+        pending
         an_article = {:article => {:id => 1, :title => "a great article"}}
         
         entry = to_xml(an_article) do |member, article|
@@ -117,6 +123,7 @@ describe Restfulie::Common::Converter do
       end
 
       it "should be able to declare links inside values block" do
+        pending
         an_article = {:article => {:id => 1, :title => "a great article"}}
         
         entry = to_xml(an_article) do |member, article|
@@ -140,6 +147,7 @@ describe Restfulie::Common::Converter do
       end
       
       it "should create an entry from an already declared recipe" do
+        pending
        
         describe_recipe(:simple_entry) do |member, article|
           member.values do |values|
