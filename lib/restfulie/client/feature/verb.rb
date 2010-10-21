@@ -13,7 +13,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def head
-    request(:head, path, headers)
+    @verb = :head
+    request_flow
   end
 
   # POST HTTP verb without {Error}
@@ -44,7 +45,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def delete
-    request(:delete, path, headers)
+    @verb = :delete
+    request_flow
   end
 
   # GET HTTP verb {Error}
@@ -58,7 +60,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def head!
-    request!(:head, path, headers)
+    @verb = :head!
+    request_flow
   end
 
   # POST HTTP verb {Error}
@@ -89,7 +92,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def delete!
-    request!(:delete, path, headers)
+    @verb = :delete!
+    request_flow
   end
 
   protected

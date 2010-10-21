@@ -4,7 +4,7 @@ context Restfulie::Client::HTTP do
 
   context "HTTP Base" do
 
-    before(:all) do
+    before do
       @host = "http://localhost:4567"
       @client = Restfulie.at(@host)
     end
