@@ -9,18 +9,18 @@ module Restfulie::Client::Feature::History
   end
 
   def history(number)
-    snapshots[number] || raise "Undefined snapshot for #{number}"
+    snapshots[snapshots.size + number] || raise("Undefined snapshot for #{number}, only containing #{@snapshots.size} snapshots.")
   end
 
   def make_snapshot(request)
     snapshots.shift if snapshot_full?
-    snapshots << snapshot
+    snapshots << request
   end
   
   private
 
   def snapshot_full?
-    snapshots.size >= request.max_to_remind
+    snapshots.size >= max_to_remind
   end
 
 end
