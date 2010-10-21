@@ -53,7 +53,7 @@ module Restfulie::Client
     def continue(request, response, env)
       current = @stack.pop
       if current.nil?
-        return args[2]
+        return response
       end
       filter = current.new
       filter.execute(self, request, response, env)
