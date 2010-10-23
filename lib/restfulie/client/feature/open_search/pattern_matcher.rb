@@ -17,6 +17,7 @@ module Restfulie::Client::Feature::OpenSearch
         end
         pattern
       end
+      pattern.gsub(/\{[^\?]*\?\}/,"")
     end
 
   end

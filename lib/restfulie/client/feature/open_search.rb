@@ -1,7 +1,15 @@
+module Restfulie::Client::Feature
+  module OpenSearch
+    autoload :PatternMatcher, 'restfulie/client/feature/open_search/pattern_matcher'
+  end
+end
+
+
 module Restfulie::Client::Feature::OpenSearch
   
   def search(params)
-    get PatternMatcher.new.match(params, params_pattern)
+    at PatternMatcher.new.match(params, params_pattern)
+    get
   end
   
   attr_reader :params_pattern
@@ -11,12 +19,4 @@ module Restfulie::Client::Feature::OpenSearch
     self
   end
 
-end
-
-class PatternMatcher
-  
-  def match(params, pattern)
-    
-  end
-  
 end
