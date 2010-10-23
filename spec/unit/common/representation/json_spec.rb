@@ -49,14 +49,19 @@ context Restfulie::Common::Representation::Json do
   
   describe "JSON write" do
     
+    it "should keep previously freed methods in the object" do
+      @json["articles"]["size"] = 10
+      @json["articles"]["size"].should  == 10
+
+      @json.articles.size = 15
+      @json.articles.__free_method__(:size).size.should  == 15
+
+    end
+    
     it "should be able to write a JSON object in many ways" do
       @json["articles"]["size"] = 10
       @json["articles"]["size"].should  == 10
   
-      # previously freed methods are kept free in the object
-      @json.articles.size = 15
-      @json.articles.__free_method__(:size).size.should  == 15
-      
       @json.articles.link << {"href" => "http://dont.panic.com", "rel" => "towel"}
       @json.articles.link.last.href.should == "http://dont.panic.com"
       @json.articles.link.last.rel.should  == "towel"
