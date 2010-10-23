@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe Restfulie::Common::Representation::OpenSearch do
+describe Restfulie::Common::Representation::OpenSearch::Descriptor do
   
   context "unmarshalling one url documents" do
   
