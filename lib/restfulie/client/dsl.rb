@@ -3,7 +3,6 @@ module Restfulie::Client
 
     def initialize
       @requests = []
-      @responses = []
       trait :base
       trait :verb
       request :base_request

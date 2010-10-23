@@ -7,6 +7,7 @@ module Restfulie::Client
     autoload :ThrowError, 'restfulie/client/feature/throw_error'
     autoload :History, 'restfulie/client/feature/history'
     autoload :HistoryRequest, 'restfulie/client/feature/history_request'
+    autoload :OpenSearch, 'restfulie/client/feature/open_search'
   end
 end
 

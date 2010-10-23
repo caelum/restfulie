@@ -4,7 +4,7 @@ module Restfulie::Client::Feature
       resp = flow.continue(request, response, env)
       unless resp.kind_of? ::Restfulie::Client::HTTP::ResponseHolder
         resp.extend(::Restfulie::Client::HTTP::ResponseHolder)
-        resp.response = resp
+        resp.results_from request, resp
       end
       resp
     end
