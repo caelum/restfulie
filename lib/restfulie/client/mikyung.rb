@@ -1,13 +1,7 @@
 module Restfulie
   module Client
     module Mikyung
-      autoload :WhenCondition, 'restfulie/client/mikyung/when_condition'
-      autoload :ThenCondition, 'restfulie/client/mikyung/then_condition'
-      autoload :RestProcessModel, 'restfulie/client/mikyung/rest_process_model'
-      autoload :Concatenator, 'restfulie/client/mikyung/concatenator'
-      autoload :Core, 'restfulie/client/mikyung/core'
-      autoload :SteadyStateWalker, 'restfulie/client/mikyung/steady_state_walker'
-      autoload :Languages, 'restfulie/client/mikyung/languages'
+      Dir["#{File.dirname(__FILE__)}/mikyung/*.rb"].each {|f| autoload File.basename(f)[0..-4].camelize.to_sym, f }
     end
   end
 end
@@ -17,6 +11,5 @@ end
 module Restfulie
   class Mikyung < Restfulie::Client::Mikyung::Core
     Restfulie::Common::Logger.logger.level = Logger::INFO
-    # empty class
   end
 end
