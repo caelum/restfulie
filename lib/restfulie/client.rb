@@ -24,5 +24,4 @@ end
 require 'restfulie/client/ext/http_ext'
 require 'restfulie/client/ext/atom_ext'
 require 'restfulie/client/ext/json_ext'
-require 'restfulie/client/ext/xml_ext'
 
