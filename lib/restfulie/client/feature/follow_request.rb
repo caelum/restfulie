@@ -14,7 +14,6 @@ class Restfulie::Client::Feature::FollowRequest
 
   def execute(flow, request, response, env)
     resp = flow.continue(request, response, env)
-    debugger
     if follow_codes.include?(resp.code.to_i)
       location = resp.response.headers['location'] || resp.response.headers['Location']
       raise Error::AutoFollowWithoutLocationError.new(request, resp) unless location
