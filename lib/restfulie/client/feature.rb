@@ -1,13 +1,6 @@
 module Restfulie::Client
   module Feature
-    autoload :EnhanceResponse, 'restfulie/client/feature/enhance_response'
-    autoload :Base, 'restfulie/client/feature/base'
-    autoload :Verb, 'restfulie/client/feature/verb'
-    autoload :FollowRequest, 'restfulie/client/feature/follow_link'
-    autoload :ThrowError, 'restfulie/client/feature/throw_error'
-    autoload :History, 'restfulie/client/feature/history'
-    autoload :HistoryRequest, 'restfulie/client/feature/history_request'
-    autoload :OpenSearch, 'restfulie/client/feature/open_search'
+    Dir["#{File.dirname(__FILE__)}/http/*.rb"].each {|f| autoload File.basename(f)[0..-4].camelize.to_sym, f }
   end
 end
 
