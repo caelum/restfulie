@@ -22,7 +22,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def post(payload, options = {:recipe => nil})
-    request(:post, path, payload, options.merge(headers))
+    @verb = :post
+    request_flow :payload => payload
   end
 
   # PATCH HTTP verb without {Error}
@@ -39,7 +40,7 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def put(payload)
-    @verb = :head
+    @verb = :put
     request_flow :payload => payload
   end
 
@@ -58,7 +59,7 @@ module Restfulie::Client::Feature::Verb
     @verb = :get
     at query_string(params)
     request :throw_error
-    request_flow :throw_error => true
+    request_flow 
   end
 
   # HEAD HTTP verb {Error}
@@ -66,7 +67,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def head!
     @verb = :head
-    request_flow :throw_error => true
+    request :throw_error
+    request_flow 
   end
 
   # POST HTTP verb {Error}
@@ -74,7 +76,9 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def post!(payload, options = {:recipe => nil})
-    request!(:post, path, payload, options.merge(headers))
+    @verb = :post
+    request :throw_error
+    request_flow :payload => payload
   end
 
   # PATCH HTTP verb {Error}
@@ -83,7 +87,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def patch!(payload)
     @verb = :patch
-    request_flow :payload => payload, :throw_error => true
+    request :throw_error
+    request_flow :payload => payload
   end
 
   # PUT HTTP verb {Error}
@@ -92,7 +97,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def put!(payload)
     @verb = :put
-    request_flow :payload => payload, :throw_error => true
+    request :throw_error
+    request_flow :payload => payload
   end
 
   # DELETE HTTP verb {Error}
@@ -100,7 +106,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def delete!
     @verb = :delete
-    request_flow :throw_error => true
+    request :throw_error
+    request_flow 
   end
 
   protected
