@@ -7,6 +7,7 @@ module Restfulie::Client
       trait :verb
       request :base_request
       request :setup_header
+      request :serialize_body
       request :enhance_response
     end
     

@@ -2,11 +2,12 @@ class Restfulie::Client::Feature::SerializeBody
   
   def execute(flow, request, response, env)
     
-    if should_have_payload?(request.method)
+    if should_have_payload?(request.verb)
       
       payload = env[:body]
       if payload && !(payload.kind_of?(String) && payload.empty?)
-        type = headers['Content-Type']
+        debugger
+        type = request.headers['Content-Type']
         raise Restfulie::Common::Error::RestfulieError, "Missing content type related to the data to be submitted" unless type
       
         marshaller = Restfulie::Common::Converter.content_type_for(type)
