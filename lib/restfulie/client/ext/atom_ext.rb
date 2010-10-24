@@ -1,10 +1,12 @@
-# inject new behavior in Atom instances to enable easily access to link relationships.
+# Atom links now can be followed
 module Restfulie
   module Common
     module Representation
       module Atom
         class Link
-          include Restfulie::Client::HTTP::LinkRequestBuilder
+          def follow
+            Restfulie.at(href).as(type)
+          end
         end
       end
     end
