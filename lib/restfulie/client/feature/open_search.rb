@@ -8,7 +8,7 @@ end
 module Restfulie::Client::Feature::OpenSearch
   
   def search(params)
-    at PatternMatcher.new.match(params, params_pattern)
+    at ("?" + PatternMatcher.new.match(params, params_pattern))
     get
   end
   
