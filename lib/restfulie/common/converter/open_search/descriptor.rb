@@ -16,7 +16,7 @@ class Restfulie::Common::Converter::OpenSearch::Descriptor
     return nil if uri.nil?
     
     base_uri, params_pattern = extract_uri(uri)
-    Restfulie.at(base_uri).open_search.with_pattern(params_pattern)
+    Restfulie.at(base_uri).accepts(content_type).open_search.with_pattern(params_pattern)
   end
   
   private

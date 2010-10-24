@@ -20,6 +20,7 @@ describe Restfulie::Common::Converter::OpenSearch::Descriptor do
       @descriptor.urls.size.should == 1
       @descriptor.use("application/atom+xml").host.should == URI.parse("http://localhost:3000/products")
       @descriptor.use("application/atom+xml").params_pattern.should == "q={searchTerms}&pw={startPage?}&format=atom"
+      @descriptor.use("application/atom+xml").headers["Accept"].should == "application/atom+xml"
     end
   
   end
