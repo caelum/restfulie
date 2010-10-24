@@ -33,17 +33,6 @@ module Restfulie::Client::Feature
       
       flow.continue(request, response, env)
       
-      # Restfulie::Client::Response::EnhanceResponse.new(response_handler).parse(host, path, http_request, self, response, method)
-
-    end
-
-    # Executes a request against your server and return a response instance without {Error}
-    # * <tt>method: :get,:post,:delete,:head,:put</tt>
-    # * <tt>path: '/posts'</tt>
-    # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-    def request(method = nil, path = nil, *args)
-      @response_handler = Restfulie::Client::Response::IgnoreError.new(@response_handler)
-      request!(method, path, *args) 
     end
 
     def get_connection_provider(host)
