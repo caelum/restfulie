@@ -13,7 +13,7 @@ describe Restfulie::Common::Converter::OpenSearch::Descriptor do
         <Contact>admin@restbuy.com</Contact>
         <Url type="application/atom+xml"  template="http://localhost:3000/products?q={searchTerms}&amp;pw={startPage?}&amp;format=atom" />
       </OpenSearchDescription>'
-      @descriptor = Restfulie::Common::Converter::OpenSearch.new.unmarshal(xml)
+      @descriptor = Restfulie::Common::Converter::OpenSearch.unmarshal(xml)
     end
   
     it "should unmarshall opensearch xml descriptions" do

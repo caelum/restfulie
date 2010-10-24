@@ -8,7 +8,7 @@ end
 
 class Restfulie::Common::Converter::OpenSearch
   
-  def unmarshal(xml)
+  def self.unmarshal(xml)
     hash = Hash.from_xml(xml)
     descriptor = Descriptor.new(hash)
   end
