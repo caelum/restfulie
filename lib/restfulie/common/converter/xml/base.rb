@@ -45,7 +45,7 @@ module Restfulie
               end
               
               # Create representation and proxy
-              builder = Builder.new(obj)
+              builder = Builder.new(obj, options)
         
               # Check recipe arity size before calling it
               recipe.call(*[builder, obj, options][0,recipe.arity])

@@ -42,11 +42,12 @@ module Restfulie
             insert_value("link", nil, options)
           end
           
-          def members(a_collection = nil, &block)
+          def members(a_collection = nil, options = {}, &block)
             collection = a_collection || @obj 
             raise Error::BuilderError("Members method require a collection to execute") unless collection.respond_to?(:each)
             collection.each do |member|
-              entry = @doc.create_element(Restfulie::Common::Converter.root_element_for(member))
+              root = options[:root] || Restfulie::Common::Converter.root_element_for(member)
+              entry = @doc.create_element(root)
               entry.parent = @parent
               @parent = entry
               block.call(self, member)
