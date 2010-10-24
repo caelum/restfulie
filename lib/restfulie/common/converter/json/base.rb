@@ -34,8 +34,11 @@ module Restfulie
               
               # Check if the object is already an json
               unless recipe
-                return Restfulie::Common::Representation::Json.create(obj) if obj.kind_of?(Hash) || obj.kind_of?(Array)
-                raise Restfulie::Common::Error::ConverterError.new("Recipe required")
+                if obj.kind_of?(Hash) || obj.kind_of?(Array)
+                  return Restfulie::Common::Representation::Json.create(obj)
+                else
+                  raise Restfulie::Common::Error::ConverterError.new("Recipe required")
+                end
               end
                       
               # Get recipe already described
