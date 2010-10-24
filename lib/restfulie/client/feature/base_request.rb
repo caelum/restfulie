@@ -19,7 +19,12 @@ module Restfulie::Client::Feature
         cached = Restfulie::Client.cache_provider.get([host, path], http_request, method)
         return cached if cached
 
-        response = http_request.send(method, path, request.headers)
+        if env[:body]
+          response = http_request.send(method, path, env[:body], request.headers)
+        else
+          response = http_request.send(method, path, request.headers)
+        end
+
       rescue Exception => e
         response = e
       end
