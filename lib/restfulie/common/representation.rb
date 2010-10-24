@@ -1,6 +1,3 @@
 module Restfulie::Common::Representation
-  autoload :Atom, 'restfulie/common/representation/atom'
-  autoload :Generic, 'restfulie/common/representation/generic'
-  autoload :Json, 'restfulie/common/representation/json'
-  autoload :Links, 'restfulie/common/representation/links'
+  Dir["#{File.dirname(__FILE__)}/representation/*.rb"].each {|f| autoload File.basename(f)[0..-4].camelize.to_sym, f }
 end
