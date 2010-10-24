@@ -3,5 +3,4 @@ module Restfulie::Common::Representation
   autoload :Generic, 'restfulie/common/representation/generic'
   autoload :Json, 'restfulie/common/representation/json'
   autoload :Links, 'restfulie/common/representation/links'
-  autoload :OpenSearch, 'restfulie/common/representation/open_search'
 end

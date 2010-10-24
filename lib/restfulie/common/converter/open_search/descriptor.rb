@@ -1,4 +1,4 @@
-class Restfulie::Common::Representation::OpenSearch::Descriptor
+class Restfulie::Common::Converter::OpenSearch::Descriptor
   
   def initialize(hash)
     @hash = hash["OpenSearchDescription"]

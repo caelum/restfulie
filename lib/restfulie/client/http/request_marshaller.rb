@@ -9,7 +9,6 @@ module Restfulie
         def initialize(requester)
           @requester = requester
           @requester.response_handler= Restfulie::Client::Response::CacheHandler.new(@requester.response_handler)
-          @requester.response_handler= Restfulie::Client::Response::UnmarshallHandler.new(self, @requester.response_handler)
           @requester.response_handler= Restfulie::Client::Response::CreatedRedirect.new(self, @requester.response_handler)
           @raw = false
         end
@@ -22,7 +21,8 @@ module Restfulie
           'application/atom+xml' => ::Restfulie::Common::Converter::Atom,
           'application/xml'      => ::Restfulie::Common::Converter::Xml,
           'text/xml'             => ::Restfulie::Common::Converter::Xml,
-          'application/json'     => ::Restfulie::Common::Converter::Json
+          'application/json'     => ::Restfulie::Common::Converter::Json,
+          'application/opensearchdescriptor+xml' => ::Restfulie::Common::Converter::OpenSearch
         }
         
         def self.register_representation(media_type,representation)
