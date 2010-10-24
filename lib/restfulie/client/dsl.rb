@@ -9,6 +9,7 @@ module Restfulie::Client
       request :setup_header
       request :serialize_body
       request :enhance_response
+      request :follow_request
     end
     
     def request(what)

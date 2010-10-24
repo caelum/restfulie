@@ -6,7 +6,6 @@ class Restfulie::Client::Feature::SerializeBody
       
       payload = env[:body]
       if payload && !(payload.kind_of?(String) && payload.empty?)
-        debugger
         type = request.headers['Content-Type']
         raise Restfulie::Common::Error::RestfulieError, "Missing content type related to the data to be submitted" unless type
       
