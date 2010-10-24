@@ -104,6 +104,8 @@ module Restfulie
             @contributors
           end
         
+          include Restfulie::Common::Links
+
           # It has one required attribute, href, and five optional attributes: rel, type, hreflang, title, and length
           def links
             return @links if @links

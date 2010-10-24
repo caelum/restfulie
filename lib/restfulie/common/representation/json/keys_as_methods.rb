@@ -44,6 +44,8 @@ module Restfulie
             class << self; self; end
           end
           
+          include Restfulie::Common::Links
+
           # easy accessors to links
           def links
             some_links = self["link"]
