@@ -10,21 +10,11 @@ module Restfulie
           @requester = requester
           @requester.response_handler= Restfulie::Client::Response::CacheHandler.new(@requester.response_handler)
           @requester.response_handler= Restfulie::Client::Response::CreatedRedirect.new(self, @requester.response_handler)
-          @raw = false
         end
         
-        def raw?
-          @raw
-        end
-    
         def accepts(media_types)
           @default_representation = Restfulie::Common::Converter.content_type_for(media_types)
           delegate(:accepts, media_types)
-        end
-    
-        def raw
-          @raw = true
-          self
         end
     
         # Executes super if its a raw request, returning the content itself.
