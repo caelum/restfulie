@@ -16,27 +16,9 @@ module Restfulie
         def raw?
           @raw
         end
-        
-        @@representations = {
-          'application/atom+xml' => ::Restfulie::Common::Converter::Atom,
-          'application/xml'      => ::Restfulie::Common::Converter::Xml,
-          'text/xml'             => ::Restfulie::Common::Converter::Xml,
-          'application/json'     => ::Restfulie::Common::Converter::Json,
-          'application/opensearchdescriptor+xml' => ::Restfulie::Common::Converter::OpenSearch
-        }
-        
-        def self.register_representation(media_type,representation)
-          @@representations[media_type] = representation
-        end
-
-        def self.content_type_for(media_type)
-          return nil unless media_type
-          content_type = media_type.split(';')[0] # [/(.*?);/, 1]
-          @@representations[content_type]
-        end
     
         def accepts(media_types)
-          @default_representation = @@representations[media_types]
+          @default_representation = Restfulie::Common::Converter.content_type_for(media_types)
           delegate(:accepts, media_types)
         end
     
@@ -55,7 +37,7 @@ module Restfulie
             rel = self.respond_to?(:rel) ? self.rel : ""
             type = headers['Content-Type']
             raise Restfulie::Common::Error::RestfulieError, "Missing content type related to the data to be submitted" unless type
-            marshaller = RequestMarshaller.content_type_for(type)
+            marshaller = Restfulie::Common::Converter.content_type_for(type)
             raise Restfulie::Common::Error::RestfulieError, "Missing content type for #{type} related to the data to be submitted" unless marshaller
             payload = marshaller.marshal(payload, { :rel => rel, :recipe => recipe }) unless payload.nil? || (payload.kind_of?(String) && payload.empty?)
             args = set_marshalled_payload(method, path, payload, *args)
@@ -63,7 +45,7 @@ module Restfulie
           end
     
           if @acceptable_mediatypes
-            unmarshaller = RequestMarshaller.content_type_for(@acceptable_mediatypes)
+            unmarshaller = Restfulie::Common::Converter.content_type_for(@acceptable_mediatypes)
             args = add_representation_headers(method, path, unmarshaller, *args)
           end
     
