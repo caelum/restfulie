@@ -39,12 +39,7 @@ module Restfulie
           end
 
           def method_missing(method)
-            value = text(method)
-            unless value
-              super
-            else
-              value
-            end
+            text(method) || super
           end
 
         protected 
@@ -54,12 +49,12 @@ module Restfulie
           end
       
           def set_text(node_name, value)
-            unless (node = @doc.at_xpath("xmlns:#{node_name}"))
-              node = create_element(node_name, value)
-              node.parent = @doc
-            else
+            if (node = @doc.at_xpath("xmlns:#{node_name}"))
               value = value.xmlschema if value.kind_of?(Time) || value.kind_of?(DateTime)
               node.content = value
+            else
+              node = create_element(node_name, value)
+              node.parent = @doc
             end
           end
       

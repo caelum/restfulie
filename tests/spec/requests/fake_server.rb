@@ -40,11 +40,11 @@ class FakeServer < Sinatra::Base
   end
 
   put "/test/?" do
-    'OK'
+    '<content>OK</content>'
   end
 
   delete "/test/?" do
-    'OK'
+    '<content>OK</content>'
   end
 
   get "/test/:error" do

@@ -95,21 +95,20 @@ namespace :test do
     FakeServer.start_server_and_run_spec "full-examples/rest_from_scratch/part_3"
   end
   
+  task :sinatra do
+    FakeServer.start_sinatra do
+      puts "Press something to quit"
+      gets
+    end
+  end
+  
   task :all => ["spec","integration"]
   
-  # namespace :rcov do
-  #   Spec::Rake::SpecTask.new('rcov') do |t|
-  #       t.spec_opts = %w(-fs --color)
-  #       t.spec_files = FileList['spec/units/**/*_spec.rb']
-  #       t.rcov = true
-  #       t.rcov_opts = ["-e", "/Library*", "-e", "~/.rvm", "-e", "spec", "-i", "bin"]
-  #     end
-  #     desc 'Run coverage test with fake server'
-  #     task :run do
-  #       start_server_and_invoke_test('test:rcov:rcov')
-  #     end
-  # end
-  
+end
+
+RSpec::Core::RakeTask.new(:spec) do |t|
+  # t.spec_files = FileList['spec_*.rb']
+  t.spec_opts = ['--colour', '--format progress']
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

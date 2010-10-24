@@ -8,16 +8,23 @@ require 'rspec/rails'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
+class Object
+  def debug
+    debugger
+    self
+  end
+end
+
 module ResponseMatchers
 
   class ResponseStatus
 
     def initialize(response_code)
-      @expected_code = response_code.to_i
+      @expected_code = response_code.to_s
     end
 
     def matches?(response_header)
-      @actual_code = response_header[2].code
+      @actual_code = response_header.code
       @expected_code == @actual_code
     end
 

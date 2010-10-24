@@ -4,7 +4,11 @@ module Restfulie
     module Representation
       class Json
         class Link
-          include Restfulie::Client::HTTP::LinkRequestBuilder
+          def follow
+            r = Restfulie.at(href)
+            r = r.as(type) if type
+            r
+          end
         end
       end
     end

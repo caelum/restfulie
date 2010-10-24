@@ -18,6 +18,11 @@ module Restfulie
           def type
             content_type
           end
+          def follow
+            r = Restfulie.at(href)
+            r = r.as(content_type) if content_type
+            r
+          end
         end
       end
     end

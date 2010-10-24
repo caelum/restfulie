@@ -1,0 +1,5 @@
+--colour
+--format html:doc/rspec_results.html
+--format specdoc
+--loadby mtime
+--reverse
