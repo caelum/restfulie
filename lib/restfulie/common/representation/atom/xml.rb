@@ -39,12 +39,7 @@ module Restfulie
           end
 
           def method_missing(method)
-            value = text(method)
-            unless value
-              super
-            else
-              value
-            end
+            text(method) || super
           end
 
         protected 
