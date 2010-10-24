@@ -10,23 +10,16 @@ module Restfulie::Client::Feature
     # * <tt>method: :get,:post,:delete,:head,:put</tt>
     # * <tt>path: '/posts'</tt>
     # * <tt>args: payload: 'some text' and/or headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
-    def request!(method, host, path, request, flow, env, *args)
-      headers = request.default_headers.merge(args.extract_options!)
-      unless host.user.blank? && host.password.blank?
-        headers["Authorization"] = "Basic " + ["#{host.user}:#{host.password}"].pack("m").delete("\r\n")
-      end
-      headers.delete :recipe
-      headers['cookie'] = request.cookies if request.cookies
-      args << headers
+    def request!(method, host, path, request, flow, env)
 
-      ::Restfulie::Common::Logger.logger.info(request.http_to_s(method, path, *args)) if ::Restfulie::Common::Logger.logger
+      ::Restfulie::Common::Logger.logger.info(request.http_to_s(method, path, [request.headers])) if ::Restfulie::Common::Logger.logger
       begin
         http_request = get_connection_provider(host)
 
         cached = Restfulie::Client.cache_provider.get([host, path], http_request, method)
         return cached if cached
 
-        response = http_request.send(method, path, *args)
+        response = http_request.send(method, path, request.headers)
       rescue Exception => e
         response = e
       end

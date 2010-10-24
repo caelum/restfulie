@@ -2,6 +2,7 @@ module Restfulie::Client::Feature
   module Base
   
     attr_reader :default_headers, :cookies, :verb, :host
+    attr_writer :headers
   
     #Set host
     def at(url)
@@ -68,12 +69,6 @@ module Restfulie::Client::Feature
       result << headers.collect { |key, value| "#{key}: #{value}" }.join("\n")
 
       (result + [body ? (body.inspect + "\n") : nil]).compact.join("\n") << "\n"
-    end
-
-    protected
-
-    def headers=(h)
-      @headers = h
     end
 
   end
