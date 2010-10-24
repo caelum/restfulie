@@ -84,55 +84,54 @@ module Restfulie
         
           # Author have name, and optional uri and email, this describes a person
           def authors
-            unless @authors
-              @authors = TagCollection.new(@doc)
-              @doc.xpath("xmlns:author").each do |author|
-                @authors << Person.new("author", author)
-              end
+            return @authors if @authors
+
+            @authors = TagCollection.new(@doc)
+            @doc.xpath("xmlns:author").each do |author|
+              @authors << Person.new("author", author)
             end
+            @authors
             
-            return @authors
           end
         
           def contributors
-            unless @contributors
-              @contributors = TagCollection.new(@doc)
-              @doc.xpath("xmlns:author").each do |contributor|
-                @contributors << Person.new("contributor", contributor)
-              end
+            return @contributors if @contributors
+
+            @contributors = TagCollection.new(@doc)
+            @doc.xpath("xmlns:author").each do |contributor|
+              @contributors << Person.new("contributor", contributor)
             end
-            
-            return @contributor
+            @contributors
           end
         
           # It has one required attribute, href, and five optional attributes: rel, type, hreflang, title, and length
           def links
-            unless @links
-              @links = TagCollection.new(@doc) do |array, symbol, *args|
-                linkset = array.select {|link| link.rel == symbol.to_s }
-                unless linkset.empty?
-                  linkset.size == 1 ? linkset.first : linkset
-                else
-                  nil
-                end          
-              end
-              @doc.xpath("xmlns:link").each do |link|
-                @links << Link.new(link)
-              end        
-            end
+            return @links if @links
             
-            return @links
+            @links = TagCollection.new(@doc) do |array, symbol, *args|
+              linkset = array.select {|link| link.rel == symbol.to_s }
+              unless linkset.empty?
+                linkset.size == 1 ? linkset.first : linkset
+              else
+                nil
+              end          
+            end
+            @doc.xpath("xmlns:link").each do |link|
+              @links << Link.new(link)
+            end        
+            @links
+            
           end
         
           def categories
-            unless @categories
-              @categories = TagCollection.new(@doc)
-              @doc.xpath("xmlns:category").each do |category|
-                @categories << Link.new(category)
-              end        
-            end
+            return @categories if @categories
             
-            return @categories
+            @categories = TagCollection.new(@doc)
+            @doc.xpath("xmlns:category").each do |category|
+              @categories << Link.new(category)
+            end        
+            @categories
+            
           end
         end
       end
