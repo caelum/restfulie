@@ -1,10 +1,7 @@
 module Restfulie
   module Common
     module Converter
-      autoload :Values, 'restfulie/common/converter/values'
-      autoload :Atom, 'restfulie/common/converter/atom'
-      autoload :Json, 'restfulie/common/converter/json'
-      autoload :Xml, 'restfulie/common/converter/xml'
+      Dir["#{File.dirname(__FILE__)}/converter/*.rb"].each {|f| autoload File.basename(f)[0..-4].camelize.to_sym, f }
 
       # Returns the default root element name for an item or collection
       def self.root_element_for(obj)
