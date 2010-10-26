@@ -72,6 +72,7 @@ GEM
       thor (~> 0.14.0)
     rake (0.8.7)
     rcov (0.9.8)
+    respondie (0.9.0)
     rspec (2.0.0.beta.19)
       rspec-core (= 2.0.0.beta.19)
       rspec-expectations (= 2.0.0.beta.19)
@@ -117,6 +118,7 @@ DEPENDENCIES
   rack-conneg
   rails (>= 3.0.0)
   rcov
+  respondie
   rspec-rails (>= 2.0.0.beta.19)
   ruby-debug
   sinatra
