@@ -4,7 +4,6 @@ module Restfulie::Client::Feature
   end
 end
 
-
 module Restfulie::Client::Feature::OpenSearch
   
   def search(params)
