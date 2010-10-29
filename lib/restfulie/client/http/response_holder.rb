@@ -20,6 +20,10 @@ module Restfulie::Client::HTTP
       @request = request
       @response = response
     end
+
+    def verb
+      @request.verb
+    end
         
   end
 end
