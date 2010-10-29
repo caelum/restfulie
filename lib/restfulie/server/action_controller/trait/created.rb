@@ -6,7 +6,7 @@ module Restfulie::Server::ActionController
 
       def to_format
         if (options[:status] == 201) || (options[:status] == :created)
-          head :status => 201, :location => controller.url_for(resource)
+          render :status => 201, :location => controller.url_for(resource), :text => ""
         else
           super
         end
