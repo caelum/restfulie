@@ -86,16 +86,13 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
     max_age_header = value_for(field, /^max-age=(\d+)/)
     return false if max_age_header.nil?
     
-    if value_for(field, /^no-store/)
-      false
-    else
-      true
-    end
+    return !value_for(field, /^no-store/)
   end
 
   # extracts the header value for an specific expression, which can be located at the start or in the middle
   # of the expression
   def value_for(value, expression)
+    value = value[0] if value.kind_of? Array
     value.split(",").find { |obj| obj.strip =~ expression }
   end
   
