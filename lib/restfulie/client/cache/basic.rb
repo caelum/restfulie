@@ -52,8 +52,9 @@ module Restfulie::Client::Cache
       found = cache.read(key).find do |cached|
         old_req = cached.first
         old_response = cached.last
-        if old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req) &&
-          old_response.method == req.verb
+        
+        headers_match = old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req)
+        if headers_match && old_response.verb == req.verb
           old_response
         else
           false
