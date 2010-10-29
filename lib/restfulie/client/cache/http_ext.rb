@@ -59,13 +59,13 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
   
   def has_expired_cache?
     return true if headers['date'].nil?
-    max_time = Time.rfc2822(headers['date']) + cache_max_age.seconds
+    max_time = Time.rfc2822(headers['date'][0]) + cache_max_age.seconds
     Time.now > max_time
   end
 
   # checks if the header's max-age is available and no no-store if available.
   def may_cache?
-    may_cache_field?(headers['cache-control'])
+    may_cache_method? && may_cache_field?(headers['cache-control'])
   end
   
   # Returns whether this cache control field allows caching
@@ -113,9 +113,14 @@ module Restfulie::Client::HTTP::ResponseCacheCheck
     end
   end
     
+  private
+  def may_cache_method?
+    verb == :get || verb == :post
+  end
 end
 
-class Restfulie::Client::HTTP::Response
+class Net::HTTPResponse
   include Restfulie::Client::HTTP::ResponseStatus
   include Restfulie::Client::HTTP::ResponseCacheCheck
+
 end
