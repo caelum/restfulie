@@ -14,9 +14,6 @@ class Restfulie::Client::Feature::BaseRequest
     begin
       http_request = get_connection_provider(host)
 
-      cached = Restfulie::Client.cache_provider.get([host, path], http_request, method)
-      return cached if cached
-
       if env[:body]
         response = http_request.send(method, path, env[:body], request.headers)
       else
