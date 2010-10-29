@@ -14,10 +14,10 @@ module Restfulie::Client::Cache
       response
     end
 
-    def get(key, request, verb)
+    def get(key, request)
 
       # debugger
-      response = cache_get(key, request, verb)
+      response = cache_get(key, request)
       return nil if response.nil?
 
       if response.has_expired_cache?
@@ -47,13 +47,13 @@ module Restfulie::Client::Cache
       cache.write(key, values)
     end
 
-    def cache_get(key, req, verb)
+    def cache_get(key, req)
       return nil unless cache.exist?(key)
       found = cache.read(key).find do |cached|
         old_req = cached.first
         old_response = cached.last
         if old_response.vary_headers_for(old_req) == old_response.vary_headers_for(req) &&
-          old_response.method == verb
+          old_response.method == req.verb
           old_response
         else
           false
