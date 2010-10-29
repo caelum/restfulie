@@ -35,7 +35,7 @@ module Restfulie
       register 'text/xml' , ::Restfulie::Common::Converter::Xml
       register 'application/json' , ::Restfulie::Common::Converter::Json
       register 'application/opensearchdescription+xml' , ::Restfulie::Common::Converter::OpenSearch
-      
+      register 'application/x-www-form-urlencoded', Restfulie::Common::Converter::FormUrlEncoded
       
     end
   end
