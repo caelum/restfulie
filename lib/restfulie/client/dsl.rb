@@ -9,7 +9,7 @@ module Restfulie::Client
       request :setup_header
       request :serialize_body
       request :enhance_response
-      request :cache
+      # request :cache
       request :follow_request
     end
     
