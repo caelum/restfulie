@@ -14,6 +14,9 @@ class Restfulie::Client::Feature::FollowRequest
 
   def execute(flow, request, response, env)
     resp = flow.continue(request, response, env)
+    if !resp.respond_to?(:code)
+      return resp
+    end
     code = resp.code.to_i
     if follow_codes.include?(code)
       if code==201 && !resp.body.empty?
