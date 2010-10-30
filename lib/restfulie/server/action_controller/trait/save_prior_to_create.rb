@@ -1,6 +1,6 @@
 module Restfulie::Server::ActionController::Trait::SavePriorToCreate
   def to_format
-    if controller.response.code==201
+    if (options[:status] == 201) || (options[:status] == :created)==201
       if resource.save
         super
       else
