@@ -42,6 +42,11 @@ module Restfulie
       
         # keeps changing from a steady state to another until its goal has been achieved
         def run
+
+          # load the steps and scenario
+          @goal.steps 
+          @goal.scenario 
+
           if @start.kind_of? String
             client = Restfulie.at(@start)
             client = client.follow if @follow
@@ -51,10 +56,6 @@ module Restfulie
             # probably configured thru the Rest Process Model class
             @start = current = @goal.class.get_restfulie.get
           end
-          
-          # load the steps and scenario
-          @goal.steps 
-          @goal.scenario 
           
           while(!@goal.completed?(current))
             current = @walker.move(@goal, current, self)
