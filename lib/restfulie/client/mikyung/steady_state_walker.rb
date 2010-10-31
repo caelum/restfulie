@@ -14,7 +14,7 @@ module Restfulie
         private
         
           def try_to_execute(step, current, max_attempts, mikyung)
-            raise "Unable to proceed when trying to #{step}" if max_attempts == 0
+            raise "Unable to proceed when trying to analyze #{step.body}" if max_attempts == 0
         
             resource = step
             raise "Step returned 'give up'" if resource.nil?
