@@ -16,9 +16,7 @@ context Restfulie::Client::Cache::Restrictions do
   it "should cache if the response may be cached" do
     request = Object.new
     response = mock(Net::HTTPResponse)
-    Restfulie::Client::Cache::Restrictions.should_receive(:may_cache_method?).with(:get).and_return true
     response.should_receive(:may_cache?).and_return true
-    response.should_receive(:method).and_return :get
         
     Restfulie::Client::Cache::Restrictions.may_cache?(response).should be_true
   end
