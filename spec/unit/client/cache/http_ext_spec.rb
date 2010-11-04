@@ -5,7 +5,7 @@ class HashResponse
   attr_accessor :code
 end
 
-context Restfulie::Client::HTTP::Response do
+context Restfulie::Client::HTTP::ResponseStatus do
   
   def check_complies_with(from, to, method)
     o = HashResponse.new
@@ -41,7 +41,7 @@ context Restfulie::Client::HTTP::Response do
 
 end
 
-context Restfulie::Client::HTTP::Response do
+context Restfulie::Client::HTTP::ResponseStatus do
   
   before do
     @response = mock Net::HTTPResponse
