@@ -34,5 +34,5 @@ describe Restfulie::Client::Feature::RetryWhenUnavailable do
     end
     
   end
-  
+
 end
