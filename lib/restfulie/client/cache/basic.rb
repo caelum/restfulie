@@ -16,7 +16,6 @@ module Restfulie::Client::Cache
 
     def get(key, request)
 
-      # debugger
       response = cache_get(key, request)
       return nil if response.nil?
 
