@@ -1,9 +1,10 @@
 class Restfulie::Client::Feature::SerializeBody
   
-  def execute(flow, request, response, env)
+  def execute(flow, request, response, env = {})
     
     if should_have_payload?(request.verb)
       
+      env = env.dup
       payload = env[:payload] = env[:body]
       if payload && !(payload.kind_of?(String) && payload.empty?)
         type = request.headers['Content-Type']
