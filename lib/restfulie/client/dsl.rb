@@ -13,9 +13,9 @@ module Restfulie::Client
       request :follow_request
     end
     
-    def request(what)
+    def request(what, *args)
       req = "Restfulie::Client::Feature::#{what.to_s.classify}".constantize
-      @requests << req
+      @requests << {:type => req, :args => args}
       self
     end
 
@@ -32,7 +32,7 @@ module Restfulie::Client
       end
       if Restfulie::Client::Feature.const_defined? "#{sym.to_s.classify}Request"
         loaded = true
-        request "#{sym.to_s}Request"
+        request "#{sym.to_s}Request", *args
       end
       if loaded
         self
@@ -52,13 +52,13 @@ module Restfulie::Client
     def initialize(stack)
       @stack = stack.dup
     end
-    
+
     def continue(request, response, env)
       current = @stack.pop
       if current.nil?
         return response
       end
-      filter = current.new
+      filter = current[:type].new(current[:args])
       filter.execute(self, request, response, env)
     end
     
