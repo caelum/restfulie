@@ -59,7 +59,11 @@ module Restfulie::Client
         return response
       end
       filter = current[:type].new(current[:args])
-      filter.execute(self, request, response, env)
+      filter.execute(self.dup, request, response, env)
+    end
+    
+    def dup
+      Parser.new(@stack)
     end
     
   end
