@@ -23,8 +23,6 @@ spec = Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb', '[A-Z]*', 'lib/**/*.rng'].to_a
   s.add_dependency("nokogiri", [">= 1.4.2"])
-  s.add_dependency("actionpack", [">= 2.3.2"])
-  s.add_dependency("activesupport", [">= 2.3.2"])
   s.add_dependency("json_pure", [">= 1.2.4"])
 
   s.author = AUTHOR

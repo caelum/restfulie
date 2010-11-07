@@ -1,7 +1,9 @@
 # A sample Gemfile
 source :gemcutter
-#
-gem "rails", ">= 3.0.0"
+
+# gem "rails", ">= 3.0.0"
+gem "actionpack", ">= 3.0.0"
+gem "activesupport", ">= 3.0.0"
 gem "libxml-ruby"
 
 gem "rack-conneg"
