@@ -1,6 +1,6 @@
 class Restfulie::Client::Feature::SerializeBody
   
-  def execute(flow, request, response, env = {})
+  def execute(flow, request, env = {})
     
     if should_have_payload?(request.verb)
       
@@ -19,7 +19,7 @@ class Restfulie::Client::Feature::SerializeBody
       
     end
 
-    flow.continue(request, response, env)
+    flow.continue(request, env)
   end
   
   protected

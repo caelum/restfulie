@@ -13,7 +13,9 @@ module Restfulie::Client::HTTP
     end
     
     def headers
-      response.to_hash
+      h = response.to_hash
+      h.extend(::Restfulie::Client::HTTP::LinkHeader)
+      h
     end
     
     def results_from(request, response)

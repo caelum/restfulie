@@ -5,10 +5,10 @@
 module Restfulie::Client::Feature
   class RetryWhenUnavailable
 
-  	def execute(chain, request, response, env)
-  		resp = chain.continue(request, response, env)
+  	def execute(chain, request, env)
+  		resp = chain.continue(request, env)
   		if should_retry?(resp, env)
-  			resp = chain.continue(request, response, env)
+  			resp = chain.continue(request, env)
   		end
   		resp
   	end

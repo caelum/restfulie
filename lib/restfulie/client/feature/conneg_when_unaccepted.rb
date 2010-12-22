@@ -9,8 +9,8 @@
 module Restfulie::Client::Feature
   class ConnegWhenUnaccepted
     
-  	def execute(chain, request, response, env)
-			resp = chain.continue(request, response, env)
+  	def execute(chain, request, env)
+			resp = chain.continue(request, env)
 			return resp if resp.code.to_i!=406
 		  
 			accept = Restfulie::Common::Converter.find_for(response.headers["Accept"])
@@ -18,7 +18,7 @@ module Restfulie::Client::Feature
 		  
     	request.with("Content-type", accept)
     	env = env.dup.merge(:body => env[:payload])
-    	Restfulie::Client::Feature::SerializeBody.new.execute(chain, request, response, env)
+    	Restfulie::Client::Feature::SerializeBody.new.execute(chain, request, env)
   	end
 
   end
