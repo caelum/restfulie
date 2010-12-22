@@ -15,13 +15,13 @@ describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
     
     it "should not retry execution by default if response code is not 406" do
       @response.stub(:code).and_return("404")
-      @feature.execute(@chain, @request, @response, {}).should == @response
+      @feature.execute(@chain, @request, {}).should == @response
     end
 
     it "should not retry execution if there is no content type agreed on" do
       @response.stub(:code).and_return("406")
       Restfulie::Common::Converter.should_receive(:find_for).with(["application/xml"]).and_return(nil)
-      @feature.execute(@chain, @request, @response, {}).should == @response
+      @feature.execute(@chain, @request, {}).should == @response
     end
 
     it "should retry execution by default if response code is 503" do
@@ -35,9 +35,9 @@ describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
       Restfulie::Client::Feature::SerializeBody.should_receive(:new).and_return(following)
 
       second_response = mock Net::HTTPResponse
-      following.should_receive(:execute).with(@chain, @request, @response, env.dup.merge(:body => env[:payload])).and_return(second_response)
+      following.should_receive(:execute).with(@chain, @request, env.dup.merge(:body => env[:payload])).and_return(second_response)
       
-      @feature.execute(@chain, @request, @response, env).should == second_response
+      @feature.execute(@chain, @request, env).should == second_response
     end
     
   end
