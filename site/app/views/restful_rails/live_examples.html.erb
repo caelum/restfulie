@@ -1,0 +1,66 @@
+<div id="textoCapitulo">
+	We have a live example of a server implementation using a resource+hypermedia course ordering system available.<br/>
+<br/>
+	Follow the steps below to try out the system:<br/>
+<br/>
+<ol>
+	<li><a href="http://restfulie-test.heroku.com">Access the server system</a></li>
+	<li>Create a couple of trainings</li>
+	<li>Create an order</li>
+	<li>Access the order listing and retrieve its xml link</li>
+</ol>
+<br/>
+	And now you can try the restfulie client api through a simple and generic resource+hypermedia client application:<br/>
+<br/>
+<ol>
+	<li><a href="http://restfulie-client.heroku.com">Access the client system</a></li>
+	<li>Enter your order uri</li>
+	<li>Check your order information which was retrieved and all available actions</li>
+</ol>
+<br/>
+	Now you can either:<br/>
+<br/>
+<ul>
+	<li><b>latest</b> - refresh your order information  _order.latest_</li>
+	<li><b>cancel</b> - cancel your order (dead end!) _order.destroy_</li>
+	<li><b>pay</b> - pay for your order, and don't forget to send your (fake) credit card information _order.pay(payment)_</li>
+	<li><b>check_payment_info</b> - after paying you can check the payment information stored at the server _order.check_payment_info_</li>
+</ul>
+<br/>
+	In order to pay do not forget to send the parameter <b>payment</b> with a value as<br/>
+
+	<pre>
+<%=html'	 <payment>
+	   <amount>15</amount>
+	   <cardholder_name>Guilherme Silveira</cardholder_name>
+	   <card_number>123456789012</card_number>
+	   <expiry_month>12</expiry_month>
+	   <expiry_year>12</expiry_year>
+	 </payment>'%>
+	</pre>
+	
+	You can also test it using IRB:
+	
+<pre>
+<%=html'	 
+irb
+
+require "action_controller"
+require "active_record"
+require "restfulie/client"
+
+order = Restfulie.at("http://restfulie-test.heroku.com/orders/17").get
+puts order.status
+
+or
+
+class Order
+	uses_restfulie
+end
+
+order = Order.from_web "http://restfulie-test.heroku.com/orders/17"
+puts order.class
+puts order.status
+'%>
+</pre>
+</div>

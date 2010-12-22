@@ -1,0 +1,74 @@
+<div id="textoCapitulo">
+<h3>A generic controller</h3>
+
+Common resources will include CRUD, search and security features through the use of the appropriate HTTP verbs and characteritics.
+In order to make it easier to deal with those cases, <b>Restfulie</b> has a custom generic controller that you can either inherit from or include its content into your own controller:
+
+<pre>
+class CitiesController < ApplicationController
+  include Restfulie::Server::Controller
+end
+</pre>
+
+<h3><a name="404">Automatic 404 support</a></h3>
+
+For all single model related requests, a <b>404</b> response will be returned if the resource is not found.
+
+<h3><a name="show">Inherited method: show</a></h3>
+
+The default <b>show</b> method will search for the resource and, if not found, return <b>404</b>.
+
+If the resource is found, content negotiation takes place in order to render it according to the client preferences.
+
+<h3><a name="delete">Inherited method: delete</a></h3>
+
+The default <b>delete</b> method will search for the resource and, if not found, return <b>404</b>.
+
+If the resource is found, it will be deleted.
+
+<h3><a name="create">Inherited method: create</a></h3>
+
+The default <b>create</b> method will instantiate a model based on the request body string.
+
+<blockquote>Automatic creation does not support model creation based on request parameters if there is no body.</blockquote>
+
+The instantiated resource will be saved and, if successful, return a <b>201</b> with the resource location as the <b>Location</b> header.
+
+<h3><a name="update">Inherited method: update</a></h3>
+
+The default <b>update</b> method will instantiate a model based on the request body string.
+
+It will load the required resource and check if it can be updated by invoking the <b>can? :update</b> method. Your rest resource should contain such an option for its current state, as:
+
+<pre>class Order
+	def acts_as_restfulie |order, t|
+		t << [:update]
+	end
+end
+</pre>
+
+Update will return 415 if the content type does not match the ones understood by its model.
+
+You can update your model prior to updating it by implementing a <b>pre_update</b>:
+
+<pre>class OrdersController
+	def pre_update(model)
+		model.status = "force_an_specific_status_prior_to_update"
+	end
+end
+</pre>
+
+<h3>Cache info</h3>
+
+You can override the entire caching behavior by implementing the method <b>cache_info</b> in your controller. Restfulie currently supports both etag and last modified values for such fields.
+
+<pre>
+def cache_info
+  info = {:etag => self}
+  info[:etag] = self.etag if self.respond_to? :etag
+  info[:last_modified] = self.updated_at.utc if self.respond_to? :updated_at
+  info
+end
+</pre>
+
+</div>

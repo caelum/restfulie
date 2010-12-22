@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>restfulie</title>
+	<link href="screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="menu.css" rel="stylesheet" type="text/css" media="screen" />
+    <!--[if lt IE 7]>
+    <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div id="headerWrap">
+    	<div id="headerContent">
+        	<h1 id="logoRestfulie"><span>restfulie</span></h1><!-- vraptorlogo-->
+            
+            <ul id="langMenu">
+            	<li><a id="engBtn" href="#.html"><span>ENGLISH</span></a></li>
+                <li><a id="ptBtn" href="#.html"><span>PORTUGUES</span></a></li>
+            </ul><!-- langMenu-->            
+        </div><!-- header content -->
+    </div><!-- header wrap-->
+
+    <div id="menuWrap">
+    	<ul id="menuElements">
+        	<li><a href="index.html"><span>home</span></a></li>
+			<li><a href="documentacao.html"><span>documentação</span></a></li>
+			<li><a href="beneficios.html"><span>benefícios</span></a></li>						
+        	<li><a href="suporte.html"><span>suporte</span></a></li>
+        </ul><!-- menuElements-->
+    </div><!-- menuWrap-->
+    
+	<div id="contentWrap">
+    	<div id="contentDocumentacao">
+        	<h2><span>documentação</span></h2>
+            <h3>documentação toda em português, configuração, migração e utilização.</h3>
+            
+            <div id="subMenuDoc">
+            	<img id="positionTop" src="images/subMenuTop-trans.png" />
+                <img id="positionBottom" src="images/subMenuBottom-trans.png" />
+            	<ol type="1">
+                	<li><a href="#.html">1-VRaptor3 - Guia de 1 minuto</a></li>
+                    <li><a href="#.html">2-Configurações avancadas: sobrescrevendo as convenções e comportamento do VRaptor</a></li>
+                    <li><a href="#.html">3-Resources-Rest</a></li>
+                    <li><a href="#.html">4-Componentes</a></li>
+                </ol>
+            </div><!-- submenu-->
+                        
+            <div id="textoCapitulo">
+<h2>VRaptor3 - Guia de 1 minuto</h2>
+<p>O VRaptor 3 foca em simplicidade e, portanto, todas as funcionalidades que você verá têm como primeira meta resolver o problema do programador da maneira menos intrusiva possível em seu código. Tanto para salvar, remover, buscar e atualizar ou ainda funcionalidades que costumam ser mais complexas como upload e download de arquivos, resultados em formatos diferentes (xml, json, xhtml etc), tudo isso é feito através de funcionalidades simples do VRaptor 3, que sempre procuram encapsular HttpServletRequest, Response, Session e toda a API do javax.servlet.</p>
+<h3>Começando um projeto</h3>
+<p>Você pode começar seu projeto a partir do vraptor-blank-project, que contém as dependências necessárias e a configuração no web.xml para começar seu projeto. 
+Ele pode ser baixado em: <a href=" http://vraptor.caelum.com.br/download.html">http://vraptor.caelum.com.br/download.html</a></p>
+<h3>Um controller simples</h3>
+<p>Com o VRaptor configurado no seu web.xml, basta criar os seus controllers para receber as requisições e começar a construir seu sistema. Um controller simples seria:</p>
+<pre>
+/*
+* anotando seu controller com @Resource, seus métodos públicos ficarão disponíveis
+* para receber requisições web.
+*/
+@Resource
+public class ClientsController {
+   
+    private ClientDao dao;
+   
+    /*
+     * Você pode receber as dependências da sua classe no construtor, e o VRaptor vai
+     * se encarregar de criar ou localizar essas dependências pra você e usá-las pra
+     * criar o seu controller. Para que o VRaptor saiba como criar o ClientDao você
+     * deve anotá-lo com @Component.
+     */
+    public ClientsController(ClientDao dao) {
+        this.dao = dao;   
+    }
+   
+    /*
+     * Todos os métodos públicos do controller serão acessíveis via web.
+     * Neste caso, o método form estará acessível pela URI /clients/form,
+     * e a view padrão será /WEB-INF/jsp/clients/form.jsp
+     */
+    public void form() {
+    }
+
+    /*
+     * Você pode receber parâmetros no seu método, e o VRaptor vai tentar popular os
+     * campos dos parâmetro de acordo com a requisição. Se houver na requisição:
+     * custom.name=Lucas
+     * custom.address=R.Vergueiro
+     * então teremos os campos name e address do Client custom estarão populados com
+     * Lucas e R.Vergueiro via getters e setters
+     * URI: /clients/add
+     * view: /WEB-INF/jsp/clients/add.jsp
+     */
+    public void add(Client custom) {
+        dao.save(custom);
+    }
+   
+    /*
+     * O retorno do seu método é exportado para a view. Nesse caso, como o retorno é
+     * uma lista de clientes, a variável acessível no jsp será ${clientList}.
+     * URI: /clients/list
+     * view: /WEB-INF/jsp/clients/list.jsp
+     */
+    public List<Client> list() {
+        return dao.listAll():
+    }
+   
+    /*
+     * Se o retorno for um tipo simples, o nome da variável exportada será o nome da
+     * classe com a primeira letra minúscula. Nesse caso, como retornou um Client, a
+     * variável na jsp será ${client}.
+     * Devemos ter um parâmetro da requisição id=5 por exemplo, e o VRaptor vai
+     * fazer a conversão do parâmetro em Long, e passar como parâmetro do método.
+     * URI: /clients/view
+     * view: /WEB-INF/jsp/clients/view.jsp
+     */
+    public Client view(Long id) {
+        return dao.load(id);
+    }
+}
+</pre>
+<p>Para uma introdução mais detalhada, veja o Guia inicial de 10 minutos. </p>
+</div><!-- content -->
+            
+        </div><!-- content cnt -->
+    </div><!-- content wrap-->
+  
+     <div id="footerWrap">
+    	<div id="footerContent">
+            <div class="footbar">
+            	<img class="logoFooter" src="images/logoCaelumGray-trans.png" alt="vraptor logo" />                
+					<ul>
+                	<li>site map:</li>
+                    <li><a href="index.html">home</a></li>
+                    <li>|</li>
+                    <li><a href="rest.html">rest</a></li>
+                    <li>|</li>
+                    <li><a href="rails.html">rails</a></li>
+                    <li>|</li>
+                    <li><a href="java.html">java</a></li>
+                    <li>|</li>
+                    <li><a href="suporte.html">suporte</a></li>
+                </ul>
+                <p><a href="#.html">licença de uso</a> - Restfulie ©2009 Caelum - Ensino e Inovação</p>
+            </div><!-- footnote-->
+        </div><!-- footer content -->
+        <a id="signature" href="mailto:lokidg@gmail.com">loki|design</a>
+    </div><!-- footer wrap-->
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-270161-11");
+	pageTracker._trackPageview();
+	} catch(err) {}
+ </script>
+    
+</body>
+</html>

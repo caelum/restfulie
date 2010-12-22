@@ -1,0 +1,72 @@
+<div id="textoCapitulo">
+	
+	<h2>Client API</h2>
+	
+<p>	Entry points are commonly defined through a resource retrieval or creation request. Restfulie allows you to use both type of entry points through its API.</p>
+
+<h3><a name="get entry point">Resource retrieval entry point</a></h3>
+
+<p>Most systems will create a request retrieval entry point, which can be accessed as:</p>
+
+<pre>
+dynamic city = Restfulie.At('http://localhost:3000/cities/5.xml').Get();
+</pre>
+
+After that, the xml tree can be accessed and links followed. A typical city hypermedia file would be:
+
+<pre>
+&lt;city>
+	&lt;name>Sao Paulo&lt;/name>
+	&lt;population>
+		&lt;size>18000000&lt;/size>
+		&lt;growth>10&lt;/growth>
+	&lt;/population>
+	&lt;updated-at>10/01/2010&lt;/updated-at>
+	&lt;link rel="next_largest" href="http://localhost:3000/cities/18.xml" />
+&lt;/city>
+</pre>
+
+The information can be retrieved through the usual method invocations:
+
+<pre>
+Console.WriteLine(city.name);
+Console.WriteLine(string.format("Size {0} and  growth {1}", order.Population.Size, order.Population.Growth));
+</pre>
+
+By default, the attributes that uses the "-"  character in name will be converted to "_"
+
+<pre>
+Console.WriteLine(string.format("The last update was {0}", order.Update_At))
+</pre>
+
+And links can be followed as:
+
+<pre>
+dynamic next_one = city.Next_largest();
+</pre>
+
+Note that the client application knows what the <b>rel</b> attribute <b>next_largest</b> means, but does not know what it's value stands for (Rio de Janeiro).
+
+
+
+<h3><a name="response result">Acessing the web response</a></h3>
+
+In this case, you can access the http response through <b>web_response</b>, i.e.:
+
+<pre>
+dynamic city = Restfulie.At('http://localhost:3000/cities/5.xml').Get();
+Console.WriteLine(string.format("Response code {0}",city.WebResponse.StatusCode)); 
+Console.WriteLine(string.format("The content type is {0}", city.WebResponse.ContentType));
+</pre>
+
+	<h3>HTTP verbs</h3>
+
+	By default, restfulie uses the following table:
+
+<ul>
+	<li>destroy, cancel and delete send a DELETE request</li>
+	<li>update sends a PUT request</li>
+	<li>refresh, reload, show, latest sends a GET request</li>	
+</ul>
+
+</div>
