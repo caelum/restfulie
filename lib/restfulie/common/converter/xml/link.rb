@@ -23,6 +23,11 @@ module Restfulie
             r = r.as(content_type) if content_type
             r
           end
+          
+          def to_s
+            "<link to #{@options}>"
+          end
+          
         end
       end
     end
