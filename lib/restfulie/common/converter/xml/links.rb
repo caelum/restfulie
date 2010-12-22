@@ -4,18 +4,20 @@ module Restfulie
       module Xml
         
         # an object to represent a list of links that can be invoked
-        class Links < Array
+        class Links < Hash
           
           def initialize(links)
+            super()
             links = [links] unless links.kind_of? Array
             links = [] unless links
-            super(links.map { |l| Restfulie::Common::Converter::Xml::Link.new(l) })
+            links.each { |l|
+              link = Restfulie::Common::Converter::Xml::Link.new(l)
+              self[link.rel.to_s] = link
+            }
           end
           
           def method_missing(sym, *args)
-            find do |link|
-              link.rel == sym.to_s
-            end
+            self[sym.to_s]
           end
         end
       end

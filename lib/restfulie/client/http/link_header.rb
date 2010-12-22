@@ -9,7 +9,7 @@ module Restfulie::Client::HTTP
     end
     
     def link(rel)
-      links.send rel
+      links[rel]
     end
         
     private
