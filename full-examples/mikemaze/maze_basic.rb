@@ -2,30 +2,40 @@ require 'rubygems'
 require 'restfulie'
 require 'ruby-debug'
 
-Restfulie::Common::Logger.logger.level = Logger::DEBUG
+Restfulie::Common::Logger.logger.level = Logger::INFO
 
-map = Restfulie.at('http://amundsen.com/examples/mazes/2d/ten-by-ten/').accepts("application/xml").get
+current = Restfulie.at('http://amundsen.com/examples/mazes/2d/five-by-five/').accepts("application/xml").get.headers
 
 steps = 0
 
-visited = []
+visited = {}
 path = []
 
-while(!current.headers.link("exit")) do
+while(!current.link("exit"))  do
   
-  puts "available links are #{current.headers.links.keys}"
+  puts "available links are #{current.links.keys}"
+  puts current.links
   
   link = ["start", "east", "west", "south", "north"].find do |direction|
-    map.headers.link(direction) && !visited.contains[map.headers.link(direction).href]
+    # puts "#{direction} #{!visited[current.link(direction).href]}"
+    current.link(direction) && !visited[current.link(direction).href]
   end
   
-  if link
-    visited << link.href
-    path << link
-    current = link.follow.get
+  puts "found #{link}"
+  
+  if !link
+    path.pop
+    puts path
+    link = path.pop
   else
-    current = path.pop
+    link = current.link(link)
   end
+
+  visited[link.href] = true
+  path << link
+  response = link.follow.get
+  puts "response was #{response.code}"
+  current = response.headers
   
   steps = steps + 1
   
