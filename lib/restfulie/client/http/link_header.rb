@@ -15,7 +15,8 @@ module Restfulie::Client::HTTP
     private
 
     def link_header_to_array
-      self["link"].map do |link|
+      links = self["link"][0].split(",")
+      links.map do |link|
         string_to_hash(link)
       end
     end
