@@ -1,0 +1,6 @@
+This software tries to solve Mike Amundsen's maze problem by using the Restfulie
+Ruby client.
+
+To run it use:
+
+ruby maze_solver_spec.rb
