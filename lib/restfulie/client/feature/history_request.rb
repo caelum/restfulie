@@ -10,8 +10,8 @@
 #
 class Restfulie::Client::Feature::HistoryRequest
 
-  def execute(flow, request, response, env)
-    resp = flow.continue(request, response, env)
+  def execute(flow, request, env)
+    resp = flow.continue(request, env)
     request.make_snapshot(request)
     resp
   end

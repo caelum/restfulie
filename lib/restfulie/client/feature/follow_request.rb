@@ -12,8 +12,8 @@ class Restfulie::Client::Feature::FollowRequest
     self
   end
 
-  def execute(flow, request, response, env)
-    resp = flow.continue(request, response, env)
+  def execute(flow, request, env)
+    resp = flow.continue(request, env)
     if !resp.respond_to?(:code)
       return resp
     end

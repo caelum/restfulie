@@ -1,10 +1,10 @@
 class Restfulie::Client::Feature::Cache
   
-  def execute(flow, request, response, env)
+  def execute(flow, request, env)
     found = Restfulie::Client.cache_provider.get([request.host, request.path], request)
     return found if found
     
-    resp = flow.continue(request, response, env)
+    resp = flow.continue(request, env)
     if resp.kind_of?(Exception)
       resp
     else

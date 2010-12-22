@@ -1,6 +1,6 @@
 class Restfulie::Client::Feature::BaseRequest
   
-  def execute(flow, request, response, env)
+  def execute(flow, request, env)
     request!(request.verb, request.host, request.path, request, flow, env)
   end
   
@@ -24,7 +24,7 @@ class Restfulie::Client::Feature::BaseRequest
       response = e
     end
     
-    flow.continue(request, response, env)
+    response
     
   end
 

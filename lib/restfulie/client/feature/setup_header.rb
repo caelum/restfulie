@@ -2,7 +2,7 @@ module Restfulie::Client::Feature
 
   class SetupHeader
     
-    def execute(flow, request, response, env)
+    def execute(flow, request, env)
       headers = request.default_headers.dup.merge(request.headers)
       host = request.host
       if host.user || host.password
@@ -14,7 +14,7 @@ module Restfulie::Client::Feature
       # gs: this should not be overriden, do it in some other way
       request.headers = headers
       
-      flow.continue(request, response, env)
+      flow.continue(request, env)
     end
     
   end
