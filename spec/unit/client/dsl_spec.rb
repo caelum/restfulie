@@ -18,7 +18,7 @@ describe Restfulie::Client::Dsl do
       factory = Factory.new(do_nothing)
       parser = Restfulie::Client::Parser.new([factory])
       
-      args = [:req, :res, :env]
+      args = [:req, :env]
 
       do_nothing.should_receive(:execute).with(parser, *args)
       parser.continue(*args)
@@ -29,7 +29,7 @@ describe Restfulie::Client::Dsl do
       invoke_next = Object.new
       parser = Restfulie::Client::Parser.new([Factory.new(do_nothing), Factory.new(invoke_next)])
       
-      args = [:req, :res, :env]
+      args = [:req, :env]
 
       do_nothing.should_receive(:execute).with(parser, *args)
       def invoke_next.execute(parser, *args)
