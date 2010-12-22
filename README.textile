@@ -1,85 +1,50 @@
 h1. Web site
 
-Restfulie's website can be found at "http://restfulie.caelumobjects.com":http://restfulie.caelumobjects.com
-From there you can see some videos and read the "Restfulie from Scratch guide":http://restfulie.caelumobjects.com/caelumobjects-restful-rails.pdf.
+"http://restfulie.caelumobjects.com":"Restfulie's site" has a lot of information on Restfulie itself
 
 h1. Quit pretending
 
-CRUD through HTTP is a good step forward to using resources and becoming RESTful, another step further into it is to make use of hypermedia and semantic meaningful media types: this gem allows you to do it really fast.
+CRUD through HTTP and web services (aka Rest) in Rails is a good step forward to using resources and becoming RESTful, another step further into it is to make use of hypermedia and semantic meaningful media types: this gem allows you to do it really fast. Go go go!
 
-You can read the "article on using the web for real":http://guilhermesilveira.wordpress.com/2009/11/03/quit-pretending-use-the-web-for-real-restfulie/ which gives an introduction to hypermedia/resources/services.
+h2. Bite me!
 
-h2. Why would I use restfulie?
-
-#  Easy --> writing hypermedia and semantic meaningful media type aware clients
-#  Small -> it's not a bloated solution with a huge list of APIs
-#  HATEOAS --> clients you are unaware of will not bother if you change
-#  HATEOAS --> consumed resources will not affect your software whenever they change their flow
-#  Adaptability --> clients are able to adapt to your changes
- 
-h2. Simple server example
-
-In the server side, all you need to do is notify inherited_resources which media types you are able to represent your resource:
+One liners for your pleasure. First, how to let restfulie know which media types you can handle:
 
 <pre>
-	class OrdersController < ApplicationController
-	  include Restfulie::Server::ActionController::Base
-
+class ItemsController < ...
 	  respond_to :atom, :html, :xml, :commerce, :opensearch
+end
+</pre>
 
+Now let's handle them all:
+
+<pre>
 	  def index
 	    respond_with @orders = Order.all
 	  end
-
-	  def show
-	    respond_with @order = Order.find(params[:id])
-	  end
-
-	end
 </pre>
 
-That's it. Restfulie will take care of rendering a valid representation according to content negotiation. You can configure the rendering process through a custom tokamak view:
+And what is the *first* difference between simple web services with Rails and a REST architecture? Let's add hypermedia to the game:
 
 <pre>
-	collection(@orders) do |collection|
-	  collection.values do |value|
-		value.id = orders_url
-	  end
-	  
-	  collection.link("create", orders_url)
-	  collection.members
-	end
+memeber(@order) do |order|
+  order.link "payment", payment_url(order)
+end
 </pre>
 
-You can go through an entire application by "watching this video":http://guilhermesilveira.wordpress.com or "downloading an example application contained within the restfulie ":http://github.com/caelum/restfulie/tree/master/full-examples/rest_from_scratch/
-
-h2. Simple client example
-
-The following example is a partial REST client implementation that navigates through some relations:
+There you go, hypermedia, on the fly. You can also throw in link headers and much more fun for your life when maintaining your services. Lets grab it and navigate!
 
 <pre>
-order = Restfulie.at('http://localhost:3000/orders/1').get!
-order.items.each { |item| puts items }
-receipt = order.payment.post! { :amount => 500 }
-puts receipt.id
+response = Restfulie.at('http://localhost:3030/orders').get
+puts response.code
+
+orders = response.resource
+response = orders.link(payment).follow.post {creditcard => 4444}
 </pre>
 
-In order to create a full REST client, "watch this video":http://guilhermesilveira.wordpress.com.
+That was it for your first hypermedia introduction with Restfulie. Now its time for the real deal.
 
-h2. Full examples
-
-You can view an entire application running Restfulie under *spec/integration/order/server* and *spec/integration/order/client* in this git repository.
-
-"You can also download a full example of a REST based agent and server":http://github.com/caelum/restfulie/tree/master/full-examples/rest_from_scratch/ using Restfulie, according to the Rest Architecture Maturity Model.
-
-h2. Documentation
-
-Appart from the simple server and client examples provided here, you can find the following links useful:
-
-* "RDocs":http://rdoc.info/projects/caelum/restfulie
-* "Official website":http://restfulie.caelumobjects.com
-* "How-tos":http://restfulie.caelumobjects.com/caelumobjects-restful-rails.pdf
-* "Buying through Rest: Rest to the enterprise (video)":http://guilhermesilveira.wordpress.com/2010/04/13/buying-through-rest-applying-rest-to-the-enterprise/
+Download it, install it, use it, ask questions in the mailing list and read the documentation on Restfulie's website!
 
 h2. Installing
 
