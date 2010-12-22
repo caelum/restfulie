@@ -3,4 +3,4 @@ Ruby client.
 
 To run it use:
 
-ruby maze_solver_spec.rb
+ruby maze_basic.rb

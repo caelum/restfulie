@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'restfulie'
-require 'ruby-debug'
 
 Restfulie::Common::Logger.logger.level = Logger::INFO
 
@@ -16,8 +15,7 @@ while(!current.link("exit"))  do
   puts "available links are #{current.links.keys}"
   puts current.links
   
-  link = ["start", "east", "west", "south", "north"].find do |direction|
-    # puts "#{direction} #{!visited[current.link(direction).href]}"
+  link = ["start", "east", "west", "south", "north"].find do |direction|    # puts "#{direction} #{!visited[current.link(direction).href]}"
     current.link(direction) && !visited[current.link(direction).href]
   end
   
@@ -25,7 +23,6 @@ while(!current.link("exit"))  do
   
   if !link
     path.pop
-    puts path
     link = path.pop
   else
     link = current.link(link)
@@ -33,9 +30,7 @@ while(!current.link("exit"))  do
 
   visited[link.href] = true
   path << link
-  response = link.follow.get
-  puts "response was #{response.code}"
-  current = response.headers
+  current = link.follow.get.headers
   
   steps = steps + 1
   
