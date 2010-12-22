@@ -42,7 +42,7 @@ module Restfulie::Client
     end
     
     def request_flow(env = {})
-      Parser.new(@requests).continue(self, nil, env)
+      Parser.new(@requests).continue(self, env)
     end
 
   end
@@ -59,6 +59,7 @@ module Restfulie::Client
         return nil
       end
       filter = current[:type].new(current[:args])
+      Restfulie::Common::Logger.logger.debug "invoking filter #{filter.class.name} with #{request} at #{env}"
       filter.execute(self.dup, request, env)
     end
     

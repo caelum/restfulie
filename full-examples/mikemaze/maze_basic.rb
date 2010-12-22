@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'restfulie'
 
+Restfulie::Common::Logger.logger.level = Logger::DEBUG
+
 map = Restfulie.at('http://amundsen.com/examples/mazes/2d/ten-by-ten/').accepts("application/xml").get
 
 current = map.headers.link("start").follow.get
