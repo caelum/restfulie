@@ -1,0 +1,3 @@
+[submodule "full-examples/restfulie-restbuy"]
+	path = full-examples/restfulie-restbuy
+	url = git://github.com/caelum/restfulie-restbuy.git
