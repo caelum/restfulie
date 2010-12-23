@@ -1,4 +1,6 @@
 module Restfulie::Client::Cache
+  
+  # Cache restrictions that allow you to cache this response or not
   module Restrictions
     class << self
 
