@@ -1,15 +1,13 @@
 # A sample Gemfile
 source :gemcutter
 
-# gem "rails", ">= 3.0.0"
 gem "actionpack", ">= 3.0.0"
 gem "activesupport", ">= 3.0.0"
-gem "libxml-ruby"
 
 gem "rack-conneg"
-gem "json_pure"
 gem "sqlite3-ruby"
 gem "yard"
+gem "tokamak"
 
 gem "respondie"
 
