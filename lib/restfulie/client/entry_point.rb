@@ -5,7 +5,7 @@ module Restfulie
     module HTTP::RecipeModule
       def recipe(converter_sym, options={}, &block)
         raise 'Undefined block' unless block_given?
-        converter = "Restfulie::Common::Converter::#{converter_sym.to_s.camelize}".constantize
+        converter = "Tokamak::#{converter_sym.to_s.camelize}".constantize
         converter.describe_recipe(options[:name], &block) 
       end
 

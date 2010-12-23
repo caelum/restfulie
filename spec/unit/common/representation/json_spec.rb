@@ -1,17 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 require 'json'
 
-context Restfulie::Common::Representation::Json do
+context Tokamak::Representation::Json do
   
   before :all do
     full_json = IO.read(File.dirname(__FILE__) + '/../full_json.js')
-    @json = Restfulie::Common::Representation::Json.create(full_json)
+    @json = Tokamak::Representation::Json.create(full_json)
   end
   
   describe "JSON creation" do
   
     it "should be able to create an empty JSON object" do
-      json = Restfulie::Common::Representation::Json.create
+      json = Tokamak::Representation::Json.create
       json["id"] = "new_id"
       json["title"] = "new title"
       a_time = Time.now

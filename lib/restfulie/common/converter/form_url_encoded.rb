@@ -1,4 +1,4 @@
-class Restfulie::Common::Converter::FormUrlEncoded < Restfulie::Common::Representation::Generic
+class Restfulie::Common::Converter::FormUrlEncoded < Tokamak::Representation::Generic
   def self.marshal(content, rel)
       if content.kind_of? Hash
         content.map { |key, value| "#{key}=#{value}" }.join("&")

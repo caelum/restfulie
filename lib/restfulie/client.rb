@@ -15,7 +15,7 @@ module Restfulie
     mattr_accessor :cache_provider, :cache_store
 
     Restfulie::Client.cache_store = ActiveSupport::Cache::MemoryStore.new
-    Restfulie::Client.cache_provider = Restfulie::Client::Cache::Basic.new
+    Restfulie::Client.cache_provider = Restfulie::Client::Cache::Fake.new
 
   end
 end

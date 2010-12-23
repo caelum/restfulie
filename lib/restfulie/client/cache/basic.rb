@@ -33,6 +33,13 @@ module Restfulie::Client::Cache
       cache.clear
     end
 
+  protected
+  
+    # allows you to redefine the cache store
+    def cache
+      Restfulie::Client.cache_store
+    end
+
   private
 
     # allows response enhancement when the cache was hit with it
@@ -65,10 +72,6 @@ module Restfulie::Client::Cache
     def remove(key)
       cache.delete(key)
       nil
-    end
-
-    def cache
-      Restfulie::Client.cache_store
     end
 
   end

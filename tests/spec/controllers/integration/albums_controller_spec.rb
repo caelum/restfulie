@@ -19,7 +19,7 @@ describe AlbumsController do
     before do
       request.accept = "application/atom+xml"
       get :index, :format => :atom
-      @feed = Restfulie::Common::Representation::Atom::Factory.create(response.body)
+      @feed = Tokamak::Representation::Atom::Factory.create(response.body)
     end
     
     it "generation atom feed to get index" do
@@ -32,7 +32,7 @@ describe AlbumsController do
     
     it "members artists transitions included" do
       transitions = @feed.entries.first.links
-      transitions.find {|t| t.rel == 'artists'}.should be_kind_of(::Restfulie::Common::Representation::Atom::Link)
+      transitions.find {|t| t.rel == 'artists'}.should be_kind_of(::Tokamak::Representation::Atom::Link)
     end
   end # describe "get index"
   
@@ -42,7 +42,7 @@ describe AlbumsController do
       @album = Album.first
       pending
       get :show, :id => @album.id, :format => :atom
-      @entry = Restfulie::Common::Representation::Atom::Factory.create(response.body)      
+      @entry = Tokamak::Representation::Atom::Factory.create(response.body)      
     end
   
     it "generation atom entry" do

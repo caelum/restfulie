@@ -11,7 +11,7 @@ class AtomifiedModel
   end
 
   def to_atom(options={})
-    entry = Restfulie::Common::Representation::Atom::Entry.new
+    entry = Tokamak::Representation::Atom::Entry.new
     entry.id        = "entry1"
     entry.title     = "entry"
     entry.updated   = Time.parse("2010-05-03T16:29:26Z")

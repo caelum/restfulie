@@ -45,6 +45,7 @@ context Restfulie::Client::HTTP::ResponseStatus do
   
   before do
     @response = mock Net::HTTPResponse
+    @response.stub(:verb).and_return(:get)
     @response.extend Restfulie::Client::HTTP::ResponseCacheCheck
   end
 
@@ -133,7 +134,7 @@ context Restfulie::Client::HTTP::ResponseStatus do
       Time.should_receive(:now).and_return(201)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      @response.stub(:headers).and_return('date' => Object.new)
+      @response.stub(:headers).and_return('date' => [Object.new])
       @response.has_expired_cache?.should be_true
     end
 
@@ -141,7 +142,7 @@ context Restfulie::Client::HTTP::ResponseStatus do
       Time.should_receive(:now).and_return(199)
       Time.should_receive(:rfc2822).and_return(100)
       @response.should_receive(:cache_max_age).and_return(100)
-      @response.stub(:headers).and_return('date' => Object.new)
+      @response.stub(:headers).and_return('date' => [Object.new])
       @response.has_expired_cache?.should be_false
     end
 

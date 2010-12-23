@@ -1,14 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe Restfulie::Common::Representation::Atom do
+describe Tokamak::Representation::Atom do
   before :all do
     full_atom = IO.read(File.dirname(__FILE__) + '/../full_atom.xml')
-    @atom = Restfulie::Common::Representation::Atom::Factory.create(full_atom)
+    @atom = Tokamak::Representation::Atom::Factory.create(full_atom)
   end
   
   describe "Atom creation" do
     it "should be able to create an empty Feed object" do
-      feed = Restfulie::Common::Representation::Atom::Feed.new
+      feed = Tokamak::Representation::Atom::Feed.new
       feed.id = "new_id"
       feed.title = "new title"
       a_time = Time.now
@@ -21,7 +21,7 @@ describe Restfulie::Common::Representation::Atom do
     end
     
     it "should be able to create an empty Atom object" do
-      entry = Restfulie::Common::Representation::Atom::Entry.new
+      entry = Tokamak::Representation::Atom::Entry.new
       entry.id = "new_id"
       entry.title = "new title"
       a_time = Time.now
@@ -90,7 +90,7 @@ describe Restfulie::Common::Representation::Atom do
     end
   
     it "should write recommended attributes" do      
-      an_author = Restfulie::Common::Representation::Atom::Person.new("author", :name => "Trololo", :email => "trololo@tro.com")
+      an_author = Tokamak::Representation::Atom::Person.new("author", :name => "Trololo", :email => "trololo@tro.com")
       @atom.authors << an_author
       @atom.authors.size.should == 3
       @atom.authors.last.name.should == "Trololo"
@@ -102,7 +102,7 @@ describe Restfulie::Common::Representation::Atom do
       a_link.rel.should == "self"
       a_link.href.should == "http://example.com/albums/1"
       
-      @atom.links << Restfulie::Common::Representation::Atom::Link.new(:href => "http://example.com/albums/2", :rel => "alternate")
+      @atom.links << Tokamak::Representation::Atom::Link.new(:href => "http://example.com/albums/2", :rel => "alternate")
       @atom.links.size.should == 3
       
       @atom.links.delete(a_link)

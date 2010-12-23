@@ -4,7 +4,7 @@ module Restfulie::Client::HTTP
     
     def resource
       type = headers['content-type'] || response['Content-Type']
-      representation = Restfulie::Common::Converter.content_type_for(type[0]) || Restfulie::Common::Representation::Generic.new
+      representation = Restfulie::Common::Converter.content_type_for(type[0]) || Tokamak::Representation::Generic.new
       representation.unmarshal(response.body)
     end
     

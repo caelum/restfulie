@@ -9,7 +9,7 @@ class Array
       options[:skip_attributes]         = true      
     end
     
-    feed = Restfulie::Common::Representation::Atom::Feed.new
+    feed = Tokamak::Representation::Atom::Feed.new
     # TODO: Define better feed attributes
     # Array#to_s can return a very long string
     feed.title      = "Collection of #{map {|i| i.class.name }.uniq.to_sentence}"

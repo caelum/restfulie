@@ -2,7 +2,7 @@ class Hash
 
   def links(*args)
     links = fetch("link", [])
-    Restfulie::Common::Converter::Xml::Links.new(links)
+    Tokamak::Xml::Links.new(links)
   end
 
   include Restfulie::Common::Links

@@ -18,7 +18,7 @@ context Array do
     
     feed = [].to_atom do |f|
       f.title = "customized title"
-      f.authors << Restfulie::Common::Representation::Atom::Person.new("author", :name => 'John Doe')
+      f.authors << Tokamak::Representation::Atom::Person.new("author", :name => 'John Doe')
     end.to_xml
     
     feed.should include("<title>customized title</title")

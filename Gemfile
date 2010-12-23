@@ -1,4 +1,3 @@
-# A sample Gemfile
 source :gemcutter
 
 gem "actionpack", ">= 3.0.0"

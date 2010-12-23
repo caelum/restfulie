@@ -14,7 +14,7 @@ context Array do
     3.times { array << SimpleElement.new }
 
     array.each { |a|
-      a.should_receive(:to_atom).and_return(Restfulie::Common::Representation::Atom::Entry.new)
+      a.should_receive(:to_atom).and_return(Tokamak::Representation::Atom::Entry.new)
     }
     
     feed = array.to_atom
@@ -26,7 +26,7 @@ context Array do
     feed.id.to_s.should == array.hash.to_s
     
     feed.entries.size.should == 3
-    feed.entries.first.should be_kind_of(Restfulie::Common::Representation::Atom::Entry)
+    feed.entries.first.should be_kind_of(Tokamak::Representation::Atom::Entry)
   end
   
   it "accepts a block to customize fields" do
@@ -35,7 +35,7 @@ context Array do
     a = false
     array.to_atom do |f|
       a = true
-      f.should be_kind_of(Restfulie::Common::Representation::Atom::Feed)
+      f.should be_kind_of(Tokamak::Representation::Atom::Feed)
     end
     a.should be_true
     
