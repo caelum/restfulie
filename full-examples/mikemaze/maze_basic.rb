@@ -19,8 +19,6 @@ while(!current.link("exit"))  do
     current.link(direction) && !visited[current.link(direction).href]
   end
   
-  puts "found #{link}"
-  
   if !link
     path.pop
     link = path.pop
