@@ -1,5 +1,9 @@
 collection(@albums) do |collection|
   
+  collection.id "1"
+  collection.author do |author|
+     author.mais_coisa
+  end
   collection.values do |value|
     value.id      "1"
     value.title   "Index Album feed spec"
