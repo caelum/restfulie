@@ -6,4 +6,7 @@ class RestfulRailsController < ApplicationController
   def basic
   end
   
+  def examples
+  end
+  
 end
