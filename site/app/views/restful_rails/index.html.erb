@@ -70,22 +70,21 @@ end
 We are ready to go, hypermedia supported:
 
 <pre>
-	# using restfulie as an http api:
-	response = Restfulie.accepts("application/xml").
-						at('http://localhost:8080/items').get
-	puts response.body
-	puts response.code
-	
-	# unmarshalling the items response
-	items = response.resource
-	puts items.size
-	puts items[0].name
-	
-	# navigating through hypermedia
-	item = { :name => "New product", :price => 30 }
-	result = items.link("self").
-					follow.post item
-	puts result.code
+# using restfulie as an http api:
+response = Restfulie.accepts("application/xml").
+					at('http://localhost:8080/items').get
+puts response.body
+puts response.code
+
+# unmarshalling the items response
+items = response.resource
+puts items.size
+puts items[0].name
+
+# navigating through hypermedia
+item = { :name => "New product", :price => 30 }
+result = items.link("self").follow.post item
+puts result.code
 </pre>
 
 This is it. Adding hypermedia capabilities and following links. Now its time to use it in the <b>right way</b>.

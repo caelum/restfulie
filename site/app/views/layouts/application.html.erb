@@ -21,7 +21,7 @@
     <div id="menuWrap">
     	<ul id="menuElements">
         	<li><a href="<%=url_for :features%>"><span>quit pretending</span></a></li>
-        	<li><a href="<%=restfulie_rails_path%>"><span>rails</span></a></li>
+        	<li><a href="<%=url_for :controller => :restful_rails, :action => :index %>"><span>rails</span></a></li>
         	<li><a href="http://vraptor.caelum.com.br/documentation"><span>java</span></a></li>
         	<li><a href="<%=url_for :csharp%>"><span>c#</span></a></li>
         	<li><a href="<%= url_for :support%>"><span>support</span></a></li>
