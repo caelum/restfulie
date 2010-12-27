@@ -18,43 +18,32 @@
         </div><!-- header content -->
     </div><!-- header wrap-->
 
-    <div id="menuWrap">
-    	<ul id="menuElements">
-        	<li><a href="<%=url_for :features%>"><span>quit pretending</span></a></li>
-        	<li><a href="<%=url_for :controller => :restful_rails, :action => :index %>"><span>rails</span></a></li>
-        	<li><a href="http://vraptor.caelum.com.br/documentation"><span>java</span></a></li>
-        	<li><a href="<%=url_for :csharp%>"><span>c#</span></a></li>
-        	<li><a href="<%= url_for :support%>"><span>support</span></a></li>
-        	<li><a href="<%=rails_path%>" onclick="javascript:pageTracker._trackPageview('caelumobjects-restful-java.pdf')"><span>java chapter</span></a></li>
-        	<li><a href="<%=rails_path%>" onclick="javascript:pageTracker._trackPageview('<%= rails_path%>')"><span>guide</span></a></li>
-        	<li><a href="<%= url_for :benefits%>"><span>testimonials</span></a></li>
-        </ul><!-- menuElements-->
-    </div><!-- menuWrap-->
+    <%= render :partial => 'layouts/menu' %>
 
     <div id="contentWrap">
 		  	<div id="contentDocumentacao">
 		      	<h2><span>documentation</span></h2>
 		          <h3>configuration and utilization</h3>
 
-		          <div id="subMenuDoc">
-								<%= image_tag"subMenuTop-trans.png", :id => "positionTop" %>
-		          	<ol type="1">
-									<li><%= link_to "1. One minute guide", :action => :index%></li>
-									<li><%= link_to "2. Basic Rest", :action => :basic %></li>
-									<li><%= link_to "3. Examples", :action => "index"%></li>
-									<li><%= link_to "4. Content negotiation (serialize and unaccepted feature)", :action => "index"%></li>
-									<li><%= link_to "5. View: tokamak", :action => "index"%></li>
-									<li><%= link_to "6. Hypermedia and links", :action => "hypermedia"%></li>
-									<li><%= link_to "7. Enhance response", :action => "index"%></li>
-									<li><%= link_to "8. Result code (and following)", :action => "index"%></li>
-									<li><%= link_to "9. History", :action => "index"%></li>
-									<li><%= link_to "10. Open search", :action => "index"%></li>
-									<li><%= link_to "11. Throw error, retry when unavailable", :action => "index"%></li>
-									<li><%= link_to "12. Your own features", :action => "index"%></li>
-									<li><%= link_to "13. Help!", :action => "index"%></li>
-		            </ol>
-								<%= image_tag"subMenuBottom-trans.png", :id => "positionBottom" %>
-		          </div><!-- submenu-->
+			    <div id="subMenuDoc">
+											<%= image_tag"subMenuTop-trans.png", :id => "positionTop" %>
+			    	<ol type="1">
+												<li><%= link_to "1. One minute guide", :action => :index%></li>
+												<li><%= link_to "2. Basic Rest", :action => :basic %></li>
+												<li><%= link_to "3. Examples", :action => :examples%></li>
+												<li><%= link_to "4. Content negotiation (serialize and unaccepted feature)", :action => "index"%></li>
+												<li><%= link_to "5. View: tokamak", :action => "index"%></li>
+												<li><%= link_to "6. Hypermedia and links", :action => "hypermedia"%></li>
+												<li><%= link_to "7. Enhance response", :action => "index"%></li>
+												<li><%= link_to "8. Result code (and following)", :action => "index"%></li>
+												<li><%= link_to "9. History", :action => "index"%></li>
+												<li><%= link_to "10. Open search", :action => "index"%></li>
+												<li><%= link_to "11. Throw error, retry when unavailable", :action => "index"%></li>
+												<li><%= link_to "12. Your own features", :action => "index"%></li>
+												<li><%= link_to "13. Help!", :action => "index"%></li>
+			      </ol>
+											<%= image_tag"subMenuBottom-trans.png", :id => "positionBottom" %>
+			    </div><!-- submenu-->
 
 		          <%= yield %>
 
