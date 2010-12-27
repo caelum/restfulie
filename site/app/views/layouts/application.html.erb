@@ -20,13 +20,13 @@
 
     <div id="menuWrap">
     	<ul id="menuElements">
-        	<li><a href="<%=url_for :features%>"><span>quit pretending</span></a></li>
+        	<li><a href="<%=url_for :action =>:hypermedia%>"><span>why hypermedia?</span></a></li>
+        	<li><a href="<%=url_for :action =>:quit_pretending%>"><span>quit pretending</span></a></li>
         	<li><a href="<%=url_for :controller => :restful_rails, :action => :index %>"><span>rails</span></a></li>
         	<li><a href="http://vraptor.caelum.com.br/documentation"><span>java</span></a></li>
         	<li><a href="<%=url_for :csharp%>"><span>c#</span></a></li>
         	<li><a href="<%= url_for :support%>"><span>support</span></a></li>
-        	<li><a href="<%=rails_path%>" onclick="javascript:pageTracker._trackPageview('caelumobjects-restful-java.pdf')"><span>java chapter</span></a></li>
-        	<li><a href="<%=rails_path%>" onclick="javascript:pageTracker._trackPageview('<%= rails_path%>')"><span>guide</span></a></li>
+        	<li><a href="<%=rails_path%>" onclick="javascript:pageTracker._trackPageview('<%= rails_path%>')"><span>pdf</span></a></li>
         	<li><a href="<%= url_for :benefits%>"><span>testimonials</span></a></li>
         </ul><!-- menuElements-->
     </div><!-- menuWrap-->
