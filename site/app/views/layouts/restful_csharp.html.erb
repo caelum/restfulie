@@ -14,27 +14,12 @@
     	<div id="headerContent">
         	<h1 id="logoRestfulie"><span>restfulie</span></h1><!-- vraptorlogo-->
             
-<!--            <ul id="langMenu">
-            	<li><a id="engBtn" href="#.html"><span>ENGLISH</span></a></li>
-                <li><a id="ptBtn" href="#.html"><span>PORTUGUES</span></a></li>
-            </ul>-->
 						<a id="caelumObjects" href="http://www.caelumobjects.com/" title="Caelum Objects Site"><span>Caelum Objects</span></a>
         </div><!-- header content -->
     </div><!-- header wrap-->
 
-    <div id="menuWrap">
-    	<ul id="menuElements">
-        	<li><a href="/"><span>home</span></a></li>
-        	<li><a href="<%=url_for :rest%>"><span>rest/hateoas</span></a></li>
-        	<li><a href="<%=url_for :features%>"><span>features</span></a></li>
-        	<li><a href="<%=url_for :rails%>"><span>rails</span></a></li>
-        	<li><a href="http://github.com/caelum/restfulie-java"><span>java</span></a></li>
-        	<li><a href="<%=url_for :csharp%>"><span>c#</span></a></li>
-        	<li><a href="<%= url_for :support%>"><span>support</span></a></li>
-        	<li><a href="<%= url_for :benefits%>"><span>testimonials</span></a></li>
-        </ul><!-- menuElements-->
-    </div><!-- menuWrap-->
-    
+    <%= render :partial => 'layouts/menu' %>
+
 	
     <div id="contentWrap">
 		  	<div id="contentDocumentacao">
