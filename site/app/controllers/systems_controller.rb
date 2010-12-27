@@ -5,10 +5,10 @@ class SystemsController < ApplicationController
   end
   def support
   end
-  def rest
-  end
   def features
   end
   def quit_pretending
+  end
+  def hypermedia
   end
 end
