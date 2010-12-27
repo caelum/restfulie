@@ -1,0 +1,9 @@
+<h3>What is content negotation?</h3>
+
+<p>REST clients know how to deal with several different media types, for instance application/xml and application/opensearchdescriptor+xml. Being so, when requesting something to your service, a client tells which media types it is capable of understand so the service provides the best fit between the ones both of them are capable of handling.</p>
+
+<%= image_tag "negotiation.png", :title => "Content negotiation" %><br/>
+
+Content negotiation is the key concept that allows services to change their links to other parts of other systems while not breaking compatibility with their consumers (clients).
+
+Because the new linked services supports a set of media types that so does your client, changes can be made and nothing breaks. 
