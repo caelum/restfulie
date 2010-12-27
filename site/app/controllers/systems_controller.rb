@@ -7,6 +7,8 @@ class SystemsController < ApplicationController
   end
   def rest
   end
-  def restfulie_features
+  def features
+  end
+  def quit_pretending
   end
 end
