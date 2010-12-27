@@ -9,4 +9,10 @@ class RestfulRailsController < ApplicationController
   def examples
   end
   
+  def conneg
+  end
+  
+  def features
+  end
+  
 end
