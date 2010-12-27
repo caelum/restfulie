@@ -1,0 +1,20 @@
+<div id="textoCapitulo">
+	<%= render :partial => 'shared/simple_representation' %>
+
+<h3>Client side</h3>
+
+<p>
+	If you use Restfulie to access such a resource, there will be one entry point and all it's interactions will be driven by hypermedia links:<br/><br/>
+	
+<pre>
+# retrieves the resource through GET: the entry point
+response = Restfulie.at(resource_uri).get();
+order = response.resource;
+
+console.log("Order price is #{order.price}");
+</pre>
+</p>
+
+<p>By now you should be able to put your resources online and hypermedia-link them whenever they make sense. Do not forget to use hypermedia controls to notify your client the URIs to use for creating and updating content too, as with the payment example above.</p>
+
+</div>
