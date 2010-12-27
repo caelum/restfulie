@@ -1,0 +1,49 @@
+<div id="textoCapitulo">
+<h2>One minute guide</h2>
+
+<p>This is a one minute guide to get you going with Restfulie.
+	As soon as you finish this example you are up to the next guide and then
+	move on to the features you want to explore more.</p>
+	
+<h2>Configuring</h2>
+
+Configuration should *always* be minimal and programmatic. To use Restfulie simply install it:
+
+<pre>
+&lt;script type="text/javascript" charset="utf-8" src="restfulie.js"&gt;&lt;/script&gt;
+</pre>
+
+Or require its minified version
+
+<pre>
+&lt;script type="text/javascript" charset="utf-8" src="restfulie.min.js"&gt;&lt;/script&gt;
+</pre>
+
+<h2>Http client</h2>
+
+The first part of Restfulie works as a typical http client, with a cuter interface.
+
+The following example shows how to use it to access your system:
+
+<pre>
+result = Restfulie.at("/my_user/my_user_timeline.xml").get();
+
+alert('The response code was ' + result.code);
+# you can also use the result.body and result.headers
+
+resource = result.resource;
+
+for (statusIndex in result.resource.statuses.status){
+	status = resource.statuses.status[statusIndex];
+	$(tweets).html($(tweets).html()
+	+"<div class='status'>"
+		+"<div class='author'><a href='http://my_twitter.com/"+status.user.screen_name+"'>@"+status.user.screen_name+"</a></div>"
+		+"<div class='msg'>"+status.text+"<pre>"+"("+status.source+" | "+status.created_at+")"+"</pre></div>"
+	+"</div>"
+	);
+}
+</pre>
+
+<h2>Cross site limitations</h2>
+
+When runnning Javascript in a browser (not on node.js), javascript is not supposed to ajax to another website, thus Restfulie can not do it too: you need to proxy the invocations to any 3rd-party as you would with any other ajax library.
