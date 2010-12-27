@@ -6,6 +6,6 @@ describe Tokamak::Representation::Links do
     link2 = Tokamak::Representation::Atom::Link.new(:rel => "next", :href => "http://google.com?q=ruby")
     links = [link1, link2]
     
-    Tokamak::Representation::Links.extract_link_header(links).should == "<http://google.com>; rel=home, <http://google.com?q=ruby>; rel=next"
+    Tokamak::Common.extract_link_header(links).should == "<http://google.com>; rel=home, <http://google.com?q=ruby>; rel=next"
   end  
 end

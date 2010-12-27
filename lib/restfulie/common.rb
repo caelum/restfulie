@@ -15,6 +15,20 @@ module Restfulie
     autoload :Logger, 'restfulie/common/logger'
     autoload :Converter, 'restfulie/common/converter'
   end
+
+  def self.extract_link_header(links)
+    links.collect {|link| "<#{link.href}>; rel=#{link.rel}"}.join(', ')
+  end
+end
+
+module Medie
+  class Link
+    def follow
+      r = Restfulie.at(href)
+      r = r.as(content_type) if content_type
+      r
+    end
+  end
 end
 
 require 'restfulie/common/core_ext'

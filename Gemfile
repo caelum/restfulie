@@ -6,7 +6,7 @@ gem "activesupport", ">= 3.0.0"
 gem "rack-conneg"
 gem "sqlite3-ruby"
 gem "yard"
-gem "tokamak"
+gem "tokamak", ">= 1.0.0.beta3"
 
 gem "respondie"
 
@@ -17,7 +17,6 @@ else
 end
 
 group :test do  
-  gem "nokogiri"
   gem "rspec-rails", ">= 2.0.0.beta.19"
   gem "rcov"
   gem "sinatra"
