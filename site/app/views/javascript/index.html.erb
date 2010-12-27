@@ -26,22 +26,19 @@ The first part of Restfulie works as a typical http client, with a cuter interfa
 The following example shows how to use it to access your system:
 
 <pre>
-result = Restfulie.at("/my_user/my_user_timeline.xml").get();
+<%= html 'result = Restfulie.at("/my_user/my_user_timeline.xml").get();
 
-alert('The response code was ' + result.code);
+alert("The response code was " + result.code);
 # you can also use the result.body and result.headers
 
 resource = result.resource;
 
 for (statusIndex in result.resource.statuses.status){
-	status = resource.statuses.status[statusIndex];
-	$(tweets).html($(tweets).html()
-	+"<div class='status'>"
-		+"<div class='author'><a href='http://my_twitter.com/"+status.user.screen_name+"'>@"+status.user.screen_name+"</a></div>"
-		+"<div class='msg'>"+status.text+"<pre>"+"("+status.source+" | "+status.created_at+")"+"</pre></div>"
-	+"</div>"
-	);
-}
+	tweet = resource.statuses.status[statusIndex];
+	console.log("username " + tweet.user.screen_name);
+	console.log("message " + tweet.text);
+	console.log("tweet created at " + tweet.created_at);
+} '%>
 </pre>
 
 <h2>Cross site limitations</h2>

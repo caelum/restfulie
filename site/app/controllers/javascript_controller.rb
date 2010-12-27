@@ -1,4 +1,4 @@
-class RestfulRailsController < ApplicationController
+class JavascriptController < ApplicationController
   
   def index
   end
