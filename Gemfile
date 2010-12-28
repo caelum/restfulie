@@ -1,14 +1,12 @@
 source :gemcutter
 
-gem "actionpack", ">= 3.0.0"
-gem "activesupport", ">= 3.0.0"
-
 gem "rack-conneg"
 gem "sqlite3-ruby"
 gem "yard"
 gem "tokamak", ">= 1.0.0.beta3"
 
 gem "respondie"
+gem "medie"
 
 if RUBY_VERSION < "1.9"
   gem "ruby-debug"
