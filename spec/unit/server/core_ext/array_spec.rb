@@ -9,38 +9,6 @@ context Array do
     end
   end
 
-  it "creates an Atom feed based on the array elements" do
-    array = []
-    3.times { array << SimpleElement.new }
-
-    array.each { |a|
-      a.should_receive(:to_atom).and_return(Tokamak::Representation::Atom::Entry.new)
-    }
-    
-    feed = array.to_atom
-    
-    feed.title.should == "Collection of SimpleElement"
-    feed.updated.to_s.should == array.last.updated_at.to_s
-    feed.published.to_s.should == array.first.published_at.to_s
-    
-    feed.id.to_s.should == array.hash.to_s
-    
-    feed.entries.size.should == 3
-    feed.entries.first.should be_kind_of(Tokamak::Representation::Atom::Entry)
-  end
-  
-  it "accepts a block to customize fields" do
-    
-    array = []
-    a = false
-    array.to_atom do |f|
-      a = true
-      f.should be_kind_of(Tokamak::Representation::Atom::Feed)
-    end
-    a.should be_true
-    
-  end
-  
   it "should use the most recent date as updated one" do
     first = SimpleElement.new
     second = SimpleElement.new

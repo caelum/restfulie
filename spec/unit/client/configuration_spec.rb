@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 module Restfulie::Client::Configuration::Test
-  class AtomRepresentation; end
   class XmlRepresentation; end
 end
 
@@ -24,11 +23,6 @@ context Restfulie::Client::Configuration do
   it "should allow to set the test environment" do
     configuration.environment = :test
     configuration.environment.should equal :test
-  end
-  
-  it "should set the atom representations" do
-    configuration.representations['application/atom+xml'] = Restfulie::Client::Configuration::Test::AtomRepresentation
-    configuration.representations['application/atom+xml'].should == Restfulie::Client::Configuration::Test::AtomRepresentation
   end
   
   it "should allow a xml representation" do

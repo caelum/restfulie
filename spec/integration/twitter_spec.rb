@@ -1,4 +1,7 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'fakeweb'
+
+require File.dirname(__FILE__) + '/twitter'
 
 context Restfulie do
 
