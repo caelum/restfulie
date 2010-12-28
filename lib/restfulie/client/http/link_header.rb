@@ -5,7 +5,7 @@ module Restfulie::Client::HTTP
     
     def links
       r = link_header_to_array
-      Tokamak::Xml::Links.new(r)
+      Medie::Xml::Links.new(r)
     end
     
     def link(rel)

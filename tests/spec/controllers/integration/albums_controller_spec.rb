@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe AlbumsController do
   
   before do
-    response.stub(:content_type) { "application/atom+xml" }
+    response.stub(:content_type) { "application/json" }
     
     3.times do |i|
       album = Album.create!(:title => "Album #{i}", :description => "Description #{i}", :length => i*10)
@@ -17,12 +17,12 @@ describe AlbumsController do
   
   describe "get index" do
     before do
-      request.accept = "application/atom+xml"
-      get :index, :format => :atom
-      @feed = Tokamak::Representation::Atom::Factory.create(response.body)
+      request.accept = "application/json"
+      get :index, :format => :Json
+      @feed = Medie::Json::Factory.create(response.body)
     end
     
-    it "generation atom feed to get index" do
+    it "generation Json feed to get index" do
       @feed.entries.size.should == Album.count
     end
     
@@ -32,20 +32,20 @@ describe AlbumsController do
     
     it "members artists transitions included" do
       transitions = @feed.entries.first.links
-      transitions.find {|t| t.rel == 'artists'}.should be_kind_of(::Tokamak::Representation::Atom::Link)
+      transitions.find {|t| t.rel == 'artists'}.should be_kind_of(::Medie::Json::Link)
     end
   end # describe "get index"
   
   describe "get show" do
     before do
-      response.content_type = "application/atom+xml"
+      response.content_type = "application/json"
       @album = Album.first
       pending
-      get :show, :id => @album.id, :format => :atom
-      @entry = Tokamak::Representation::Atom::Factory.create(response.body)      
+      get :show, :id => @album.id, :format => :Json
+      @entry = Medie::Json::Factory.create(response.body)      
     end
   
-    it "generation atom entry" do
+    it "generation Json entry" do
       pending
       @entry.title.should == @album.title
     end
