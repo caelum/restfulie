@@ -4,7 +4,7 @@ module Restfulie::Client::HTTP
     
     def resource
       type = headers['content-type'] || response['Content-Type']
-      representation = Restfulie::Common::Converter.content_type_for(type[0]) || Tokamak::Representation::Generic.new
+      representation = Medie.registry.for(type[0])
       representation.unmarshal(response.body)
     end
     
@@ -13,9 +13,7 @@ module Restfulie::Client::HTTP
     end
     
     def headers
-      h = response.to_hash
-      h.extend(::Restfulie::Client::HTTP::LinkHeader)
-      h
+      response.to_hash.extend(::Restfulie::Client::HTTP::LinkHeader)
     end
     
     def results_from(request, response)
