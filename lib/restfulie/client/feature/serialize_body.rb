@@ -1,3 +1,5 @@
+# Feature responsible for marshalling the entity into the request body.
+# It will use the request content type header to select the proper marshaller using Medie.
 class Restfulie::Client::Feature::SerializeBody
   
   def execute(flow, request, env = {})

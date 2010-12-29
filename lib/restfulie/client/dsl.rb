@@ -42,6 +42,7 @@ module Restfulie::Client
     end
     
     def request_flow(env = {})
+      Restfulie::Common::Logger.logger.debug "ready to execute request using stack #{@requests}"
       Parser.new(@requests).continue(self, env)
     end
 
@@ -58,7 +59,11 @@ module Restfulie::Client
       if current.nil?
         return nil
       end
-      filter = current[:type].new(current[:args])
+      if current[:type].instance_method(:initialize).arity==1
+        filter = current[:type].new(current[:args])
+      else
+        filter = current[:type].new
+      end
       Restfulie::Common::Logger.logger.debug "invoking filter #{filter.class.name} with #{request} at #{env}"
       filter.execute(self.dup, request, env)
     end
