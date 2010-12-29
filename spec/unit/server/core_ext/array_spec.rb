@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Array do
+describe Array do
   
   class SimpleElement
     attr_accessor :updated_at, :published_at
