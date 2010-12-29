@@ -103,6 +103,6 @@ end
 
 
 
-context Maze do
+describe Maze do
   Mikyung.new(Maze::ExitBackTracking.new, Restfulie.at('http://amundsen.com/examples/mazes/2d/five-by-five/').accepts('application/vnd.amundsen.maze+xml').get! ).run
 end

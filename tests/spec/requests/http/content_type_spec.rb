@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Client::HTTP do
+describe Restfulie::Client::HTTP do
 
   context 'HTTP Builder' do
   

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-context Restfulie do
+describe Restfulie do
 
   context "when building restfulie" do
   

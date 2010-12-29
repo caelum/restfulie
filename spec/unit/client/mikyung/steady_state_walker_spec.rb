@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-context Restfulie::Client::Mikyung::SteadyStateWalker do
+describe Restfulie::Client::Mikyung::SteadyStateWalker do
   
   before do
     @goal = Object.new

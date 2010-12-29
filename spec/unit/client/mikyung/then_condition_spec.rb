@@ -4,7 +4,7 @@ class BasicGoal
   attr_accessor :then_rules
 end
 
-context Restfulie::Client::Mikyung::ThenCondition do
+describe Restfulie::Client::Mikyung::ThenCondition do
   
   before do
     @condition = Restfulie::Client::Mikyung::ThenCondition.new("launch a rocket")
