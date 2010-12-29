@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-context Restfulie::Client::Mikyung::WhenCondition do
+describe Restfulie::Client::Mikyung::WhenCondition do
   
   class MyProcess < Restfulie::Client::Mikyung::RestProcessModel
     def scenario

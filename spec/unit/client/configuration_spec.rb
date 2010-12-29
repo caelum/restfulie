@@ -4,7 +4,7 @@ module Restfulie::Client::Configuration::Test
   class XmlRepresentation; end
 end
 
-context Restfulie::Client::Configuration do
+describe Restfulie::Client::Configuration do
 
   let(:configuration) { Restfulie::Client::Configuration.new }
 

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-context Restfulie::Server::Configuration do
+describe Restfulie::Server::Configuration do
   
   it "setup should yield self" do
     Restfulie::Server::Configuration.setup do |config|

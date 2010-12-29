@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Client::Cache::Restrictions do
+describe Restfulie::Client::Cache::Restrictions do
 
   it "should cache if the response may be cached" do
     request = Object.new

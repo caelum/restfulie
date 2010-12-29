@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Client::Cache::Fake do
+describe Restfulie::Client::Cache::Fake do
   
   it "should always retrieve nil, even if it was put" do
     req = Object.new

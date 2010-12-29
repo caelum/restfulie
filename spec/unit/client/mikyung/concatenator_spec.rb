@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-context Restfulie::Client::Mikyung::Concatenator do
+describe Restfulie::Client::Mikyung::Concatenator do
 
   it "should use the content if there are no extra args" do
     Restfulie::Client::Mikyung::Concatenator.new("alive").content.should == "alive"

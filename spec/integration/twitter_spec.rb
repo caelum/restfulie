@@ -3,7 +3,7 @@ require 'fakeweb'
 
 require File.dirname(__FILE__) + '/twitter'
 
-context Restfulie do
+describe Restfulie do
 
   TWITTER_ENTRY_POINT = "http://twitter.com/statuses/public_timeline.xml"
 

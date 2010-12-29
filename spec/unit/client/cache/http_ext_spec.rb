@@ -5,7 +5,7 @@ class HashResponse
   attr_accessor :code
 end
 
-context Restfulie::Client::HTTP::ResponseStatus do
+describe Restfulie::Client::HTTP::ResponseStatus do
   
   def check_complies_with(from, to, method)
     o = HashResponse.new
@@ -41,7 +41,7 @@ context Restfulie::Client::HTTP::ResponseStatus do
 
 end
 
-context Restfulie::Client::HTTP::ResponseStatus do
+describe Restfulie::Client::HTTP::ResponseStatus do
   
   before do
     @response = mock Net::HTTPResponse
@@ -49,7 +49,7 @@ context Restfulie::Client::HTTP::ResponseStatus do
     @response.extend Restfulie::Client::HTTP::ResponseCacheCheck
   end
 
-  context "while retrieveing cache information" do
+  context "while retrieving cache information" do
     
     it "should invoke may_ache_field with cache control" do
       response = Object.new

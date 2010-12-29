@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-context Restfulie::Client::Mikyung do
+describe Restfulie::Client::Mikyung do
 
   context "when trying to achieve a goal" do
   
