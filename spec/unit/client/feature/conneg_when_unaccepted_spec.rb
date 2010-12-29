@@ -7,7 +7,7 @@ describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
     @response = mock Net::HTTPResponse
     @response.stub("headers").and_return("Accept"=>["application/xml"])
     @request = Object.new
-    @chain = mock Restfulie::Client::Parser
+    @chain = mock Restfulie::Client::StackNavigator
     @chain.should_receive(:continue).and_return(@response)
   end
   

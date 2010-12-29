@@ -43,38 +43,9 @@ module Restfulie::Client
     
     def request_flow(env = {})
       Restfulie::Common::Logger.logger.debug "ready to execute request using stack #{@requests}"
-      Parser.new(@requests).continue(self, env)
+      StackNavigator.new(@requests).continue(self, env)
     end
 
-  end
-  
-  class Parser
-    
-    def initialize(stack)
-      @stack = stack.dup
-    end
+  end  
 
-    def continue(request, env)
-      current = @stack.pop
-      if current.nil?
-        return nil
-      end
-      filter = instantiate(current)
-      Restfulie::Common::Logger.logger.debug "invoking filter #{filter.class.name} with #{request} at #{env}"
-      filter.execute(self.dup, request, env)
-    end
-    
-    def instantiate(current)
-      if current[:type].instance_method(:initialize).arity==1
-        current[:type].new(current[:args])
-      else
-        current[:type].new
-      end
-    end
-      
-    def dup
-      Parser.new(@stack)
-    end
-    
-  end
 end

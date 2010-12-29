@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Restfulie::Client::Dsl do
+describe Restfulie::Client::StackNavigator do
   
   context "when navigating through the filter list" do
     
@@ -18,7 +18,7 @@ describe Restfulie::Client::Dsl do
     it "should invoke the first one" do
       do_nothing = DoNothing.new
       DoNothing.should_receive(:new).and_return(do_nothing)
-      parser = Restfulie::Client::Parser.new([:type => DoNothing])
+      parser = Restfulie::Client::StackNavigator.new([:type => DoNothing])
       def parser.dup
         self
       end
@@ -32,7 +32,7 @@ describe Restfulie::Client::Dsl do
     it "should invoke first the most recent ones" do
       do_nothing = DoNothing.new
       DoNothing.should_receive(:new).and_return(do_nothing)
-      parser = Restfulie::Client::Parser.new([:type => InvokeNext, :type => DoNothing])
+      parser = Restfulie::Client::StackNavigator.new([:type => InvokeNext, :type => DoNothing])
       def parser.dup
         self
       end
@@ -61,13 +61,13 @@ describe Restfulie::Client::Dsl do
 
   context "when instantiating filters" do
     it "should pass on the arg" do
-      parser = Restfulie::Client::Parser.new([])
-      client = parser.instantiate :type => Client, :args => "guilherme"
+      instantiator = Restfulie::Client::BasicInstantiator.new
+      client = instantiator.new Client, "guilherme"
       client.name.should == "guilherme"
     end
     it "should be capable of instantiating with no args" do
-      parser = Restfulie::Client::Parser.new([])
-      client = parser.instantiate :type => Owner
+      instantiator = Restfulie::Client::BasicInstantiator.new
+      client = instantiator.new Owner, nil
       client.name.should == "adriano"
     end
   end

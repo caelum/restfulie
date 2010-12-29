@@ -11,6 +11,7 @@ module Restfulie
     autoload :Cache, 'restfulie/client/cache'
     autoload :Feature, 'restfulie/client/feature'
     autoload :Dsl, 'restfulie/client/dsl'
+    autoload :StackNavigator, 'restfulie/client/stack_navigator'
     
     mattr_accessor :cache_provider, :cache_store
 

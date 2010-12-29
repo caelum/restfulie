@@ -6,7 +6,7 @@ describe Restfulie::Client::Feature::RetryWhenUnavailable do
     @feature = Restfulie::Client::Feature::RetryWhenUnavailable.new
     @response = mock Net::HTTPResponse
     @request = Object.new
-    @chain = mock Restfulie::Client::Parser
+    @chain = mock Restfulie::Client::StackNavigator
     @chain.should_receive(:continue).and_return(@response)
   end
   
