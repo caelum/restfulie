@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 module Restfulie::Client::Configuration::Test
   class XmlRepresentation; end
@@ -34,8 +34,6 @@ describe Restfulie::Client::Configuration do
     configuration.entry_point = "http://foo.com/bar"
     configuration.entry_point.should == 'http://foo.com/bar'
         
-    configuration.representations['application/atom+xml'] = Restfulie::Client::Configuration::Test::AtomRepresentation
-    
     configuration.environment = :test
     
     configuration.entry_point.should be_empty
@@ -47,11 +45,9 @@ describe Restfulie::Client::Configuration do
     
     configuration.environment = :development
     configuration.entry_point.should == 'http://foo.com/bar'
-    configuration.representations['application/atom+xml'].should == Restfulie::Client::Configuration::Test::AtomRepresentation
     
     configuration.environment = :test
     configuration.entry_point.should == 'http://bar.com/foo'
-    configuration.representations['application/xml'].should == Restfulie::Client::Configuration::Test::XmlRepresentation
   end
 
 end

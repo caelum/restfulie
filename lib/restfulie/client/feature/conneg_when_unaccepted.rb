@@ -13,7 +13,7 @@ module Restfulie::Client::Feature
 			resp = chain.continue(request, env)
 			return resp if resp.code.to_i!=406
 		  
-			accept = Restfulie::Common::Converter.find_for(resp.headers["Accept"])
+			accept = Medie.registry.for(resp.headers["Accept"])
 		  return resp if accept.nil?
 		  
     	request.with("Content-type", accept)

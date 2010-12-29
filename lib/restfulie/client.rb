@@ -20,5 +20,4 @@ module Restfulie
   end
 end
 
-require 'restfulie/client/ext/http_ext'
-require 'restfulie/client/ext/open_search_ext'
+require 'restfulie/client/ext'

@@ -10,7 +10,7 @@ class Restfulie::Client::Feature::SerializeBody
         type = request.headers['Content-Type']
         raise Restfulie::Common::Error::RestfulieError, "Missing content type related to the data to be submitted" unless type
       
-        marshaller = Restfulie::Common::Converter.content_type_for(type)
+        marshaller = Medie.registry.for(type)
         raise Restfulie::Common::Error::RestfulieError, "Missing content type for #{type} related to the data to be submitted" unless marshaller
 
         rel = request.respond_to?(:rel) ? request.rel : ""

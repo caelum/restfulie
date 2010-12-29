@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Restfulie::Common::Error do
   describe Restfulie::Common::Error::RestfulieError do

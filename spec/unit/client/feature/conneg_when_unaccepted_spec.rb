@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require 'spec_helper'
 
 describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
   
@@ -20,7 +20,7 @@ describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
 
     it "should not retry execution if there is no content type agreed on" do
       @response.stub(:code).and_return("406")
-      Restfulie::Common::Converter.should_receive(:find_for).with(["application/xml"]).and_return(nil)
+      Medie.registry.should_receive(:for).with(["application/xml"]).and_return(nil)
       @feature.execute(@chain, @request, {}).should == @response
     end
 
@@ -28,7 +28,7 @@ describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
       env = {:payload => "my payload"}
       
       @response.stub(:code).and_return("406")
-      Restfulie::Common::Converter.should_receive(:find_for).with(["application/xml"]).and_return("application/xml")
+      Medie.registry.should_receive(:for).with(["application/xml"]).and_return("application/xml")
 
       @request.should_receive(:with).with("Content-type", "application/xml")
       following = Object.new

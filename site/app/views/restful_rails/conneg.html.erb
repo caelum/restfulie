@@ -57,7 +57,7 @@ end
 <p>To add support to a new media type, first create a class with two class methods, marshal and unmarshal that are invoked to serialize and deserialize the representation:</p>
 
 <pre>
-class Restfulie::Common::Converter::FormUrlEncoded
+class Medie.registry::FormUrlEncoded
 
 	# marshals this content into a string to be posted/puted/patched
 	def self.marshal(content, rel)
@@ -84,7 +84,7 @@ end
 <p>Finally, register your custom media type handler with Restfulie:</p>
 
 <pre>
-Restfulie::Common::Converter.register 'application/opensearchdescription+xml', ::Restfulie::Common::Converter::OpenSearch
+Medie.registry.register 'application/opensearchdescription+xml', ::Medie.registry::OpenSearch
 </pre>
 
 If you create any new media type that can be shared, remember to contribute with Restfulie.
