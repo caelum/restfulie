@@ -11,10 +11,11 @@ module Restfulie
   module Common
     autoload :Error, 'restfulie/common/error'
     autoload :Logger, 'restfulie/common/logger'
+
+    def self.extract_link_header(links)
+      links.collect {|link| "<#{link.href}>; rel=#{link.rel}"}.join(', ')
+    end
   end
 
-  def self.extract_link_header(links)
-    links.collect {|link| "<#{link.href}>; rel=#{link.rel}"}.join(', ')
-  end
 end
 
