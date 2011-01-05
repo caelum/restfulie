@@ -2,16 +2,18 @@ source :gemcutter
 
 gem "rack-conneg"
 gem "sqlite3-ruby"
-gem "yard"
-gem "tokamak", ">= 1.0.0.beta3"
-
-gem "respondie"
-gem "medie"
+gem 'tokamak', ">=1.1.1"
+gem 'medie', ">= 1.0.0.beta3"
+gem 'respondie', "~> 0.9.0"
 
 if RUBY_VERSION < "1.9"
   gem "ruby-debug"
 else
   gem "ruby-debug19", :require => "ruby-debug"
+end
+
+group :development do
+  gem "yard"
 end
 
 group :test do  
