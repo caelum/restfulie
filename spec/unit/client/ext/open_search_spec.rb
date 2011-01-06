@@ -14,7 +14,7 @@ describe Medie::OpenSearch::Descriptor do
         <Contact>admin@restbuy.com</Contact>
         <Url type="application/atom+xml"  template="http://localhost:3000/products?q={searchTerms}&amp;pw={startPage?}&amp;format=atom" />
       </OpenSearchDescription>'
-      @descriptor = Medie::OpenSearch::Driver.unmarshal(xml)
+      @descriptor = Medie::OpenSearch::Driver.new.unmarshal(xml)
     end
   
     it "should unmarshall opensearch xml descriptions" do
