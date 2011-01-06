@@ -4,7 +4,7 @@ module Restfulie
     MINOR = 0
     TINY  = 0
 
-    STRING = [MAJOR, MINOR, TINY].join('.') + ".beta3"
+    STRING = [MAJOR, MINOR, TINY].join('.') + ".beta4"
 
     # Restfulie's version
     def self.to_s
