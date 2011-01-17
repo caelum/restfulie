@@ -1,6 +1,6 @@
 h1. Web site
 
-"http://restfulie.caelumobjects.com":"Restfulie's site" has a lot of information on Restfulie itself
+"Restfulie's site":http://restfulie.caelumobjects.com has a lot of information on Restfulie itself
 
 h1. Quit pretending
 
@@ -12,16 +12,16 @@ One liners for your pleasure. First, how to let restfulie know which media types
 
 <pre>
 class ItemsController < ...
-	  respond_to :atom, :html, :xml, :commerce, :opensearch
+  respond_to :atom, :html, :xml, :commerce, :opensearch
 end
 </pre>
 
 Now let's handle them all:
 
 <pre>
-	  def index
-	    respond_with @orders = Order.all
-	  end
+def index
+  respond_with @orders = Order.all
+end
 </pre>
 
 And what is the *first* difference between simple web services with Rails and a REST architecture? Let's add hypermedia to the game:
@@ -66,16 +66,6 @@ bundle install
 rake test:spec test:integration
 </pre>
 
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-11770776-1");
-pageTracker._trackPageview();
-} catch(err) {}</script>
-
 h2. Contributions
 
 Restfulie was created and is maintained by "Caelum":http://caelumobjects.com, and has received enormous contributions from all those developers:
@@ -95,8 +85,8 @@ Everton Ribeiro, abril
 Paulo Ahagon, abril
 Elomar França
 Thomas Stefano
-"David Paniz":"http://www.caelum.com.br"
-"Caike Souza":"http://www.caikesouza.com/blog"
+"David Paniz":http://www.caelum.com.br
+"Caike Souza":http://www.caikesouza.com/blog
 
 h2. Rails 2
 
