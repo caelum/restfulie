@@ -1,4 +1,4 @@
-class RestfulRailsController < ApplicationController
+class RailsController < ApplicationController
   
   def index
   end
@@ -13,6 +13,9 @@ class RestfulRailsController < ApplicationController
   end
   
   def features
+  end
+  
+  def tokamak
   end
   
 end

@@ -1,0 +1,58 @@
+<div id="textoCapitulo">
+<h2>Hypermedia clients</h2>
+
+<p>Hypermedia support information is scattered aroud the entire documentation as this is a hypermedia based library..</p>
+	
+<h2>Link support</h2>
+
+For representations that contain link elements in its body, such as this one in xml:
+
+<pre>
+<%=html("
+<order>
+	<link rel='payment' href='http://store.caelum.com.br/orders/2345/payment' />
+	<items>
+		<item>
+			<id>Rest from scratch book</id>
+		</item>
+	</items>
+	<price>1235.4</price>
+</order>
+")%>
+</pre>
+
+This link can be accessed by unmarshalling the resource and then accessing the link itself:
+
+<pre>
+response = Restfulie.at(uri).get
+
+# follow the payment link within the order
+response = response.resource.order.links.payment.follow.get
+
+# will print the payment body
+puts resource.body
+</pre>
+
+Once you have invoked the <b>follow</b> method, the object returned is the same as a
+<b>Restfulie.at()</b> invocation, a request dsl, which allows you to configure the
+request as you wish, and execute it by invoking the proper http verb (i.e. get, post or put).
+
+You can see an example of a full client navigating through links in the examples section.
+
+<h2>Link header support</h2>
+
+If your service provides a link header such as:
+
+<pre>
+Link: <http://amundsen.com/examples/mazes/2d/ten-by-ten/0:north>; rel="start"; type="application/xml"
+</pre>
+
+This header can be accessed by using the headers.link and links method:
+
+<pre>
+resource = Restfulie.at(uri).get
+puts resource.headers.link("start").href
+
+# following the link
+another_resource = resource.headers.link("start").follow.get
+</pre>
