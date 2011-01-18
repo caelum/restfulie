@@ -1,13 +1,11 @@
 # ==== RequestHistory
-# Uses RequestBuilder and remind previous requests
+# Uses RequestHistory to remind previous requests
 #
 # ==== Example:
 #
-#   @executor = ::Restfulie::Client::HTTP::RequestHistoryExecutor.new("http://restfulie.com") #this class includes RequestHistory module.
-#   @executor.at('/posts').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #first request
-#   @executor.at('/blogs').as('application/xml').accepts('application/atom+xml').with('Accept-Language' => 'en').get.code #=> 200 #second request
-#   @executor.request_history!(0) #doing first request
-#
+#   result = Restfulie.at(uri).get
+#   result = result.headers.links.payment.get
+#   result.request_history(1) # doing first request
 class Restfulie::Client::Feature::HistoryRequest
 
   def execute(flow, request, env)

@@ -13,6 +13,18 @@
 response = Restfulie.at(uri).throw_error.get
 </pre>
 
+<h2>History</h2>
+
+<p>The history feature gives access to the history of executed requests, so one can re-execute
+	it or customize it prior to sending the request again. To add it, simply load it into your DSL:</p>
+
+<pre>
+	result = Restfulie.at(uri).history.get
+	
+	# sends the request again
+	result.request_history(0).get
+</pre>
+
 <h2>Retrying requests</h2>
 
 <p>Another characteristic of REST over HTTP is that some requests can be easily retried by adding a new feature to the DSL. The RetryWhenUnavailable feature demonstrates how to use it

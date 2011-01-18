@@ -20,10 +20,7 @@ class RailsController < ApplicationController
 
   def opensearch
   end
-  def history
-  end
-  def result
-  end
+
   def response
   end
   
