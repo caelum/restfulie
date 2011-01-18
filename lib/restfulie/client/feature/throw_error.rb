@@ -1,3 +1,7 @@
+# Adds support to throwing an error when 300+ response codes are returned
+#
+# To use it, load it in your dsl:
+# Restfulie.at("http://localhost:3000/product/2").throw_error.get
 class Restfulie::Client::Feature::ThrowError
   def execute(flow, request, env)
     result = flow.continue(request, env)
