@@ -1,4 +1,4 @@
-class RailsController < ApplicationController
+class RubyController < ApplicationController
   
   def index
   end
@@ -19,9 +19,6 @@ class RailsController < ApplicationController
   end
 
   def opensearch
-  end
-
-  def response
   end
   
 end
