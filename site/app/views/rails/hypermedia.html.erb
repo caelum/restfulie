@@ -2,6 +2,39 @@
 <h2>Hypermedia clients</h2>
 
 <p>Hypermedia support information is scattered aroud the entire documentation as this is a hypermedia based library..</p>
+
+<h2>The response object</h2>
+
+The response object to a restfulie http request allows access to four different methods, the
+response <b>code</b>, its <b>body</b>, <b>headers</b> and an extra method called <b>resource</b>
+that will try to unmarshall the response body according to its content type.
+
+Restfulie uses <a href="http://github.com/caelum/medie">medie</a> to do the unmarshalling,
+giving back a hypermedia aware object. The following example shows a typical response to
+a xml request:
+
+<pre>
+> response = Restfulie.at(uri).accepts("application/xml").get
+> puts response.body
+<%=html("
+<order>
+	<link rel='payment' href='http://store.caelum.com.br/orders/2345/payment' />
+	<items>
+		<item>
+			<id>Rest from scratch book</id>
+		</item>
+	</items>
+	<price>1235.4</price>
+</order>
+")%>
+> puts response.code
+200
+> puts response.headesr['Content-Type']
+['application/xml']
+> resource = response.resource
+> puts resource.order.items[0].item.id
+"Rest from scratch book"
+</pre>
 	
 <h2>Link support</h2>
 
