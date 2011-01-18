@@ -1,0 +1,22 @@
+<div id="textoCapitulo">
+<h2>Opensearch</h2>
+
+<p>Restfulie client supports opensearch with both xml and json out of the box. Atom support
+	can be included by adding a media type handler for atom.</p>
+
+<h2>The media type handler</h2>
+
+The opensearch media type handler comes from <a href="http://github.com/caelum/medie">medie</a> and allows unmarshalling an open search descriptor file, such as:
+
+<pre>
+description = Restfulie.at("http://localhost:3000/products/opensearch.xml").accepts('application/opensearchdescription+xml').get.resource
+</pre>
+
+And now, a description object can be searched by invoking the <b>use</b> method:
+
+<pre>
+items = description.use("application/xml").search(:searchTerms => what, :startPage => 1)
+</pre>
+
+There is a sample application <a href="https://github.com/caelum/restfulie-restbuy">showcasing open search usage on the client side at restfulie-restbuy</a>.
+	
