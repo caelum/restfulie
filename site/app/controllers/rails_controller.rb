@@ -17,5 +17,14 @@ class RailsController < ApplicationController
   
   def tokamak
   end
+
+  def opensearch
+  end
+  def history
+  end
+  def result
+  end
+  def response
+  end
   
 end
