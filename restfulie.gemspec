@@ -13,7 +13,13 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.4.1}
   s.summary = %q{Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side).}
-
+  
+  s.add_dependency("rack-conneg")
+  s.add_dependency("sqlite3-ruby")
+  s.add_dependency('tokamak', ">= 1.0.0.beta4")
+  s.add_dependency('medie', ">= 1.0.0.beta4")
+  s.add_dependency('respondie', "~> 0.9.0")
+    
   if s.respond_to? :specification_version then
     s.specification_version = 3
 

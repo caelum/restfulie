@@ -1,10 +1,6 @@
 source :gemcutter
 
-gem "rack-conneg"
-gem "sqlite3-ruby"
-gem 'tokamak', ">= 1.0.0.beta4"
-gem 'medie', ">= 1.0.0.beta4"
-gem 'respondie', "~> 0.9.0"
+gemspec
 
 if RUBY_VERSION < "1.9"
   gem "ruby-debug"
