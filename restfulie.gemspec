@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.summary = %q{Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side).}
   
   s.add_dependency("rack-conneg")
-  s.add_dependency("sqlite3-ruby")
   s.add_dependency('tokamak', ">= 1.0.0.beta4")
   s.add_dependency('medie', ">= 1.0.0.beta4")
   s.add_dependency('respondie', "~> 0.9.0")
@@ -26,12 +25,15 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4.2"])
       s.add_runtime_dependency(%q<json_pure>, [">= 1.2.4"])
+      s.add_development_dependency("sqlite3-ruby")
     else
       s.add_dependency(%q<nokogiri>, [">= 1.4.2"])
       s.add_dependency(%q<json_pure>, [">= 1.2.4"])
+      s.add_dependency("sqlite3-ruby")
     end
   else
     s.add_dependency(%q<nokogiri>, [">= 1.4.2"])
     s.add_dependency(%q<json_pure>, [">= 1.2.4"])
+    s.add_dependency("sqlite3-ruby")
   end
 end
