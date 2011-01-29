@@ -17,7 +17,7 @@ module Restfulie::Client::Feature
     # extension point that allows you to redefine
     # when a request should be retried
     def should_retry?(response, env)
-      response.code.to_i == 503
+      response.code == 503
     end
   	
   end

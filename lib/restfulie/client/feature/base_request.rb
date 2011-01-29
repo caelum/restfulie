@@ -11,25 +11,29 @@ class Restfulie::Client::Feature::BaseRequest
   def request!(method, host, path, request, flow, env)
 
     ::Restfulie::Common::Logger.logger.info(request.http_to_s(method, path, [request.headers])) if ::Restfulie::Common::Logger.logger
-    begin
-      http_request = get_connection_provider(host)
+    http_request = get_connection_provider(host)
 
-      if env[:body]
-        response = http_request.send(method, path, env[:body], request.headers)
-      else
-        response = http_request.send(method, path, request.headers)
-      end
-
-    rescue Exception => e
-      response = e
+    if env[:body]
+      enhance http_request.send(method, path, env[:body], request.headers)
+    else
+      enhance http_request.send(method, path, request.headers)
     end
-    
-    response
     
   end
 
+  protected
+
   def get_connection_provider(host)
     @connection ||= ::Net::HTTP.new(host.host, host.port)
+  end
+
+  private
+  
+  def enhance(response)
+    def response.code
+      super.to_i
+    end
+    response
   end
   
 end

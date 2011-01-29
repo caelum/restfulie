@@ -11,7 +11,7 @@ module Restfulie::Client::Feature
     
   	def execute(chain, request, env)
 			resp = chain.continue(request, env)
-			return resp if resp.code.to_i!=406
+			return resp if resp.code!=406
 		  
 			accept = Medie.registry.for(resp.headers["Accept"])
 		  return resp if accept.nil?
