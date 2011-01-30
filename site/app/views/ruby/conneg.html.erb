@@ -95,7 +95,7 @@ If you create any new media type that can be shared, remember to contribute with
 
 <p>Restfulie goes ahead and provides something more. The ConnegWhenUnaccepted feature allows your clients to retry a request if the service did not accept the media type you tried to send.</p>
 
-<p>The client will automatically check if any of the media types supported by the service (through the Accept respose header) is supported by the client itself, if so, it will re-send the response using the new media type.</p>
+<p>The client will automatically check if any of the media types supported by the service (through the Accept response header) is supported by the client itself(through the Content-tyep response header), if so, it will re-send the response using the new media type.</p>
 
 <p>This feature is turned off by default and can be linked in the chain of features by invoking it in your DSL:</p>
 
