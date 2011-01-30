@@ -15,3 +15,4 @@ log
 .yardoc
 server.pid
 .bundle
+site/config/environment.rb
