@@ -1,11 +1,11 @@
 <div id="textoCapitulo">
 <h2>Features</h2>
 
-<p>Most of the client features can be composed during the request building phase. This means that when invoking Restfulie.at one can specify which features are supposed to be used and
-	which can be left out, allowing an infinite number of combinations without the need
-	to write extra classes.</p>
+<p>Most of the client features can be composed during the request building phase. This means that when invoking Restfulie.at() one can specify which features are supposed to be used and which can be left out, allowing an infinite number of combinations without the need to write extra classes.</p>
+
+<h2>Request Features<h2>
 	
-<h2>Throw error feature</h2>
+<h3>Throw error feature</h3>
 
 <p>A common asked feature is to throw na error in case some specific response codes are returned. There is a sample feature that can be tweaked as required, that raises an exception when 300+ codes are returned. It's name is "ThrowError" and therefore to load it one only has to invoke it in the DSL:
 
@@ -13,7 +13,7 @@
 response = Restfulie.at(uri).throw_error.get
 </pre>
 
-<h2>History</h2>
+<h3>History</h3>
 
 <p>The history feature gives access to the history of executed requests, so one can re-execute
 	it or customize it prior to sending the request again. To add it, simply load it into your DSL:</p>
@@ -25,7 +25,7 @@ response = Restfulie.at(uri).throw_error.get
 	result.request_history(0).get
 </pre>
 
-<h2>Retrying requests</h2>
+<h3>Retrying requests</h3>
 
 <p>Another characteristic of REST over HTTP is that some requests can be easily retried by adding a new feature to the DSL. The RetryWhenUnavailable feature demonstrates how to use it
 	when the server returns 503. The following code will retry the operation once by using this feature:</p>
@@ -34,36 +34,33 @@ response = Restfulie.at(uri).throw_error.get
 response = Restfulie.at(uri).retry_when_unavailable.get
 </pre>
 
-<h2>Custom features</h2>
+<h3>Custom request features</h3>
 
 <p>It is easy to create your own feature, even with configuration parameters, simply create
-	a class in the module Restfulie::Client::Feature</p>
+	a class and implemente the interface RequestFeature</p>
 	
 <pre>
-	# Adds support to whatever you want
-	#
-	# To use it, load it in your dsl:
-	# Restfulie.at(uri).my_feature.get
-	module Restfulie::Client::Feature
-	  class MyFeature
-
-	  	def execute(chain, request, env)
-	
-			# do something before the request is dispatched
-			puts "requesting something to #{request.host}"
-	
-			# dispatch the request
-	  		response = chain.continue(request, env)
-			
-			# do something after the request was executed
-			puts "got back #{response.code}"
-			
-			response
-	  	end
-
-	  end
-	end
+	public class MyFature implement RequestFeature {
+		
+		public Response process(RequestChain chain, Request request, String verb,
+				URI uri, Object payload) {
+		
+			//do something before the request is dispatched
+			Response reponse = chain.processes(chain,request,verb,uri,payload);
+			//do someething after the request have been dispatched
+			return response;
+		}
+		
+	}
 </pre>
+
+<p>After implementing it you just have to pass it so restfulie add it at the stack of features.</p>
+<pre>
+	//the method features can receive more than one feature
+	Restfulie.at("resource_uri").withFeatures(MyFeature.class,OtherFeature.class).get();
+</pre>
+
+<h2>Response Features</h2>
 
 <p>All Restfulie client features are implemented through a set of feature classes
 	such as this one. Feel free to contribute with extra features, configuration sets or
