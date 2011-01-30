@@ -4,7 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.benefits '/talking_about_restfulie', :controller => :systems, :action => :benefits
   map.support '/support', :controller => :systems, :action => :support
   map.rest '/what_is_rest_and_hateoas', :controller => :systems, :action => :rest
-  map.java '/restful_java', :controller => :restful_java, :action => :installing
+  map.java '/java', :controller => :java, :action => :index
   map.rails '/ruby', :controller => :ruby, :action => :index
   map.csharp '/restful_csharp', :controller => :restful_csharp, :action => :installing
   map.features '/restfulie_features', :controller => :systems, :action => :restfulie_features
