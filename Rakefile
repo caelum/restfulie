@@ -27,8 +27,8 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("json_pure", [">= 1.2.4"])
   s.add_dependency("rack-conneg")
   s.add_dependency("sqlite3-ruby")
-  s.add_dependency('tokamak', ">= 1.0.0.beta4")
-  s.add_dependency('medie', ">= 1.0.0.beta4")
+  s.add_dependency('tokamak', "~> 1.1.2")
+  s.add_dependency('medie', "~> 1.0.0")
   s.add_dependency('respondie', "~> 0.9.0")
   
 

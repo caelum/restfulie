@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.summary = %q{Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side).}
   
   s.add_dependency("rack-conneg")
-  s.add_dependency('tokamak', ">= 1.0.0.beta4")
-  s.add_dependency('medie', ">= 1.0.0.beta4")
+  s.add_dependency('tokamak', "~> 1.1.2")
+  s.add_dependency('medie', "~> 1.0.0")
   s.add_dependency('respondie', "~> 0.9.0")
     
   if s.respond_to? :specification_version then
