@@ -1,4 +1,3 @@
-
 ## Entry points
 	
 Entry points are commonly defined through a resource retrieval or creation request. Restfulie allows you to use both type of entry points through its API.
@@ -81,13 +80,12 @@ One should first acquire the representation from the server through your common 
 xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
 order = Order.from_xml(xml)
 </pre>
-
 or use the restfulie *from_web*:
-<pre>order = Order.from_web 'http://www.caelum.com.br/orders/1'
+<pre>
+order = Order.from_web 'http://www.caelum.com.br/orders/1'
 </pre>
 
 And now you can invoke all those actions in order to change your resource's state:
-
 <pre>
 order.refresh
 order.update
@@ -123,7 +121,6 @@ Restfulie.at('http://caelum.com.br/orders/2').accepts('application/vnd_caelum_or
 <h3>Resource format support</h3>
 
 <p>Restfulie currently supports full application/atom+xml, xml+atom rel and json+links, besides atom feed and more.</p>
-	
 
 <h3>Entry points: POST</h3>
 
