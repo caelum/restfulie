@@ -8,15 +8,16 @@
 	If you use Restfulie to access such a resource, there will be one entry point and all it's interactions will be driven by hypermedia links:<br/><br/>
 	
 <pre>
-	# retrieves the resource through GET: the entry point
+	//retrieves the resource through GET: the entry point
 	Response response = Resftulie.at("resource_uri").get();
-	Order order = response.getOrder();
+	Order order = response.getResource();
 	
 	//print the order price
-	System.out.println(oder.getPrice());
+	System.out.println(order.getPrice());
 	
 	//send a post request to create a payment
-	resource(order).link("payment").follow().post(new Card(4444), new Amount(order.getCost()));
+	Payment payment = new Payment(new Card(444), new Amount(order.getCost()));
+	resource(order).link("payment").follow().post(payment);
 	
 	//send a delete request to cancel the order
 	resource(order).link("cancel").follow().delete();
