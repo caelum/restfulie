@@ -68,7 +68,6 @@ Note that <b>resulting_city</b> seems to be the result of following a 201 respon
 	
 ## Domain model binding example
 Create your class and invoke the *uses_restfulie* method:
-
 <pre>
 class Order < ActiveRecord::Base
 	uses_restfulie
