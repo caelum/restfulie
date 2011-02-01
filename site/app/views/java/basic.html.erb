@@ -11,11 +11,11 @@
 	//gettin an instance of restfulie
 	Restfulie restfulie = Restfulie.custom();
 	//It will register the Order class on the XML media type, so that it will be able to convert it.
-	restfulie.register(new XmlMediaType().withTypes(Order.class))
+	restfulie.getMediaTypes().register(new XmlMediaType().withTypes(Order.class))
 	
 	//retrieves the resource through GET: the entry point
 	Response response = restfulie.at("entry point").accept("application/xml").get();
-	//the resource method understand the xml and return the Order object previous registered
+	//the resource method understand the xml and return the Order object previous registered	
 	Order order = response.getResource();
 	
 	//print the order price

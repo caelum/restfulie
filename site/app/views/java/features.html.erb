@@ -37,7 +37,7 @@ Response response = Restfulie.at("uri").retryWhenUnavailable().get();
 <p>After implementing it you just have to pass it so restfulie add it at the stack of features.</p>
 <pre>
 	//the method features can receive more than one feature
-	Restfulie.at("resource_uri").withFeatures(MyFeatureRequest.class).get();
+	Restfulie.at("resource_uri").withFeature(MyFeatureRequest.class).get();
 </pre>
 
 <h2>Response Features</h2>
@@ -59,7 +59,7 @@ Response response = Restfulie.at(uri).throwError().get();
 	Response response = Restfulie.at(uri).history().get();
 	
 	# sends the request again
-	response.getRequestHistory(0).get();
+	response.getRequestHistory().get(0);
 </pre>
 
 <h3>ConnegWhenUnaccepted</h3>
@@ -90,7 +90,7 @@ able to generate it.</p>
 <p>And then pass it so restfulie add it at the stack of features.</p>
 <pre>
 	//the method features can receive more than one feature
-	Restfulie.at("resource_uri").withFeatures(MyFeatureResponse.class,OtherFeatureResponse.class).get();
+	Restfulie.at("resource_uri").withFeature(MyFeatureResponse.class,OtherFeatureResponse.class).get();
 </pre>
 
 

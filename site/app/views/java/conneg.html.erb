@@ -29,11 +29,11 @@ System.out.println(hotel.getName());
 <p>The client can use the 'Content-type' http reader to communicate with the server showing the how the information been sent is represented.</p>
 
 <pre>
-	Card card = new Card();
+	Card card = new Card(4444);
 	// The card information will be sent as an xml, and the server will be aware of it throught Content-type
 	Response response = Restfulie.at("http://myhotels.caelum.com/1").as("application/xml").accept("application/json").post(card)
 	// print the media type used to produce the response
-	System.out.println(response.getHeaders("Content-type"));
+	System.out.println(response.getHeader("Content-type"));
 </pre>
 
 <p>If both Content-type and Accept must be informated as above, and with the same representation, you can use
@@ -43,7 +43,7 @@ a shortcut for it.</p>
 	// The handling() method will add application/xml for both Accept/Content-type header	
 	Response response = Restfulie.at("http://myhotels.caelum.com/1").handling("application/xml").post(card)
 	// print the media type used to produce the response
-	System.out.println(response.getHeaders("Content-type"));
+	System.out.println(response.getHeader("Content-type"));
 </pre>
 
 
