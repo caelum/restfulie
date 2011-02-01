@@ -6,6 +6,7 @@ module Restfulie::Client
       trait :base
       trait :verb
       request :base_request
+      request :rescue_exception
       request :setup_header
       request :serialize_body
       request :enhance_response

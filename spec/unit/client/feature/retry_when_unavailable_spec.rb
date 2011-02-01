@@ -15,12 +15,12 @@ describe Restfulie::Client::Feature::RetryWhenUnavailable do
     it "should retry execution by default if response code is 503" do
       second_response = mock Net::HTTPResponse
       @chain.should_receive(:continue).with(@request, {}).and_return(second_response)
-      @response.stub(:code).and_return("503")
+      @response.stub(:code).and_return(503)
       @feature.execute(@chain, @request, {}).should == second_response
     end
     
     it "should not retry execution by default if response code is not 503" do
-      @response.stub(:code).and_return("404")
+      @response.stub(:code).and_return(404)
       @feature.execute(@chain, @request, {}).should == @response
     end
     

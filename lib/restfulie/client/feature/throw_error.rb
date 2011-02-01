@@ -9,7 +9,7 @@ class Restfulie::Client::Feature::ThrowError
       Restfulie::Common::Logger.logger.error(result)
       raise Restfulie::Client::HTTP::Error::ServerNotAvailableError.new(request, Restfulie::Client::HTTP::Response.new(request.verb, request.path, 503, nil, {}), result )
     end
-    case result.response.code.to_i
+    case result.response.code
     when 100..299
       result
     when 300..399

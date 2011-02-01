@@ -14,12 +14,12 @@ describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
   context "when executing a request" do
     
     it "should not retry execution by default if response code is not 406" do
-      @response.stub(:code).and_return("404")
+      @response.stub(:code).and_return(404)
       @feature.execute(@chain, @request, {}).should == @response
     end
 
     it "should not retry execution if there is no content type agreed on" do
-      @response.stub(:code).and_return("406")
+      @response.stub(:code).and_return(406)
       Medie.registry.should_receive(:for).with(["application/xml"]).and_return(nil)
       @feature.execute(@chain, @request, {}).should == @response
     end
@@ -27,7 +27,7 @@ describe Restfulie::Client::Feature::ConnegWhenUnaccepted do
     it "should retry execution by default if response code is 503" do
       env = {:payload => "my payload"}
       
-      @response.stub(:code).and_return("406")
+      @response.stub(:code).and_return(406)
       Medie.registry.should_receive(:for).with(["application/xml"]).and_return("application/xml")
 
       @request.should_receive(:with).with("Content-type", "application/xml")
