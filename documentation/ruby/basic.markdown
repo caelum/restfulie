@@ -1,6 +1,7 @@
 ## Hypermedia representations
 
 <p>A Restful application should support hypermedia content, and following this constraint, a typical resource representing an order in xml would add controls (links or forms) so clients can navigate through your service protocol (in this case, make a payment):</p>
+
 ```<order xmlns:atom="http://www.w3.org/2005/Atom">
 	<product>rails training</product>
 	<product>REST training</product>
@@ -9,6 +10,7 @@
 	<atom:link rel="payment" href="http://www.caelum.com.br/orders/1/payment" />
 </order>
 ```
+
 Here the order is represented through a typical application/xml file, but it has something extra: controls that allows clients to decide what to do next.
 Or an <b>example</b> of a valid json representation with hypermedia:
 
