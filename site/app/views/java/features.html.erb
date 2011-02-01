@@ -11,7 +11,7 @@
 	when the server returns 503. The following code will retry the operation once by using this feature:</p>
 	
 <pre>
-Response response = Restfulie.at("uri").retry_when_unavailable().get();
+Response response = Restfulie.at("uri").retryWhenUnavailable().get();
 </pre>
 
 <h3>Custom request features</h3>
@@ -47,7 +47,7 @@ Response response = Restfulie.at("uri").retry_when_unavailable().get();
 <p>A common asked feature is to throw na error in case some specific response codes are returned. There is a sample feature that can be tweaked as required, that raises an exception when 300+ codes are returned. It's name is "ThrowError" and therefore to load it one only has to invoke it in the DSL:
 
 <pre>
-Response response = Restfulie.at(uri).throw_error().get();
+Response response = Restfulie.at(uri).throwError().get();
 </pre>
 
 <h3>History</h3>
@@ -59,7 +59,7 @@ Response response = Restfulie.at(uri).throw_error().get();
 	Response response = Restfulie.at(uri).history().get();
 	
 	# sends the request again
-	response.request_history(0).get();
+	response.getRequestHistory(0).get();
 </pre>
 
 <h3>ConnegWhenUnaccepted</h3>
@@ -68,7 +68,7 @@ Response response = Restfulie.at(uri).throw_error().get();
 able to generate it.</p>
 
 <pre>
-	Product product = Restfulie.at("http://localhost:3000/product/2").conneg_when_unaccepted().get();
+	Product product = Restfulie.at("http://localhost:3000/product/2").connegWhenUnaccepted().get();
 </pre>
 
 <h3>Custom request features</h3>

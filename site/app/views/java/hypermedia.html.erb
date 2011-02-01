@@ -14,8 +14,8 @@ giving back a hypermedia aware object. The following example shows a typical res
 a xml request:
 
 <pre>
-> response = Restfulie.at(uri).accepts("application/xml").get
-> puts response.body
+Response response = Restfulie.at(uri).accepts("application/xml").get();
+System.out.println(response.getBody());
 <%=html("
 <order>
 	<link rel='payment' href='http://store.caelum.com.br/orders/2345/payment' />
@@ -27,13 +27,10 @@ a xml request:
 	<price>1235.4</price>
 </order>
 ")%>
-> puts response.code
-200
-> puts response.headesr['Content-Type']
-['application/xml']
-> resource = response.resource
-> puts resource.order.items[0].item.id
-"Rest from scratch book"
+System.out.println(response.getCode()); // 200
+System.out.println(response.headers('Content-Type')); //'application/xml'
+Order oder = response.getResourse();
+System.out.println(order.getItems(0).getId()); // "Rest from scratch book"
 </pre>
 
 <h2>Supported media types</h2>
@@ -63,13 +60,15 @@ For representations that contain link elements in its body, such as this one in 
 This link can be accessed by unmarshalling the resource and then accessing the link itself:
 
 <pre>
-response = Restfulie.at(uri).get
+Response response = Restfulie.at(uri).get();
 
-# follow the payment link within the order
-response = response.resource.order.links.payment.follow.get
+//follow the payment link within the order
+Order order = response.getResource();
+// the resource method is staticaly imported from ...
+resource(order).link("payment").follow().get();
 
-# will print the payment body
-puts resource.body
+//will print the payment body
+System.out.println(order.response.getBody());
 </pre>
 
 Once you have invoked the <b>follow</b> method, the object returned is the same as a
@@ -89,9 +88,10 @@ Link: <http://amundsen.com/examples/mazes/2d/ten-by-ten/0:north>; rel="start"; t
 This header can be accessed by using the headers.link and links method:
 
 <pre>
-resource = Restfulie.at(uri).get
-puts resource.headers.link("start").href
+Response response = Restfulie.at(uri).get();
+puts response.getHeaders().link("start").getHref();
 
 # following the link
-another_resource = resource.headers.link("start").follow.get
+Resource resource = response.getResource();
+Response anotherResponse = resource.headers.link("start").follow().get();
 </pre>
