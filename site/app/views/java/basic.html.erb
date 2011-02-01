@@ -8,8 +8,14 @@
 	If you use Restfulie to access such a resource, there will be one entry point and all it's interactions will be driven by hypermedia links:<br/><br/>
 	
 <pre>
+	//gettin an instance of restfulie
+	Restfulie restfulie = Restfulie.custom();
+	//It will register the Order class on the XML media type, so that it will be able to convert it.
+	restfulie.register(new XmlMediaType().withTypes(Order.class))
+	
 	//retrieves the resource through GET: the entry point
-	Response response = Resftulie.at("resource_uri").get();
+	Response response = restfulie.at("entry point").accept("application/xml").get();
+	//the resource method understand the xml and return the Order object previous registered
 	Order order = response.getResource();
 	
 	//print the order price
@@ -25,6 +31,6 @@
 
 </p>
 
-<p>This should be all. Requesting the order with the header Accept or the extension xml should get you back a hypermedia supported xml file. With the json and atom versions everything should work accordingly.
+<p>This should be all. Requesting the order with the header Accept as "application/xml" should get you back a hypermedia supported xml file. With the json version everything should work accordingly.
 	
 	By now you should be able to put your resources online and hypermedia-link them whenever they make sense. Do not forget to use hypermedia controls to notify your client the URIs to use for creating and updating content too, as with the payment example above.</p>
