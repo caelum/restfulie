@@ -22,56 +22,46 @@ require 'restfulie'
 
 In your controller, simply tell what is your resource and which representation media types you support. Notice how every feature is nothing but a one-liner:
 
-<pre>
-class ItemsController
-
-	respond_to :xml, :json, :atom
-	
-	def index
-		respond_with @items = Item.all
-	end
-	
-	def show
-		respond_with @item = Item.find(params[:id])
-	end
-end	
-</pre>
+    class ItemsController
+      respond_to :xml, :json, :atom
+      def index
+        respond_with @items = Item.all
+      end
+      def show
+        respond_with @item = Item.find(params[:id])
+      end
+    end	
 
 ## Hypermedia
 
 Rail's webservices support through CRUD xml/json/atom is a nice easy to use feature. To move from webservices into the rest world, let's add some hyperlinks. Creating a template file called index.tokamak, one describes a representation's appearance:
 
-<pre>
-collection(@items, :root => "items") do |items|
-  items.link "self", items_url
+    collection(@items, :root => "items") do |items|
+      items.link "self", items_url
 
-  items.members do |m, item|
-    m.link :self, item_url(item)
-    m.values { |values|
-      values.name   item.name
-    }
-  end
-end
-</pre>
+      items.members do |m, item|
+        m.link :self, item_url(item)
+        m.values { |values|
+          values.name   item.name
+        }
+      end
+    end
 
 And our show.tokamak:
 
-<pre>
-member(@item) do |m|
-  m.link "self", item_url(@item)
-  m.values { |v|
-    v.name @item.name
-    v.price @item.price
-  }
-end
-</pre>
+    member(@item) do |m|
+      m.link "self", item_url(@item)
+      m.values { |v|
+        v.name @item.name
+        v.price @item.price
+      }
+    end
 
 We are ready to go, hypermedia supported:
 
 <pre>
 # using restfulie as an http api:
-response = Restfulie.accepts("application/xml").
-					at('http://localhost:8080/items').get
+response = Restfulie.accepts("application/xml").at('http://localhost:8080/items').get
 puts response.body
 puts response.code
 
