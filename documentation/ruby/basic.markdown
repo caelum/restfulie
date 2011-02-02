@@ -2,17 +2,13 @@
 
 A Restful application should support hypermedia content, and following this constraint, a typical resource representing an order in xml would add controls (links or forms) so clients can navigate through your service protocol (in this case, make a payment):
 
-<pre>
-	<code>
-		<order xmlns:atom="http://www.w3.org/2005/Atom">
+	<order xmlns:atom="http://www.w3.org/2005/Atom">
 		<product>rails training</product>product>
 		<product>REST training</product>product>
 		<price>512.45</price>price>
 		<atom:link rel="self" href="http://www.caelum.com.br/orders/1" />
 		<atom:link rel="payment" href="http://www.caelum.com.br/orders/1/payment" />
-		</order>
-	</code>
-</pre>
+	</order>
 
 Here the order is represented through a typical application/xml file, but it has something extra: controls that allows clients to decide what to do next.
 Or an <b>example</b> of a valid json representation with hypermedia:
@@ -32,25 +28,20 @@ Or an <b>example</b> of a valid json representation with hypermedia:
 
 Last of all, one could add the links on the Link header of the http response:
 
-<pre>
-<%= html 'Link: <http://www.caelum.com.br/orders/1>; rel="self", <http://www.caelum.com.br/orders/1/payment>; rel="payment"' %>
-</pre>
+`<%= html 'Link: <http://www.caelum.com.br/orders/1>; rel="self", <http://www.caelum.com.br/orders/1/payment>; rel="payment"' %>`
 
 ## Server side
 
 This is a simple example how to make your controls available to your resource consumers. First configure your controller to respond to the media types you want to support, for example xml, json and atom:
 
-<pre>
-class OrderController < ApplicationControl
 
-	respond_to :json, :xml, :atom
+    class OrderController < ApplicationControl
+      respond_to :json, :xml, :atom
+      def show
+        respond_with @order = Order.load(params[:id])
+      end
+    end
 
-	def show
-		respond_with @order = Order.load(params[:id])
-	end
-
-end
-</pre>
 
 Now create a file called "show.tokamak" in the typical directory structure for view files on Rails. This file is a tokamak template that allows you to add
 hypermedia controls:
