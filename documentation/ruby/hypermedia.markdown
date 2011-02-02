@@ -12,28 +12,26 @@ Restfulie uses <a href="http://github.com/caelum/medie">medie</a> to do the unma
 giving back a hypermedia aware object. The following example shows a typical response to
 a xml request:
 
-<pre>
-> response = Restfulie.at(uri).accepts("application/xml").get
-> puts response.body
-<%=html("
-<order>
-	<link rel='payment' href='http://store.caelum.com.br/orders/2345/payment' />
-	<items>
-		<item>
-			<id>Rest from scratch book</id>
-		</item>
-	</items>
-	<price>1235.4</price>
-</order>
-")%>
-> puts response.code
-200
-> puts response.headesr['Content-Type']
-['application/xml']
-> resource = response.resource
-> puts resource.order.items[0].item.id
-"Rest from scratch book"
-</pre>
+    > response = Restfulie.at(uri).accepts("application/xml").get
+    > puts response.body
+
+    <order>
+        <link rel='payment' href='http://store.caelum.com.br/orders/2345/payment' />
+        <items>
+            <item>
+                <id>Rest from scratch book</id>
+            </item>
+        </items>
+        <price>1235.4</price>
+    </order>
+
+    > puts response.code
+    200
+    > puts response.headesr['Content-Type']
+    ['application/xml']
+    > resource = response.resource
+    > puts resource.order.items[0].item.id
+    "Rest from scratch book"
 
 ## Supported media types
 
@@ -45,31 +43,25 @@ type handler at the mailing list.
 
 For representations that contain link elements in its body, such as this one in xml:
 
-<pre>
-<%=html("
-<order>
-	<link rel='payment' href='http://store.caelum.com.br/orders/2345/payment' />
-	<items>
-		<item>
-			<id>Rest from scratch book</id>
-		</item>
-	</items>
-	<price>1235.4</price>
-</order>
-")%>
-</pre>
+    <order>
+        <link rel='payment' href='http://store.caelum.com.br/orders/2345/payment' />
+        <items>
+            <item>
+                <id>Rest from scratch book</id>
+            </item>
+        </items>
+        <price>1235.4</price>
+    </order>
 
 This link can be accessed by unmarshalling the resource and then accessing the link itself:
 
-<pre>
-response = Restfulie.at(uri).get
+    response = Restfulie.at(uri).get
 
-# follow the payment link within the order
-response = response.resource.order.links.payment.follow.get
+    # follow the payment link within the order
+    response = response.resource.order.links.payment.follow.get
 
-# will print the payment body
-puts resource.body
-</pre>
+    # will print the payment body
+    puts resource.body
 
 Once you have invoked the <b>follow</b> method, the object returned is the same as a
 <b>Restfulie.at()</b> invocation, a request dsl, which allows you to configure the
@@ -81,16 +73,13 @@ You can see an example of a full client navigating through links in the examples
 
 If your service provides a link header such as:
 
-<pre>
-Link: <http://amundsen.com/examples/mazes/2d/ten-by-ten/0:north>; rel="start"; type="application/xml"
-</pre>
+`Link: <http://amundsen.com/examples/mazes/2d/ten-by-ten/0:north>; rel="start"; type="application/xml"`
 
 This header can be accessed by using the headers.link and links method:
 
-<pre>
-resource = Restfulie.at(uri).get
-puts resource.headers.link("start").href
+    resource = Restfulie.at(uri).get
+    puts resource.headers.link("start").href
 
 # following the link
-another_resource = resource.headers.link("start").follow.get
-</pre>
+`another_resource = resource.headers.link("start").follow.get`
+
