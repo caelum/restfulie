@@ -12,8 +12,6 @@ A Restful application should support hypermedia content, and following this cons
 </order>
 </pre>
 
-
-
 Here the order is represented through a typical application/xml file, but it has something extra: controls that allows clients to decide what to do next.
 Or an <b>example</b> of a valid json representation with hypermedia:
 
@@ -88,6 +86,5 @@ order.links.self.follow.delete
 This should be all. Requesting the order with the header Accept or the extension xml should get you back a hypermedia supported xml file. With the json and atom versions everything should work accordingly.
 	
 By now you should be able to put your resources online and hypermedia-link them whenever they make sense. Do not forget to use hypermedia controls to notify your client the URIs to use for creating and updating content too, as with the payment example above.
-
 
 
