@@ -63,13 +63,10 @@ This is a simple example how to make your controls available to your resource co
 
 <pre>
 class OrderController < ApplicationControl
-
 	respond_to :json, :xml, :atom
-
 	def show
 		respond_with @order = Order.load(params[:id])
 	end
-
 end
 </pre>
 
@@ -105,10 +102,6 @@ order.links.payment.follow.post { :card => 4444, :amount => order.cost}
 order.links.self.follow.delete
 </pre>
 
-
 This should be all. Requesting the order with the header Accept or the extension xml should get you back a hypermedia supported xml file. With the json and atom versions everything should work accordingly.
 	
 By now you should be able to put your resources online and hypermedia-link them whenever they make sense. Do not forget to use hypermedia controls to notify your client the URIs to use for creating and updating content too, as with the payment example above.
-
-
-
