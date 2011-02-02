@@ -4,7 +4,7 @@
 
 REST clients know how to deal with several different media types, for instance application/xml and application/opensearchdescriptor+xml. Being so, when requesting something to your service, a client tells which media types it is capable of understand so the service provides the best fit between the ones both of them are capable of handling.
 
-![Content negotiation](http://restfulie.caelum.com.br/images/negotiation.png)
+![Content negotiation](http://farm5.static.flickr.com/4105/5410725778_fe7eac4422_b.jpg)
 
 Content negotiation is the key concept that allows services to change their links to other parts of other systems while not breaking compatibility with their consumers (clients).
 
