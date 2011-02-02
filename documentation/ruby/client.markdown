@@ -1,14 +1,13 @@
+
 ## Entry points
 	
 Entry points are commonly defined through a resource retrieval or creation request. Restfulie allows you to use both type of entry points through its API.
 
-<h3><a name="get entry point">Resource retrieval entry point</a></h3>
+### Resource retrieval entry point
 
 Most systems will create a request retrieval entry point, which can be accessed as:
 
-<pre>
-city = Restfulie.at('http://localhost:3000/cities/5').get
-</pre>
+`city = Restfulie.at('http://localhost:3000/cities/5').get`
 
 After that, the xml tree can be accessed and links followed. A typical city hypermedia file would be:
 
@@ -38,7 +37,7 @@ next_one = city.next_largest
 
 Note that the client application knows what the <b>rel</b> attribute <b>next_largest</b> means, but does not know what it's value stands for (Rio de Janeiro).
 
-<h3><a name="response result">Acessing the web response</a></h3>
+### Acessing the web response
 
 In this case, you can access the http response through <b>web_response</b>, i.e.:
 
@@ -47,7 +46,7 @@ city = Restfulie.at('http://localhost:3000/cities/5').get
 puts "Response code #{city.web_response.code}"
 </pre>
 
-<h3><a name="request result">Parsing a web response</a></h3>
+### Parsing a web response
 
  The return of such <b>web_response</b> method is an object of <i>Restfulie::Client::HTTPResponse</i> and allows you to access methods to check whether the request was successful or any other group of response codes:
 <pre>
@@ -56,7 +55,7 @@ puts "Response code #{city.web_response.code}"
 	puts "Response code #{city.web_response.is_client_error?}"
 </pre>
 
-<h3><a name="create entry point">Resource creation entry point</a></h3>
+### Resource creation entry point
 
 If your server defines an entry point related to a resource creation, you can use the <b>create</b>	method as:
 
@@ -68,23 +67,23 @@ Note that <b>resulting_city</b> seems to be the result of following a 201 respon
 	
 ## Domain model binding example
 Create your class and invoke the *uses_restfulie* method:
-<pre>
-class Order < ActiveRecord::Base
-	uses_restfulie
-end
-</pre>
+
+    class Order < ActiveRecord::Base
+		    uses_restfulie
+    end
 
 One should first acquire the representation from the server through your common GET request and process it through the usual from_* methods:
 <pre>
 xml = Net::HTTP.get(URI.parse('http://www.caelum.com.br/orders/1'))
 order = Order.from_xml(xml)
 </pre>
+
 or use the restfulie *from_web*:
-<pre>
-order = Order.from_web 'http://www.caelum.com.br/orders/1'
+<pre>order = Order.from_web 'http://www.caelum.com.br/orders/1'
 </pre>
 
 And now you can invoke all those actions in order to change your resource's state:
+
 <pre>
 order.refresh
 order.update
@@ -93,14 +92,12 @@ order.pay
 </pre>
 
 Note that:
-<ul>
-	<li> refresh is get</li>
-	<li> update is put (and you have to put everything back)</li>
-	<li> destroy is delete</li>
-	<li> pay (unknown methods) is post</li>
-</ul>
+	* refresh is get</li>
+	* update is put (and you have to put everything back)</li>
+	* destroy is delete</li>
+	* pay (unknown methods) is post</li>
 
-<h3>Media type and content negotiation</h3>
+### Media type and content negotiation
 
 Restfulie entry point requests can make use of conneg by notifying the server which media type is being sent and which ones can be understood.
 
@@ -117,11 +114,12 @@ Restfulie.at('http://caelum.com.br/orders/2').accepts('application/vnd_caelum_or
 </pre>
 
 
-<h3>Resource format support</h3>
+### Resource format support</h3>
 
 <p>Restfulie currently supports full application/atom+xml, xml+atom rel and json+links, besides atom feed and more.</p>
+	
 
-<h3>Entry points: POST</h3>
+### Entry points: POST</h3>
 
 In some cases, one wants to access an entry point through a <b>POST</b> request, i.e. adding a new Product to the system:
 
@@ -134,7 +132,7 @@ end
 product = Product.remote_create Product.new
 </pre>
 
-<h3><a name="304 cache">304 cache support</a></h3>
+### 304 cache support
 
 If a self request is send to another URI, Restfulie will automatically use its <b>Etag</b> and <b>Last-modified</b> informations to execute the request. If the response is 304, it will return the object itself, indicating to the running software that there was no change: saving bandwidth.
 
@@ -147,3 +145,4 @@ while !order.ready?
 	order = order.self
 end
 </pre>
+
