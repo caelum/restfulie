@@ -1,0 +1,36 @@
+<div id="textoCapitulo">
+
+	<%= render :partial => 'shared/simple_representation' %>
+
+<h3>Client side</h3>
+
+<p>
+	If you use Restfulie to access such a resource, there will be one entry point and all it's interactions will be driven by hypermedia links:<br/><br/>
+	
+<pre>
+	//gettin an instance of restfulie
+	Restfulie restfulie = Restfulie.custom();
+	//It will register the Order class on the XML media type, so that it will be able to convert it.
+	restfulie.getMediaTypes().register(new XmlMediaType().withTypes(Order.class))
+	
+	//retrieves the resource through GET: the entry point
+	Response response = restfulie.at("entry point").accept("application/xml").get();
+	//the resource method understand the xml and return the Order object previous registered	
+	Order order = response.getResource();
+	
+	//print the order price
+	System.out.println(order.getPrice());
+	
+	//send a post request to create a payment
+	Payment payment = new Payment(new Card(444), new Amount(order.getCost()));
+	resource(order).link("payment").follow().post(payment);
+	
+	//send a delete request to cancel the order
+	resource(order).link("cancel").follow().delete();
+</pre>
+
+</p>
+
+<p>This should be all. Requesting the order with the header Accept as "application/xml" should get you back a hypermedia supported xml file. With the json version everything should work accordingly.
+	
+	By now you should be able to put your resources online and hypermedia-link them whenever they make sense. Do not forget to use hypermedia controls to notify your client the URIs to use for creating and updating content too, as with the payment example above.</p>

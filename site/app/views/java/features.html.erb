@@ -1,0 +1,99 @@
+<div id="textoCapitulo">
+<h2>Features</h2>
+
+<p>Most of the client features can be composed during the request building phase. This means that when invoking Restfulie.at() one can specify which features are supposed to be used and which can be left out, allowing an infinite number of combinations without the need to write extra classes.</p>
+
+<h2>Request Features<h2>
+	
+<h3>Retrying requests</h3>
+
+<p>Another characteristic of REST over HTTP is that some requests can be easily retried by adding a new feature to the DSL. The RetryWhenUnavailable feature demonstrates how to use it
+	when the server returns 503. The following code will retry the operation once by using this feature:</p>
+	
+<pre>
+Response response = Restfulie.at("uri").retryWhenUnavailable().get();
+</pre>
+
+<h3>Custom request features</h3>
+
+<p>It is easy to create your own feature, even with configuration parameters, simply create
+	a class and implemente the interface RequestFeature</p>
+	
+<pre>
+	public class MyFatureRequest implement RequestFeature {
+		
+		public Response process(RequestChain chain, Request request, String verb,
+				URI uri, Object payload) {
+		
+			//do something before the request is dispatched
+			Response response = chain.next(request, verb, uri, payload);
+			//do someething after the request have been dispatched
+			return response;
+		}
+		
+	}
+</pre>
+
+<p>After implementing it you just have to pass it so restfulie add it at the stack of features.</p>
+<pre>
+	//the method features can receive more than one feature
+	Restfulie.at("resource_uri").withFeature(MyFeatureRequest.class).get();
+</pre>
+
+<h2>Response Features</h2>
+
+<h3>Throw error feature</h3>
+
+<p>A common asked feature is to throw na error in case some specific response codes are returned. There is a sample feature that can be tweaked as required, that raises an exception when 300+ codes are returned. It's name is "ThrowError" and therefore to load it one only has to invoke it in the DSL:
+
+<pre>
+Response response = Restfulie.at(uri).throwError().get();
+</pre>
+
+<h3>History</h3>
+
+<p>The history feature gives access to the history of executed requests, so one can re-execute
+	it or customize it prior to sending the request again. To add it, simply load it into your DSL:</p>
+
+<pre>
+	Response response = Restfulie.at(uri).history().get();
+	
+	# sends the request again
+	response.getRequestHistory().get(0);
+</pre>
+
+<h3>ConnegWhenUnaccepted</h3>
+
+<p>The ConnegWhenUnaccepted feature retry an request when the server response with the 406("unaccepted media type") code, the new request will be sent with another media type supported by the server(throug Accept) if the client is 
+able to generate it.</p>
+
+<pre>
+	Product product = Restfulie.at("http://localhost:3000/product/2").connegWhenUnaccepted().get();
+</pre>
+
+<h3>Custom request features</h3>
+
+<p>It is easy to create your own feature, even with configuration parameters, simply create
+	a class and implement the interface ResponseFeature</p>
+	
+<pre>
+	public class MyFature implement ResponseFeature {
+		
+		public Response process(ResponseChain responseChain, Response response) {
+			Response reponse = responseChain.next(response);
+			return response;
+		}
+		
+	}
+</pre>
+
+<p>And then pass it so restfulie add it at the stack of features.</p>
+<pre>
+	//the method features can receive more than one feature
+	Restfulie.at("resource_uri").withFeature(MyFeatureResponse.class,OtherFeatureResponse.class).get();
+</pre>
+
+
+<p>All Restfulie client features are implemented through a set of feature classes
+	such as this one. Feel free to contribute with extra features, configuration sets or
+	documentation to them or ask around in the mailing lists for other people contributions.</p>

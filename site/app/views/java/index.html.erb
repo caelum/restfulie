@@ -1,0 +1,53 @@
+<div id="textoCapitulo">
+<h2>One minute guide</h2>
+
+<p>This is a one minute guide to get you going with Restfulie Java.
+	As soon as you finish this example you are up to the next guide and then
+	move on to the features you want to explore more.</p>
+	
+<h2>Sever side configuration</h2>
+
+<h2>Starting up</h2>
+Restfulie Java server side support is provided through <a>VRaptor</a>. 
+For an easy to start up you can start your project based on vraptor-blank-project, available on http://vraptor.caelum.com.br/download.jsp . It contains all required jar dependencies, and the minimal web.xml configuration for working with VRaptor. For more information on VRaptor you can find the doc <a>here</a>
+
+<h2>A simple controller</h2>
+
+Having VRaptor properly configured on your web.xml, you can create your controllers for dealing with web requests and start building your system. A simple controller would be:
+<br>
+<br>
+<pre>
+	/*
+	* You should annotate your controller with @Resource, so all of its public methods will
+	* be ready to deal with web requests.
+	*/
+	@Resource
+	public class ItemsController {
+
+
+	    /*
+	     * VRaptor will return you list as an Xml represetation.
+	     * URI: /clients/list
+	     * xml:
+		 * <list>
+	     * 		<item>
+		 *          <id>1</id>
+		 *          <description>tshirt</description>
+		 *          <price>40.5</price>
+		 * 		</item>
+		 * </list>
+	     */
+	    public void list() {
+			Item item = new Item();
+			item.setId(1);
+			item.setDescription("tshirt");
+			item.setPreco(40.5);
+			
+			List<Item> items = Arryas.asList(item);
+			result(xml()).from(items).serialize();
+	    }
+
+	}
+</pre>
+<br>
+<br>
