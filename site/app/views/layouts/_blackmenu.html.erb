@@ -1,0 +1,11 @@
+<div id="menuWrap">
+	<ul id="menuElements">
+    	<li><a href="<%=url_for :controller => :systems, :action =>:hypermedia%>"><span>why hypermedia?</span></a></li>
+    	<li><a href="<%=url_for :controller => :systems, :action =>:quit_pretending%>"><span>quit pretending</span></a></li>
+    	<li><a href="<%=url_for :controller => :systems, :action =>:features %>"><span>features</span></a></li>
+    	<li><a href="<%=url_for :controller => :systems, :action =>:documentation %>"><span>documentation</span></a></li>
+    	<li><a href="<%= url_for :support%>"><span>support</span></a></li>
+    	<li><a href="<%=rails_path%>" onclick="javascript:pageTracker._trackPageview('<%= rails_path%>')"><span>pdf</span></a></li>
+    	<li><a href="<%= url_for :benefits%>"><span>testimonials</span></a></li>
+    </ul>
+</div>

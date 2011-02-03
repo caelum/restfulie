@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>restfulie - rest from scratch</title>
-	<%= stylesheet_link_tag "screen", "menu", :cache => true %>
+	<%= stylesheet_link_tag "screen", "menu", "uppermenu", :cache => true %>
     <!--[if lt IE 7]>
     <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
     <![endif]-->
@@ -12,13 +12,18 @@
 <body>
 	<div id="headerWrap">
     	<div id="headerContent">
-        	<h1 id="logoRestfulie"><span>restfulie</span></h1><!-- vraptorlogo-->
+    	
+    	    <%= render :partial => 'layouts/uppermenu' %>
+    	
+        	<h1 id="logoRestfulie"><span>restfulie</span></h1><!-- restfulielogo-->
+        	    <p class="moto">Quit pretending.</p>
             
 						<a id="caelumObjects" href="http://www.caelumobjects.com/" title="Caelum Objects Site"><span>Caelum Objects</span></a>
+						
         </div><!-- header content -->
     </div><!-- header wrap-->
 
-    <%= render :partial => 'layouts/menu' %>
+
     
 	<%= yield %>
 
