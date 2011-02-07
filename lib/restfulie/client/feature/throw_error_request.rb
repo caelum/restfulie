@@ -7,7 +7,8 @@ class Restfulie::Client::Feature::ThrowErrorRequest
     result = flow.continue(request, env)
     if result.kind_of? Exception
       Restfulie::Common::Logger.logger.error(result)
-      raise Restfulie::Client::HTTP::Error::ServerNotAvailableError.new(request, Restfulie::Client::HTTP::Response.new(request.verb, request.path, 503, nil, {}), result )
+      response = Restfulie::Client::Feature::FakeResponse.new(503, "")
+      raise Restfulie::Client::HTTP::Error::ServerNotAvailableError.new(request, response, result )
     end
     case result.response.code
     when 100..299
