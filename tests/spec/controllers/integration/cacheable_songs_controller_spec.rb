@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CacheableClientsController do
   before(:each) do
-    request.accept = "application/atom+xml"
+    request.accept = "application/json"
   end
   
   context "requesting a single resource" do
