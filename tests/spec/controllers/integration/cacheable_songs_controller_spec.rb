@@ -7,17 +7,6 @@ describe CacheableClientsController do
   
   context "requesting a single resource" do
     
-    # it "should not set Etag" do
-    #   get :single
-    #   controller.response.etag.should == nil
-    # end
-    # 
-    # it "sets Last-Modified with resource.updated_at" do
-    #   get :single
-    #   response.last_modified.should == Time.utc(2010)
-    #   response.status.to_i.should == 200
-    # end
-    
     it "should return 304 Not Modified if client's cache is still valid" do
       request.env["HTTP_IF_MODIFIED_SINCE"] = Time.utc(2010).httpdate
       get :single
