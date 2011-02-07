@@ -2,7 +2,7 @@
 #
 # To use it, load it in your dsl:
 # Restfulie.at("http://localhost:3000/product/2").throw_error.get
-class Restfulie::Client::Feature::ThrowError
+class Restfulie::Client::Feature::ThrowErrorRequest
   def execute(flow, request, env)
     result = flow.continue(request, env)
     if result.kind_of? Exception

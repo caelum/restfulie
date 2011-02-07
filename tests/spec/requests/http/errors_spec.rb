@@ -6,7 +6,7 @@ describe Restfulie::Client::HTTP do
   
     before do
       @host = "http://localhost:4567"
-      @client = Restfulie.at(@host)
+      @client = Restfulie.at(@host).throw_error
     end
   
     it "receives error when 300..399  code is returned" do

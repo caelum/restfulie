@@ -72,6 +72,7 @@ module FakeServer
   
   def self.start_server_and_run_spec(target_dir)
     success = Dir.chdir(File.join(File.dirname(__FILE__), target_dir)) do
+      system('bundle install')
       system('rake db:drop db:create db:migrate')
       self.run "rails server", "rake spec"
     end
@@ -133,7 +134,7 @@ end
 
 desc "Install the gem locally"
 task :install => [:package] do
-  sh %{gem install pkg/#{GEM}-#{GEM_VERSION} -l}
+  sh %{gem install pkg/#{GEM}-#{GEM_VERSION}.gem -l}
 end
 
 desc "Create a gemspec file"
@@ -143,9 +144,9 @@ task :make_spec do
   end
 end
 
-desc "Builds the project"
-task :build => ["install", "test:spec"]
+desc "Runs everything"
+task :all => ["install", "test:spec"]
 
 desc "Default build will run specs"
-task :default => :build
+task :default => :all
 
