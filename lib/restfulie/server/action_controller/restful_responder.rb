@@ -3,8 +3,8 @@ module Restfulie
     module ActionController
       class RestfulResponder < ::ActionController::Responder
         
-        include CacheableResponder
-        include CreatedResponder
+        include Trait::Cacheable
+        include Trait::Created
 
       end
     end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class ResponderWithCreated < ::ActionController::Responder
-  include Restfulie::Server::ActionController::CreatedResponder
+  include Restfulie::Server::ActionController::Trait::Created
 end
 
 class CreationController < ApplicationController

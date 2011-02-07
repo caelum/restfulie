@@ -7,8 +7,6 @@ module Restfulie
           # Needs to require responder_legacy.rb
           base.responder = Restfulie::Server::ActionController::RestfulResponder
           base.extend(Restfulie::Server::ActionController::Base::ClassMethods)
-          # Atom representation is added by default
-          Restfulie::Server::ActionController::ParamsParser.register('application/atom+xml', Tokamak::Atom)
         end
 
         module ClassMethods
