@@ -10,7 +10,7 @@ describe Restfulie::Client::HTTP do
     end
   
     it "receives error when 300..399  code is returned" do
-      @client.at("/test/302").get.should respond_with_status(302)
+      @client.at("/test/302").get.should respond_with_status(200)
     end
     it "raise Error::Redirection error when 300..399  code is returned" do
       lambda { @client.at("/test/302").get! }.should raise_exception ::Restfulie::Client::HTTP::Error::Redirection

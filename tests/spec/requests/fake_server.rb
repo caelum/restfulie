@@ -25,10 +25,6 @@ class FakeServer < Sinatra::Base
     Rack::Response.new('OK', 200).finish
   end
 
-  get "/test/?" do
-    'OK'
-  end
-
   post "/test/redirect/:location" do
     r = Rack::Response.new('OK', 201)
     r.header["Location"] = "#{request.scheme}://#{request.host}:#{request.port}/#{params[:location]}"
@@ -46,9 +42,17 @@ class FakeServer < Sinatra::Base
   delete "/test/?" do
     '<content>OK</content>'
   end
+  
+  get "/test" do
+    'OK'
+  end
 
   get "/test/:error" do
-    Rack::Response.new('OK', params[:error].to_i).finish
+    r = Rack::Response.new('OK', params[:error].to_i)
+    if params[:error].to_i==302
+      r.header["Location"] = "/redirected"
+    end
+    r.finish
   end
 
   get "/request_with_querystring" do
