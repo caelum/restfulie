@@ -56,19 +56,16 @@ module Restfulie::Client::Feature::Verb
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def get!(params = {})
-    @verb = :get
-    at query_string(params)
-    request :throw_error
-    request_flow 
+    request :throw_error_request
+    get params
   end
 
   # HEAD HTTP verb {Error}
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def head!
-    @verb = :head
-    request :throw_error
-    request_flow 
+    request :throw_error_request
+    head
   end
 
   # POST HTTP verb {Error}
@@ -76,9 +73,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def post!(payload, options = {:recipe => nil})
-    @verb = :post
-    request :throw_error
-    request_flow :body => payload
+    request :throw_error_request
+    post payload
   end
 
   # PATCH HTTP verb {Error}
@@ -86,9 +82,8 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def patch!(payload)
-    @verb = :patch
-    request :throw_error
-    request_flow :body => payload
+    request :throw_error_request
+    patch payload
   end
 
   # PUT HTTP verb {Error}
@@ -96,18 +91,16 @@ module Restfulie::Client::Feature::Verb
   # * <tt>payload: 'some text'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def put!(payload)
-    @verb = :put
-    request :throw_error
-    request_flow :body => payload
+    request :throw_error_request
+    put payload
   end
 
   # DELETE HTTP verb {Error}
   # * <tt>path: '/posts'</tt>
   # * <tt>headers: {'Accept' => '*/*', 'Content-Type' => 'application/atom+xml'}</tt>
   def delete!
-    @verb = :delete
-    request :throw_error
-    request_flow 
+    request :throw_error_request
+    delete
   end
 
   protected
