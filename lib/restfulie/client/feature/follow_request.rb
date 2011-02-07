@@ -23,7 +23,7 @@ class Restfulie::Client::Feature::FollowRequest
         resp
       else
         location = resp.response.headers['location'] || resp.response.headers['Location']
-        raise Error::AutoFollowWithoutLocationError.new(request, resp) unless location
+        raise Restfulie::Client::HTTP::Error::AutoFollowWithoutLocationError.new(request, resp) unless location
         # use the first location available
         location = location[0]
         Restfulie.at(location).accepts(request.headers['Accept']).get
