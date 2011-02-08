@@ -43,14 +43,11 @@ module Restfulie::Server::ActionController
   module Trait
     module Cacheable
       
-      CACHES = [::Expires.new, ::LastModifieds.new]
-      
       def to_format
-        headers = cache_control_headers
-        cached = CACHES.inject(false) do |cached, cache|
-          cached || cache.do_http_cache(self, headers)
-        end
-        if ::ActionController::Base.perform_caching && cached
+
+        cache_request()
+
+        if is_cached?
           set_public_cache_control(headers)
           controller.response.headers["Cache-Control"] = headers.join(', ')
           fresh = request.fresh?(controller.response)
@@ -63,9 +60,25 @@ module Restfulie::Server::ActionController
           super
         end
       end
-      
+
+      def caches
+        [::Expires.new, ::LastModifieds.new]
+      end
+
+
       private
-        
+
+      def cache_request
+        headers = cache_control_headers
+        cached = caches.inject(false) do |cached, cache|
+          cached || cache.do_http_cache(self, headers)
+        end
+      end
+
+      def is_cached?
+        ::ActionController::Base.perform_caching && cached
+      end
+
       def set_public_cache_control(headers)
         headers.delete("private")
         headers.delete("no-cache")
