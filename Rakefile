@@ -6,7 +6,7 @@ require 'rake/rdoctask'
 require 'rspec'
 require 'rspec/core'
 require 'rspec/core/rake_task'
-require File.expand_path('lib/restfulie')
+require File.join(File.dirname(__FILE__), 'lib', 'restfulie', 'version')
 
 GEM = "restfulie"
 GEM_VERSION = Restfulie::VERSION
