@@ -113,8 +113,7 @@ namespace :test do
 end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
-  # t.spec_files = FileList['spec_*.rb']
-  t.spec_opts = ['--colour', '--format progress']
+  t.rspec_opts = ['--colour', '--format progress']
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
