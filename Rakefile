@@ -16,6 +16,7 @@ EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
 spec = Gem::Specification.new do |s|
+	s.description = "restfulie"
   s.name = GEM
   s.version = GEM_VERSION
   s.platform = Gem::Platform::RUBY
