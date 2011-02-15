@@ -6,7 +6,7 @@ require 'rake/rdoctask'
 require 'rspec'
 require 'rspec/core'
 require 'rspec/core/rake_task'
-require File.expand_path('lib/restfulie')
+require File.join(File.dirname(__FILE__), 'lib', 'restfulie', 'version')
 
 GEM = "restfulie"
 GEM_VERSION = Restfulie::VERSION
@@ -16,6 +16,7 @@ EMAIL    = "guilherme.silveira@caelum.com.br"
 HOMEPAGE = "http://restfulie.caelumobjects.com"
 
 spec = Gem::Specification.new do |s|
+	s.description = "restfulie"
   s.name = GEM
   s.version = GEM_VERSION
   s.platform = Gem::Platform::RUBY
@@ -113,8 +114,7 @@ namespace :test do
 end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
-  # t.spec_files = FileList['spec_*.rb']
-  t.spec_opts = ['--colour', '--format progress']
+  t.rspec_opts = ['--colour', '--format progress']
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
