@@ -10,33 +10,6 @@ require File.join(File.dirname(__FILE__), 'lib', 'restfulie', 'version')
 
 GEM = "restfulie"
 GEM_VERSION = Restfulie::VERSION
-SUMMARY  = "Hypermedia aware resource based library in ruby (client side) and ruby on rails (server side)."
-AUTHOR   = "Guilherme Silveira, Caue Guerra, Luis Cipriani, Everton Ribeiro, George Guimaraes, Paulo Ahagon, and many more!"
-EMAIL    = "guilherme.silveira@caelum.com.br"
-HOMEPAGE = "http://restfulie.caelumobjects.com"
-
-spec = Gem::Specification.new do |s|
-	s.description = "restfulie"
-  s.name = GEM
-  s.version = GEM_VERSION
-  s.platform = Gem::Platform::RUBY
-  s.summary = SUMMARY
-  s.require_paths = ['lib']
-  s.files = FileList['lib/**/*.rb', '[A-Z]*', 'lib/**/*.rng'].to_a
-  
-  s.add_dependency("nokogiri", [">= 1.4.2"])
-  s.add_dependency("json_pure", [">= 1.2.4"])
-  s.add_dependency("rack-conneg")
-  s.add_dependency("sqlite3-ruby")
-  s.add_dependency('tokamak', "~> 1.1.2")
-  s.add_dependency('medie', "~> 1.0.0")
-  s.add_dependency('respondie', "~> 0.9.0")
-  
-
-  s.author = AUTHOR
-  s.email = EMAIL
-  s.homepage = HOMEPAGE
-end
 
 module FakeServer
   def self.wait_server(port=3000)
@@ -115,10 +88,6 @@ end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = ['--colour', '--format progress']
-end
-
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.gem_spec = spec
 end
 
 Rake::RDocTask.new("rdoc") do |rdoc|
