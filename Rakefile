@@ -6,6 +6,9 @@ require 'rake/rdoctask'
 require 'rspec'
 require 'rspec/core'
 require 'rspec/core/rake_task'
+require "bundler"
+Bundler::GemHelper.install_tasks
+
 require File.join(File.dirname(__FILE__), 'lib', 'restfulie', 'version')
 
 GEM = "restfulie"
@@ -103,7 +106,7 @@ end
 
 desc "Install the gem locally"
 task :install => [:package] do
-  sh %{gem install pkg/#{GEM}-#{GEM_VERSION}.gem -l}
+  sh %{gem install --verbose pkg/#{GEM}-#{GEM_VERSION}.gem -l}
 end
 
 desc "Create a gemspec file"
@@ -118,4 +121,10 @@ task :all => ["install", "test:spec"]
 
 desc "Default build will run specs"
 task :default => :all
+
+spec = eval(File.read('restfulie.gemspec'))
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.gem_spec = spec
+end
+
 
