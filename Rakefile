@@ -104,11 +104,6 @@ optionally do
   end
 end
 
-desc "Install the gem locally"
-task :install => [:package] do
-  sh %{gem install --verbose pkg/#{GEM}-#{GEM_VERSION}.gem -l}
-end
-
 desc "Create a gemspec file"
 task :make_spec do
   File.open("#{GEM}.gemspec", "w") do |file|
@@ -121,10 +116,4 @@ task :all => ["install", "test:spec"]
 
 desc "Default build will run specs"
 task :default => :all
-
-spec = eval(File.read('restfulie.gemspec'))
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.gem_spec = spec
-end
-
 
