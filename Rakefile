@@ -102,7 +102,7 @@ optionally do
 end
 
 desc "Install the gem locally"
-task :install => [:package] do
+task :install do
   sh %{gem install pkg/#{GEM}-#{GEM_VERSION}.gem -l}
 end
 
