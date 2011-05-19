@@ -6,6 +6,9 @@ require 'rake/rdoctask'
 require 'rspec'
 require 'rspec/core'
 require 'rspec/core/rake_task'
+require "bundler"
+Bundler::GemHelper.install_tasks
+
 require File.join(File.dirname(__FILE__), 'lib', 'restfulie', 'version')
 
 GEM = "restfulie"
@@ -99,11 +102,6 @@ optionally do
   YARD::Rake::YardocTask.new do |t|
     t.files   = ['lib/restfulie/**/*.rb', 'README.textile']
   end
-end
-
-desc "Install the gem locally"
-task :install do
-  sh %{gem install pkg/#{GEM}-#{GEM_VERSION}.gem -l}
 end
 
 desc "Create a gemspec file"
