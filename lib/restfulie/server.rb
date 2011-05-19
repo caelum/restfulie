@@ -9,7 +9,7 @@ module Restfulie
   end
 end
 
-require 'restfulie/server/tokamak'
+require 'restfulie/server/hypertemplate'
 require 'restfulie/server/core_ext'
 
 if defined? ::ActionController

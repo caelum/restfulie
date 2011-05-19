@@ -2,7 +2,7 @@ require 'net/http'
 require 'uri'
 
 require 'rubygems'
-require 'tokamak'
+require 'hypertemplate'
 require 'medie'
 
 module Restfulie

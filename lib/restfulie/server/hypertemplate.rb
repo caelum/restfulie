@@ -1,3 +1,3 @@
 if defined? ::ActionView and ::ActionController
-  require 'tokamak/hook/rails'
+  require 'hypertemplate/hook/rails'
 end
