@@ -25,15 +25,13 @@ Gem::Specification.new do |s|
 	end
 
   if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-    s.add_runtime_dependency("nokogiri", [">= 1.4.2"])
-    s.add_runtime_dependency("json_pure", [">= 1.2.4"])
     s.add_development_dependency("sqlite3-ruby")
   else
-    s.add_dependency("nokogiri", [">= 1.4.2"])
-    s.add_dependency("json_pure", [">= 1.2.4"])
     s.add_dependency("sqlite3-ruby")
   end
 
+  s.add_dependency("nokogiri", [">= 1.4.2"])
+  s.add_dependency("json_pure", [">= 1.2.4"])
   s.add_dependency("rack-conneg")
   s.add_dependency('hypertemplate', "~> 1.2.0")
   s.add_dependency('medie', "~> 1.0.0")
