@@ -14,8 +14,10 @@ module Net
       res
     end
 
-    class Patch < Get
-      METHOD = "PATCH"
+    if not HTTP.const_defined?(:Patch)
+      class Patch < Get
+        METHOD = "PATCH"
+      end
     end
   end
 end
