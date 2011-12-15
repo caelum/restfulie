@@ -6,4 +6,9 @@ describe Restfulie do
     Restfulie.at('http://guilhermesilveira.wordpress.com/').should_not == (Restfulie.at('http://guilhermesilveira.wordpress.com/'))
   end
 
+  it "should set headers when with options is given" do
+    response = Restfulie.at('http://google.com').with({'Service-Ticket' => 'foobar'})
+    response.headers.should == {'Service-Ticket' => 'foobar'}
+  end
+
 end
