@@ -31,7 +31,7 @@ module Restfulie::Client::Feature
     # * <tt>headers (e.g. {'Cache-control' => 'no-cache'})</tt>
     #
     def with(headers)
-      headers.merge!(headers)
+      self.headers.merge!(headers)
       self
     end
 
