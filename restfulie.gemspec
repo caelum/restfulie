@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency("nokogiri", [">= 1.4.2"])
   s.add_dependency("json_pure", [">= 1.2.4"])
   s.add_dependency("rack-conneg")
-  s.add_dependency('hypertemplate', "~> 1.2.0")
+  s.add_dependency('hypertemplate', "~> 1.2.2")
   s.add_dependency('medie', "~> 1.0.0")
   s.add_dependency('respondie', "~> 0.9.0")
 end
