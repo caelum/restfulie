@@ -1,3 +1,7 @@
+h1. Status
+
+Restfulie Ruby is not being actively maintained. Restfulie C# and Java (through VRaptor) support can be found on the mailing list.
+
 h1. Web site
 
 "Restfulie's site":http://restfulie.caelumobjects.com has a lot of information on Restfulie itself
